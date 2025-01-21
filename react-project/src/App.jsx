@@ -1,13 +1,9 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
+import router from './router/Router.jsx'
 import './App.css'
 
 function App() {
-  return (
-    <>
-      <Outlet />
-    </>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App
