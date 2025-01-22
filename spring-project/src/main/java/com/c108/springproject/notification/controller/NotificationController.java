@@ -18,7 +18,7 @@ public class NotificationController {
     }
 
 
-    @GetMapping("/")
+    @PostMapping("/")
     public String createNotification() {
         NotificationReadReqDto notice = new NotificationReadReqDto();
         notice.setTitle("Hi");
