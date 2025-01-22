@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 import RootPage from '../pages/RootPage'
+// 이용자 section
 import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
-import Home from '../pages/conusumer/Home'
-import Login from '../pages/conusumer/Login'
+import ConsumerHome from '../pages/conusumer/Home'
+import ConsumerLogin from '../pages/conusumer/Login'
+// 관리자 section
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/AdminHome'
 const router = createBrowserRouter([
@@ -18,11 +20,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <Home />,
+            element: <ConsumerHome />,
           },
           {
             path: 'login',
-            element: <Login />,
+            element: <ConsumerLogin />,
           },
         ],
       },
