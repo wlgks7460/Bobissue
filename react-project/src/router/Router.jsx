@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Home from '../pages/Home'
 import RootPage from '../pages/RootPage'
+import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
+import Home from '../pages/conusumer/Home'
+import Login from '../pages/conusumer/Login'
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/AdminHome'
 const router = createBrowserRouter([
@@ -12,7 +14,17 @@ const router = createBrowserRouter([
       {
         // consumer section
         path: '',
-        element: <Home />,
+        element: <ConsumerRoot />,
+        children: [
+          {
+            path: '',
+            element: <Home />,
+          },
+          {
+            path: 'login',
+            element: <Login />,
+          },
+        ],
       },
       {
         // seller section
