@@ -3,6 +3,8 @@ import Home from '../pages/Home'
 import RootPage from '../pages/RootPage'
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/AdminHome'
+import AdminLoginPage from '../pages/admin/AdminLoginPage'
+
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -26,6 +28,11 @@ const router = createBrowserRouter([
           {
             // admin - HomePage
             path: '',
+            element: <AdminLoginPage />,
+          },
+          {
+            //admin - LoginPage
+            path: 'home',
             element: <AdminHome />,
           },
         ],
