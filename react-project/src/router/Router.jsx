@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 import RootPage from '../pages/RootPage'
-// 이용자 section
 import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
 import Home from '../pages/conusumer/Home'
 import Login from '../pages/conusumer/Login'
-
+import AdminRoot from '../pages/admin/AdminRoot'
+import AdminHome from '../components/admin/AdminHome'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -33,6 +33,14 @@ const router = createBrowserRouter([
       {
         // admin section
         path: 'admin',
+        element: <AdminRoot />,
+        children: [
+          {
+            // admin - HomePage
+            path: '',
+            element: <AdminHome />,
+          },
+        ],
       },
     ],
   },
