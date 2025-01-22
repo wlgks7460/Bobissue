@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import SearchBar from '../../components/consumer/SearchBar'
 import HomeEventBanner from '../../components/consumer/home/HomeEventBanner'
 import ItemSummary from '../../components/consumer/home/ItemSummary'
 import HomeLiveShopping from '../../components/consumer/home/HomeLiveShopping'
@@ -15,6 +16,8 @@ const Home = () => {
   ])
   return (
     <div>
+      {/* search bar */}
+      <SearchBar />
       {/* 이벤트 배너 section */}
       <HomeEventBanner />
       {/* 라이브 커머스 section */}
