@@ -1,4 +1,4 @@
-package com.c108.springproject.items.domain;
+package com.c108.springproject.item.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor; // 데이터베이스 테이블에 매핑
@@ -19,9 +19,10 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int itemNo;
 
-    //나중에 연결
-    @Column(nullable = false)
-    private int categoryNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_no", nullable = false)
+    private ItemCategory categoryNo;
+
     // 나중에 연결
     @Column(nullable = false)
     private BigInteger imageNo;
@@ -35,16 +36,16 @@ public class Item {
     @Column(nullable = true)
     private int salePrice;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String updatedAt;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 15)
     private String expiredAt;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 255)
     private String description;
 
     @Column(nullable = false)

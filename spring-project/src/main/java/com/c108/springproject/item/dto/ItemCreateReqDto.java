@@ -1,6 +1,5 @@
-package com.c108.springproject.items.dto;
+package com.c108.springproject.item.dto;
 
-import jakarta.persistence.Column;
 import lombok.*;
 import lombok.AllArgsConstructor;
 

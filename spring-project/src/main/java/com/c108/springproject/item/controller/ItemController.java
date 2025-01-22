@@ -1,9 +1,8 @@
-package com.c108.springproject.items.controller;
+package com.c108.springproject.item.controller;
 
-import com.c108.springproject.items.domain.Item;
-import com.c108.springproject.items.dto.ItemCreateReqDto;
-import com.c108.springproject.items.service.ItemService;
-
+import com.c108.springproject.item.domain.Item;
+import com.c108.springproject.item.dto.ItemCreateReqDto;
+import com.c108.springproject.item.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/item")
 public class ItemController {
 
-    private ItemService itemService;
+    private final ItemService itemService;
 
-
+    @Autowired
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
