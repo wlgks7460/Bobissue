@@ -4,9 +4,12 @@ import RootPage from '../pages/RootPage'
 import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
 import ConsumerHome from '../pages/conusumer/Home'
 import ConsumerLogin from '../pages/conusumer/Login'
+import ConsumerSignup from '../pages/conusumer/Signup'
 // 관리자 section
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/AdminHome'
+import Signup from '../pages/conusumer/Signup'
+
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -25,6 +28,10 @@ const router = createBrowserRouter([
           {
             path: 'login',
             element: <ConsumerLogin />,
+          },
+          {
+            path: 'signup',
+            element: <Signup />,
           },
         ],
       },
