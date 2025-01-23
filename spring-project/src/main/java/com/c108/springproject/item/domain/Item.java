@@ -25,7 +25,7 @@ public class Item {
     @JsonIgnore // 순환참조 해결
     private ItemCategory categoryNo;
 
-    // 나중에 연결
+    // 나중에 연결a
     @Column(nullable = false)
     private BigInteger imageNo;
     // 나중에 연결

@@ -1,13 +1,17 @@
 package com.c108.springproject.item.service;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.item.domain.ItemCategory;
 import com.c108.springproject.item.dto.ItemCategoryReqDto;
+import com.c108.springproject.item.dto.ItemCategoryResDto;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemCategoryService {
@@ -34,13 +38,21 @@ public class ItemCategoryService {
     }
 
     // 카테고리 전체 조회
-    public List<ItemCategory> getAllCategories() {
-        return itemcategoryRepository.findAll();
+    public List<ItemCategoryResDto> getAllCategories() {
+        return itemcategoryRepository.findAll().stream()
+                .map(itemCategory -> ItemCategoryResDto.builder()  // 이 부분에서 ItemCategoryReqDto -> ItemCategoryResDto로 변경
+                        .categoryNo(itemCategory.getCategoryNo())
+                        .name(itemCategory.getName())
+                        .createdAt(itemCategory.getCreatedAt())
+                        .updatedAt(itemCategory.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());  // 괄호 수정
     }
-    
+
+
     // id 받아서 카테고리 정보 조회
     public ItemCategory getCategory(int categoryNo) {
-        return itemcategoryRepository.findById(categoryNo).orElse(null);
+        return itemcategoryRepository.findById(categoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
         // 예외처리 질문
     }
 
@@ -55,7 +67,7 @@ public class ItemCategoryService {
         ItemCategory updatedCategory = ItemCategory.builder()
                 .categoryNo(category.getCategoryNo())
                 .name(dto.getName())
-                .createdAt(category.getCreatedAt())
+                .createdAt(currentDate)
                 .updatedAt(currentDate)
                 .build();
         return itemcategoryRepository.save(updatedCategory);

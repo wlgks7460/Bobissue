@@ -1,13 +1,16 @@
 package com.c108.springproject.item.service;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemCategory;
-import com.c108.springproject.item.dto.ItemCreateReqDto;
+import com.c108.springproject.item.dto.*;
 import com.c108.springproject.item.repository.ItemRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -23,24 +26,88 @@ public class ItemService {
 
     }
 
+    // 상품 생성
     @Transactional
-    public Item createItem(ItemCreateReqDto itemCreateReqDto) {
-        // 카테고리 가져오기
-        ItemCategory category = itemCategoryService.getCategory(itemCreateReqDto.getCategoryNo());
+    public ItemCreateResDto createItem(ItemCreateReqDto reqDto) {
+        // 카테고리 존재 확인 및 가져오기
+        ItemCategory category = itemCategoryService.getCategory(reqDto.getCategoryNo());
 
-        Item new_item = Item.builder()
+        // Item 엔티티 생성 및 저장
+        Item savedItem = itemRepository.save(Item.builder()
                 .categoryNo(category)
-                .imageNo(BigInteger.valueOf(1))
-                .companyNo(1)
-                .price(itemCreateReqDto.getPrice())
-                .salePrice(itemCreateReqDto.getSalePrice())
-                .createdAt(itemCreateReqDto.getCreatedAt())
-                .updatedAt(itemCreateReqDto.getUpdatedAt())
-                .expiredAt(itemCreateReqDto.getExpiredAt())
-                .description(itemCreateReqDto.getDescription())
-                .stock(itemCreateReqDto.getStock())
+                .imageNo(reqDto.getImageNo())
+                .companyNo(reqDto.getCompanyNo())
+                .price(reqDto.getPrice())
+                .salePrice(reqDto.getSalePrice())
+                .createdAt(reqDto.getCreatedAt())
+                .updatedAt(reqDto.getUpdatedAt())
+                .expiredAt(reqDto.getExpiredAt())
+                .description(reqDto.getDescription())
+                .stock(reqDto.getStock())
+                .build());
+
+        // ResponseDto로 변환하여 반환
+        return ItemCreateResDto.builder()
+                .itemNo(savedItem.getItemNo())
+                .category(ItemCategoryResDto.builder()
+                        .categoryNo(category.getCategoryNo())
+                        .name(category.getName())
+//                        .createdAt(category.getCreatedAt())
+//                        .updatedAt(category.getUpdatedAt())
+                        .build())
+                .imageNo(savedItem.getImageNo())
+                .companyNo(savedItem.getCompanyNo())
+                .price(savedItem.getPrice())
+                .salePrice(savedItem.getSalePrice())
+                .createdAt(savedItem.getCreatedAt())
+                .updatedAt(savedItem.getUpdatedAt())
+                .expiredAt(savedItem.getExpiredAt())
+                .description(savedItem.getDescription())
+                .stock(savedItem.getStock())
                 .build();
-        return itemRepository.save(new_item);
+    }
+
+    // 전체 상품 조회
+    public List<ItemListResDto> getAllItems() {
+        return itemRepository.findAll().stream()
+                .map(item -> ItemListResDto.builder()
+                        .itemNo(item.getItemNo())
+                        .categoryNo(item.getCategoryNo().getCategoryNo())
+                        .imageNo(item.getImageNo())
+                        .companyNo(item.getCompanyNo())
+                        .price(item.getPrice())
+                        .salePrice(item.getSalePrice())
+//                        .createdAt(item.getCreatedAt())
+//                        .updatedAt(item.getUpdatedAt())
+//                        .expiredAt(item.getExpiredAt())
+                        .description(item.getDescription())
+//                        .stock(item.getStock())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    // 상품 상세 조회
+    public ItemResDto getItem(int itemNo) {
+        Item item = itemRepository.findById(itemNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+        ItemCategory category = item.getCategoryNo();
+        return ItemResDto.builder()
+                .itemNo(item.getItemNo())
+                .category(ItemCategoryResDto.builder()
+                        .categoryNo(category.getCategoryNo())
+                        .name(category.getName())
+                        .build())
+                .imageNo(item.getImageNo())
+                .companyNo(item.getCompanyNo())
+                .price(item.getPrice())
+                .salePrice(item.getSalePrice())
+                .createdAt(item.getCreatedAt())
+                .updatedAt(item.getUpdatedAt())
+                .expiredAt(item.getExpiredAt())
+                .description(item.getDescription())
+                .stock(item.getStock())
+                .build();
     }
 
 }
