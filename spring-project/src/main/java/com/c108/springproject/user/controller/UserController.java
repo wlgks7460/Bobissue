@@ -1,9 +1,13 @@
 package com.c108.springproject.user.controller;
 
+import com.c108.springproject.global.DefaultResponse;
+import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.user.dto.SignUpDto;
 import com.c108.springproject.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,19 +22,13 @@ public class UserController {
         this.userService=userService;
     }
 
-    @GetMapping("/")
-    public void signUp() {//@RequestBody @Valid SignUpDto signUpDto
-        System.out.println("hi");
-        SignUpDto signUpDto = new SignUpDto();
-        signUpDto.setName("김경은");
-        signUpDto.setBirthday("2001-05-22");
-        signUpDto.setEmail("ruddms1522@naver.com");
-        signUpDto.setPassword("1234");
-        signUpDto.setGender('F');
-        signUpDto.setLoginType(0);
-        signUpDto.setPhoneNumber("010-5636-3512");
+    @PostMapping("/")
+    public ResponseDto signUp(@RequestBody SignUpDto signUpDto) {
         userService.signUp(signUpDto);
 
-//        return ResponseEntity.ok("success");
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_USER,new DefaultResponse<String>(signUpDto.getName()));
     }
+
+
+
 }
