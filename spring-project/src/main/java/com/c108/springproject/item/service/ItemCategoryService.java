@@ -1,5 +1,7 @@
 package com.c108.springproject.item.service;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.item.domain.ItemCategory;
 import com.c108.springproject.item.dto.ItemCategoryReqDto;
 import com.c108.springproject.item.dto.ItemCategoryResDto;
@@ -50,7 +52,7 @@ public class ItemCategoryService {
 
     // id 받아서 카테고리 정보 조회
     public ItemCategory getCategory(int categoryNo) {
-        return itemcategoryRepository.findById(categoryNo).orElse(null);
+        return itemcategoryRepository.findById(categoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
         // 예외처리 질문
     }
 
