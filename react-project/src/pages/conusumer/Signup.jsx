@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const Signup = () => {
   // 회원 가입 관련 데이터
@@ -6,22 +6,47 @@ const Signup = () => {
   const passwordRef = useRef() // 비밀번호
   const password2Ref = useRef() // 비밀번호 확인
   const nameRef = useRef() // 이름
-  const birthRef = useRef() // 생년월일일
+  const birthRef = useRef() // 생년월일
   const phoneRef = useRef() // 전화번호
-  const postcodeRef = useRef() // 우편번호
-  const addressRef = useRef() // 주소소
+  const [postcode, setPostCode] = useState('') // 우편번호
+  const [address, setAddress] = useState('') // 주소
   const addressDetailRef = useRef() // 상세주소
+  const [gender, setGender] = useState('m') // 성별
+  const [today, setToday] = useState() // 현재 연도
+
+  // 약관 관련 데이터
+  const [termsAgreement, setTermsAgreement] = useState(false) // 이용약관 동의
+  const [personalDataAgreement, setPersonalDataAgreement] = useState(false) // 개인정보 동의
+  const [emailAgreement, setEamilAgreement] = useState(false) // 이메일 수신 동의
+  const [smsAgreement, setSmsAgreement] = useState(false) // sms 수신 동의
+  const [ageAgreement, setAgeAgreement] = useState(false) // 만 14세 이상 확인
+
+  // 약관 ref
 
   // 주소 찾기 함수
   const searchAddress = () => {
     new daum.Postcode({
       oncomplete: function (data) {
-        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-        // 예제를 참고하여 다양한 활용법을 확인해 보세요.
-        console.log(data)
+        // data에 들어있는 정보를 변수에 담아주면 됩니다.
+        setPostCode(data.zonecode)
+        setAddress(data.address)
       },
     }).open()
     addressDetailRef.current.focus()
+  }
+
+  // 성별 값 변경 함수
+  const handleGender = (e) => {
+    setGender(e.target.value)
+  }
+
+  // 약관 동의 관련 함수
+  // 전체 동의
+
+  // 약관 보기
+  const handleTerms = (e, type) => {
+    e.preventDefault()
+    console.log(type)
   }
 
   // 회원 가입 함수
@@ -30,8 +55,25 @@ const Signup = () => {
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
+      name: nameRef.current.value,
+      birthday: birthRef.current.value,
+      phone_number: phoneRef.current.value,
+      address: `(${postcode}) ${address} ${addressDetailRef.current.value}`,
+      gender: gender,
     }
+    console.log(payload)
   }
+  // 현재 날짜 가져오기
+  useEffect(() => {
+    // mount
+    const tempDate = new Date()
+    const year = tempDate.getFullYear()
+    const month = `${tempDate.getMonth() + 1}`.padStart(2, '0')
+    const date = tempDate.getDate().toString().padStart(2, '0')
+    setToday(`${year}-${month}-${date}`)
+    // unmount
+    return () => {}
+  }, [])
   return (
     <div className='min-h-[70vh] flex justify-center py-16'>
       <div className='flex flex-col'>
@@ -40,64 +82,88 @@ const Signup = () => {
           <span className='text-red-600'>*</span>필수 입력사항
         </p>
         {/* 회원가입 폼 */}
-        <form className='flex flex-col gap-5'>
-          <div>
+        <form className='flex flex-col gap-5' onSubmit={signup}>
+          {/* 이메일 */}
+          <div className='flex items-center'>
             <label htmlFor='email' className='inline-block w-[150px] me-5'>
               이메일<span className='text-red-600'>*</span>
             </label>
             <input
               type='email'
               id='email'
-              className='w-[400px] h-[50px] border border-gray-400 rounded px-5'
-              placeholder='이메일을을 입력해주세요.'
+              className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
+              placeholder='이메일을 입력해주세요.'
+              ref={emailRef}
             />
           </div>
-          <div>
+          {/* 비밀번호 */}
+          <div className='flex items-center'>
             <label htmlFor='password' className='inline-block w-[150px] me-5'>
               비밀번호<span className='text-red-600'>*</span>
             </label>
             <input
               type='password'
               id='password'
-              className='w-[400px] h-[50px] border border-gray-400 rounded px-5'
+              className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
               placeholder='비밀번호를 입력해주세요.'
+              ref={passwordRef}
             />
           </div>
-          <div>
+          <div className='flex items-center'>
             <label htmlFor='password2' className='inline-block w-[150px] me-5'>
               비밀번호확인<span className='text-red-600'>*</span>
             </label>
             <input
               type='password'
               id='password2'
-              className='w-[400px] h-[50px] border border-gray-400 rounded px-5'
+              className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
               placeholder='비밀번호를 한번 더 입력해주세요.'
+              ref={password2Ref}
             />
           </div>
-          <div>
+          {/* 이름 */}
+          <div className='flex items-center'>
             <label htmlFor='name' className='inline-block w-[150px] me-5'>
               이름<span className='text-red-600'>*</span>
             </label>
             <input
               type='text'
               id='name'
-              className='w-[400px] h-[50px] border border-gray-400 rounded px-5'
+              className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
               placeholder='이름을 입력해주세요.'
+              ref={nameRef}
             />
           </div>
-          <div>
+          {/* 생년월일 */}
+          <div className='flex items-center'>
+            <p className='inline-block w-[150px] me-5'>
+              생년월일<span className='text-red-600'>*</span>
+            </p>
+            <input
+              type='date'
+              min='1900-01-01'
+              max={today}
+              defaultValue={today}
+              className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
+              ref={birthRef}
+            />
+          </div>
+          {/* 전화번호 */}
+          <div className='flex items-center'>
             <label htmlFor='phone' className='inline-block w-[150px] me-5'>
               전화번호<span className='text-red-600'>*</span>
             </label>
             <input
               type='tel'
-              pattern='[0-9]{3}[0-9]{3,4}[0-9]{4}'
+              pattern='[0-9]{3}-[0-9]{3,4}-[0-9]{4}'
               id='phone'
-              className='w-[400px] h-[50px] border border-gray-400 rounded px-5'
-              placeholder='-없이 입력해주세요.'
+              className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
+              placeholder='-포함하여 입력해주세요.'
+              ref={phoneRef}
             />
           </div>
-          <div className='flex'>
+          {/* 주소 */}
+          <div className='flex items-center'>
             <label htmlFor='postcode' className='inline-block w-[150px] me-5'>
               주소<span className='text-red-600'>*</span>
             </label>
@@ -106,25 +172,60 @@ const Signup = () => {
                 <input
                   type='text'
                   id='postcode'
-                  className='w-[150px] h-[50px] border border-gray-400 rounded px-5'
+                  className='w-[100px] h-[50px] border border-gray-400 rounded px-3'
                   onFocus={searchAddress}
                   placeholder='우편번호'
+                  value={postcode || ''}
+                  readOnly
                 />
                 <input
                   type='text'
                   id='address'
-                  className='w-[240px] h-[50px] border border-gray-400 rounded px-5'
+                  className='w-[290px] h-[50px] border border-gray-400 rounded px-3'
                   onFocus={searchAddress}
                   placeholder='주소'
+                  value={address || ''}
+                  readOnly
                 />
               </div>
               <input
                 type='text'
                 id='addressDetail'
-                className='w-[400px] h-[50px] border border-gray-400 rounded px-5'
+                className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
                 placeholder='상세 주소'
                 ref={addressDetailRef}
               />
+            </div>
+          </div>
+          {/* 성별 */}
+          <div className='flex items-center'>
+            <p className='inline-block w-[150px] me-5'>
+              성별<span className='text-red-600'>*</span>
+            </p>
+            <div className='grid grid-cols-2 w-[400px]'>
+              <div className='flex items-center'>
+                <input
+                  type='radio'
+                  id='male'
+                  name='gender'
+                  value='m'
+                  className='w-5 h-5 me-5 accent-indigo-600'
+                  onChange={handleGender}
+                  defaultChecked
+                />
+                <label htmlFor='male'>남</label>
+              </div>
+              <div className='flex items-center'>
+                <input
+                  type='radio'
+                  id='female'
+                  name='gender'
+                  value='f'
+                  className='w-5 h-5 me-5 accent-indigo-600'
+                  onChange={handleGender}
+                />
+                <label htmlFor='female'>여</label>
+              </div>
             </div>
           </div>
           <hr className='border-black' />
@@ -135,7 +236,18 @@ const Signup = () => {
             </div>
             <div className='flex flex-col gap-3'>
               <div className='flex items-center gap-2 px-3'>
-                <button className='w-[40px] h-[40px]'>체크</button>
+                <button className='w-[35px] h-[35px] border border-gray-400 rounded-full'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={3}
+                    stroke='currentColor'
+                    className='size-6'
+                  >
+                    <path strokeLinecap='round' strokeLinejoin='round' d='m4.5 12.75 6 6 9-13.5' />
+                  </svg>
+                </button>
                 <div>
                   <p className='text-xl'>전체 동의합니다.</p>
                   <p className='text-xs text-gray-600'>
@@ -150,7 +262,12 @@ const Signup = () => {
                   <p>
                     이용약관 동의 <span className='text-gray-500'>(필수)</span>
                   </p>
-                  <p className='text-indigo-600'>약관 보기</p>
+                  <button
+                    className='text-indigo-600'
+                    onClick={(event) => handleTerms(event, 'terms')}
+                  >
+                    약관 보기
+                  </button>
                 </div>
               </div>
               <div className='flex items-center gap-2 px-3'>
@@ -159,7 +276,12 @@ const Signup = () => {
                   <p>
                     개인정보 수집·이용 동의 <span className='text-gray-500'>(필수)</span>
                   </p>
-                  <p className='text-indigo-600'>약관 보기</p>
+                  <button
+                    className='text-indigo-600'
+                    onClick={(event) => handleTerms(event, 'pesonalData')}
+                  >
+                    약관 보기
+                  </button>
                 </div>
               </div>
               <div className='flex items-center gap-2 px-3'>
