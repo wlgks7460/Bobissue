@@ -8,6 +8,8 @@ import ConsumerSignup from '../pages/conusumer/Signup'
 // 관리자 section
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/AdminHome'
+import AdminLoginPage from '../pages/admin/AdminLoginPage'
+
 import Signup from '../pages/conusumer/Signup'
 
 const router = createBrowserRouter([
@@ -47,6 +49,11 @@ const router = createBrowserRouter([
           {
             // admin - HomePage
             path: '',
+            element: <AdminLoginPage />,
+          },
+          {
+            //admin - LoginPage
+            path: 'home',
             element: <AdminHome />,
           },
         ],
