@@ -24,7 +24,9 @@ public enum ResponseCode {
     SUCCESS_FIND_CATEGORY("SUCCESS_FIND_CATEGORY", "카테고리 조회 완료"),
     SUCCESS_CREATE_CATEGORY("SUCCESS_CREATE_CATEGORY", "카테고리 생성 완료"),
     SUCCESS_FIND_ALL_CATEGORY("SUCCESS_FIND_ALL_CATEGORY", "전체 카테고리 조회 완료"),
-    CATEGORY_NOT_FOUND("CATEGORY_NOT_FOUND", "카테고리 조회 실패")
+    CATEGORY_NOT_FOUND("CATEGORY_NOT_FOUND", "카테고리 조회 실패"),
+    FAILED_DELETE_QUESTION("FAILED_DELETE_QUESTION", "문의글 삭제 실패"),
+
     ;
 
     private final String code;

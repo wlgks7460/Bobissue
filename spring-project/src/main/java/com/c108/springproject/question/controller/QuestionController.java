@@ -46,6 +46,8 @@ public class QuestionController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_QUESTION, new DefaultResponse<QuestionResDto>(questionService.updateQuestion(question_no, questionUpdateReqDto)));
     }
 
-
-
+    @DeleteMapping("{question_no}")
+    public ResponseDto deleteQuestionByNo(@PathVariable Long question_no){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_QUESTION, new DefaultResponse<Long>(questionService.deleteQuestion(question_no)));
+    }
 }

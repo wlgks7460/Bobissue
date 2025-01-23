@@ -67,4 +67,14 @@ public class QuestionService {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_QUESTION);
         }
     }
+
+    @Transactional
+    public Long deleteQuestion(Long question_no){
+        try{
+            questionRepository.deleteByQuestionNo(question_no);
+            return question_no;
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_QUESTION);
+        }
+    }
 }
