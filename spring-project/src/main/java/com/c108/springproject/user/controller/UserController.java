@@ -5,7 +5,6 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.user.dto.SignUpDto;
 import com.c108.springproject.user.service.UserService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
