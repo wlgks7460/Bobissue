@@ -8,7 +8,10 @@ import {
   InboxIcon,
 } from '@heroicons/react/24/outline'
 
+import { useNavigate } from 'react-router-dom'
+
 const AdminSideBar = () => {
+  const navigate = useNavigate()
   const [open, setOpen] = React.useState(0) // 상위 메뉴 상태
   const [subOpen, setSubOpen] = React.useState(0) // 중간 메뉴 상태
 
@@ -65,11 +68,36 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 1 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>회원 정보관리</div>
-                    <div>회원 레벨 관리</div>
-                    <div>회원 등록하기</div>
-                    <div>회원 엑셀일괄등록</div>
-                    <div>회원 일괄메일발송</div>
+                    <div
+                      onClick={() => navigate('/admin/members/info')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      회원 정보관리
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/members/level')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      회원 레벨 관리
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/members/register')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      회원 등록하기
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/members/excel')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      회원 엑셀일괄등록
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/members/email')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      회원 일괄메일발송
+                    </div>
                   </div>
                 )}
               </div>
@@ -92,7 +120,6 @@ const AdminSideBar = () => {
                   <div className='pl-4 py-1 space-y-2'>
                     <div>포인트 관리</div>
                     <div>포인트 엑셀일괄 등록</div>
-                    <div>포인트 일괄지급 & 차감</div>
                   </div>
                 )}
               </div>
