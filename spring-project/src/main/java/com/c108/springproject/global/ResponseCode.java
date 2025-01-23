@@ -12,7 +12,9 @@ public enum ResponseCode {
     SUCCESS_CREATE_USER("SUCCESS_CREATE_USER","회원가입 완료"),
     SUCCESS_FIND_ALL_QUESTION("SUCCESS_FIND_ALL_QUESTION", "전체 문의글 조회 완료"),
     SUCCESS_FIND_QUESTION("SUCCESS_FIND_QUESTION", "문의글 조회 완료"),
-    QUESTION_NOT_FOUND("QUESTION_NOT_FOUND", "문의글 조회 실패")
+    QUESTION_NOT_FOUND("QUESTION_NOT_FOUND", "문의글 조회 실패"),
+    NOT_FOUND_CATEGORY("NOT_FOUND_CATEGORY", "카테고리 없음"),
+    SUCCESS_UPDATE_QUESTION("SUCCESS_UPDATE_QUESTION", "문의글 수정 완료"),
     ;
 
     private final String code;

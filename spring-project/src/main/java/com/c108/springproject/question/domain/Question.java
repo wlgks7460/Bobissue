@@ -1,6 +1,7 @@
 package com.c108.springproject.question.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.question.dto.request.QuestionUpdateReqDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,8 +27,8 @@ public class Question extends BaseEntity implements Serializable {
     @Column
     private String content;
 
-    @Column(nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private QuestionCategory category;
 
 //    @OneToMany
 //    @JoinColumn(name = "image_no", nullable = false)
@@ -48,8 +49,16 @@ public class Question extends BaseEntity implements Serializable {
     @Column
     private String userNo;
 
-
     @Column(nullable = false)
     private String status;
+
+
+    public void questionUpdate(QuestionUpdateReqDto questionUpdateReqDto){
+        this.title = questionUpdateReqDto.getTitle();
+        this.content = questionUpdateReqDto.getContent();
+        this.isPrivate = questionUpdateReqDto.getIsPrivate();
+        this.category = QuestionCategory.valueOf(questionUpdateReqDto.getCategory());
+
+    }
 
 }
