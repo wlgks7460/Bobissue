@@ -1,16 +1,20 @@
 import React, { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import naverLogo from '../../assets/consumer/naverLoginLogo.png'
 import kakaoLogo from '../../assets/consumer/kakaoLoginLogo.png'
 
 const Login = () => {
-  const idRef = useRef() // 아이디
-  const passwordRef = useRef() // 비밀번호호
+  // 페이지 이동
+  const navigate = useNavigate()
+
+  // 로그인 관련 데이터
+  const emailRef = useRef() // 이메일일
+  const passwordRef = useRef() // 비밀번호
 
   // 로그인 요청 함수
   const login = (e) => {
     e.preventDefault()
-    console.log(idRef.current.value, passwordRef.current.value)
+    console.log(emailRef.current.value, passwordRef.current.value)
   }
 
   // 네이버 로그인 함수
@@ -19,16 +23,16 @@ const Login = () => {
   // 카카오 로그인 함수
   const kakaoLogin = () => {}
   return (
-    <div className='min-h-[80vh] flex justify-center items-center'>
+    <div className='min-h-[70vh] flex justify-center pt-16'>
       <div className='flex flex-col'>
         <p className='text-2xl font-bold text-center mb-5'>로그인</p>
         {/* 회원 로그인 폼 */}
         <form className='login-form flex flex-col mb-2' onSubmit={login}>
           <input
-            type='text'
+            type='email'
             className='w-[350px] h-[50px] border border-gray-400 rounded px-5 mb-2'
-            placeholder='아이디를 입력해주세요.'
-            ref={idRef}
+            placeholder='이메일을 입력해주세요.'
+            ref={emailRef}
           />
           <input
             type='password'
@@ -37,8 +41,6 @@ const Login = () => {
             ref={passwordRef}
           />
           <div className='flex justify-end text-sm text-gray-600 mb-5'>
-            <span className='cursor-pointer hover:text-black'>아이디 찾기</span>
-            <span className='mx-2'>|</span>
             <span className='cursor-pointer hover:text-black'>비밀번호 찾기</span>
           </div>
           <input
@@ -47,12 +49,12 @@ const Login = () => {
             className='w-[350px] h-[50px] border border-gray-400 rounded bg-indigo-400 hover:bg-indigo-600 text-white cursor-pointer'
           />
         </form>
-        <Link
-          to='/signup'
-          className='w-[350px] h-[50px] border border-gray-400 rounded mb-5 cursor-pointer flex justify-center items-center'
+        <button
+          className='w-[350px] h-[50px] border border-gray-400 rounded mb-5 cursor-pointer'
+          onClick={() => navigate('/signup')}
         >
           회원가입
-        </Link>
+        </button>
         {/* 소셜 로그인 */}
         <div className='flex flex-col gap-2'>
           <button
