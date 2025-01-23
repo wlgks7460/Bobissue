@@ -1,5 +1,6 @@
 package com.c108.springproject.item.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor; // 데이터베이스 테이블에 매핑
 import lombok.Builder;
@@ -19,8 +20,9 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int itemNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "category_no", nullable = false)
+    @JsonIgnore // 순환참조 해결
     private ItemCategory categoryNo;
 
     // 나중에 연결

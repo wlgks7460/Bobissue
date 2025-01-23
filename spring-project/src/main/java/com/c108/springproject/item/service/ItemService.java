@@ -16,7 +16,7 @@ public class ItemService {
     private final ItemCategoryService itemCategoryService;
 
 
-    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, ItemCategoryService itemCategoryService1) {
+    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService) {
 
         this.itemRepository = itemRepository;
         this.itemCategoryService = itemCategoryService;
@@ -28,15 +28,14 @@ public class ItemService {
         // 카테고리 가져오기
         ItemCategory category = itemCategoryService.getCategory(itemCreateReqDto.getCategoryNo());
 
-
         Item new_item = Item.builder()
                 .categoryNo(category)
                 .imageNo(BigInteger.valueOf(1))
                 .companyNo(1)
-                .price(123123)
-                .salePrice(111111)
-                .createdAt("2020-01-10")
-                .updatedAt("2020-01-10")
+                .price(itemCreateReqDto.getPrice())
+                .salePrice(itemCreateReqDto.getSalePrice())
+                .createdAt(itemCreateReqDto.getCreatedAt())
+                .updatedAt(itemCreateReqDto.getUpdatedAt())
                 .expiredAt(itemCreateReqDto.getExpiredAt())
                 .description(itemCreateReqDto.getDescription())
                 .stock(itemCreateReqDto.getStock())

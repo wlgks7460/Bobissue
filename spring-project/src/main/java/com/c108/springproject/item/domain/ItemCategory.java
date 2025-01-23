@@ -9,13 +9,14 @@ import lombok.NoArgsConstructor; // 기본 생성자 생성
 import java.util.List;
 
 @Entity
+@Table(name = "itemcategory")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int categoryNo;
 
     @Column(nullable = false, length = 50)
