@@ -5,13 +5,13 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.question.domain.Question;
 import com.c108.springproject.question.dto.QuestionReqDto;
+import com.c108.springproject.question.dto.QuestionResDto;
 import com.c108.springproject.question.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/question")
@@ -30,6 +30,18 @@ public class QuestionController {
         Question question = questionService.createQuestion(questionReqDto);
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_QUESTION, new DefaultResponse<Long>(question.getQuestionNo()));
     }
+
+
+    @GetMapping("/")
+    public ResponseDto findAllQuestions(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_QUESTION, new DefaultResponse.ListResponse<Question>(questionService.findAllQuestions()));
+    }
+
+    @GetMapping("/{question_no}")
+    public ResponseDto findQuestionByNo(@PathVariable Long question_no){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_QUESTION, new DefaultResponse<Question>(questionService.findQuestionByNo(question_no)));
+    }
+
 
 
 }
