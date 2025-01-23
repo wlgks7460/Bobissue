@@ -10,8 +10,6 @@ import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/AdminHome'
 import AdminLoginPage from '../pages/admin/AdminLoginPage'
 
-import Signup from '../pages/conusumer/Signup'
-
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -33,7 +31,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'signup',
-            element: <Signup />,
+            element: <ConsumerSignup />,
           },
         ],
       },
