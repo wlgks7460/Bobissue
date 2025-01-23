@@ -1,8 +1,10 @@
 package com.c108.springproject.item.dto;
 
-import lombok.*;
+
 import lombok.AllArgsConstructor;
-import com.c108.springproject.item.dto.ItemCategoryResDto;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
 
@@ -10,16 +12,16 @@ import java.math.BigInteger;
 @Builder
 @Data
 @NoArgsConstructor
-public class ItemCreateResDto {
+public class ItemListResDto {
     private int itemNo;
-    private ItemCategoryResDto category;
+    private int categoryNo;
     private BigInteger imageNo;
     private int companyNo;
     private int price;
     private int salePrice;
-    private String createdAt;
-    private String updatedAt;
-    private String expiredAt;
+//    private String createdAt;
+//    private String updatedAt;
+//    private String expiredAt;
     private String description;
-    private int stock;
+//    private int stock;
 }
