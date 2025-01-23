@@ -61,9 +61,10 @@ public class QuestionService {
     public QuestionResDto updateQuestion(Long question_no, QuestionUpdateReqDto questionUpdateReqDto) {
         try{
             Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
-            return null;
+            question.updateQuestion(questionUpdateReqDto);
+            return QuestionResDto.toDto(question);
         }catch(BobIssueException e){
-            throw new BobIssueException(ResponseCode.QUESTION_NOT_FOUND);
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_QUESTION);
         }
     }
 }

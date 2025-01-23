@@ -53,7 +53,7 @@ public class Question extends BaseEntity implements Serializable {
     private String status;
 
 
-    public void questionUpdate(QuestionUpdateReqDto questionUpdateReqDto){
+    public void updateQuestion(QuestionUpdateReqDto questionUpdateReqDto){
         this.title = questionUpdateReqDto.getTitle();
         this.content = questionUpdateReqDto.getContent();
         this.isPrivate = questionUpdateReqDto.getIsPrivate();
