@@ -1,7 +1,12 @@
 package com.c108.springproject.item.controller;
 
+import com.c108.springproject.global.DefaultResponse;
+import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.item.dto.ItemCategoryReqDto;
 import com.c108.springproject.item.domain.ItemCategory;
+import com.c108.springproject.item.dto.ItemCategoryResDto;
+import com.c108.springproject.item.dto.ItemReadResDto;
 import com.c108.springproject.item.service.ItemCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +43,9 @@ public class ItemCategoryController {
 
     // 전체 조회
     @GetMapping("/")
-    public ResponseEntity<List<ItemCategory>> getAllCategories() {
-        return ResponseEntity.ok(itemCategoryService.getAllCategories());
+    public ResponseDto getAllCategories() {
+        List<ItemCategoryResDto> categories = itemCategoryService.getAllCategories();
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_QUESTION, new DefaultResponse<>(categories));
     }
 
     // 카테고리 수정
