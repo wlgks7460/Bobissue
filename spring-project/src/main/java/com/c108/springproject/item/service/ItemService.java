@@ -68,6 +68,7 @@ public class ItemService {
     }
 
     // 전체 상품 조회
+    @Transactional
     public List<ItemListResDto> getAllItems() {
         return itemRepository.findAll().stream()
                 .map(item -> ItemListResDto.builder()
@@ -88,6 +89,7 @@ public class ItemService {
 
 
     // 상품 상세 조회
+    @Transactional
     public ItemResDto getItem(int itemNo) {
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
@@ -108,6 +110,55 @@ public class ItemService {
                 .description(item.getDescription())
                 .stock(item.getStock())
                 .build();
+    }
+
+
+    // 상품 수정
+    public ItemUpdateResDto updateItem(int itemNo, ItemUpdateReqDto reqDto) {
+        Item item = itemRepository.findById(itemNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+        Item updatedItem = Item.builder()
+                .itemNo(itemNo)
+                .categoryNo(itemCategoryService.getCategory(reqDto.getCategoryNo()))
+                .imageNo(reqDto.getImageNo())
+                .companyNo(reqDto.getCompanyNo())
+                .price(reqDto.getPrice())
+                .salePrice(reqDto.getSalePrice())
+                .createdAt(item.getCreatedAt())
+                .updatedAt(reqDto.getUpdatedAt())
+                .expiredAt(reqDto.getExpiredAt())
+                .description(reqDto.getDescription())
+                .stock(reqDto.getStock())
+                .build();
+
+        Item savedItem = itemRepository.save(updatedItem);
+        ItemCategory category = savedItem.getCategoryNo();
+
+        return ItemUpdateResDto.builder()
+                .itemNo(updatedItem.getItemNo())
+                .category(ItemCategoryResDto.builder()
+                        .categoryNo(category.getCategoryNo())
+                        .name(category.getName())
+                        .build())
+                .imageNo(updatedItem.getImageNo())
+                .companyNo(updatedItem.getCompanyNo())
+                .price(updatedItem.getPrice())
+                .salePrice(updatedItem.getSalePrice())
+                .createdAt(updatedItem.getCreatedAt())
+                .updatedAt(updatedItem.getUpdatedAt())
+                .expiredAt(updatedItem.getExpiredAt())
+                .description(updatedItem.getDescription())
+                .stock(updatedItem.getStock())
+                .build();
+    }
+
+
+    // 상품 삭제
+    @Transactional
+    public void deleteItem(int itemNo) {
+        if (itemRepository.existsById(itemNo)) {
+            itemRepository.deleteById(itemNo);
+        }
     }
 
 }
