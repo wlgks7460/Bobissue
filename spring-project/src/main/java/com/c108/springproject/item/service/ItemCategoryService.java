@@ -6,6 +6,7 @@ import com.c108.springproject.item.domain.ItemCategory;
 import com.c108.springproject.item.dto.ItemCategoryReqDto;
 import com.c108.springproject.item.dto.ItemCategoryResDto;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class ItemCategoryService {
     }
 
     // 카테고리 만들기
+    @Transactional
     public ItemCategory createCategory(ItemCategoryReqDto dto) {
         
         // 날짜 가져오기
@@ -38,6 +40,7 @@ public class ItemCategoryService {
     }
 
     // 카테고리 전체 조회
+    @Transactional
     public List<ItemCategoryResDto> getAllCategories() {
         return itemcategoryRepository.findAll().stream()
                 .map(itemCategory -> ItemCategoryResDto.builder()  // 이 부분에서 ItemCategoryReqDto -> ItemCategoryResDto로 변경
@@ -51,13 +54,14 @@ public class ItemCategoryService {
 
 
     // id 받아서 카테고리 정보 조회
+    @Transactional
     public ItemCategory getCategory(int categoryNo) {
         return itemcategoryRepository.findById(categoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
-        // 예외처리 질문
     }
 
     
-    // 수정하기
+    // 카테고리 수정
+    @Transactional
     public ItemCategory updateCategory(int categoryNo, ItemCategoryReqDto dto) {
         ItemCategory category = getCategory(categoryNo);
         // 날짜 가져오기
@@ -75,6 +79,7 @@ public class ItemCategoryService {
     
     
     // delete void로 반환하는 것은 반환 값이 필요 없음
+    @Transactional
     public void deleteCategory(int categoryNo) {
         if (itemcategoryRepository.existsById(categoryNo)) {
             itemcategoryRepository.deleteById(categoryNo);

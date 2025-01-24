@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
     Optional<Question> findByQuestionNo(Long questionNo);
+    void deleteByQuestionNo(Long questionNo);
 }

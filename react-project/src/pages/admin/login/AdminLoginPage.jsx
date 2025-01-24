@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import AdminLoginForm from '../../components/admin/AdminLoginForm'
+import AdminLoginForm from '../../../components/admin/home/AdminLoginForm'
 
 const AdminLoginPage = () => {
   const navigate = useNavigate()
