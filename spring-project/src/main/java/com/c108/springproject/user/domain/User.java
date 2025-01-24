@@ -33,8 +33,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private char gender;
+    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
+    private String gender;
 
     @Column
     private float height;
@@ -45,8 +45,8 @@ public class User {
     @Column(nullable = false)
     private int loginType;
 
-    @Column(nullable = false)
-    private char status;
+    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
+    private String status;
 
     @Column(nullable = false)
     private int point;
