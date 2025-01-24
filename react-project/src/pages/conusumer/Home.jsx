@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import SearchBar from '../../components/consumer/SearchBar'
 import HomeEventBanner from '../../components/consumer/home/HomeEventBanner'
-import ItemSummary from '../../components/consumer/home/ItemSummary'
 import HomeLiveShopping from '../../components/consumer/home/HomeLiveShopping'
+import HomeItmeList from '../../components/consumer/home/HomeItmeList'
 
 const Home = () => {
   const [categories, setCategory] = useState([
@@ -25,9 +25,7 @@ const Home = () => {
       {/*상품 section */}
       <div className='flex flex-col items-center gap-10'>
         {categories.map((category, index) => (
-          <div key={index + category}>
-            <ItemSummary category={category} />
-          </div>
+          <HomeItmeList key={index + category} category={category} />
         ))}
       </div>
     </div>
