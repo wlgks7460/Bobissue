@@ -10,6 +10,7 @@ public enum ResponseCode {
 
     SUCCESS_CREATE_QUESTION("SUCCESS_CREATE_QUESTION","문의글 작성 완료"),
     SUCCESS_CREATE_USER("SUCCESS_CREATE_USER","회원가입 완료"),
+    SUCCESS_FOUND_USER_LIST("SUCCESS_FOUND_USER_LIST", "회원 리스트 조회 완료")
     ;
 
     private final String code;
