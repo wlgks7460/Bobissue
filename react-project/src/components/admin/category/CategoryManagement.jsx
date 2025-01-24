@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
+import Breadcrumb from '../common/Breadcrumb'
 
 const CategoryManagementForm = () => {
+  // Breadcrumb에 사용할 경로 데이터
+  const breadcrumbPaths = [
+    { name: 'Home' }, // 홈
+    { name: '카테고리관리' },
+  ]
   const [categories, setCategories] = useState([
     { id: '001', name: '닭가슴살', count: 8 },
     { id: '002', name: '샐러드', count: 5 },
@@ -51,6 +57,8 @@ const CategoryManagementForm = () => {
 
   return (
     <div className='p-6'>
+      {/* Breadcrumb */}
+      <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>카테고리 관리</h1>
       <h2 className='text-lg font-semibold mb-4'>카테고리 등록</h2>
       <div className='grid grid-cols-2 gap-4 mb-6'>

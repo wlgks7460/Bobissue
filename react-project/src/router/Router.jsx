@@ -25,6 +25,11 @@ import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
 import SellerTreePage from '../pages/admin/seller/SellerTreePage'
 import SellerOrderPage from '../pages/admin/seller/SellerOrderPage'
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
+import LiveManagementPage from '../pages/admin/live/LiveManagementPage'
+import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
+import LiveOnAirPage from '../pages/admin/live/LiveOnAirPage'
+import LiveEndedPage from '../pages/admin/live/LiveEndedPage'
+import ViwerMangagementPage from '../pages/admin/live/ViewerManagementPage'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -160,8 +165,35 @@ const router = createBrowserRouter([
             ],
           },
           {
+            // 카테고리 관리 섹션
             path: 'category',
-            element: <CategoryManagementPage />,
+            element: <CategoryManagementPage />, // 카테고리 관리 페이지
+          },
+          {
+            // 라이브 커머스 섹션
+            path: 'live',
+            children: [
+              {
+                path: 'management', // 라이브 관리 (신청/일정) 페이지
+                element: <LiveManagementPage />,
+              },
+              {
+                path: 'notice', // 라이브 공지 관리 페이지
+                element: <LiveNoticePage />,
+              },
+              {
+                path: 'onair', // 진행중 라이브 페이지
+                element: <LiveOnAirPage />,
+              },
+              {
+                path: 'end', // 종료된 라이브 페이지
+                element: <LiveEndedPage />,
+              },
+              {
+                path: 'viewer', // 시청자 관리 페이지
+                element: <ViwerMangagementPage />,
+              },
+            ],
           },
         ],
       },
