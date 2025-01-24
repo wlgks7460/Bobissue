@@ -333,9 +333,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 7 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>라이브 신청 관리</div>
-                    <div>라이브 일정 관리</div>
-                    <div>라이브 공지 관리</div>
+                    <div
+                      onClick={() => navigate('/admin/live/management')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      라이브관리 (신청/일정)
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/live/notice')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      라이브공지관리
+                    </div>
                   </div>
                 )}
               </div>
@@ -354,10 +363,24 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 8 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>진행예정 라이브</div>
-                    <div>진행중 라이브</div>
-                    <div>종료된 라이브</div>
-                    <div>시청자 관리</div>
+                    <div
+                      onClick={() => navigate('/admin/live/onair')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      진행중 라이브
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/live/end')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      종료된 라이브
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/live/viewer')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      시청자 관리
+                    </div>
                   </div>
                 )}
               </div>

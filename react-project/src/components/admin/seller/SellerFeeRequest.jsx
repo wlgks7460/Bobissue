@@ -9,7 +9,7 @@ const SellerFeeRequestPage = () => {
   const breadcrumbPaths = [
     { name: 'Home' }, // 홈
     { name: '판매자 수수료' }, // 판매자 수수료
-    { name: '수수료 정산 요청' }, // 현재 페이지
+    { name: '판매자 수수료정산' }, // 현재 페이지
   ]
 
   // 예제 데이터
@@ -64,7 +64,7 @@ const SellerFeeRequestPage = () => {
     <div className='p-6'>
       {/* Breadcrumb */}
       <Breadcrumb paths={breadcrumbPaths} />
-      <h1 className='text-2xl font-bold mb-6'>수수료 정산 요청</h1>
+      <h1 className='text-2xl font-bold mb-6'>판매자 수수료정산</h1>
 
       {/* 기본 검색 */}
       <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
