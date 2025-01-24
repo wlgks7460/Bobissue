@@ -1,5 +1,6 @@
-package com.c108.springproject.question.dto;
+package com.c108.springproject.question.dto.request;
 
+import com.c108.springproject.question.domain.QuestionCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

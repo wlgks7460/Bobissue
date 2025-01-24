@@ -1,10 +1,9 @@
 package com.c108.springproject.global;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,5 +15,32 @@ public class DefaultResponse<T> {
     @Builder
     public DefaultResponse(T data){
         this.data = data;
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class ListResponse<T>{
+
+        private Long count;
+        private List<T> data;
+
+        @Builder
+        public ListResponse(List<T> list){
+            this.count = (long)list.size();
+            this.data = list;
+        }
+    }
+
+
+    @Getter
+    @NoArgsConstructor
+    public static class ErrorResponse<T>{
+
+        private T error;
+
+        @Builder
+        public ErrorResponse(T error){
+            this.error = error;
+        }
     }
 }

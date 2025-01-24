@@ -4,6 +4,7 @@ import RootPage from '../pages/RootPage'
 import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
 import ConsumerHome from '../pages/conusumer/Home'
 import ConsumerLogin from '../pages/conusumer/Login'
+import ConsumerSignup from '../pages/conusumer/Signup'
 // 관리자 section
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/AdminHome'
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
           {
             path: 'login',
             element: <ConsumerLogin />,
+          },
+          {
+            path: 'signup',
+            element: <ConsumerSignup />,
           },
         ],
       },
