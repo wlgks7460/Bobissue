@@ -203,8 +203,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 4 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>판매자 전체목록</div>
-                    <div>판매자 신규신청</div>
+                    <div
+                      onClick={() => navigate('/admin/seller/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      판매자 전체목록
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/seller/register')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      판매자 신규신청
+                    </div>
                   </div>
                 )}
               </div>
@@ -223,9 +233,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 5 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>판매자 수수료 보기</div>
-                    <div>판매자 수수료 정산요청</div>
-                    <div>판매자 수수료내역</div>
+                    <div
+                      onClick={() => navigate('/admin/fee/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      판매자 수수료내역
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/fee/request')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      판매자 수수료정산
+                    </div>
                   </div>
                 )}
               </div>
@@ -244,8 +263,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 6 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>판매자 트리구조</div>
-                    <div>판매자 주문통계</div>
+                    <div
+                      onClick={() => navigate('/admin/seller/tree')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      판매자 트리구조
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/seller/order')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      판매자 주문통계
+                    </div>
                   </div>
                 )}
               </div>
