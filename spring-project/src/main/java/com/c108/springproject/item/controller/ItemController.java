@@ -35,7 +35,7 @@ public class ItemController {
     @GetMapping("/")
     public ResponseDto getAllItems() {
         List<ItemListResDto> items = itemService.getAllItems();
-        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_QUESTION, new DefaultResponse<>(items));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ITEM, new DefaultResponse<>(items));
     }
 
     // 상품 상세 조회
