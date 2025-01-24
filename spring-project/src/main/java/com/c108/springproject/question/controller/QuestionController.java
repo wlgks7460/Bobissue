@@ -23,15 +23,14 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseDto createQuestion(@RequestBody QuestionReqDto questionReqDto){
-        System.out.println(questionReqDto);
         Question question = questionService.createQuestion(questionReqDto);
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_QUESTION, new DefaultResponse<Long>(question.getQuestionNo()));
     }
 
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseDto findAllQuestions(){
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_QUESTION, new DefaultResponse.ListResponse<QuestionResDto>(questionService.findAllQuestions()));
     }
@@ -43,7 +42,7 @@ public class QuestionController {
 
     @PutMapping("/{question_no}")
     public ResponseDto updateQuestionByNo(@PathVariable Long question_no, @RequestBody QuestionUpdateReqDto questionUpdateReqDto){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_QUESTION, new DefaultResponse<QuestionResDto>(questionService.updateQuestion(question_no, questionUpdateReqDto)));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_QUESTION, new DefaultResponse<QuestionResDto>(questionService.updateQuestion(question_no, questionUpdateReqDto)));
     }
 
     @DeleteMapping("{question_no}")
