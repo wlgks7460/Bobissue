@@ -18,7 +18,12 @@ import PointExcelPage from '../pages/admin/point/PointExcelPage'
 import PointInfoPage from '../pages/admin/point/PointInfoPage'
 import DailyStatisticsPage from '../pages/admin/statistics/DailyStatisticsPage'
 import MonthlyStatisticsPage from '../pages/admin/statistics/MonthlyStatisticsPage'
-
+import SellerInfoPage from '../pages/admin/seller/SellerInfoPage'
+import SellerRegisterPage from '../pages/admin/seller/SellerRegisterPage'
+import SellerFeePage from '../pages/admin/seller/SellerFeePage'
+import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
+import SellerTreePage from '../pages/admin/seller/SellerTreePage'
+import SellerOrderPage from '../pages/admin/seller/SellerOrderPage'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -114,6 +119,42 @@ const router = createBrowserRouter([
               {
                 path: 'monthly', //월별 통계 페이지
                 element: <MonthlyStatisticsPage />,
+              },
+            ],
+          },
+          {
+            // 판매자 관리 섹션
+            path: 'seller',
+            children: [
+              {
+                path: 'info', // 판매자 관리 페이지
+                element: <SellerInfoPage />,
+              },
+              {
+                path: 'register',
+                element: <SellerRegisterPage />, // 판매자 신규신청 페이지
+              },
+              {
+                path: 'tree',
+                element: <SellerTreePage />, // 판매자 트리구조 페이지
+              },
+              {
+                path: 'order',
+                element: <SellerOrderPage />, // 판매자 주문통계 페이지
+              },
+            ],
+          },
+          {
+            // 판매자 수수료 섹션
+            path: 'fee',
+            children: [
+              {
+                path: 'info', // 판매자 수수료내역 페이지
+                element: <SellerFeePage />,
+              },
+              {
+                path: 'request',
+                element: <SellerFeeRuquestPage />,
               },
             ],
           },
