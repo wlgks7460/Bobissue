@@ -7,7 +7,6 @@ const MemberExcelUpload = () => {
   const breadcrumbPaths = [
     { name: 'Home' }, // 홈
     { name: '회원관리' }, // 회원관리
-    { name: '회원관리' }, // 회원관리
     { name: '회원엑셀일괄등록' }, // 현재 페이지
   ]
   // 파일 이름과 미리보기 데이터 상태 관리

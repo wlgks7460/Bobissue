@@ -118,8 +118,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 2 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>포인트 관리</div>
-                    <div>포인트 엑셀일괄 등록</div>
+                    <div
+                      onClick={() => navigate('/admin/points/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      포인트 관리
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/points/excel')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      포인트 엑셀일괄 등록
+                    </div>
                   </div>
                 )}
               </div>
@@ -140,8 +150,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 3 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>월별 가입 통계 분석</div>
-                    <div>일별 가입 통계 분석</div>
+                    <div
+                      onClick={() => navigate('/admin/statistics/daily')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      일별 가입 통계 분석
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/statistics/monthly')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      월별 가입 통계 분석
+                    </div>
                   </div>
                 )}
               </div>

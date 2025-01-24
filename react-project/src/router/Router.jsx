@@ -13,7 +13,10 @@ import MemberLevelPage from '../pages/admin/member/MemberLevelPage'
 import MemberRegisterPage from '../pages/admin/member/MemberRegisterPage'
 import MemberExcelPage from '../pages/admin/member/MemberExcelPage'
 import MemberEmailPage from '../pages/admin/member/MemberEmailPage'
-// 포인트 관련 pages 생성 후 임포트하기
+import PointExcelPage from '../pages/admin/point/PointExcelPage'
+import PointInfoPage from '../pages/admin/point/PointInfoPage'
+import DailyStatisticsPage from '../pages/admin/statistics/DailyStatisticsPage'
+import MonthlyStatisticsPage from '../pages/admin/statistics/MonthlyStatisticsPage'
 
 const router = createBrowserRouter([
   {
@@ -86,12 +89,26 @@ const router = createBrowserRouter([
             path: 'points',
             children: [
               {
-                path: '', // 포인트 관리 페이지
-                element: <PointManagementPage />,
+                path: 'info', // 포인트 관리 페이지
+                element: <PointInfoPage />,
               },
               {
                 path: 'excel', // 포인트 엑셀 일괄등록
-                element: <PointExcelUploadPage />,
+                element: <PointExcelPage />,
+              },
+            ],
+          },
+          {
+            // 통계 섹션
+            path: 'statistics',
+            children: [
+              {
+                path: 'daily', // 일별 통계 페이지
+                element: <DailyStatisticsPage />,
+              },
+              {
+                path: 'monthly', //월별 통계 페이지
+                element: <MonthlyStatisticsPage />,
               },
             ],
           },
