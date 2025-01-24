@@ -24,6 +24,7 @@ import SellerFeePage from '../pages/admin/seller/SellerFeePage'
 import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
 import SellerTreePage from '../pages/admin/seller/SellerTreePage'
 import SellerOrderPage from '../pages/admin/seller/SellerOrderPage'
+import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -157,6 +158,10 @@ const router = createBrowserRouter([
                 element: <SellerFeeRuquestPage />,
               },
             ],
+          },
+          {
+            path: 'category',
+            element: <CategoryManagementPage />,
           },
         ],
       },

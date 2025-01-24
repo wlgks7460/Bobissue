@@ -292,7 +292,9 @@ const AdminSideBar = () => {
           >
             <div className='flex items-center space-x-2'>
               <Cog6ToothIcon className='h-5 w-5' />
-              <span className='text-gray-700'>카테고리 관리</span>
+              <span onClick={() => navigate('/admin/category')} className='text-gray-700'>
+                카테고리 관리
+              </span>
             </div>
           </div>
         </div>
