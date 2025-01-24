@@ -15,7 +15,7 @@ public class UsersResDto {
     private String name;
     private String birthday;
     private String email;
-    private char gender;
+    private String gender;
     private float height;
     private float weight;
     private int loginType;//
