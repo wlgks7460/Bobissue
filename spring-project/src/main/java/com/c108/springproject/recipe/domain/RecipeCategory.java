@@ -1,5 +1,6 @@
 package com.c108.springproject.recipe.domain;
 
+import com.c108.springproject.global.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor; // 데이터베이스 테이블에 매핑
@@ -14,8 +15,11 @@ import java.math.BigInteger;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeCategory {
+public class RecipeCategory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int categoryNo;
+
+    @Column(nullable = false)
+    private String name;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/api/item")
 public class ItemController {
 
     private final ItemService itemService;
@@ -25,14 +25,14 @@ public class ItemController {
     }
 
     // 살품 생성
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseDto createItem(@RequestBody ItemCreateReqDto itemCreateReqDto) {
         ItemCreateResDto resDto = itemService.createItem(itemCreateReqDto);
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ITEM, new DefaultResponse<>(resDto));
     }
 
     // 상품 전체 조회
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseDto getAllItems() {
         List<ItemListResDto> items = itemService.getAllItems();
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ITEM, new DefaultResponse<>(items));
