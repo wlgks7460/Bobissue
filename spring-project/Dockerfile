@@ -4,11 +4,11 @@ FROM openjdk:17-jdk-slim AS build
 WORKDIR /spring-project
 
 # Gradle Wrapper 파일을 복사하고 Gradle 빌드 실행
-COPY ./gradlew .
-COPY ./gradle .
-COPY ./build.gradle .
-COPY ./settings.gradle .
-COPY ./src .
+COPY gradlew .
+COPY gradle .
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
 
 RUN chmod +x gradlew && ./gradlew build
 
