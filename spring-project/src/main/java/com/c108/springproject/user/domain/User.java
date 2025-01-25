@@ -1,5 +1,6 @@
 package com.c108.springproject.user.domain;
 
+import com.c108.springproject.user.dto.UserDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -62,4 +63,12 @@ public class User {
 
     @Column(nullable = false)
     private int gradeNo;
+
+    public void updateUser(UserDto userDto) {
+        this.name = userDto.getName();
+        this.email = userDto.getEmail();
+        this.height = userDto.getHeight();
+        this.weight = userDto.getWeight();
+        this.phoneNumber = userDto.getPhoneNumber();
+    }
 }

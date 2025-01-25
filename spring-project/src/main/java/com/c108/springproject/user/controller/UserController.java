@@ -3,9 +3,9 @@ package com.c108.springproject.user.controller;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
-import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.dto.SignUpReqDto;
-import com.c108.springproject.user.dto.UsersResDto;
+import com.c108.springproject.user.dto.UserDto;
+import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,9 +33,23 @@ public class UserController {
 
     @GetMapping
     public ResponseDto findUserList() {
-        List<UsersResDto> userList = userService.findUserList();
+        List<UserResDto> userList = userService.findUserList();
 
-        return new ResponseDto(HttpStatus.FOUND, ResponseCode.SUCCESS_FOUND_USER_LIST,new DefaultResponse<List<UsersResDto>>(userList));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FOUND_USER_LIST,new DefaultResponse<List<UserResDto>>(userList));
+    }
+
+    @GetMapping("/{userNo}")
+    public ResponseDto findUserById(@PathVariable int userNo) {
+        UserResDto userResDto=userService.findUserById(userNo);
+
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_USER,new DefaultResponse<UserResDto>(userResDto));
+    }
+
+    @PostMapping("/{userNo}")
+    public ResponseDto updateUser(@PathVariable int userNo, @RequestBody UserDto userDto) {
+        userService.updateUser(userNo, userDto);
+
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_UPDATE_USER,null);
     }
 
 

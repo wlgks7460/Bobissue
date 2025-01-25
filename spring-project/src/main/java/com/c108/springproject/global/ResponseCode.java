@@ -29,6 +29,10 @@ public enum ResponseCode {
     CATEGORY_NOT_FOUND("CATEGORY_NOT_FOUND", "카테고리 조회 실패"),
     FAILED_DELETE_QUESTION("FAILED_DELETE_QUESTION", "문의글 삭제 실패"),
 
+    SUCCESS_FIND_USER("SUCCESS_FIND_USER", "회원 조회 완료"),
+    NOT_FOUND_USER("NOT_FOUND_USER", "회원을 찾을 수 없음"),
+    SUCCESS_UPDATE_USER("SUCCESS_UPDATE_USER", "회원 수정 완료"),
+    FAILED_UPDATE_USER("FAILED_UPDATE_USER", "회원 수정 실패"),
     ;
 
     private final String code;
