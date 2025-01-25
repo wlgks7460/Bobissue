@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResDto {
-    private int userId;
+    private int userNo;
     private String name;
     private String birthday;
     private String email;
@@ -25,7 +25,7 @@ public class UserResDto {
     private int gradeNo;
 
     public UserResDto(User user) {
-        this.userId = user.getUserNo();
+        this.userNo = user.getUserNo();
         this.name = user.getName();
         this.birthday = user.getBirthday();
         this.email = user.getEmail();

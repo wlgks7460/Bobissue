@@ -21,10 +21,10 @@ public class Question extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long questionNo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column
+    @Column(length = 2000)
     private String content;
 
     @Enumerated(EnumType.STRING)
@@ -37,20 +37,24 @@ public class Question extends BaseEntity implements Serializable {
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "item_no", nullable = false)
 //    private Item itemNo;
-    @Column
-    private String itemNo;
-
     @Column(nullable = false)
+    private int itemNo;
+
+    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String isPrivate;
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id", nullable = false)
 //    private User userNo;
-    @Column
-    private String userNo;
-
     @Column(nullable = false)
+    private int userNo;
+
+    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
+
+    public void readQuestion(){
+        this.status = "Y";
+    }
 
 
     public void updateQuestion(QuestionUpdateReqDto questionUpdateReqDto){
@@ -58,7 +62,6 @@ public class Question extends BaseEntity implements Serializable {
         this.content = questionUpdateReqDto.getContent();
         this.isPrivate = questionUpdateReqDto.getIsPrivate();
         this.category = QuestionCategory.valueOf(questionUpdateReqDto.getCategory());
-
     }
 
 }

@@ -5,10 +5,46 @@ import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
 import ConsumerHome from '../pages/conusumer/Home'
 import ConsumerLogin from '../pages/conusumer/Login'
 import ConsumerSignup from '../pages/conusumer/Signup'
+
 // 관리자 section
+
+// (관리자) home
 import AdminRoot from '../pages/admin/AdminRoot'
-import AdminHome from '../components/admin/AdminHome'
-import AdminLoginPage from '../pages/admin/AdminLoginPage'
+import AdminHome from '../components/admin/home/AdminHome'
+import AdminLoginPage from '../pages/admin/login/AdminLoginPage'
+// (관리자) 회원관리
+import MemberInfoPage from '../pages/admin/member/MemberInfoPage'
+import MemberLevelPage from '../pages/admin/member/MemberLevelPage'
+import MemberRegisterPage from '../pages/admin/member/MemberRegisterPage'
+import MemberExcelPage from '../pages/admin/member/MemberExcelPage'
+import MemberEmailPage from '../pages/admin/member/MemberEmailPage'
+// (관리자) 포인트관리 & 일일월별 통계
+import PointExcelPage from '../pages/admin/point/PointExcelPage'
+import PointInfoPage from '../pages/admin/point/PointInfoPage'
+import DailyStatisticsPage from '../pages/admin/statistics/DailyStatisticsPage'
+import MonthlyStatisticsPage from '../pages/admin/statistics/MonthlyStatisticsPage'
+// (관리자) 판매자관리
+import SellerInfoPage from '../pages/admin/seller/SellerInfoPage'
+import SellerRegisterPage from '../pages/admin/seller/SellerRegisterPage'
+import SellerFeePage from '../pages/admin/seller/SellerFeePage'
+import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
+import SellerTreePage from '../pages/admin/seller/SellerTreePage'
+import SellerOrderPage from '../pages/admin/seller/SellerOrderPage'
+// (관리자) 카테고리관리
+import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
+// (관리자) 라이브커머스관리
+import LiveManagementPage from '../pages/admin/live/LiveManagementPage'
+import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
+import LiveOnAirPage from '../pages/admin/live/LiveOnAirPage'
+import LiveEndedPage from '../pages/admin/live/LiveEndedPage'
+import ViwerMangagementPage from '../pages/admin/live/ViewerManagementPage'
+// (관리자) 컨텐츠관리
+import CouponIssuePage from '../pages/admin/coupon/CouponIssuePage'
+import CouponStatusPage from '../pages/admin/coupon/CouponStatusPage'
+import ListPage from '../pages/admin/screen/ListPage'
+import RegisterPage from '../pages/admin/screen/RegisterPage'
+import ReportListPage from '../pages/admin/report/ListPage'
+import ReportDetailPage from '../pages/admin/report/DetailPage'
 
 const router = createBrowserRouter([
   {
@@ -50,9 +86,175 @@ const router = createBrowserRouter([
             element: <AdminLoginPage />,
           },
           {
-            //admin - LoginPage
+            // admin - LoginPage
             path: 'home',
             element: <AdminHome />,
+          },
+          {
+            // 회원관리 섹션
+            path: 'members',
+            children: [
+              {
+                path: 'info', // 회원 정보관리
+                element: <MemberInfoPage />,
+              },
+              {
+                path: 'level', // 회원 레벨 관리
+                element: <MemberLevelPage />,
+              },
+              {
+                path: 'register', // 회원 등록
+                element: <MemberRegisterPage />,
+              },
+              {
+                path: 'excel', // 회원 엑셀 등록
+                element: <MemberExcelPage />,
+              },
+              {
+                path: 'email', // 회원 일괄메일발송
+                element: <MemberEmailPage />,
+              },
+            ],
+          },
+          {
+            // 포인트 관리 섹션
+            path: 'points',
+            children: [
+              {
+                path: 'info', // 포인트 관리 페이지
+                element: <PointInfoPage />,
+              },
+              {
+                path: 'excel', // 포인트 엑셀 일괄등록
+                element: <PointExcelPage />,
+              },
+            ],
+          },
+          {
+            // 통계 섹션
+            path: 'statistics',
+            children: [
+              {
+                path: 'daily', // 일별 통계 페이지
+                element: <DailyStatisticsPage />,
+              },
+              {
+                path: 'monthly', //월별 통계 페이지
+                element: <MonthlyStatisticsPage />,
+              },
+            ],
+          },
+          {
+            // 판매자 관리 섹션
+            path: 'seller',
+            children: [
+              {
+                path: 'info', // 판매자 관리 페이지
+                element: <SellerInfoPage />,
+              },
+              {
+                path: 'register',
+                element: <SellerRegisterPage />, // 판매자 신규신청 페이지
+              },
+              {
+                path: 'tree',
+                element: <SellerTreePage />, // 판매자 트리구조 페이지
+              },
+              {
+                path: 'order',
+                element: <SellerOrderPage />, // 판매자 주문통계 페이지
+              },
+            ],
+          },
+          {
+            // 판매자 수수료 섹션
+            path: 'fee',
+            children: [
+              {
+                path: 'info', // 판매자 수수료내역 페이지
+                element: <SellerFeePage />,
+              },
+              {
+                path: 'request',
+                element: <SellerFeeRuquestPage />,
+              },
+            ],
+          },
+          {
+            // 카테고리 관리 섹션
+            path: 'category',
+            element: <CategoryManagementPage />, // 카테고리 관리 페이지
+          },
+          {
+            // 라이브 커머스 섹션
+            path: 'live',
+            children: [
+              {
+                path: 'management', // 라이브 관리 (신청/일정) 페이지
+                element: <LiveManagementPage />,
+              },
+              {
+                path: 'notice', // 라이브 공지 관리 페이지
+                element: <LiveNoticePage />,
+              },
+              {
+                path: 'onair', // 진행중 라이브 페이지
+                element: <LiveOnAirPage />,
+              },
+              {
+                path: 'end', // 종료된 라이브 페이지
+                element: <LiveEndedPage />,
+              },
+              {
+                path: 'viewer', // 시청자 관리 페이지
+                element: <ViwerMangagementPage />,
+              },
+            ],
+          },
+          // 컨텐츠 관리
+          {
+            // 쿠폰 관리 섹션'
+            path: 'coupon',
+            children: [
+              {
+                // 쿠폰 관리 (현황 조회) 페이지
+                path: 'info',
+                element: <CouponStatusPage />,
+              },
+              {
+                // 쿠폰 발급 페이지
+                path: 'issue',
+                element: <CouponIssuePage />,
+              },
+            ],
+          },
+          // 화면 관리 섹션
+          {
+            path: 'screen',
+            children: [
+              {
+                path: 'info', // 이벤트 배너 조회 페이지
+                element: <ListPage />,
+              },
+              {
+                path: 'register', // 이벤트 배너 등록 페이지
+                element: <RegisterPage />,
+              },
+            ],
+          },
+          // 신고 관리 섹션
+          {
+            path: 'report',
+            children: [
+              {
+                path: 'info', // 신고 조회 페이지
+                element: <ReportListPage />,
+              },
+              {
+                path: 'detail', // 신고 상세 조회 및 처리 페이지
+                element: <ReportDetailPage />,
+              },
+            ],
           },
         ],
       },
