@@ -16,10 +16,10 @@ public class QuestionReqDto {
     private String content;
     private String category;
 //    private String imageNo;
-    private String itemNo;
+    private int itemNo;
     private String isPrivate;
 //    private User userNo;
-    private String status;
-    private String createdAt;
-    private String updatedAt;
+//    private User userNo;
+//    private User userNo;
+
 }

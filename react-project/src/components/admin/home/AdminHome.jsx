@@ -1,7 +1,7 @@
 import React from 'react'
-import AdminSideBar from '../admin/AdminSideBar'
-import AdminNav from './AdminNav'
-import AdminDashBoard from './AdminDashBoard'
+import AdminSideBar from '../home/AdminSideBar'
+import AdminNav from '../home/AdminNav'
+import AdminDashBoard from '../home/AdminDashboard'
 
 const AdminHome = () => {
   return (
@@ -19,7 +19,7 @@ const AdminHome = () => {
         </div>
 
         {/* 콘텐츠 영역 */}
-        <main className='pt-16 bg-gray-50 h-full p-6 overflow-y-auto'>
+        <main className='pt-16 bg-white h-full p-6 overflow-y-auto'>
           <AdminDashBoard />
         </main>
       </div>

@@ -5,18 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpDto {
+public class SignUpReqDto {
     private String name;
     private String birthday;
     private String email;
     private String password;
-    private char gender;
+    private String gender;
     private float height;
     private float weight;
     private int loginType;//

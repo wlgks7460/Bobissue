@@ -32,7 +32,7 @@ public class QuestionService {
                     .content(questionReqDto.getContent())
                     .category(category)
                     .isPrivate(questionReqDto.getIsPrivate())
-                    .status(questionReqDto.getStatus())
+                    .status("N")
                     .build();
             return questionRepository.save(new_question);
         }catch (BobIssueException e){
@@ -54,13 +54,14 @@ public class QuestionService {
     @Transactional
     public QuestionResDto findQuestionByNo(Long question_no) {
         Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
+        question.readQuestion();
         return QuestionResDto.toDto(question);
     }
 
     @Transactional
     public QuestionResDto updateQuestion(Long question_no, QuestionUpdateReqDto questionUpdateReqDto) {
+        Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
         try{
-            Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
             question.updateQuestion(questionUpdateReqDto);
             return QuestionResDto.toDto(question);
         }catch(BobIssueException e){
@@ -70,8 +71,9 @@ public class QuestionService {
 
     @Transactional
     public Long deleteQuestion(Long question_no){
+        Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
         try{
-            questionRepository.deleteByQuestionNo(question_no);
+            question.delete();
             return question_no;
         }catch (BobIssueException e){
             throw new BobIssueException(ResponseCode.FAILED_DELETE_QUESTION);

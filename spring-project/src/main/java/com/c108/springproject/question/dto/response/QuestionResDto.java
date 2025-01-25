@@ -13,10 +13,14 @@ public class QuestionResDto {
     private String title;
     private String content;
     private String category;
-    private String itemNo;
+    private int itemNo;
     private String isPrivate;
-    private String userNo;
+    private int userNo;
     private String status;
+    private String createAt;
+    private int createdUser;
+    private String updatedAt;
+    private int updatedUser;
 
     public static QuestionResDto toDto(Question question){
         QuestionResDto questionResDto = QuestionResDto.builder()
@@ -28,6 +32,10 @@ public class QuestionResDto {
                 .isPrivate(question.getIsPrivate())
                 .userNo(question.getUserNo())
                 .status(question.getStatus())
+                .createAt(question.getCreatedAt())
+                .createdUser(question.getCreatedUser())
+                .updatedAt(question.getUpdatedAt())
+                .updatedUser(question.getUpdatedUser())
                 .build();
         return questionResDto;
     }
