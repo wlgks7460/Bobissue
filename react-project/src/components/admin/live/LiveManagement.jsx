@@ -17,8 +17,8 @@ const LiveApplicationManagement = () => {
   ]
   // 신청 데이터
   const [applications, setApplications] = useState([
-    { id: 1, seller: '가맹점몰', date: '2025-02-01', time: '10:00-12:00', status: '대기' },
-    { id: 2, seller: '한글몰', date: '2025-02-03', time: '14:00-16:00', status: '대기' },
+    { id: 1, seller: '싸피몰', date: '2025-02-01', time: '10:00-12:00', status: '대기' },
+    { id: 2, seller: '멀티캠퍼스', date: '2025-02-03', time: '14:00-16:00', status: '대기' },
   ])
 
   // 스케줄러 데이터

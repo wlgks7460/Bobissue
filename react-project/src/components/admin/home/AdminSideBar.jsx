@@ -467,8 +467,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 9 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>쿠폰 현황 조회</div>
-                    <div>쿠폰 발급</div>
+                    <div
+                      onClick={() => navigate('/admin/coupon/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      쿠폰 현황 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/coupon/issue')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      쿠폰 발급
+                    </div>
                   </div>
                 )}
               </div>
@@ -487,8 +497,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 10 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>이벤트 배너 조회</div>
-                    <div>이벤트 배너 등록</div>
+                    <div
+                      onClick={() => navigate('/admin/screen/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      이벤트 배너 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/screen/register')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      이벤트 배너 등록
+                    </div>
                   </div>
                 )}
               </div>
@@ -507,8 +527,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 11 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>신고 내역 조회</div>
-                    <div>신고 상세 조회 / 처리</div>
+                    <div
+                      onClick={() => navigate('/admin/report/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      신고 내역 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/report/detail')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      신고 상세 조회 / 처리
+                    </div>
                   </div>
                 )}
               </div>
