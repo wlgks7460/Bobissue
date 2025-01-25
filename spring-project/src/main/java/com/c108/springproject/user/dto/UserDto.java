@@ -9,14 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpReqDto {
+public class UserDto {
     private String name;
-    private String birthday;
     private String email;
-    private String password;
-    private String gender;
     private float height;
     private float weight;
     private String phoneNumber;
-    private int loginType;//
+
 }
