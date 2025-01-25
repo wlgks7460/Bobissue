@@ -8,7 +8,7 @@ COPY ./gradlew .
 COPY ./gradle /gradle
 COPY ./build.gradle .
 COPY ./settings.gradle .
-COPY ./src
+COPY ./src /app/src
 
 RUN chmod +x gradlew && ./gradlew build
 
