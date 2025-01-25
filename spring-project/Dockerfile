@@ -5,10 +5,10 @@ WORKDIR /app
 
 # Gradle Wrapper 파일을 복사하고 Gradle 빌드 실행
 COPY ./gradlew .
-COPY ./gradle /gradle
+COPY ./gradle .
 COPY ./build.gradle .
 COPY ./settings.gradle .
-COPY ./src /app/src
+COPY ./src .
 
 RUN chmod +x gradlew && ./gradlew build
 
