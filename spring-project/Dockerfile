@@ -1,7 +1,7 @@
 # Step 1: Build stage
 FROM openjdk:17-jdk-slim AS build
 
-WORKDIR /app
+WORKDIR /spring-project
 
 # Gradle Wrapper 파일을 복사하고 Gradle 빌드 실행
 COPY ./gradlew .
