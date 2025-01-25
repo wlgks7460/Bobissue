@@ -5,17 +5,18 @@ WORKDIR /spring-project
 
 # Gradle Wrapper 파일을 복사하고 Gradle 빌드 실행
 COPY gradlew .
-COPY gradle .
+COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 
-RUN chmod +x gradlew && ./gradlew build
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJar
 
 # Step 2: Run stage
 FROM openjdk:17-jdk-slim
 
-WORKDIR /app
+WORKDIR /spring-project
 
 # 빌드된 Jar 파일을 복사
 COPY --from=build /var/lib/jenkins/workspace/bobissue/spring-project/build/libs/*.jar app.jar
