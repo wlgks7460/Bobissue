@@ -36,6 +36,9 @@ public enum ResponseCode {
     NOT_FOUND_USER("NOT_FOUND_USER", "회원을 찾을 수 없음"),
     SUCCESS_CREATE_RECIPECATEGORY("SUCCESS_CREATE_RECIPECATEGORY", "레시피 카테고리 생성 완료"),
     SUCCESS_FIND_RECIPECATEGORY("SUCCESS_FIND_RECIPECATEGORY", "전체 레시피 카테고리 조회 완료"),
+    RECIPECATEGORY_NOT_FOUND("RECIPECATEGORY_NOT_FOUND", "레시피 카테고리 조회 실패"),
+    FAILED_UPDATE_CATEGORY("FAILED_UPDATE_CATEGORY", "카테고리 업데이트 실패"),
+    SUCCESS_DELETE_CATEGORY("SUCCESS_DELETE_CATEGORY", "카테고리 삭제 성공"),
     ;
 
     private final String code;

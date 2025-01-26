@@ -22,7 +22,8 @@ public class RecipeCategoryService {
     public RecipeCategoryService(RecipeCategoryRepository recipeCategoryRepository) {
         this.recipeCategoryRepository = recipeCategoryRepository;
     }
-
+    
+    // 생성
     @Transactional
     public RecipeCategory createCategory(RecipeCategoryReqDto request) {
         try {
@@ -35,6 +36,7 @@ public class RecipeCategoryService {
         }
     }
 
+    // 전체 조회
     @Transactional
     public List<RecipeCategoryResDto> findAllRecipeCategory() {
         List<RecipeCategory> recipeCategories = recipeCategoryRepository.findAll();
@@ -44,4 +46,36 @@ public class RecipeCategoryService {
         }
         return recipeCategoryResDtos;
     }
+    
+    // 상세 조회
+    @Transactional
+    public RecipeCategory findRecipeCategoryByNo(int recipeCategoryNo) {
+        return recipeCategoryRepository.findById(recipeCategoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.RECIPECATEGORY_NOT_FOUND));
+    }
+
+    //수정
+
+    public RecipeCategoryResDto updateRecipeCategory(int recipeCategoryNo, RecipeCategoryReqDto recipeCategoryReqDto ) {
+        RecipeCategory recipeCategory = recipeCategoryRepository.findById(recipeCategoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.RECIPECATEGORY_NOT_FOUND));
+        try {
+            RecipeCategory updatedCategory = RecipeCategory.builder()
+                    .categoryNo(recipeCategory.getCategoryNo())
+                    .name(recipeCategoryReqDto.getName())
+                    .build();
+            return RecipeCategoryResDto.toDto(updatedCategory);
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_CATEGORY);
+        }
+    }
+
+    public int deleteRecipeCategory(int recipeCategoryNo) {
+        RecipeCategory recipeCategory = recipeCategoryRepository.findById(recipeCategoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_CATEGORY));
+        try {
+            recipeCategory.delete();
+            return recipeCategoryNo;
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.NOT_FOUND_CATEGORY);
+        }
+    }
+
 }
