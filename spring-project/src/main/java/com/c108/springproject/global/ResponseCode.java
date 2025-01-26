@@ -43,6 +43,9 @@ public enum ResponseCode {
     SUCCESS_CREATE_RECIPE("SUCCESS_CREATE_RECIPE", "레시피 생성 성공"),
     SUCCESS_UPDATE_USER("SUCCESS_UPDATE_USER", "회원 수정 완료"),
     FAILED_UPDATE_USER("FAILED_UPDATE_USER", "회원 수정 실패"),
+    RECIPE_NOT_FOUND("RECIPE_NOT_FOUND", "레시피 조회 실패"),
+    FAILED_UPDATE_RECIPE("FAILED_UPDATE_RECIPE", "레시피 수정 실패"),
+    SUCCESS_UPDATE_RECIPE("SUCCESS_UPDATE_RECIPE", "레시피 수정 성공"),
     ;
 
     private final String code;

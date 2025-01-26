@@ -9,7 +9,9 @@ import com.c108.springproject.recipe.domain.Recipe;
 import com.c108.springproject.recipe.domain.RecipeCategory;
 import com.c108.springproject.recipe.dto.request.MaterialReqDto;
 import com.c108.springproject.recipe.dto.request.RecipeCreateReqDto;
+import com.c108.springproject.recipe.dto.request.RecipeUpdateReqDto;
 import com.c108.springproject.recipe.dto.response.RecipeCreateResDto;
+import com.c108.springproject.recipe.dto.response.RecipeUpdateResDto;
 import com.c108.springproject.recipe.repository.RecipeCategoryRepository;
 import com.c108.springproject.recipe.repository.RecipeRepository;
 import jakarta.transaction.Transactional;
@@ -62,6 +64,43 @@ public class RecipeService {
             throw e;
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_CREATE_RECIPE);
+        }
+    }
+    @Transactional
+    public RecipeUpdateResDto updateRecipe(int recipeNo, RecipeUpdateReqDto request) {
+        try {
+            Recipe recipe = recipeRepository.findById(recipeNo)
+                    .orElseThrow(() -> new BobIssueException(ResponseCode.RECIPE_NOT_FOUND));
+
+            RecipeCategory category = recipeCategoryRepository.findById(request.getCategoryNo())
+                    .orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
+
+            recipe.getMaterials().clear();
+
+            recipe.update(category, request.getName(), request.getTime());
+            recipe.setImageNo(request.getImageNo());
+            recipe.setUpdatedUser(request.getUpdatedUser());
+
+
+            for (MaterialReqDto materialDto : request.getMaterials()) {
+                Item item = itemRepository.findById(materialDto.getItemNo())
+                        .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+
+                Material material = Material.builder()
+                        .recipe(recipe)
+                        .item(item)
+                        .cnt(materialDto.getCnt())
+                        .build();
+
+                recipe.getMaterials().add(material);
+            }
+
+            Recipe updatedRecipe = recipeRepository.save(recipe);
+            return RecipeUpdateResDto.toDto(updatedRecipe);
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_RECIPE);
         }
     }
 
