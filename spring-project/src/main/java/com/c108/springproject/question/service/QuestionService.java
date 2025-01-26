@@ -36,7 +36,7 @@ public class QuestionService {
                     .build();
             return questionRepository.save(new_question);
         }catch (BobIssueException e){
-            throw new BobIssueException(ResponseCode.QUESTION_NOT_FOUND);
+            throw new BobIssueException(ResponseCode.FAILED_CREATE_QUESTION);
         }
 
     }
