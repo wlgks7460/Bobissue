@@ -45,7 +45,11 @@ import ListPage from '../pages/admin/screen/ListPage'
 import RegisterPage from '../pages/admin/screen/RegisterPage'
 import ReportListPage from '../pages/admin/report/ListPage'
 import ReportDetailPage from '../pages/admin/report/DetailPage'
-
+// (관리자) CS 관리
+import NotificationPage from '../pages/admin/cs/NotificationPage'
+import CSCenterPage from '../pages/admin/cs/CSCenterPage'
+import NoticePage from '../pages/admin/cs/NoticePage'
+import FAQPage from '../pages/admin/cs/FAQPage'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -253,6 +257,28 @@ const router = createBrowserRouter([
               {
                 path: 'detail', // 신고 상세 조회 및 처리 페이지
                 element: <ReportDetailPage />,
+              },
+            ],
+          },
+          // CS 관리 섹션
+          {
+            path: 'cs',
+            children: [
+              {
+                path: 'notification', // 알림 관리 페이지
+                element: <NotificationPage />,
+              },
+              {
+                path: 'cscenter', // 고객센터 관리 페이지
+                element: <CSCenterPage />,
+              },
+              {
+                path: 'notice', // 공지사항 페이지
+                element: <NoticePage />,
+              },
+              {
+                path: 'FAQ', // FAQ 운영 페이지
+                element: <FAQPage />,
               },
             ],
           },
