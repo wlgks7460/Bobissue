@@ -10,14 +10,14 @@ import com.c108.springproject.recipe.domain.RecipeCategory;
 import com.c108.springproject.recipe.dto.request.MaterialReqDto;
 import com.c108.springproject.recipe.dto.request.RecipeCreateReqDto;
 import com.c108.springproject.recipe.dto.request.RecipeUpdateReqDto;
-import com.c108.springproject.recipe.dto.response.RecipeCreateResDto;
-import com.c108.springproject.recipe.dto.response.RecipeUpdateResDto;
+import com.c108.springproject.recipe.dto.response.*;
 import com.c108.springproject.recipe.repository.RecipeCategoryRepository;
 import com.c108.springproject.recipe.repository.RecipeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class RecipeService {
@@ -102,6 +102,31 @@ public class RecipeService {
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_RECIPE);
         }
+    }
+
+    // 전체조회
+    @Transactional
+    public List<RecipeListResDto> findAllRecipe() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        List<RecipeListResDto> recipeListResDtos = new ArrayList<>();
+        for(Recipe recipe: recipes) {
+            recipeListResDtos.add(RecipeListResDto.toDto(recipe));
+        }
+        return recipeListResDtos;
+    }
+
+    @Transactional
+    public RecipeResDto findRecipe(int recipeNo) {
+        Recipe recipe = recipeRepository.findById(recipeNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.RECIPE_NOT_FOUND));
+        return RecipeResDto.toDto(recipe);
+    }
+
+    @Transactional
+    public void deleteRecipe(int recipeNo) {
+        Recipe recipe = recipeRepository.findById(recipeNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.RECIPE_NOT_FOUND));
+        recipe.delete();
     }
 
 
