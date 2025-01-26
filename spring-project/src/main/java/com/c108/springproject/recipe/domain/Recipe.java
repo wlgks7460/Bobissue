@@ -9,6 +9,8 @@ import lombok.Getter; // 모든 필드에 getter 메서드 생성
 import lombok.NoArgsConstructor; // 기본 생성자 생성
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,8 +25,9 @@ public class Recipe extends BaseEntity {
     @Column(nullable = false)
     private BigInteger imageNo;
 
-    @Column(nullable = false)
-    private int categoryNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_no", nullable = false)
+    private RecipeCategory category;
 
     @Column(nullable = false, length = 100)
     private String  name;
@@ -32,12 +35,17 @@ public class Recipe extends BaseEntity {
     @Column(nullable = false)
     private int time;
 
-    @Column(nullable = false)
-    private int createdUser;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<Material> materials = new ArrayList<>();
 
-    @Column(nullable = false)
-    private int updatedUser;
+    public void update(RecipeCategory category, String name, int time) {
+        this.category = category;
+        this.name = name;
+        this.time = time;
+    }
 
-    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
-    private String delYn;
+
+
+//    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
+//    private String delYn;
 }

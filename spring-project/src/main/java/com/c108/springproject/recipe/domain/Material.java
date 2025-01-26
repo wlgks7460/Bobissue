@@ -1,6 +1,7 @@
 package com.c108.springproject.recipe.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.item.domain.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor; // 데이터베이스 테이블에 매핑
@@ -15,17 +16,24 @@ import java.math.BigInteger;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Material extends BaseEntity {
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int materialNo;
 
-    @Column(nullable = false)
-    private int itemNO;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_no")
+    private Recipe recipe;
 
-    @Column(nullable = false)
-    private int recipeNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_no")
+    private Item item;
 
     @Column(nullable = false)
     private int cnt;
+
+    public void update(Item item, int cnt) {
+        this.item = item;
+        this.cnt = cnt;
+    }
 }

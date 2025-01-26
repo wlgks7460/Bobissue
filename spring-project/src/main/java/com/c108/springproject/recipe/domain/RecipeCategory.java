@@ -9,6 +9,7 @@ import lombok.Getter; // 모든 필드에 getter 메서드 생성
 import lombok.NoArgsConstructor; // 기본 생성자 생성
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,4 +23,7 @@ public class RecipeCategory extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Recipe> recipes;
 }
