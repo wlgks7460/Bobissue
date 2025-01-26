@@ -1,4 +1,4 @@
-package com.c108.springproject.notification.dto;
+package com.c108.springproject.notification.dto.request;
 
 
 import com.c108.springproject.notification.domain.NotificationRead;
@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificationReadReqDto {
+public class NotificationReqDto {
     private String title;
     private String content;
-    private String createdAt;
-    private String updatedAt;
-    private NotificationRead read;
+    private String reader;
 }
