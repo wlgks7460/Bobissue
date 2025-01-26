@@ -3,10 +3,7 @@ package com.c108.springproject.recipe.domain;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor; // 데이터베이스 테이블에 매핑
-import lombok.Builder;
-import lombok.Getter; // 모든 필드에 getter 메서드 생성
-import lombok.NoArgsConstructor; // 기본 생성자 생성
+import lombok.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,6 +33,7 @@ public class Recipe extends BaseEntity {
     @Column(nullable = false)
     private int time;
 
+    @Builder.Default
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Material> materials = new ArrayList<>();
 
