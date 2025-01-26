@@ -22,11 +22,11 @@ public class Material {
     private int materialNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_no")
+    @JoinColumn(name = "recipe_no", nullable = false)
     private Recipe recipe;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_no")
+    @JoinColumn(name = "item_no", nullable = false)
     private Item item;
 
     @Column(nullable = false)

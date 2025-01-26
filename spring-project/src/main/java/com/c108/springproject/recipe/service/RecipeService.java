@@ -29,6 +29,7 @@ public class RecipeService {
         this.itemRepository = itemRepository;
     }
 
+    @Transactional
     public RecipeCreateResDto createRecipe(RecipeCreateReqDto request) {
         try {
             RecipeCategory category = recipeCategoryRepository.findById(request.getCategoryNo())
@@ -36,26 +37,26 @@ public class RecipeService {
 
             Recipe recipe = Recipe.builder()
                     .category(category)
+                    .imageNo(request.getImageNo())
                     .name(request.getName())
                     .time(request.getTime())
                     .materials(new ArrayList<>())
                     .build();
-
-            Recipe savedRecipe = recipeRepository.save(recipe);
 
             for (MaterialReqDto materialDto : request.getMaterials()) {
                 Item item = itemRepository.findById(materialDto.getItemNo())
                         .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
                 Material material = Material.builder()
-                        .recipe(savedRecipe)
+                        .recipe(recipe)
                         .item(item)
                         .cnt(materialDto.getCnt())
                         .build();
 
-                savedRecipe.getMaterials().add(material);
+                recipe.getMaterials().add(material);
             }
 
+            Recipe savedRecipe = recipeRepository.save(recipe);
             return RecipeCreateResDto.toDto(savedRecipe);
         } catch (BobIssueException e) {
             throw e;

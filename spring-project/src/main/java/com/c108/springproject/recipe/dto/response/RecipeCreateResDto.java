@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RecipeCreateResDto {
     private int recipeNo;
+    private BigInteger imageNo;
     private int categoryNo;
     private String categoryName;
     private String name;
@@ -28,6 +30,7 @@ public class RecipeCreateResDto {
     public static RecipeCreateResDto toDto(Recipe recipe) {
         return RecipeCreateResDto.builder()
                 .recipeNo(recipe.getRecipeNo())
+                .imageNo(recipe.getImageNo())
                 .categoryNo(recipe.getCategory().getCategoryNo())
                 .categoryName(recipe.getCategory().getName())
                 .name(recipe.getName())

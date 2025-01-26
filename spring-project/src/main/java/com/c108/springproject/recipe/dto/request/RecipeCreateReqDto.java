@@ -1,5 +1,6 @@
 package com.c108.springproject.recipe.dto.request;
 
+import java.math.BigInteger;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RecipeCreateReqDto {
     private int categoryNo;
+    private BigInteger imageNo;
     private String name;
     private int time;
     private int createdUser;
