@@ -2,6 +2,7 @@ package com.c108.springproject.user.service;
 
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.dto.SignUpReqDto;
+import com.c108.springproject.user.dto.UserDto;
 import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,19 @@ public class UserService {
         return userRepository.findById(userNo).map(UserResDto::new).orElse(null);
     }
 
+//    @Transactional
+//    public UserResDto findUserByEmail(String email) {}
+
+    @Transactional
+    public void updateUser(int userNo, UserDto userDto) {
+        try{
+            User user = userRepository.findById(userNo).orElse(null);
+            user.updateUser(userDto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 //    @Transactional
 //    public User signIn(String email, String password) {
 //    }

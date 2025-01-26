@@ -41,6 +41,8 @@ public enum ResponseCode {
     SUCCESS_DELETE_CATEGORY("SUCCESS_DELETE_CATEGORY", "카테고리 삭제 성공"),
     FAILED_CREATE_RECIPE("FAILED_CREATE_RECIPE", "레시피 생성 실패"),
     SUCCESS_CREATE_RECIPE("SUCCESS_CREATE_RECIPE", "레시피 생성 성공"),
+    SUCCESS_UPDATE_USER("SUCCESS_UPDATE_USER", "회원 수정 완료"),
+    FAILED_UPDATE_USER("FAILED_UPDATE_USER", "회원 수정 실패"),
     ;
 
     private final String code;
