@@ -47,5 +47,29 @@ public class AnswerService {
         return AnswerResDto.toDto(answer);
     }
 
+    @Transactional
+    public AnswerResDto updateAnswer(Long question_no, AnswerReqDto answerReqDto){
+        Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
+        Answer answer = answerRepository.findByQuestionNo(question).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ANSWER));
+        try {
+            answer.updateAnswer(answerReqDto);
+            return AnswerResDto.toDto(answer);
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_ANSWER);
+        }
+    }
+
+    @Transactional
+    public Long deleteAnswer(Long question_no){
+        Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
+        Answer answer = answerRepository.findByQuestionNo(question).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ANSWER));
+        try{
+            answer.delete();
+            return answer.getAnswerNo();
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_ANSWER);
+        }
+    }
+
 
 }

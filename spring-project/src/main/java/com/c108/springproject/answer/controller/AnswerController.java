@@ -33,4 +33,14 @@ public class AnswerController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ANSWER, new DefaultResponse<AnswerResDto>(answerService.findAnswer(question_no)));
     }
 
+
+    @PutMapping("")
+    public ResponseDto updateAnswer(@PathVariable("question_no") Long question_no, @RequestBody AnswerReqDto answerReqDto){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_ANSWER, new DefaultResponse<AnswerResDto>(answerService.updateAnswer(question_no, answerReqDto)));
+    }
+
+    @DeleteMapping("")
+    public ResponseDto deleteAnswer(@PathVariable("question_no") Long question_no){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_ANSWER, new DefaultResponse<Long>(answerService.deleteAnswer(question_no)));
+    }
 }

@@ -1,5 +1,6 @@
 package com.c108.springproject.answer.domain;
 
+import com.c108.springproject.answer.dto.request.AnswerReqDto;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.question.domain.Question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,6 +41,10 @@ public class Answer extends BaseEntity implements Serializable {
 
     public void readAnswer() {
         this.status = "Y";
+    }
+
+    public void updateAnswer(AnswerReqDto answerReqDto){
+        this.content = answerReqDto.getContent();
     }
 
 }
