@@ -5,6 +5,7 @@ import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
 import ConsumerHome from '../pages/conusumer/Home'
 import ConsumerLogin from '../pages/conusumer/Login'
 import ConsumerSignup from '../pages/conusumer/Signup'
+import ConsumerItemDetail from '../pages/conusumer/ItemDetail'
 // 관리자 section
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/home/AdminHome'
@@ -24,6 +25,7 @@ import SellerFeePage from '../pages/admin/seller/SellerFeePage'
 import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
 import SellerTreePage from '../pages/admin/seller/SellerTreePage'
 import SellerOrderPage from '../pages/admin/seller/SellerOrderPage'
+
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
           {
             path: 'signup',
             element: <ConsumerSignup />,
+          },
+          {
+            path: 'item/:itemNo',
+            element: <ConsumerItemDetail />,
           },
         ],
       },
