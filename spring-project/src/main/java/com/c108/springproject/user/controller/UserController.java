@@ -43,11 +43,11 @@ public class UserController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_USER,new DefaultResponse<UserResDto>(userResDto));
     }
 
-    @PostMapping("/{userNo}")
-    public ResponseDto updateUser(@PathVariable int userNo, @RequestBody UserDto userDto) {
-        userService.updateUser(userNo, userDto);
-        return new ResponseDto(HttpStatus.FOUND, ResponseCode.SUCCESS_FIND_USER,new DefaultResponse<UserResDto>(userResDto));
-    }
+//    @PostMapping("/{userNo}")
+//    public ResponseDto updateUser(@PathVariable int userNo, @RequestBody UserDto userDto) {
+//        userService.updateUser(userNo, userDto);
+//        return new ResponseDto(HttpStatus.FOUND, ResponseCode.SUCCESS_FIND_USER,new DefaultResponse<UserResDto>(userResDto));
+//    }
 
 
 

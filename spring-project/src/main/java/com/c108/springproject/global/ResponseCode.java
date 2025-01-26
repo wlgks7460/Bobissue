@@ -43,6 +43,11 @@ public enum ResponseCode {
     SUCCESS_CREATE_RECIPE("SUCCESS_CREATE_RECIPE", "레시피 생성 성공"),
     SUCCESS_UPDATE_USER("SUCCESS_UPDATE_USER", "회원 수정 완료"),
     FAILED_UPDATE_USER("FAILED_UPDATE_USER", "회원 수정 실패"),
+
+    SUCCESS_CREATE_ANSWER("SUCCESS_CREATE_ANSWER", "문의 답변 작성 성공"),
+    FAILED_CREATE_ANSWER("FAILED_CREATE_ANSWER", "문의 답변 작성 실패"),
+    SUCCESS_FIND_ANSWER("SUCCESS_FIND_ANSWER", "문의 답변 조회 성공"),
+    FAILED_FIND_ANSWER("FAILED_FIND_ANSWER", "문의 답변 조회 실패")
     ;
 
     private final String code;
