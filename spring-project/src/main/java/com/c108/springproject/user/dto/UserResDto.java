@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsersResDto {
-    private int userId;
+public class UserResDto {
+    private int userNo;
     private String name;
     private String birthday;
     private String email;
-    private char gender;
+    private String gender;
     private float height;
     private float weight;
     private int loginType;//
@@ -24,8 +24,8 @@ public class UsersResDto {
     private String updateAt;
     private int gradeNo;
 
-    public UsersResDto(User user) {
-        this.userId = user.getUserNo();
+    public UserResDto(User user) {
+        this.userNo = user.getUserNo();
         this.name = user.getName();
         this.birthday = user.getBirthday();
         this.email = user.getEmail();

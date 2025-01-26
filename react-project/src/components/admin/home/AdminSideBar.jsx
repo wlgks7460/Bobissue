@@ -292,7 +292,9 @@ const AdminSideBar = () => {
           >
             <div className='flex items-center space-x-2'>
               <Cog6ToothIcon className='h-5 w-5' />
-              <span className='text-gray-700'>카테고리 관리</span>
+              <span onClick={() => navigate('/admin/category')} className='text-gray-700'>
+                카테고리 관리
+              </span>
             </div>
           </div>
         </div>
@@ -331,9 +333,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 7 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>라이브 신청 관리</div>
-                    <div>라이브 일정 관리</div>
-                    <div>라이브 공지 관리</div>
+                    <div
+                      onClick={() => navigate('/admin/live/management')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      라이브관리 (신청/일정)
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/live/notice')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      라이브공지관리
+                    </div>
                   </div>
                 )}
               </div>
@@ -352,10 +363,24 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 8 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>진행예정 라이브</div>
-                    <div>진행중 라이브</div>
-                    <div>종료된 라이브</div>
-                    <div>시청자 관리</div>
+                    <div
+                      onClick={() => navigate('/admin/live/onair')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      진행중 라이브
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/live/end')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      종료된 라이브
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/live/viewer')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      시청자 관리
+                    </div>
                   </div>
                 )}
               </div>
@@ -442,8 +467,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 9 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>쿠폰 현황 조회</div>
-                    <div>쿠폰 발급</div>
+                    <div
+                      onClick={() => navigate('/admin/coupon/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      쿠폰 현황 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/coupon/issue')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      쿠폰 발급
+                    </div>
                   </div>
                 )}
               </div>
@@ -462,8 +497,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 10 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>이벤트 배너 조회</div>
-                    <div>이벤트 배너 등록</div>
+                    <div
+                      onClick={() => navigate('/admin/screen/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      이벤트 배너 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/screen/register')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      이벤트 배너 등록
+                    </div>
                   </div>
                 )}
               </div>
@@ -482,8 +527,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 11 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>신고 내역 조회</div>
-                    <div>신고 상세 조회 / 처리</div>
+                    <div
+                      onClick={() => navigate('/admin/report/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      신고 내역 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/report/detail')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      신고 상세 조회 / 처리
+                    </div>
                   </div>
                 )}
               </div>

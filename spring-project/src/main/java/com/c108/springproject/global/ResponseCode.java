@@ -10,7 +10,7 @@ public enum ResponseCode {
 
     SUCCESS_CREATE_QUESTION("SUCCESS_CREATE_QUESTION","문의글 작성 완료"),
     SUCCESS_CREATE_USER("SUCCESS_CREATE_USER","회원가입 완료"),
-    SUCCESS_FOUND_USER_LIST("SUCCESS_FOUND_USER_LIST", "회원 리스트 조회 완료")
+    SUCCESS_FOUND_USER_LIST("SUCCESS_FOUND_USER_LIST", "회원 리스트 조회 완료"),
     SUCCESS_FIND_ALL_QUESTION("SUCCESS_FIND_ALL_QUESTION", "전체 문의글 조회 완료"),
     SUCCESS_FIND_QUESTION("SUCCESS_FIND_QUESTION", "문의글 조회 완료"),
     QUESTION_NOT_FOUND("QUESTION_NOT_FOUND", "문의글 조회 실패"),
@@ -29,6 +29,10 @@ public enum ResponseCode {
     CATEGORY_NOT_FOUND("CATEGORY_NOT_FOUND", "카테고리 조회 실패"),
     FAILED_DELETE_QUESTION("FAILED_DELETE_QUESTION", "문의글 삭제 실패"),
 
+    SUCCESS_FIND_USER("SUCCESS_FIND_USER", "회원 조회 완료"),
+    NOT_FOUND_USER("NOT_FOUND_USER", "회원을 찾을 수 없음"),
+    SUCCESS_UPDATE_USER("SUCCESS_UPDATE_USER", "회원 수정 완료"),
+    FAILED_UPDATE_USER("FAILED_UPDATE_USER", "회원 수정 실패"),
     ;
 
     private final String code;
