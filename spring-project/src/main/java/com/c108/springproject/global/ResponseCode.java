@@ -75,6 +75,9 @@ public enum ResponseCode {
     NOT_ENOUGH_STOCK("NOT_ENOUGH_STOCK", "재고 부족"),
     FAILED_CREATE_ORDER("FAILED_CREATE_ORDER", "주문 생성 실패"),
     SUCCESS_CREATE_ORDER("SUCCESS_CREATE_ORDER", "주문 생성 성공"),
+    ORDER_NOT_FOUND("ORDER_NOT_FOUND", "주문 조회 실패"),
+    SUCCESS_FIND_ALL_ORDERS("SUCCESS_FIND_ALL_ORDERS", "전체 주문 조회 성공"),
+    SUCCESS_FIND_ORDER("SUCCESS_FIND_ORDER", "주문 조회 성공"),
     ;
 
     private final String code;

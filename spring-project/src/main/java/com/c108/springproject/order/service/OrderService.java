@@ -6,11 +6,17 @@ import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.order.domain.Order;
 import com.c108.springproject.order.domain.OrderDetail;
+import com.c108.springproject.order.domain.OrderStatus;
+import com.c108.springproject.order.domain.DeliveryStatus;
 import com.c108.springproject.order.dto.request.OrderCreateReqDto;
 import com.c108.springproject.order.dto.request.OrderItemReqDto;
 import com.c108.springproject.order.dto.response.OrderCreateResDto;
+import com.c108.springproject.order.dto.response.OrderDetailResDto;
+import com.c108.springproject.order.dto.response.OrderListResDto;
+import com.c108.springproject.order.repository.DeliveryStatusRepository;
 import com.c108.springproject.order.repository.OrderDetailRepository;
 import com.c108.springproject.order.repository.OrderRepository;
+import com.c108.springproject.order.repository.OrderStatusRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +28,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final ItemRepository itemRepository;
+    private final OrderStatusRepository orderStatusRepository;
+    private final DeliveryStatusRepository deliveryStatusRepository;
 
 
-    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ItemRepository itemRepository) {
+    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ItemRepository itemRepository, OrderStatusRepository orderStatusRepository, DeliveryStatusRepository deliveryStatusRepository) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.itemRepository = itemRepository;
+        this.orderStatusRepository = orderStatusRepository;
+        this.deliveryStatusRepository = deliveryStatusRepository;
     }
 
     @Transactional
@@ -113,15 +123,40 @@ public class OrderService {
             order.getOrderDetails().add(detail);
         }
     }
-    
-    // 수정 필드
-
-
-
     // 그냥 전체 조회
-
+    @Transactional
+    public List<OrderListResDto> findAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderListResDto> orderListResDtos = new ArrayList<>();
+        for(Order order: orders) {
+            String orderStatus = getOrderStatus(order.getOrderCategoryNo());
+            String deliveryStatus = getDeliveryStatus(order.getDelCategoryNo());
+            orderListResDtos.add(OrderListResDto.toDto(order, orderStatus, deliveryStatus));
+        }
+        return orderListResDtos;
+    }
 
 
     // 상세 조회
+    @Transactional
+    public OrderDetailResDto findOrder(int orderNo) {
+        Order order = orderRepository.findById(orderNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
+        String orderStatus = getOrderStatus(order.getOrderCategoryNo());
+        String deliveryStatus = getDeliveryStatus(order.getDelCategoryNo());
+        return OrderDetailResDto.toDto(order, orderStatus, deliveryStatus);
+    }
+
+    private String getOrderStatus(int orderStatusNo) {
+        return orderStatusRepository.findByOrderStatusNo(orderStatusNo)
+                .map(OrderStatus::getName)
+                .orElse("조회 실패");
+    }
+
+    private String getDeliveryStatus(int delCategoryNo) {
+        return deliveryStatusRepository.findByDelCategoryNo(delCategoryNo)
+                .map(DeliveryStatus::getName)
+                .orElse("조회 실패");
+    }
 
 }
