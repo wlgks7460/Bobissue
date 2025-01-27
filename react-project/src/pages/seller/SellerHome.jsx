@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import TopNavbar from './components/TopNavbar';
 import Sidebar from './components/Sidebar';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const SellerMainPage = () => {
+  const location =useLocation()
   const navigate = useNavigate();
   const [token, setToken] = useState(null); // token 상태를 useState로 관리
   const [menuState, setMenuState] = useState({
@@ -21,16 +22,20 @@ const SellerMainPage = () => {
 
   // 로그인 여부를 확인하고 리디렉션 처리
   useEffect(() => {
-    let savedToken = localStorage.getItem('SELLER_AUTH_TOKEN');
-     savedToken ="hello"
+    const savedToken = localStorage.getItem('SELLER_AUTH_TOKEN'); // 로컬스토리지에서 토큰 가져오기
+  
     if (!savedToken) {
-      //더미토큰 디버깅용
-      setToken(savedToken)
-      navigate('/seller/login', { replace: true }); // 로그인 페이지로 리디렉션
+      // 토큰이 없는 경우 로그인 페이지로 리디렉션
+      const redirectPath = `${location.pathname}${location.search}`;
+      console.log(location.pathname);
+      console.log(redirectPath);
+      navigate(`/seller/login?path=${encodeURIComponent(redirectPath)}`, { replace: true });
     } else {
-      setToken(savedToken); // 토큰 상태 업데이트
+      // 토큰이 있는 경우 상태 업데이트
+      setToken(savedToken);
     }
-  },[navigate]);
+  }, [navigate, location.pathname, location.search]); // 의존성 배열 수정
+  
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {

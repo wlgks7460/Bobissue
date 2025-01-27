@@ -11,11 +11,17 @@ const SellerLoginPage = () => {
 
   useEffect(() => {
     const SELLER_AUTH_TOKEN = localStorage.getItem('SELLER_AUTH_TOKEN');
+    const queryParams = new URLSearchParams(location.search)
+    const redirectPath = queryParams.get('path') || '/seller'
     if (SELLER_AUTH_TOKEN) {
-      const queryParams = new URLSearchParams(location.search);
-      const redirectPath = queryParams.get('path') || '/seller'; // 기본값은 '/seller'
-      navigate(redirectPath, { replace: true }); // 토큰이 있으면 리디렉션
+      ; // 기본값은 '/seller'
+      //navigate(redirectPath, { replace: true }); // 토큰이 있으면 리디렉션
+      navigate(redirectPath,{replace:true})
+    }else{
+      //login페이지로 전환하려면 이 부분을 주석처리하고 로컬스토리지를 비워주세요
+      //localStorage.setItem('SELLER_AUTH_TOKEN','debug_token')
     }
+    //navigate(redirectPath,{replace:true})
   }, [navigate, location.search]);
 
   const handleLogin = async (e) => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '@/utils/API';
 
@@ -15,6 +15,13 @@ const SellerRegisterPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const SELLER_AUTH_TOKEN = localStorage.getItem('SELLER_AUTH_TOKEN');
+    if (SELLER_AUTH_TOKEN) {
+      navigate('/seller');
+    }
+  }, [navigate]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -29,7 +36,7 @@ const SellerRegisterPage = () => {
     }
     try {
       await API.post('/auth/seller/register', formData);
-      navigate('/seller/login'); // 회원가입 후 로그인 페이지로 이동
+      navigate('/seller/login');
     } catch (err) {
       setError('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
@@ -135,25 +142,44 @@ const SellerRegisterPage = () => {
         </div>
         {/* 연락처 */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="contactNumber">
-            연락처
-          </label>
-          <input
-            type="text"
-            id="contactNumber"
-            name="contactNumber"
-            value={formData.contactNumber}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
+  <label className="block text-sm font-medium mb-2" htmlFor="contactNumber">
+    연락처
+  </label>
+  <div className="flex items-center space-x-2">
+    <input
+      type="text"
+      id="contactNumber"
+      name="contactNumber"
+      value={formData.contactNumber}
+      onChange={handleChange}
+      className="flex-grow px-3 py-2 border border-gray-300 rounded"
+      placeholder="전화번호를 입력하세요"
+      required
+    />
+    <button
+      type="button"
+      onClick={() => handleVerification(formData.contactNumber)}
+      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+    >
+      인증하기
+    </button>
+  </div>
+</div>
+
         {/* 회원가입 버튼 */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
         >
           회원가입
+        </button>
+        {/* 로그인 페이지 이동 버튼 */}
+        <button
+          type="button"
+          onClick={() => navigate('/seller/login')}
+          className="w-full mt-4 bg-red-500 text-white py-2 px-6 rounded hover:bg-red-700"
+        >
+          로그인하러가기
         </button>
       </form>
     </div>
