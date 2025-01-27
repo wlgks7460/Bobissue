@@ -5,6 +5,7 @@ const TopNavbar = ({ toggleSidebar }) => {
   return (
     <nav className="flex items-center justify-between bg-gray-100 px-4 py-3 shadow-md relative z-50">
       {/* 햄버거 버튼 */}
+      
       <button
         onClick={toggleSidebar}
         className=" text-gray-600 p-2 rounded-md hover:bg-gray-200 focus:outline-none"
@@ -25,8 +26,10 @@ const TopNavbar = ({ toggleSidebar }) => {
           />
         </svg>
       </button>
+      
 
       {/* 로고 이미지 */}
+    
       <Link to="">
         <img
           src="/path/to/your/image.png"
@@ -36,6 +39,7 @@ const TopNavbar = ({ toggleSidebar }) => {
       </Link>
 
       {/* 홈 링크 */}
+
       <Link
         to="/"
         className="ml-auto text-sm text-indigo-600 no-underline hover:underline focus:underline"

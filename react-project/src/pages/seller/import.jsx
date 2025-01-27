@@ -1,6 +1,9 @@
 
 export { default as SellerHome } from './SellerHome';
 export { default as SMain } from './SMain';
+//판매자 회원가입 관련
+export {default as Login} from './Login/Login'
+export {default as Signup} from './Login/Signup'
 // 상품 관리 관련
 export { default as Register } from './Products/Register';
 export { default as Inquiry } from './Products/Inquiry';

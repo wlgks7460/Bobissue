@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+
 const PasswordVerification = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');

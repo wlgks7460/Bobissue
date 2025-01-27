@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import API from '@/utils/API'
 
 const Register = () => {
   const [productName, setProductName] = useState('')
@@ -19,10 +20,13 @@ const Register = () => {
     setProductImage(URL.createObjectURL(file))
   }
 
+  const load_data=()=>{
+    const response = API.get('api/itemsave')
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // 검증 로직: 모든 필드가 입력되었는지 확인
     if (
       !productName ||
       !category ||
@@ -37,14 +41,48 @@ const Register = () => {
       alert('모든 항목을 입력해주세요.')
       return
     }
+    try{
+      const formdata={
+        productName,
+        category,
+        brandName,
+        price: parseFloat(price),
+        discount: parseFloat(discount),
+        stock: parseInt(stock, 10),
+        startDate,
+        endDate,
+      }
+      const response = API.post('items',formdata)
+      console.log(response.data);
+    }catch (error) {
+      console.error('저장 실패:', error)
+      alert('저장 중 오류가 발생했습니다.')
+    }   
 
-    // 모든 필드가 유효한 경우
     alert('상품이 등록되었습니다!')
-    navigate('/seller/products/inquiry') // 등록 후 경로 이동
+    navigate('/seller/products/inquiry')
   }
 
-  const handleSave = () => {
-    alert('중간 저장 완료!')
+  const handleSave = async () => {
+    try {
+      const formData = {
+        productName,
+        category,
+        brandName,
+        price: parseFloat(price),
+        discount: parseFloat(discount),
+        stock: parseInt(stock, 10),
+        startDate,
+        endDate,
+      }
+
+      const response = await API.post('api/items', formData)
+      console.log('저장 성공:', response.data)
+      alert('중간 저장 완료!')
+    } catch (error) {
+      console.error('저장 실패:', error)
+      alert('저장 중 오류가 발생했습니다.')
+    }
   }
 
   const today = new Date().toISOString().split('T')[0]
@@ -54,7 +92,6 @@ const Register = () => {
       <div className='max-w-4xl mx-auto bg-white shadow-md rounded-md p-6'>
         <h1 className='text-2xl font-bold text-gray-800 mb-6'>상품 등록</h1>
         <form onSubmit={handleSubmit} className='space-y-6'>
-          {/* 상품 기본 정보 */}
           <section>
             <h2 className='text-xl font-semibold text-gray-700 mb-4'>상품 기본 정보</h2>
             <div className='space-y-4'>
@@ -94,7 +131,6 @@ const Register = () => {
             </div>
           </section>
 
-          {/* 상품 이미지 */}
           <section>
             <h2 className='text-xl font-semibold text-gray-700 mb-4'>상품 이미지</h2>
             <input
@@ -114,7 +150,6 @@ const Register = () => {
             )}
           </section>
 
-          {/* 가격 및 재고 */}
           <section>
             <h2 className='text-xl font-semibold text-gray-700 mb-4'>가격 및 재고</h2>
             <div className='space-y-4'>
@@ -151,7 +186,6 @@ const Register = () => {
             </div>
           </section>
 
-          {/* 판매 가능 기간 */}
           <section>
             <h2 className='text-xl font-semibold text-gray-700 mb-4'>판매 가능 기간</h2>
             <div className='space-y-4'>
@@ -178,7 +212,6 @@ const Register = () => {
             </div>
           </section>
 
-          {/* 버튼 */}
           <div className='flex justify-between items-center mt-6'>
             <button
               type='button'

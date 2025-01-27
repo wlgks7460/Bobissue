@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TopNavbar from './components/TopNavbar';
 import Sidebar from './components/Sidebar';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const SellerMainPage = () => {
+  const navigate = useNavigate();
+  const [token, setToken] = useState(null); // token 상태를 useState로 관리
   const [menuState, setMenuState] = useState({
     product: false,
     delivery: false,
@@ -15,7 +17,20 @@ const SellerMainPage = () => {
     notices: false,
   });
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // 로그인 여부를 확인하고 리디렉션 처리
+  useEffect(() => {
+    let savedToken = localStorage.getItem('SELLER_AUTH_TOKEN');
+     savedToken ="hello"
+    if (!savedToken) {
+      //더미토큰 디버깅용
+      setToken(savedToken)
+      navigate('/seller/login', { replace: true }); // 로그인 페이지로 리디렉션
+    } else {
+      setToken(savedToken); // 토큰 상태 업데이트
+    }
+  },[navigate]);
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {
@@ -31,6 +46,11 @@ const SellerMainPage = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // 로그인 상태가 확인될 때까지 컴포넌트 렌더링 방지
+  // if (token) {
+  //   return null; // 로그인 상태를 확인할 때까지 아무것도 렌더링하지 않음
+  // }
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Top Navbar */}
@@ -42,7 +62,7 @@ const SellerMainPage = () => {
         )}
         {/* Main Content */}
         <main
-          className={` p-6 bg-gray-50 transition-all duration-300 lg:ml-32`}
+          className={`p-6 bg-gray-50 transition-all duration-300 ${sidebarOpen ? 'lg:ml-32' : ''}`}
         >
           <Outlet />
         </main>

@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import API from '../../../utils/API' // API.js 경로에 맞게 수정
 
 const Inquiry = () => {
   const [products, setProducts] = useState([])
@@ -12,12 +14,19 @@ const Inquiry = () => {
 
   // 상품 데이터 가져오기 (API 호출)
   useEffect(() => {
-    // 실제 API 호출로 변경하세요
-    fetch('/api/products') // Spring Boot에서 제공하는 엔드포인트
-      .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error('상품 데이터 불러오기 실패:', error))
-    setProducts(dummy)
+    const fetchProducts = async () => {
+      try {
+        // 실제 API 호출로 변경
+        const response = await API.get('/api/sellers') // Spring Boot의 엔드포인트
+        console.log(response);
+        setProducts(response.data)
+      } catch (error) {
+        console.error('상품 데이터 불러오기 실패:', error)
+        setProducts(dummy) // 에러 발생 시 더미 데이터를 사용
+      }
+    }
+
+    fetchProducts()
   }, [])
 
   // 상품 상세 페이지로 이동

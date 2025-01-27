@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
+const Sidebar = ({ isOpen, toggleMenu, menuState}) => {
   return (
     <aside
       className={`  top-0 left-0 z-40 bg-gray-50 shadow-md transition-transform duration-300 transform ${

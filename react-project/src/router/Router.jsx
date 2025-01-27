@@ -38,8 +38,6 @@ import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
 import LiveOnAirPage from '../pages/admin/live/LiveOnAirPage'
 import LiveEndedPage from '../pages/admin/live/LiveEndedPage'
 import ViwerMangagementPage from '../pages/admin/live/ViewerManagementPage'
-//판매자 페이지
-import * as Seller from '../pages/seller/import'
 // (관리자) 컨텐츠관리
 import CouponIssuePage from '../pages/admin/coupon/CouponIssuePage'
 import CouponStatusPage from '../pages/admin/coupon/CouponStatusPage'
@@ -52,6 +50,8 @@ import NotificationPage from '../pages/admin/cs/NotificationPage'
 import CSCenterPage from '../pages/admin/cs/CSCenterPage'
 import NoticePage from '../pages/admin/cs/NoticePage'
 import FAQPage from '../pages/admin/cs/FAQPage'
+//판매자 페이지
+import * as Seller from '../pages/seller/import'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -77,11 +77,22 @@ const router = createBrowserRouter([
           },
         ],
       },
+      //판매자 회원가입,로그인
+      {
+        path:'seller/login',
+        element:<Seller.Login/>
+      },
+      {
+        path:'seller/signup',
+        element:<Seller.Signup/>
+
+      },
       {
         // seller section
         path: 'seller',
         element: <Seller.SellerHome />,
         children: [
+         
           //상품 관리 관련
           {
             path: '',
