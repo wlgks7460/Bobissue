@@ -113,6 +113,15 @@ public class OrderService {
             order.getOrderDetails().add(detail);
         }
     }
+    
+    // 수정 필드
 
+
+
+    // 그냥 전체 조회
+
+
+
+    // 상세 조회
 
 }
