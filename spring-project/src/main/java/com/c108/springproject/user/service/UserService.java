@@ -1,5 +1,7 @@
 package com.c108.springproject.user.service;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.dto.SignUpReqDto;
 import com.c108.springproject.user.dto.UserDto;
@@ -17,7 +19,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-//    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -35,8 +36,6 @@ public class UserService {
                 .weight(signUpDto.getWeight())
                 .loginType(signUpDto.getLoginType())
                 .phoneNumber(signUpDto.getPhoneNumber())
-                .createdAt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .updatedAt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
 
         return userRepository.save(new_user);
@@ -52,26 +51,30 @@ public class UserService {
 
     @Transactional
     public UserResDto findUserById(int userNo) {
-
-        return userRepository.findById(userNo).map(UserResDto::new).orElse(null);
+        return userRepository.findById(userNo)
+                .filter(user -> !"Y".equals(user.getDelYn())) // 삭제된 회원은 조회되지 않도록 필터링
+                .map(UserResDto::new)
+                .orElse(null);
     }
-
-//    @Transactional
-//    public UserResDto findUserByEmail(String email) {}
 
     @Transactional
     public void updateUser(int userNo, UserDto userDto) {
         try{
             User user = userRepository.findById(userNo).orElse(null);
             user.updateUser(userDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_USER);
         }
 
     }
-//    @Transactional
-//    public User signIn(String email, String password) {
-//    }
+
+    @Transactional
+    public void deleteUser(int userNo) {
+        User user = userRepository.findById(userNo).orElseThrow(() ->
+                new BobIssueException(ResponseCode.FAILED_DELETE_USER));
+
+        user.deleteUser();
+    }
 
 
 }

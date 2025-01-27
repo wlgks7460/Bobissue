@@ -33,6 +33,9 @@ public enum ResponseCode {
     NOT_FOUND_USER("NOT_FOUND_USER", "회원을 찾을 수 없음"),
     SUCCESS_UPDATE_USER("SUCCESS_UPDATE_USER", "회원 수정 완료"),
     FAILED_UPDATE_USER("FAILED_UPDATE_USER", "회원 수정 실패"),
+    SUCCESS_DELETE_USER("SUCCESS_DELETE_USER", "회원 삭제 완료"),
+    FAILED_DELETE_USER("FAILED_DELETE_USER", "회원 삭제 실패"),
+    
     ;
 
     private final String code;
