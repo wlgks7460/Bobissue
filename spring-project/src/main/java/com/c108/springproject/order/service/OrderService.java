@@ -46,10 +46,10 @@ public class OrderService {
                     .userCouponNo(request.getUserCouponNo())
                     .payment(request.getPayment())
                     .requests(request.getRequests())
-                    .orderCategoryNo(1)  // 초기 주문 상태: '주문접수'
-                    .delCategoryNo(1)    // 초기 배송 상태: '배송준비중'
+                    .orderCategoryNo(1)  // 초기 주문 상태
+                    .delCategoryNo(1)    // 초기 배송 상태
                     .totalPrice(totalPrice)
-                    .orderDetails(new ArrayList<>())  // 빈 orderDetails 리스트 초기화
+                    .orderDetails(new ArrayList<>())
                     .build();
 
             // 4. 주문 상세 정보 생성
@@ -58,8 +58,8 @@ public class OrderService {
             // 5. 주문 저장
             Order savedOrder = orderRepository.save(order);
 
-            // 6. 응답 DTO 생성 및 반환
-            return OrderCreateResDto.of(savedOrder);
+            // 6. 응답 DTO
+            return OrderCreateResDto.toDto(savedOrder);
 
         } catch (BobIssueException e) {
             throw e;
@@ -68,7 +68,7 @@ public class OrderService {
         }
     }
 
-    // 주문 상품들의 재고 확인
+    // 재고 확인
     private void validateItems(List<OrderItemReqDto> items) {
         for (OrderItemReqDto item : items) {
             Item foundItem = itemRepository.findById(item.getItemNo())

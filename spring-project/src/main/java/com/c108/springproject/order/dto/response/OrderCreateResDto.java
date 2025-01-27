@@ -25,8 +25,7 @@ public class OrderCreateResDto {
     private String requests;         // 배송 요청사항
     private List<OrderItemResDto> items;  // 주문 상품 목록
 
-    // Order 엔티티를 DTO로 변환하는 정적 메서드
-    public static OrderCreateResDto of(Order order) {
+     public static OrderCreateResDto toDto(Order order) {
         return OrderCreateResDto.builder()
                 .orderNo(order.getOrderNo())
                 .userNo(order.getUserNo())
@@ -35,7 +34,7 @@ public class OrderCreateResDto {
                 .payment(order.getPayment())
                 .requests(order.getRequests())
                 .items(order.getOrderDetails().stream()
-                        .map(OrderItemResDto::of)
+                        .map(OrderItemResDto::toDto)
                         .collect(Collectors.toList()))
                 .build();
     }
