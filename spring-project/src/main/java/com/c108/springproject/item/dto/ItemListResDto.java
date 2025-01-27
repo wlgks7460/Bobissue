@@ -17,6 +17,7 @@ public class ItemListResDto {
     private int categoryNo;
     private BigInteger imageNo;
     private int companyNo;
+    private String name;
     private int price;
     private int salePrice;
 //    private String createdAt;
@@ -24,4 +25,5 @@ public class ItemListResDto {
 //    private String expiredAt;
     private String description;
 //    private int stock;
+//    private String delYn;
 }

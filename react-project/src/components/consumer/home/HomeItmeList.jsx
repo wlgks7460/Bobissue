@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import HomeItem from './HomeItem'
+import API from '../../../utils/API'
 
 const HomeItmeList = ({ category }) => {
   const [items, setItems] = useState([]) // 상품 데이터 리스트
   // 카테고리에 맞는 상품 불러오기
   useEffect(() => {
     // mount
+    // response 부분을 API 활용하는 것으로 교체하면 될 것
     const response = {
       data: [
         {
@@ -43,9 +45,10 @@ const HomeItmeList = ({ category }) => {
       ],
     }
     setItems(response.data)
+
     // unmount
     return () => {}
-  }, [])
+  }, [items])
   return (
     <div className='w-[70rem]'>
       <div className='flex justify-between mb-5'>
