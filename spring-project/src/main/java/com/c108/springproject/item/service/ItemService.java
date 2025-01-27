@@ -47,13 +47,13 @@ public class ItemService {
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())
 //                .createdAt(reqDto.getCreatedAt())
-                .createdUser(reqDto.getCreatedUser())
+//                .createdUser(reqDto.getCreatedUser())
 //                .updatedAt(reqDto.getUpdatedAt())
-                .updatedUser(reqDto.getUpdatedUser())
+//                .updatedUser(reqDto.getUpdatedUser())
                 .expiredAt(reqDto.getExpiredAt())
                 .description(reqDto.getDescription())
                 .stock(reqDto.getStock())
-                .delYn(reqDto.getDelYn())
+//                .delYn(reqDto.getDelYn())
                 .build());
 
         // ResponseDto로 변환하여 반환
@@ -146,13 +146,13 @@ public class ItemService {
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())
 //                .createdAt(item.getCreatedAt())
-                .createdUser(item.getCreatedUser())
+//                .createdUser(item.getCreatedUser())
 //                .updatedAt(reqDto.getUpdatedAt())
-                .updatedUser(reqDto.getUpdatedUser()) // 수정한 유저
+//                .updatedUser(reqDto.getUpdatedUser()) // 수정한 유저
                 .expiredAt(reqDto.getExpiredAt())
                 .description(reqDto.getDescription())
                 .stock(reqDto.getStock())
-                .delYn(item.getDelYn())
+//                .delYn(item.getDelYn())
                 .build();
 
         // Item 클래스의 BaseEntity 상속부분에서 createdAt과 updatedAt을 상속했기 때문에 builder 패턴에서 직접 접근X.
