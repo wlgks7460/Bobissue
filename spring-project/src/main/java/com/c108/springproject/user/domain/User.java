@@ -1,5 +1,6 @@
 package com.c108.springproject.user.domain;
 
+import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.user.dto.UserDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,7 @@ import jakarta.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -56,12 +57,6 @@ public class User {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private String createdAt;
-
-    @Column(nullable = false)
-    private String updatedAt;
-
-    @Column(nullable = false)
     private int gradeNo;
 
     public void updateUser(UserDto userDto) {
@@ -70,5 +65,9 @@ public class User {
         this.height = userDto.getHeight();
         this.weight = userDto.getWeight();
         this.phoneNumber = userDto.getPhoneNumber();
+    }
+
+    public void deleteUser() {
+        super.delete();
     }
 }
