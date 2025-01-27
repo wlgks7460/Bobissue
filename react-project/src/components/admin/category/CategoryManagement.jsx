@@ -4,10 +4,7 @@ import API from '../../../utils/API'
 
 const CategoryManagementForm = () => {
   // Breadcrumb에 사용할 경로 데이터
-  const breadcrumbPaths = [
-    { name: 'Home' }, // 홈
-    { name: '카테고리관리' },
-  ]
+  const breadcrumbPaths = [{ name: 'Home' }, { name: '카테고리관리' }]
 
   const [categories, setCategories] = useState([]) // 카테고리 데이터를 저장할 상태
   const [formData, setFormData] = useState({
