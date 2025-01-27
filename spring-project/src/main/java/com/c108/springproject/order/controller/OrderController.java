@@ -27,4 +27,22 @@ public class OrderController {
                 new DefaultResponse<>(orderService.createOrder(orderCreateReqDto))
         );
     }
+
+    @GetMapping("")
+    public ResponseDto getAllOrders() {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_ALL_ORDERS,
+                new DefaultResponse<>(orderService.findAllOrders())
+        );
+    }
+
+    @GetMapping("/{orderNo}")
+    public ResponseDto getOrder(@PathVariable int orderNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_ORDER,
+                new DefaultResponse<>(orderService.findOrder(orderNo))
+        );
+    }
 }
