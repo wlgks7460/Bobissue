@@ -1,6 +1,7 @@
 package com.c108.springproject.notification.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.notification.dto.request.NotificationReqDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,17 +29,17 @@ public class Notification extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2000)
     private String content;
-
-    @Column(nullable = false)
-    private String createdAt;
-
-    @Column(nullable = false)
-    private String updatedAt;
 
     @Enumerated(EnumType.STRING)
     private NotificationRead reader;
+
+    public void updateNotification(NotificationReqDto notificationReqDto){
+        this.title = notificationReqDto.getTitle();
+        this.content = notificationReqDto.getContent();
+        this.reader = NotificationRead.valueOf(notificationReqDto.getReader());
+    }
 
 
 }

@@ -6,6 +6,7 @@ import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.item.dto.ItemCategoryReqDto;
 import com.c108.springproject.item.domain.ItemCategory;
 import com.c108.springproject.item.dto.ItemCategoryResDto;
+import com.c108.springproject.item.dto.ItemResDto;
 import com.c108.springproject.item.service.ItemCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class ItemCategoryController {
 
@@ -29,7 +30,7 @@ public class ItemCategoryController {
     }
 
     // 생성
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseDto createCategory(@RequestBody ItemCategoryReqDto itemCategoryReqDto) {
         ItemCategory itemCategory = itemCategoryService.createCategory(itemCategoryReqDto);
         // Object로 일단 모든 정보 담아왔어요
@@ -43,7 +44,7 @@ public class ItemCategoryController {
     }
 
     // 전체 조회
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseDto getAllCategories() {
         List<ItemCategoryResDto> categories = itemCategoryService.getAllCategories();
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_CATEGORY, new DefaultResponse<>(categories));
@@ -51,10 +52,11 @@ public class ItemCategoryController {
 
     // 카테고리 수정
     @PutMapping("/{categoryNo}")
-    public ResponseEntity<ItemCategory> updateCategory(
+    public ResponseDto updateCategory(
             @PathVariable int categoryNo,
             @RequestBody ItemCategoryReqDto dto) {
-        return ResponseEntity.ok(itemCategoryService.updateCategory(categoryNo, dto));
+        ItemCategoryResDto updatedCategory = itemCategoryService.updateCategory(categoryNo, dto);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_CATEGORY, new DefaultResponse<>(updatedCategory));
     }
 
     // 삭제
@@ -63,6 +65,4 @@ public class ItemCategoryController {
         itemCategoryService.deleteCategory(categoryNo);
         return ResponseEntity.noContent().build();
     }
-
-
 }

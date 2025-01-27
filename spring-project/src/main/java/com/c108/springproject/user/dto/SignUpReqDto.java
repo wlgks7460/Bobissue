@@ -17,6 +17,6 @@ public class SignUpReqDto {
     private String gender;
     private float height;
     private float weight;
-    private int loginType;//
     private String phoneNumber;
+    private int loginType;//
 }

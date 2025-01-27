@@ -5,26 +5,34 @@ import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
 import ConsumerHome from '../pages/conusumer/Home'
 import ConsumerLogin from '../pages/conusumer/Login'
 import ConsumerSignup from '../pages/conusumer/Signup'
+
 // 관리자 section
+
+// (관리자) home
 import AdminRoot from '../pages/admin/AdminRoot'
 import AdminHome from '../components/admin/home/AdminHome'
 import AdminLoginPage from '../pages/admin/login/AdminLoginPage'
+// (관리자) 회원관리
 import MemberInfoPage from '../pages/admin/member/MemberInfoPage'
 import MemberLevelPage from '../pages/admin/member/MemberLevelPage'
 import MemberRegisterPage from '../pages/admin/member/MemberRegisterPage'
 import MemberExcelPage from '../pages/admin/member/MemberExcelPage'
 import MemberEmailPage from '../pages/admin/member/MemberEmailPage'
+// (관리자) 포인트관리 & 일일월별 통계
 import PointExcelPage from '../pages/admin/point/PointExcelPage'
 import PointInfoPage from '../pages/admin/point/PointInfoPage'
 import DailyStatisticsPage from '../pages/admin/statistics/DailyStatisticsPage'
 import MonthlyStatisticsPage from '../pages/admin/statistics/MonthlyStatisticsPage'
+// (관리자) 판매자관리
 import SellerInfoPage from '../pages/admin/seller/SellerInfoPage'
 import SellerRegisterPage from '../pages/admin/seller/SellerRegisterPage'
 import SellerFeePage from '../pages/admin/seller/SellerFeePage'
 import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
 import SellerTreePage from '../pages/admin/seller/SellerTreePage'
 import SellerOrderPage from '../pages/admin/seller/SellerOrderPage'
+// (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
+// (관리자) 라이브커머스관리
 import LiveManagementPage from '../pages/admin/live/LiveManagementPage'
 import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
 import LiveOnAirPage from '../pages/admin/live/LiveOnAirPage'
@@ -32,6 +40,18 @@ import LiveEndedPage from '../pages/admin/live/LiveEndedPage'
 import ViwerMangagementPage from '../pages/admin/live/ViewerManagementPage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
+// (관리자) 컨텐츠관리
+import CouponIssuePage from '../pages/admin/coupon/CouponIssuePage'
+import CouponStatusPage from '../pages/admin/coupon/CouponStatusPage'
+import ListPage from '../pages/admin/screen/ListPage'
+import RegisterPage from '../pages/admin/screen/RegisterPage'
+import ReportListPage from '../pages/admin/report/ListPage'
+import ReportDetailPage from '../pages/admin/report/DetailPage'
+// (관리자) CS 관리
+import NotificationPage from '../pages/admin/cs/NotificationPage'
+import CSCenterPage from '../pages/admin/cs/CSCenterPage'
+import NoticePage from '../pages/admin/cs/NoticePage'
+import FAQPage from '../pages/admin/cs/FAQPage'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -325,6 +345,73 @@ const router = createBrowserRouter([
               {
                 path: 'viewer', // 시청자 관리 페이지
                 element: <ViwerMangagementPage />,
+              },
+            ],
+          },
+          // 컨텐츠 관리
+          {
+            // 쿠폰 관리 섹션'
+            path: 'coupon',
+            children: [
+              {
+                // 쿠폰 관리 (현황 조회) 페이지
+                path: 'info',
+                element: <CouponStatusPage />,
+              },
+              {
+                // 쿠폰 발급 페이지
+                path: 'issue',
+                element: <CouponIssuePage />,
+              },
+            ],
+          },
+          // 화면 관리 섹션
+          {
+            path: 'screen',
+            children: [
+              {
+                path: 'info', // 이벤트 배너 조회 페이지
+                element: <ListPage />,
+              },
+              {
+                path: 'register', // 이벤트 배너 등록 페이지
+                element: <RegisterPage />,
+              },
+            ],
+          },
+          // 신고 관리 섹션
+          {
+            path: 'report',
+            children: [
+              {
+                path: 'info', // 신고 조회 페이지
+                element: <ReportListPage />,
+              },
+              {
+                path: 'detail', // 신고 상세 조회 및 처리 페이지
+                element: <ReportDetailPage />,
+              },
+            ],
+          },
+          // CS 관리 섹션
+          {
+            path: 'cs',
+            children: [
+              {
+                path: 'notification', // 알림 관리 페이지
+                element: <NotificationPage />,
+              },
+              {
+                path: 'cscenter', // 고객센터 관리 페이지
+                element: <CSCenterPage />,
+              },
+              {
+                path: 'notice', // 공지사항 페이지
+                element: <NoticePage />,
+              },
+              {
+                path: 'FAQ', // FAQ 운영 페이지
+                element: <FAQPage />,
               },
             ],
           },

@@ -389,7 +389,7 @@ const AdminSideBar = () => {
         </div>
 
         {/* 5. 상품 관리 */}
-        <div>
+        {/* <div>
           <div
             onClick={() => handleOpen(5)}
             className={`flex items-center justify-between p-3 cursor-pointer ${
@@ -401,10 +401,10 @@ const AdminSideBar = () => {
               <span className='text-gray-700'>상품 관리</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 6. 주문관리 */}
-        <div>
+        {/* <div>
           <div
             onClick={() => handleOpen(6)}
             className={`flex items-center justify-between p-3 cursor-pointer ${
@@ -416,10 +416,10 @@ const AdminSideBar = () => {
               <span className='text-gray-700'>주문관리</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 7. 통계분석 */}
-        <div>
+        {/* <div>
           <div
             onClick={() => handleOpen(7)}
             className={`flex items-center justify-between p-3 cursor-pointer ${
@@ -431,7 +431,7 @@ const AdminSideBar = () => {
               <span className='text-gray-700'>통계분석</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 8. 컨텐츠 관리 */}
         <div>
@@ -467,8 +467,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 9 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>쿠폰 현황 조회</div>
-                    <div>쿠폰 발급</div>
+                    <div
+                      onClick={() => navigate('/admin/coupon/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      쿠폰 현황 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/coupon/issue')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      쿠폰 발급
+                    </div>
                   </div>
                 )}
               </div>
@@ -487,8 +497,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 10 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>이벤트 배너 조회</div>
-                    <div>이벤트 배너 등록</div>
+                    <div
+                      onClick={() => navigate('/admin/screen/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      이벤트 배너 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/screen/register')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      이벤트 배너 등록
+                    </div>
                   </div>
                 )}
               </div>
@@ -507,8 +527,18 @@ const AdminSideBar = () => {
                 </div>
                 {subOpen === 11 && (
                   <div className='pl-4 py-1 space-y-2'>
-                    <div>신고 내역 조회</div>
-                    <div>신고 상세 조회 / 처리</div>
+                    <div
+                      onClick={() => navigate('/admin/report/info')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      신고 내역 조회
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/report/detail')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      신고 상세 조회 / 처리
+                    </div>
                   </div>
                 )}
               </div>
@@ -526,7 +556,7 @@ const AdminSideBar = () => {
           >
             <div className='flex items-center space-x-2'>
               <InboxIcon className='h-5 w-5' />
-              <span className='text-gray-700'>고객지원</span>
+              <span className='text-gray-700'>CS 관리</span>
             </div>
             <ChevronDownIcon
               strokeWidth={2.5}
@@ -535,9 +565,30 @@ const AdminSideBar = () => {
           </div>
           {open === 9 && (
             <div className='pl-4 py-1 space-y-2'>
-              <div>알림 관리</div>
-              <div>고객 센터 관리</div>
-              <div>공지사항</div>
+              <div
+                onClick={() => navigate('/admin/cs/notification')}
+                className='cursor-pointer p-2  hover:bg-gray-100'
+              >
+                알림 관리
+              </div>
+              <div
+                onClick={() => navigate('/admin/cs/cscenter')}
+                className='cursor-pointer p-2  hover:bg-gray-100'
+              >
+                고객 센터 관리
+              </div>
+              <div
+                onClick={() => navigate('/admin/cs/notice')}
+                className='cursor-pointer p-2  hover:bg-gray-100'
+              >
+                공지사항
+              </div>
+              <div
+                onClick={() => navigate('/admin/cs/FAQ')}
+                className='cursor-pointer p-2  hover:bg-gray-100'
+              >
+                FAQ 운영
+              </div>
             </div>
           )}
         </div>
