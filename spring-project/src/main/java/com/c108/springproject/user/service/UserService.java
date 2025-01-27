@@ -36,6 +36,7 @@ public class UserService {
                 .weight(signUpDto.getWeight())
                 .loginType(signUpDto.getLoginType())
                 .phoneNumber(signUpDto.getPhoneNumber())
+                .status("Y")
                 .build();
 
         return userRepository.save(new_user);
