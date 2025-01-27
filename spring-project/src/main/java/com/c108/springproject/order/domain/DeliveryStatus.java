@@ -1,10 +1,14 @@
 package com.c108.springproject.order.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "delivery_status")
 public class DeliveryStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,4 +17,9 @@ public class DeliveryStatus {
     @Column(nullable = false, length = 50)
     private String name;
 
+    @Column(nullable = false, length = 15)
+    private String createdAt;
+
+    @Column(nullable = false, length = 15)
+    private String updatedAt;
 }

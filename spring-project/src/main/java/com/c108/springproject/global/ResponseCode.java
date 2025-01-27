@@ -69,6 +69,9 @@ public enum ResponseCode {
     FAILED_UPDATE_NOTICE("FAILED_UPDATE_NOTICE", "공지사항 수정 실패"),
     SUCCESS_DELETE_NOTICE("SUCCESS_DELETE_NOTICE", "공지사항 삭제 성공"),
     FAILED_DELETE_NOTICE("FAILED_DELETE_NOTICE", "공지사항 삭제 실패"),
+    NOT_ENOUGH_STOCK("NOT_ENOUGH_STOCK", "재고 부족"),
+    FAILED_CREATE_ORDER("FAILED_CREATE_ORDER", "주문 생성 실패"),
+    SUCCESS_CREATE_ORDER("SUCCESS_CREATE_ORDER", "주문 생성 성공"),
     ;
 
     private final String code;
