@@ -1,31 +1,28 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom' // React Router 사용
+import { useNavigate } from 'react-router-dom'
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
 
 const MemberInfoManagement = () => {
   const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원정보관리' }]
-  const navigate = useNavigate() // useNavigate 사용
+  const navigate = useNavigate()
 
   const [searchKeyword, setSearchKeyword] = useState('')
-  const [searchType, setSearchType] = useState('user-no') // 기본 검색 유형은 회원 번호
-  const [level, setLevel] = useState('전체') // 회원 레벨
-  const [filteredUsers, setFilteredUsers] = useState([]) // 필터링된 결과
-  const [isLoading, setIsLoading] = useState(false) // 로딩 상태
+  const [searchType, setSearchType] = useState('user-no')
+  const [level, setLevel] = useState('전체')
+  const [filteredUsers, setFilteredUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSearch = async () => {
     setIsLoading(true)
     try {
       if (!searchKeyword) {
-        // 전체 조회
         const response = await API.get('/users')
         setFilteredUsers(response.data.result.data)
       } else if (searchType === 'user-no') {
-        // 특정 회원 조회
         const response = await API.get(`/users/${searchKeyword}`)
-        setFilteredUsers([response.data.result]) // 단일 데이터 배열로 설정
+        setFilteredUsers([response.data.result])
       } else {
-        // 키워드 검색 + 필터링
         const response = await API.get('/users')
         const filtered = response.data.result.data.filter((user) => {
           const matchesSearch =
@@ -49,7 +46,7 @@ const MemberInfoManagement = () => {
   }
 
   const handleNavigateToDetail = (userNo) => {
-    navigate(`/admin/members/${userNo}`) // 절대 경로로 이동
+    navigate(`/admin/members/${userNo}`)
   }
 
   return (
@@ -62,9 +59,8 @@ const MemberInfoManagement = () => {
       {/* 검색 섹션 */}
       <section className='mb-6'>
         <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
-        <div className='flex items-center mb-4 space-x-4'>
-          <div>
-            <label className='block text-sm font-medium mb-1'>검색어</label>
+        <div className='flex items-center space-x-4'>
+          <div className='flex items-center space-x-2 w-full'>
             <select
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
@@ -74,31 +70,27 @@ const MemberInfoManagement = () => {
               <option value='회원명'>회원명</option>
               <option value='이메일'>이메일</option>
             </select>
-          </div>
-          <div className='flex-1'>
-            <label className='block text-sm font-medium mb-1'>검색 입력</label>
             <input
               type='text'
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
-              className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500'
+              className='w-64 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500'
               placeholder='검색어를 입력하세요'
             />
+            <button
+              onClick={handleSearch}
+              className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 whitespace-nowrap'
+            >
+              조회
+            </button>
           </div>
-        </div>
-        <div>
-          <button
-            onClick={handleSearch}
-            className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
-          >
-            조회
-          </button>
         </div>
       </section>
 
       {/* 조회 결과 */}
       <section>
-        <h2 className='text-lg font-semibold mb-4'>| 조회 결과</h2>
+        {/* 조회 결과가 있을 때만 제목 표시 */}
+        {filteredUsers.length > 0 && <h2 className='text-lg font-semibold mb-4'>| 조회 결과</h2>}
         {isLoading ? (
           <div className='text-center'>로딩 중...</div>
         ) : filteredUsers.length > 0 ? (
@@ -134,7 +126,7 @@ const MemberInfoManagement = () => {
             </tbody>
           </table>
         ) : (
-          <div className='text-center text-gray-500'>조회 결과가 없습니다.</div>
+          !isLoading && filteredUsers.length === 0 && <div></div>
         )}
       </section>
     </div>

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import API from '../../../utils/API'
+import Breadcrumb from '../common/Breadcrumb'
 
 const MemberDetail = () => {
+  const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원상세정보' }]
+
   const { userNo } = useParams()
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
@@ -86,13 +89,15 @@ const MemberDetail = () => {
 
   return (
     <div className='p-6'>
+      {/* Breadcrumb */}
+      <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>회원 상세 정보</h1>
       <div className='space-y-4'>
         <p>
           <strong>회원 번호:</strong> {user.userNo}
         </p>
         <p>
-          <strong>회원 이름:</strong>
+          <strong>회원 이름: </strong>
           {isEditing ? (
             <input
               type='text'
@@ -106,7 +111,7 @@ const MemberDetail = () => {
           )}
         </p>
         <p>
-          <strong>이메일:</strong>
+          <strong>이메일: </strong>
           {isEditing ? (
             <input
               type='email'
@@ -120,7 +125,7 @@ const MemberDetail = () => {
           )}
         </p>
         <p>
-          <strong>전화번호:</strong>
+          <strong>전화번호: </strong>
           {isEditing ? (
             <input
               type='text'
@@ -134,7 +139,7 @@ const MemberDetail = () => {
           )}
         </p>
         <p>
-          <strong>성별:</strong>
+          <strong>성별: </strong>
           {isEditing ? (
             <select
               name='gender'
@@ -152,7 +157,7 @@ const MemberDetail = () => {
           )}
         </p>
         <p>
-          <strong>생년월일:</strong>
+          <strong>생년월일: </strong>
           {isEditing ? (
             <input
               type='date'
