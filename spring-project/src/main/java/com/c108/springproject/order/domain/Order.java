@@ -49,12 +49,9 @@ public class Order extends BaseEntity {
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     // 주문 상태 변경 메서드
-    public void updateOrderStatus(int orderCategoryNo) {
+    public void updateOrder(String requests, int orderCategoryNo, int delCategoryN) {
+        if (requests != null) this.requests = requests;
         this.orderCategoryNo = orderCategoryNo;
-    }
-
-    // 배송 상태 변경 메서드
-    public void updateDeliveryStatus(int delCategoryNo) {
         this.delCategoryNo = delCategoryNo;
     }
 }

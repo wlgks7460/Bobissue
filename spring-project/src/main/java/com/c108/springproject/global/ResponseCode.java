@@ -78,6 +78,9 @@ public enum ResponseCode {
     ORDER_NOT_FOUND("ORDER_NOT_FOUND", "주문 조회 실패"),
     SUCCESS_FIND_ALL_ORDERS("SUCCESS_FIND_ALL_ORDERS", "전체 주문 조회 성공"),
     SUCCESS_FIND_ORDER("SUCCESS_FIND_ORDER", "주문 조회 성공"),
+    FAILED_UPDATE_ORDER("FAILED_UPDATE_ORDER", "주문 수정 실패"),
+    SUCCESS_UPDATE_ORDER("SUCCESS_UPDATE_ORDER", "주문 수정 성공"),
+    SUCCESS_FIND_CANCEL_ORDERS("SUCCESS_FIND_CANCEL_ORDERS", "취소 주문 조회 성공"),
     ;
 
     private final String code;
