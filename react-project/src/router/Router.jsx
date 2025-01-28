@@ -18,6 +18,7 @@ import MemberLevelPage from '../pages/admin/member/MemberLevelPage'
 import MemberRegisterPage from '../pages/admin/member/MemberRegisterPage'
 import MemberExcelPage from '../pages/admin/member/MemberExcelPage'
 import MemberEmailPage from '../pages/admin/member/MemberEmailPage'
+import MemberDetailPage from '../pages/admin/member/MemberDetailPage'
 // (관리자) 포인트관리 & 일일월별 통계
 import PointExcelPage from '../pages/admin/point/PointExcelPage'
 import PointInfoPage from '../pages/admin/point/PointInfoPage'
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
               {
                 path: 'info', // 회원 정보관리
                 element: <MemberInfoPage />,
+              },
+              {
+                path: ':userNo', // 회원 상세 페이지
+                element: <MemberDetailPage />,
               },
               {
                 path: 'level', // 회원 레벨 관리
