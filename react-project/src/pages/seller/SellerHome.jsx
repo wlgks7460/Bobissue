@@ -3,6 +3,7 @@ import TopNavbar from './components/TopNavbar';
 import Sidebar from './components/Sidebar';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+
 const SellerMainPage = () => {
   const location =useLocation()
   const navigate = useNavigate();
@@ -20,10 +21,12 @@ const SellerMainPage = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+ 
+
   // 로그인 여부를 확인하고 리디렉션 처리
   useEffect(() => {
     const savedToken = localStorage.getItem('SELLER_AUTH_TOKEN'); // 로컬스토리지에서 토큰 가져오기
-  
+    
     if (!savedToken) {
       // 토큰이 없는 경우 로그인 페이지로 리디렉션
       const redirectPath = `${location.pathname}${location.search}`;
