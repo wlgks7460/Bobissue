@@ -10,9 +10,11 @@ import com.c108.springproject.order.domain.OrderStatus;
 import com.c108.springproject.order.domain.DeliveryStatus;
 import com.c108.springproject.order.dto.request.OrderCreateReqDto;
 import com.c108.springproject.order.dto.request.OrderItemReqDto;
+import com.c108.springproject.order.dto.request.OrderUpdateReqDto;
 import com.c108.springproject.order.dto.response.OrderCreateResDto;
 import com.c108.springproject.order.dto.response.OrderDetailResDto;
 import com.c108.springproject.order.dto.response.OrderListResDto;
+import com.c108.springproject.order.dto.response.OrderUpdateResDto;
 import com.c108.springproject.order.repository.DeliveryStatusRepository;
 import com.c108.springproject.order.repository.OrderDetailRepository;
 import com.c108.springproject.order.repository.OrderRepository;
@@ -72,8 +74,6 @@ public class OrderService {
             return OrderCreateResDto.toDto(savedOrder);
 
         } catch (BobIssueException e) {
-            throw e;
-        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_CREATE_ORDER);
         }
     }
@@ -158,5 +158,54 @@ public class OrderService {
                 .map(DeliveryStatus::getName)
                 .orElse("조회 실패");
     }
+
+    @Transactional
+    public OrderUpdateResDto updateOrder(int orderNo, OrderUpdateReqDto request) {
+        try {
+            // 주문 조회
+            Order order = orderRepository.findById(orderNo)
+                    .orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
+            // 주문 취소 시 재고 복구
+            if (request.getOrderCategoryNo() == 4) {  // 주문 취소
+                for (OrderDetail detail : order.getOrderDetails()) {
+                    detail.getItem().increaseStock(detail.getCount());
+                }
+            }
+
+            // 주문 정보 업데이트
+            order.updateOrder(
+                    request.getRequests(),
+                    request.getOrderCategoryNo(),
+                    request.getDelCategoryNo()
+            );
+
+            // 저장
+            Order updatedOrder = orderRepository.save(order);
+
+            // 주문 상태 조회
+            String orderStatus = getOrderStatus(updatedOrder.getOrderCategoryNo());
+            String deliveryStatus = getDeliveryStatus(updatedOrder.getDelCategoryNo());
+
+            return OrderUpdateResDto.toDto(updatedOrder, orderStatus, deliveryStatus);
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_ORDER);
+        }
+
+    }
+
+    @Transactional
+    public List<OrderListResDto> findCancelOrders() {
+        List<Order> orders = orderRepository.findByOrderCategoryNo(4);  // 4: 주문취소
+        List<OrderListResDto> orderListResDtos = new ArrayList<>();
+        for(Order order: orders) {
+            String orderStatus = getOrderStatus(order.getOrderCategoryNo());
+            String deliveryStatus = getDeliveryStatus(order.getDelCategoryNo());
+            orderListResDtos.add(OrderListResDto.toDto(order, orderStatus, deliveryStatus));
+        }
+        return orderListResDtos;
+    }
+
+
+
 
 }
