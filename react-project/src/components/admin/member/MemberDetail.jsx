@@ -12,13 +12,17 @@ const MemberDetail = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({})
+  const formatDate = (dateString, forInput = false) => {
+    if (!dateString) return '' // null 또는 undefined 체크
+    const cleanedDate = dateString.replace(/[^0-9]/g, '') // 숫자만 남김
 
-  const formatDate = (dateString) => {
-    if (!dateString || dateString.length !== 8) return ''
-    const year = dateString.slice(0, 4)
-    const month = dateString.slice(4, 6)
-    const day = dateString.slice(6, 8)
-    return `${year}-${month}-${day}`
+    if (cleanedDate.length !== 8) return dateString // 이미 YYYY-MM-DD 형식이면 그대로 반환
+
+    const year = cleanedDate.slice(0, 4)
+    const month = cleanedDate.slice(4, 6)
+    const day = cleanedDate.slice(6, 8)
+
+    return forInput ? `${year}-${month}-${day}` : `${year}년 ${month}월 ${day}일`
   }
 
   useEffect(() => {
@@ -29,11 +33,12 @@ const MemberDetail = () => {
 
         const formattedData = {
           ...userData,
-          birthday: formatDate(userData.birthday), // YYYY-MM-DD 형식으로 변환
+          birthday: formatDate(userData.birthday, true), // YYYY-MM-DD로 변환
         }
-
+        console.log(response.data)
+        console.log(formattedData)
         setUser(formattedData)
-        setFormData(formattedData)
+        setFormData(formattedData) // ✅ 수정 모드에서도 YYYY-MM-DD 유지
       } catch (error) {
         console.error('회원 상세 정보 조회 오류:', error.response || error.message)
         alert('회원 상세 정보를 가져오는 데 실패했습니다.')
@@ -94,10 +99,10 @@ const MemberDetail = () => {
       <h1 className='text-2xl font-bold mb-6'>회원 상세 정보</h1>
       <div className='space-y-4'>
         <p>
-          <strong>회원 번호:</strong> {user.userNo}
+          <strong>회원번호:</strong> {user.userNo}
         </p>
         <p>
-          <strong>회원 이름: </strong>
+          <strong>이름: </strong>
           {isEditing ? (
             <input
               type='text'
@@ -162,7 +167,7 @@ const MemberDetail = () => {
             <input
               type='date'
               name='birthday'
-              value={formData.birthday} // 변환된 값 사용
+              value={formData.birthday || ''} // ✅ YYYY-MM-DD 형식 유지
               onChange={handleChange}
               className='w-full border border-gray-300 rounded-md px-3 py-2'
             />
