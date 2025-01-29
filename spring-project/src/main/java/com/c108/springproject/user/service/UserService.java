@@ -45,7 +45,7 @@ public class UserService {
     @Transactional
     public List<UserResDto> findUserList() {
 
-        return userRepository.findAll().stream()
+        return userRepository.findAllActiveUsers().stream()
                 .map(UserResDto::new)
                 .collect(Collectors.toList());
     }
@@ -74,7 +74,7 @@ public class UserService {
         User user = userRepository.findById(userNo).orElseThrow(() ->
                 new BobIssueException(ResponseCode.FAILED_DELETE_USER));
 
-        user.deleteUser();
+        user.delete();
     }
 
 
