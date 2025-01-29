@@ -50,6 +50,8 @@ import NotificationPage from '../pages/admin/cs/NotificationPage'
 import CSCenterPage from '../pages/admin/cs/CSCenterPage'
 import NoticePage from '../pages/admin/cs/NoticePage'
 import FAQPage from '../pages/admin/cs/FAQPage'
+//판매자 페이지
+import * as Seller from '../pages/seller/import'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -75,9 +77,151 @@ const router = createBrowserRouter([
           },
         ],
       },
+      //판매자 회원가입,로그인
+      {
+        path:'seller/login',
+        element:<Seller.Login/>
+      },
+      {
+        path:'seller/signup',
+        element:<Seller.Signup/>
+
+      },
       {
         // seller section
         path: 'seller',
+        element: <Seller.SellerHome />,
+        children: [
+         
+          //상품 관리 관련
+          {
+            path: '',
+            element: <Seller.SMain />,
+          },
+          {
+            path: 'products/view/:productId',
+            element: <Seller.PrView />,
+          },
+          {
+            path: 'products/view/:productId/update',
+            element: <Seller.PrUpdate />,
+          },
+          {
+            path: 'products/view/:productId/delete',
+            element: <Seller.PrDelete />,
+          },
+          {
+            path: 'products/register',
+            element: <Seller.Register />,
+          },
+          {
+            path: 'products/inquiry',
+            element: <Seller.Inquiry />,
+          },
+          {
+            path: 'products/update',
+            element: <Seller.Update />,
+          },
+          //주문 배송 관련
+          {
+            path: 'delivery/delivers',
+            element: <Seller.Delivery />,
+          },
+          {
+            path: 'delivery/exchanges',
+            element: <Seller.Exchange />,
+          },
+          {
+            path: 'delivery/orders',
+            element: <Seller.Orders />,
+          },
+          {
+            path: 'delivery/returns',
+            element: <Seller.Return />,
+          },
+          {
+            path: 'delivery/shipping',
+            element: <Seller.Ship />,
+          },
+          {
+            path: 'delivery/:orderId',
+            element: <Seller.OrDetail />,
+          },
+          //정산 관련
+          {
+            path: 'settlement/overview',
+            element: <Seller.Overview />,
+          },
+          {
+            path: 'settlement/view',
+            element: <Seller.Settleview />,
+          },
+          {
+            path: 'settlement/details',
+            element: <Seller.Details />,
+          },
+          {
+            path: 'settlement/accounts',
+            element: <Seller.Accounts />,
+          },
+          //판매자정보 관련
+          {
+            path: 'account/verification',
+            element: <Seller.AcVerification />,
+          },
+          {
+            path: 'account/info',
+            element: <Seller.Info />,
+          },
+          {
+            path: 'account/update-info',
+            element: <Seller.UpdateInfo />,
+          },
+          {
+            path: 'account/update-password',
+            element: <Seller.UpdatePassword />,
+          },
+          //판매자 탈퇴
+          {
+            path: 'account/withdrawal',
+            element: <Seller.Withdrawal />,
+          },
+          //문의 관련
+          {
+            path: 'inquiries/list',
+            element: <Seller.InList />,
+          },
+          {
+            path: 'inquiries/view',
+            element: <Seller.InView />,
+          },
+          {
+            path: 'inquiries/reply',
+            element: <Seller.InReply />,
+          },
+          {
+            path: 'inquiries/replylist',
+            element: <Seller.InReplylist />,
+          },
+          //판매통계 관련
+          {
+            path: 'stats/performance',
+            element: <Seller.Performance />,
+          },
+          {
+            path: 'stats/products',
+            element: <Seller.Products />,
+          },
+          //공지사항 관련
+          {
+            path: 'notices',
+            element: <Seller.Notices />,
+          },
+          {
+            path: 'notices/view',
+            element: <Seller.NoticesView />,
+          },
+        ],
       },
       {
         // admin section
