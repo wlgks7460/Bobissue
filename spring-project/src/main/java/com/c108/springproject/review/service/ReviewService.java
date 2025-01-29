@@ -36,7 +36,7 @@ public class ReviewService {
     // 리뷰 생성
     @Transactional
     public ReviewCreateResDto createReview(ReviewCreateReqDto request) {
-        // 상품 존재 확인
+        // 상품 확인
         itemRepository.findById(request.getItemNo())
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
@@ -63,7 +63,7 @@ public class ReviewService {
 
     @Transactional
     public List<ReviewListResDto> getReviewsByItem(int itemNo) {
-        // 상품 존재 확인
+        // 상품 확인
         itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
@@ -75,7 +75,7 @@ public class ReviewService {
     // 평균 평점 조회
     @Transactional
     public double getItemAverageRating(int itemNo) {
-        // 상품 존재 확인
+        // 상품 확인
         itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
@@ -85,7 +85,6 @@ public class ReviewService {
 
 
     // 리뷰 상세 조회
-
     @Transactional
     public ReviewDetailResDto getReview(int reviewNo) {
         Review review = reviewRepository.findById(reviewNo)
