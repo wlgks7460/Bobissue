@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Question, Integer> {
+public interface QuestionRepository extends JpaRepository<Question, Long> {
     Optional<Question> findByQuestionNo(Long questionNo);
     void deleteByQuestionNo(Long questionNo);
 }

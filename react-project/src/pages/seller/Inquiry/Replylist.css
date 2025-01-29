@@ -1,0 +1,46 @@
+.reply-list-container {
+  width: 80%;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reply-list-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.reply-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reply-list-table th,
+.reply-list-table td {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.reply-list-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.reply-row:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.no-replies {
+  text-align: center;
+  color: #888;
+  padding: 20px;
+  font-size: 16px;
+}

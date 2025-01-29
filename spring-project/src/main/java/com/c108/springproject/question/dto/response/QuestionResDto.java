@@ -21,6 +21,7 @@ public class QuestionResDto {
     private int createdUser;
     private String updatedAt;
     private int updatedUser;
+    private String delYN;
 
     public static QuestionResDto toDto(Question question){
         QuestionResDto questionResDto = QuestionResDto.builder()
@@ -36,6 +37,7 @@ public class QuestionResDto {
                 .createdUser(question.getCreatedUser())
                 .updatedAt(question.getUpdatedAt())
                 .updatedUser(question.getUpdatedUser())
+                .delYN(question.getDelYn())
                 .build();
         return questionResDto;
     }

@@ -1,5 +1,7 @@
 package com.c108.springproject.item.domain;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -43,14 +45,14 @@ public class Item extends BaseEntity {
 //    @Column(nullable = false, length = 15)
 //    private String createdAt;
 
-    @Column(nullable = false)
-    private int createdUser ;
+//    @Column(nullable = false)
+//    private int createdUser ;
 
 //    @Column(nullable = false, length = 15)
 //    private String updatedAt;
 
-    @Column(nullable = false)
-    private int updatedUser ;
+//    @Column(nullable = false)
+//    private int updatedUser ;
 
     @Column(nullable = true, length = 15)
     private String expiredAt;
@@ -61,6 +63,16 @@ public class Item extends BaseEntity {
     @Column(nullable = false)
     private int stock;
 
-    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
-    private String delYn = "N";
+    public void decreaseStock(int quantity) {
+        int restStock = this.stock - quantity;
+        if (restStock < 0) {
+            throw new BobIssueException(ResponseCode.NOT_ENOUGH_STOCK);
+        }
+        this.stock = restStock;
+    }
+
+    public void increaseStock(int quantity) {
+        this.stock += quantity;
+    }
+
 }
