@@ -5,6 +5,7 @@ import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
 import ConsumerHome from '../pages/conusumer/Home'
 import ConsumerLogin from '../pages/conusumer/Login'
 import ConsumerSignup from '../pages/conusumer/Signup'
+import ConsumerItemDetail from '../pages/conusumer/ItemDetail'
 
 // 관리자 section
 
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
           {
             path: 'signup',
             element: <ConsumerSignup />,
+          },
+          {
+            path: 'item/:itemNo',
+            element: <ConsumerItemDetail />,
           },
         ],
       },
