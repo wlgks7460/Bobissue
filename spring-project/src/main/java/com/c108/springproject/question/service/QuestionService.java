@@ -43,12 +43,17 @@ public class QuestionService {
 
     @Transactional
     public List<QuestionResDto> findAllQuestions() {
-        List<Question> questions = questionRepository.findAll();
-        List<QuestionResDto> questionResDtos = new ArrayList<>();
-        for(Question question : questions) {
-            questionResDtos.add(QuestionResDto.toDto(question));
+        try{
+            List<Question> questions = questionRepository.findAll();
+            List<QuestionResDto> questionResDtos = new ArrayList<>();
+            for(Question question : questions) {
+                questionResDtos.add(QuestionResDto.toDto(question));
+            }
+            return questionResDtos;
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_QUESTION);
         }
-        return questionResDtos;
+
     }
 
     @Transactional
