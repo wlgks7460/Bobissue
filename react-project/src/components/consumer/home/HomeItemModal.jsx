@@ -29,7 +29,7 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
   // 상품 장바구니 담기
   const itemOnCart = () => {
     const tempItem = {
-      ...item,
+      itemNo: item.itemNo,
       count: itemCount,
     }
     let cartData = JSON.parse(localStorage.getItem('cart'))

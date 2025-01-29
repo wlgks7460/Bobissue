@@ -5,7 +5,7 @@ import Footer from '../../components/consumer/Footer'
 
 const ConsumerRoot = () => {
   return (
-    <div className='min-h-screen'>
+    <div className='min-h-screen relative'>
       <Navbar />
       <Outlet />
       <Footer />

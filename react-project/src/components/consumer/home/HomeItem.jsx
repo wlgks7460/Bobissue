@@ -70,7 +70,7 @@ const HomeItem = ({ item }) => {
             <p className='text-xl'>
               {/* 할인율 */}
               <span className='text-red-500 me-5'>
-                {((item.price - item.salePrice) / item.price) * 100}%
+                {Math.round(((item.price - item.salePrice) / item.price) * 100)}%
               </span>
               {/* 판매가 */}
               {addComma(item.salePrice)}원
