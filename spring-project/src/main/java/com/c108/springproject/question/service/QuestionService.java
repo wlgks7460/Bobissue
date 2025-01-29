@@ -36,19 +36,24 @@ public class QuestionService {
                     .build();
             return questionRepository.save(new_question);
         }catch (BobIssueException e){
-            throw new BobIssueException(ResponseCode.QUESTION_NOT_FOUND);
+            throw new BobIssueException(ResponseCode.FAILED_CREATE_QUESTION);
         }
 
     }
 
     @Transactional
     public List<QuestionResDto> findAllQuestions() {
-        List<Question> questions = questionRepository.findAll();
-        List<QuestionResDto> questionResDtos = new ArrayList<>();
-        for(Question question : questions) {
-            questionResDtos.add(QuestionResDto.toDto(question));
+        try{
+            List<Question> questions = questionRepository.findAll();
+            List<QuestionResDto> questionResDtos = new ArrayList<>();
+            for(Question question : questions) {
+                questionResDtos.add(QuestionResDto.toDto(question));
+            }
+            return questionResDtos;
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_QUESTION);
         }
-        return questionResDtos;
+
     }
 
     @Transactional

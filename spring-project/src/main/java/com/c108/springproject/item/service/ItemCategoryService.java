@@ -26,15 +26,8 @@ public class ItemCategoryService {
     // 카테고리 만들기
     @Transactional
     public ItemCategory createCategory(ItemCategoryReqDto dto) {
-        
-        // 날짜 가져오기
-        // 글로벌 쓰는 법을 모르겠어여
-        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        
         ItemCategory new_category = ItemCategory.builder()
                 .name(dto.getName())
-                .createdAt(currentDate)
-                .updatedAt(currentDate)
                 .build();
         return itemcategoryRepository.save(new_category);
     }
@@ -62,19 +55,16 @@ public class ItemCategoryService {
     
     // 카테고리 수정
     @Transactional
-    public ItemCategory updateCategory(int categoryNo, ItemCategoryReqDto dto) {
+    public ItemCategoryResDto updateCategory(int categoryNo, ItemCategoryReqDto dto) {
         ItemCategory category = getCategory(categoryNo);
-        // 날짜 가져오기
-        // 글로벌 쓰는 법을 모르겠어여
-        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        category.setName(dto.getName());
 
-        ItemCategory updatedCategory = ItemCategory.builder()
+        return ItemCategoryResDto.builder()
                 .categoryNo(category.getCategoryNo())
-                .name(dto.getName())
-                .createdAt(currentDate)
-                .updatedAt(currentDate)
+                .name(category.getName())
+                .createdAt(category.getCreatedAt())
+                .updatedAt(category.getUpdatedAt())
                 .build();
-        return itemcategoryRepository.save(updatedCategory);
     }
     
     
