@@ -26,7 +26,7 @@ public class Seller extends BaseEntity {
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
 
-    @Column(columnDefinition = "DEFAULT 0")
+    @Column(columnDefinition = "INT DEFAULT 0")
     private int companyNo;
 
 
