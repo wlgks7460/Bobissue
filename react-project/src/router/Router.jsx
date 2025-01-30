@@ -6,6 +6,7 @@ import ConsumerHome from '../pages/conusumer/Home'
 import ConsumerLogin from '../pages/conusumer/Login'
 import ConsumerSignup from '../pages/conusumer/Signup'
 import ConsumerItemDetail from '../pages/conusumer/ItemDetail'
+import ConsumerCart from '../pages/conusumer/Cart'
 
 // 관리자 section
 
@@ -80,24 +81,26 @@ const router = createBrowserRouter([
             path: 'item/:itemNo',
             element: <ConsumerItemDetail />,
           },
+          {
+            path: 'cart',
+            element: <ConsumerCart />,
+          },
         ],
       },
       //판매자 회원가입,로그인
       {
-        path:'seller/login',
-        element:<Seller.Login/>
+        path: 'seller/login',
+        element: <Seller.Login />,
       },
       {
-        path:'seller/signup',
-        element:<Seller.Signup/>
-
+        path: 'seller/signup',
+        element: <Seller.Signup />,
       },
       {
         // seller section
         path: 'seller',
         element: <Seller.SellerHome />,
         children: [
-         
           //상품 관리 관련
           {
             path: '',
