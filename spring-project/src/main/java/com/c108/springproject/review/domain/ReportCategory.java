@@ -28,15 +28,13 @@ public class ReportCategory {
 
 
     /*
-    -- 신고 카테고리 테이블의 기본 데이터 삽입
-INSERT INTO report_category (category_no, name, created_at, created_user, updated_at, updated_user)
-VALUES
-    (1, '허위/과장 리뷰', DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1, DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1),
-    (2, '광고성 리뷰', DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1, DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1),
-    (3, '욕설/비방', DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1, DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1),
-    (4, '개인정보 노출', DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1, DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1),
-    (5, '음란성 리뷰', DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1, DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1),
-    (6, '저작권 침해', DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1, DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1),
-    (7, '기타', DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1, DATE_FORMAT(NOW(), '%Y%m%d %H%i%s'), 1);
+        INSERT INTO report_category (category_no, name) VALUES
+        (1, '허위/과장 리뷰'),
+        (2, '광고성 리뷰'),
+        (3, '욕설/비방'),
+        (4, '개인정보 노출'),
+        (5, '음란성 리뷰'),
+        (6, '저작권 침해'),
+        (7, '기타');
      */
 }

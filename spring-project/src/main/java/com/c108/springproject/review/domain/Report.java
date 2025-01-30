@@ -37,4 +37,8 @@ public class Report extends BaseEntity {
     @Column(length = 1, nullable = false, columnDefinition = "CHAR(1)")
     private String status = "N"; // (N: 미처리, Y: 처리완료)
 
+    public void updateStatus(String status) {
+        this.status = status;
+    }
 }
+
