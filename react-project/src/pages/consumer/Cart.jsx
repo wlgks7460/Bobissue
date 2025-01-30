@@ -156,6 +156,7 @@ const Cart = () => {
             <button
               className='w-full h-[50px] rounded bg-indigo-400 text-white hover:bg-indigo-600'
               onClick={() => navigate('/payment')}
+              disabled={soldOut.length > 0 || items.length < 1}
             >
               구매하기
             </button>
