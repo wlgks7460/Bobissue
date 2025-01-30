@@ -1,12 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom'
 import RootPage from '../pages/RootPage'
 // 이용자 section
-import ConsumerRoot from '../pages/conusumer/ConsumerRoot'
-import ConsumerHome from '../pages/conusumer/Home'
-import ConsumerLogin from '../pages/conusumer/Login'
-import ConsumerSignup from '../pages/conusumer/Signup'
-import ConsumerItemDetail from '../pages/conusumer/ItemDetail'
-import ConsumerCart from '../pages/conusumer/Cart'
+import ConsumerRoot from '../pages/consumer/ConsumerRoot'
+import ConsumerHome from '../pages/consumer/Home'
+import ConsumerLogin from '../pages/consumer/Login'
+import ConsumerSignup from '../pages/consumer/Signup'
+import ConsumerItemDetail from '../pages/consumer/ItemDetail'
+import ConsumerCart from '../pages/consumer/Cart'
+import ConsumerPayment from '../pages/consumer/Payment'
 
 // 관리자 section
 
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
           {
             path: 'cart',
             element: <ConsumerCart />,
+          },
+          {
+            path: 'payment',
+            element: <ConsumerPayment />,
           },
         ],
       },
