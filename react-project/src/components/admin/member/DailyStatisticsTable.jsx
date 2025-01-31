@@ -13,10 +13,6 @@ import {
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
 
-<<<<<<< HEAD
-// Chart.js 요소 등록
-=======
->>>>>>> develop
 ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale)
 
 const DailyStatisticsTable = () => {
@@ -27,27 +23,12 @@ const DailyStatisticsTable = () => {
     { name: '일별가입통계분석' },
   ]
 
-<<<<<<< HEAD
-  const today = new Date()
-  const currentYear = today.getFullYear()
-  const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0')
-  const currentDate = today.getDate().toString().padStart(2, '0')
-
-  const defaultStartDate = '2025-01-01'
-  const defaultEndDate = `${currentYear}-${currentMonth}-${currentDate}`
-
-  const [startDate, setStartDate] = useState(defaultStartDate)
-  const [endDate, setEndDate] = useState(defaultEndDate)
-=======
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
->>>>>>> develop
   const [dailyData, setDailyData] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-<<<<<<< HEAD
-=======
   // 날짜 범위 내의 모든 날짜를 생성하는 함수
   const generateDateRange = (start, end) => {
     const dates = []
@@ -61,15 +42,12 @@ const DailyStatisticsTable = () => {
     return dates
   }
 
->>>>>>> develop
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await API.get('/users')
         const data = response.data.result.data
 
-<<<<<<< HEAD
-=======
         // API 호출 시점의 날짜를 기본값으로 설정
         const queryDate = new Date()
         const year = queryDate.getFullYear()
@@ -81,7 +59,6 @@ const DailyStatisticsTable = () => {
         setStartDate(formattedQueryDate)
         setEndDate(formattedQueryDate)
 
->>>>>>> develop
         const dailyCounts = {}
         data.forEach((user) => {
           const rawDate = user.createAt
@@ -109,9 +86,6 @@ const DailyStatisticsTable = () => {
 
   useEffect(() => {
     if (startDate && endDate) {
-<<<<<<< HEAD
-      const filtered = dailyData.filter((entry) => entry.date >= startDate && entry.date <= endDate)
-=======
       // 선택된 날짜 범위의 모든 날짜 생성
       const allDates = generateDateRange(startDate, endDate)
 
@@ -123,7 +97,6 @@ const DailyStatisticsTable = () => {
         count: dailyDataMap.get(date) || 0,
       }))
 
->>>>>>> develop
       setFilteredData(filtered)
     }
   }, [startDate, endDate, dailyData])
