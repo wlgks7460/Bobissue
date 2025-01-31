@@ -103,9 +103,13 @@ const Signup = () => {
         height: Number(heightRef.current.value) || 0.0,
         weight: Number(weightRef.current.value) || 0.0,
       }
-      API.post('/users/sign-up', payload).then((res) => {
-        console.log(res)
-      })
+      API.post('/users/sign-up', payload)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     }
   }
   // 현재 날짜 가져오기
