@@ -110,7 +110,7 @@ const CategoryManagementForm = () => {
       <h1 className='text-2xl font-bold mb-6'>카테고리 관리</h1>
 
       {/* 카테고리 목록 */}
-      <h2 className='text-lg font-semibold mb-4'>카테고리 목록</h2>
+      <h2 className='text-lg font-semibold mb-4'>| 카테고리 목록</h2>
       <table className='table-auto w-full border mb-6'>
         <thead>
           <tr className='bg-gray-100'>
