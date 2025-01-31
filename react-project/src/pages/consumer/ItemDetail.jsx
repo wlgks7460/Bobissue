@@ -91,10 +91,10 @@ const ItemDetail = () => {
             <img
               src=''
               alt=''
-              className='w-[400px] h-[600px] flex-none border border-gray-300 rounded'
+              className='w-[400px] h-[500px] flex-none border border-gray-300 rounded'
             />
             {/* 상품 정보 */}
-            <div className='h-[600px] grow flex flex-col justify-between gap-5'>
+            <div className='h-[500px] grow flex flex-col justify-between gap-5'>
               <div className='flex-none'>
                 {/* 상품명 */}
                 <p className='text-2xl font-medium mb-2'>{item.name}</p>
@@ -114,10 +114,22 @@ const ItemDetail = () => {
                 </p>
               </div>
               {/* 상품 정보 */}
-              <div className='grow'>
-                <p>
-                  카테고리 <span className='text-gray-600 ms-6'>{item.category?.name}</span>
-                </p>
+              <div className='grow flex flex-col gap-5'>
+                <div className='flex'>
+                  <span className='w-[150px] text-gray-500'>카테고리</span>{' '}
+                  <span className='text-black'>{item.category?.name}</span>
+                </div>
+                <div className='flex'>
+                  <span className='w-[150px] text-gray-500'>판매자</span>{' '}
+                  <span className='text-black'>{item.createdUser}</span>
+                </div>
+                <div className='flex'>
+                  <span className='w-[150px] text-gray-500'>배송비</span>{' '}
+                  <div className='flex flex-col'>
+                    <span className='text-black'>{addComma(3000)}원</span>
+                    <span className='text-sm text-gray-500'>50,000원 이상 구매시 배송비 무료</span>
+                  </div>
+                </div>
               </div>
               {/* 상품 수량 설정 및 장바구니 담기 */}
               <div className='flex-none flex flex-col'>
@@ -160,7 +172,7 @@ const ItemDetail = () => {
             </div>
           </div>
         </div>
-        <ItemDetailTab />
+        <ItemDetailTab itemNo={item.itemNo} />
       </div>
     </div>
   )
