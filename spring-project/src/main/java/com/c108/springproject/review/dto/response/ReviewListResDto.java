@@ -13,8 +13,8 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewListResDto {
-    private int reviewNo;
-    private BigInteger imageNo;
+    private Long reviewNo;
+    private Long imageNo;
     private String content;
     private int rating;
     private String createdAt;

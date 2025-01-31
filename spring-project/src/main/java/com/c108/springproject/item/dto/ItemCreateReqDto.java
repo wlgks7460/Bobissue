@@ -11,7 +11,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 public class ItemCreateReqDto {
     private int categoryNo;
-    private BigInteger imageNo;
+    private Long imageNo;
     private int companyNo;
     private String name;
     private int price;

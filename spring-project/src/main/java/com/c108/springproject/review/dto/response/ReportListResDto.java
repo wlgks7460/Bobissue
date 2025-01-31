@@ -14,8 +14,8 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportListResDto {
-    private BigInteger reportNo;
-    private int reviewNo;
+    private Long reportNo;
+    private Long reviewNo;
     private String categoryName;
     private String title;
     private String status;

@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
+@Table(name = "recipecategory")
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeCategory extends BaseEntity {

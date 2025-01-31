@@ -14,9 +14,9 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewDetailResDto {
-    private int reviewNo;
+    private Long reviewNo;
     private int itemNo;
-    private BigInteger imageNo;
+    private Long imageNo;
     private String content;
     private int rating;
     private String createdAt;

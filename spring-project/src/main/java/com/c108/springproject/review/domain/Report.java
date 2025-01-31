@@ -18,7 +18,7 @@ import java.math.BigInteger;
 public class Report extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private BigInteger reportNo;
+    private Long reportNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_no")

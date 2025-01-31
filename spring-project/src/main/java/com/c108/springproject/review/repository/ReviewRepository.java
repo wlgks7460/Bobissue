@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
     // 특정 상품의 삭제되지 않은 리뷰 목록 조회
     List<Review> findByItemNoAndDelYn(int itemNo, String delYn);
 

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RecipeUpdateReqDto {
     private int categoryNo;
-    private BigInteger imageNo;
+    private Long imageNo;
     private String name;
     private int time;
     private int updatedUser;

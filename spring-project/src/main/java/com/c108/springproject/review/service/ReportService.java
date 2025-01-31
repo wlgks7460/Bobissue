@@ -35,7 +35,7 @@ public class ReportService {
 
     // 리뷰 신고하기
     @Transactional
-    public ReportResDto createReport(int reviewNo, ReportCreateReqDto request) {
+    public ReportResDto createReport(Long reviewNo, ReportCreateReqDto request) {
         try {
             // 리뷰 확인
             Review review = reviewRepository.findById(reviewNo)
@@ -76,7 +76,7 @@ public class ReportService {
     // 신고 상태 변경 (관리자 전용)
 
     @Transactional
-    public ReportResDto updateReportStatus(int reportNo, ReportUpdateReqDto request) {
+    public ReportResDto updateReportStatus(Long reportNo, ReportUpdateReqDto request) {
         try {
             Report report = reportRepository.findById(reportNo)
                     .orElseThrow(() -> new BobIssueException(ResponseCode.REPORT_NOT_FOUND));

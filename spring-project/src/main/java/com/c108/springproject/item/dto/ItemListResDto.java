@@ -15,7 +15,7 @@ import java.math.BigInteger;
 public class ItemListResDto {
     private int itemNo;
     private int categoryNo;
-    private BigInteger imageNo;
+    private Long imageNo;
     private int companyNo;
     private String name;
     private int price;

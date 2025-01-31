@@ -54,7 +54,7 @@ public class ReviewController {
     @GetMapping("/{reviewNo}")
     public ResponseDto getReview(
             @PathVariable int itemNo,
-            @PathVariable int reviewNo) {
+            @PathVariable Long reviewNo) {
         ReviewDetailResDto response = reviewService.getReview(reviewNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_REVIEW, new DefaultResponse<>(response));
     }
@@ -63,7 +63,7 @@ public class ReviewController {
     @PutMapping("/{reviewNo}")
     public ResponseDto updateReview(
             @PathVariable int itemNo,
-            @PathVariable int reviewNo,
+            @PathVariable Long reviewNo,
             @RequestBody ReviewUpdateReqDto request) {
         ReviewUpdateResDto response = reviewService.updateReview(reviewNo, request);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_REVIEW, new DefaultResponse<>(response));
@@ -73,7 +73,7 @@ public class ReviewController {
     @DeleteMapping("/{reviewNo}")
     public ResponseDto deleteReview(
             @PathVariable int itemNo,
-            @PathVariable int reviewNo) {
+            @PathVariable Long reviewNo) {
         reviewService.deleteReview(reviewNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_REVIEW, new DefaultResponse<>(null));
     }

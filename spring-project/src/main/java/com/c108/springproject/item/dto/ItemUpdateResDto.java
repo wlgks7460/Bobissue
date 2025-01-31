@@ -12,7 +12,7 @@ import com.c108.springproject.item.dto.ItemCategoryReqDto;
 public class ItemUpdateResDto {
     private int itemNo;
     private ItemCategoryResDto category;
-    private BigInteger imageNo;
+    private Long imageNo;
     private int companyNo;
     private String name;
     private int price;

@@ -86,7 +86,7 @@ public class ReviewService {
 
     // 리뷰 상세 조회
     @Transactional
-    public ReviewDetailResDto getReview(int reviewNo) {
+    public ReviewDetailResDto getReview(Long reviewNo) {
         Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.REVIEW_NOT_FOUND));
 
@@ -95,7 +95,7 @@ public class ReviewService {
 
     // 리뷰 수정
     @Transactional
-    public ReviewUpdateResDto updateReview(int reviewNo, ReviewUpdateReqDto request) {
+    public ReviewUpdateResDto updateReview(Long reviewNo, ReviewUpdateReqDto request) {
         Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.REVIEW_NOT_FOUND));
 
@@ -115,7 +115,7 @@ public class ReviewService {
     // 리뷰 삭제
 
     @Transactional
-    public void deleteReview(int reviewNo) {
+    public void deleteReview(Long reviewNo) {
         Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.REVIEW_NOT_FOUND));
         review.delete();

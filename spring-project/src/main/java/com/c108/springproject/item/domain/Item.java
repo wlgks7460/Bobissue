@@ -28,7 +28,7 @@ public class Item extends BaseEntity {
 
     // 나중에 연결a
     @Column(nullable = false)
-    private BigInteger imageNo;
+    private Long imageNo;
     // 나중에 연결
     @Column(nullable = false)
     private int companyNo;
