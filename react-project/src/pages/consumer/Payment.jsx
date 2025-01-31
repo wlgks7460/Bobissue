@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import API from '../../utils/API'
 import PaymentAddressModal from '../../components/consumer/payment/PaymentAddressModal'
+import SearchBar from '../../components/consumer/SearchBar'
 
 const Payment = () => {
   const navigate = useNavigate()
@@ -137,115 +138,118 @@ const Payment = () => {
   }, [])
 
   return (
-    <div className='min-h-screen flex flex-col items-center py-10'>
-      <h2 className='text-2xl font-semibold mb-6'>주문서</h2>
-      <div className='w-full max-w-3xl bg-white shadow-md p-6 rounded-lg'>
-        {/* 배송 정보 */}
-        <div className='border-b pb-6 mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>배송 정보</h3>
-          <div className='mb-3'>
-            <p>{address ? `${postcode} ${address}` : '배송지를 선택하세요'}</p>
-            <p>{addressDetail && `${addressDetail}`}</p>
+    <div>
+      <SearchBar />
+      <div className='flex flex-col items-center py-10'>
+        <h2 className='text-2xl font-semibold mb-6'>주문서</h2>
+        <div className='w-full max-w-3xl bg-white shadow-md p-6 rounded-lg'>
+          {/* 배송 정보 */}
+          <div className='border-b pb-6 mb-6'>
+            <h3 className='text-lg font-semibold mb-4'>배송 정보</h3>
+            <div className='mb-3'>
+              <p>{address ? `${postcode} ${address}` : '배송지를 선택하세요'}</p>
+              <p>{addressDetail && `${addressDetail}`}</p>
+            </div>
+            <button
+              className='w-full p-2 border rounded mb-3 bg-gray-200'
+              onClick={() => setShowModal(true)}
+            >
+              배송지 선택
+            </button>
+            <textarea
+              placeholder='배송 요청 사항 (선택)'
+              value={requests}
+              onChange={(e) => setRequests(e.target.value)}
+              className='w-full p-2 border rounded resize-none h-20'
+            />
           </div>
+
+          {/* 포인트 사용 */}
+          <div className='border-b pb-6 mb-6'>
+            <h3 className='text-lg font-semibold mb-4'>포인트 사용</h3>
+            <p className='mb-2'>사용 가능 포인트: {availablePoints}P</p>
+            <input
+              type='number'
+              placeholder='사용할 포인트 입력'
+              value={points}
+              onChange={handlePointsChange}
+              className='w-full p-2 border rounded'
+              max={availablePoints}
+            />
+          </div>
+
+          {/* 쿠폰 선택 */}
+          <div className='border-b pb-6 mb-6'>
+            <h3 className='text-lg font-semibold mb-4'>쿠폰 선택</h3>
+            <select
+              value={selectedCoupon?.code || ''}
+              onChange={handleCouponChange}
+              className='w-full p-2 border rounded'
+            >
+              <option value=''>쿠폰을 선택하세요</option>
+              {availableCoupons.map((coupon) => (
+                <option key={coupon.code} value={coupon.code}>
+                  {coupon.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 결제 금액 */}
+          <div className='border-b pb-6 mb-6'>
+            <h3 className='text-lg font-semibold mb-4'>결제 금액</h3>
+            <div className='flex justify-between'>
+              <span>총 상품 금액</span>
+              <span>{addComma(totalSalePrice)}원</span>
+            </div>
+            <div className='flex justify-between text-red-500'>
+              <span>쿠폰 할인</span>
+              <span>-{addComma(couponDiscount)}원</span>
+            </div>
+            <div className='flex justify-between text-red-500'>
+              <span>포인트 사용</span>
+              <span>-{addComma(points)}원</span>
+            </div>
+            <div className='flex justify-between font-semibold mt-3 text-lg'>
+              <span>최종 결제 금액</span>
+              <span>{addComma(finalPrice)}원</span>
+            </div>
+          </div>
+
+          {/* 결제 방법 */}
+          <div className='border-b pb-6 mb-6'>
+            <h3 className='text-lg font-semibold mb-4'>결제 방법</h3>
+            <select
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              className='w-full p-2 border rounded'
+            >
+              <option value='card'>카드</option>
+              <option value='transfer'>계좌이체</option>
+              <option value='quickpay'>간편결제</option>
+            </select>
+          </div>
+
+          {/* 결제 버튼 */}
           <button
-            className='w-full p-2 border rounded mb-3 bg-gray-200'
-            onClick={() => setShowModal(true)}
+            className='w-full bg-indigo-500 text-white p-3 rounded hover:bg-indigo-600'
+            onClick={handlePayment}
           >
-            배송지 선택
+            결제하기
           </button>
-          <textarea
-            placeholder='배송 요청 사항 (선택)'
-            value={requests}
-            onChange={(e) => setRequests(e.target.value)}
-            className='w-full p-2 border rounded resize-none h-20'
+        </div>
+
+        {/* 배송지 선택 모달 */}
+        {showModal && (
+          <PaymentAddressModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            savedAddresses={savedAddresses}
+            setSavedAddresses={setSavedAddresses}
+            selectAddress={selectAddress}
           />
-        </div>
-
-        {/* 포인트 사용 */}
-        <div className='border-b pb-6 mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>포인트 사용</h3>
-          <p className='mb-2'>사용 가능 포인트: {availablePoints}P</p>
-          <input
-            type='number'
-            placeholder='사용할 포인트 입력'
-            value={points}
-            onChange={handlePointsChange}
-            className='w-full p-2 border rounded'
-            max={availablePoints}
-          />
-        </div>
-
-        {/* 쿠폰 선택 */}
-        <div className='border-b pb-6 mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>쿠폰 선택</h3>
-          <select
-            value={selectedCoupon?.code || ''}
-            onChange={handleCouponChange}
-            className='w-full p-2 border rounded'
-          >
-            <option value=''>쿠폰을 선택하세요</option>
-            {availableCoupons.map((coupon) => (
-              <option key={coupon.code} value={coupon.code}>
-                {coupon.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* 결제 금액 */}
-        <div className='border-b pb-6 mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>결제 금액</h3>
-          <div className='flex justify-between'>
-            <span>총 상품 금액</span>
-            <span>{addComma(totalSalePrice)}원</span>
-          </div>
-          <div className='flex justify-between text-red-500'>
-            <span>쿠폰 할인</span>
-            <span>-{addComma(couponDiscount)}원</span>
-          </div>
-          <div className='flex justify-between text-red-500'>
-            <span>포인트 사용</span>
-            <span>-{addComma(points)}원</span>
-          </div>
-          <div className='flex justify-between font-semibold mt-3 text-lg'>
-            <span>최종 결제 금액</span>
-            <span>{addComma(finalPrice)}원</span>
-          </div>
-        </div>
-
-        {/* 결제 방법 */}
-        <div className='border-b pb-6 mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>결제 방법</h3>
-          <select
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-            className='w-full p-2 border rounded'
-          >
-            <option value='card'>카드</option>
-            <option value='transfer'>계좌이체</option>
-            <option value='quickpay'>간편결제</option>
-          </select>
-        </div>
-
-        {/* 결제 버튼 */}
-        <button
-          className='w-full bg-indigo-500 text-white p-3 rounded hover:bg-indigo-600'
-          onClick={handlePayment}
-        >
-          결제하기
-        </button>
+        )}
       </div>
-
-      {/* 배송지 선택 모달 */}
-      {showModal && (
-        <PaymentAddressModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          savedAddresses={savedAddresses}
-          setSavedAddresses={setSavedAddresses}
-          selectAddress={selectAddress}
-        />
-      )}
     </div>
   )
 }
