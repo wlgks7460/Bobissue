@@ -3,7 +3,7 @@ import ItemDetailDescription from './itemDetailDescription'
 import ItemDetailReview from './ItemDetailReview'
 import ItemDetailQuestion from './ItemDetailQuestion'
 
-const ItemDetailTab = () => {
+const ItemDetailTab = ({ itemNo }) => {
   // 탭 상태 확인
   const [tabState, setTabState] = useState('description')
   return (
@@ -32,7 +32,7 @@ const ItemDetailTab = () => {
       {tabState === 'description' ? (
         <ItemDetailDescription />
       ) : tabState === 'review' ? (
-        <ItemDetailReview />
+        <ItemDetailReview itemNo={itemNo} />
       ) : (
         <ItemDetailQuestion />
       )}
