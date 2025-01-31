@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 
 const SearchBar = () => {
   return (
@@ -7,7 +9,11 @@ const SearchBar = () => {
         <p>카테고리</p>
       </div>
       <div>searchBar</div>
-      <div>ButtonSection</div>
+      <div className='flex'>
+        <Link to={'/cart'}>
+          <ShoppingBagIcon className='w-5' />
+        </Link>
+      </div>
     </div>
   )
 }

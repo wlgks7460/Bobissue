@@ -13,7 +13,10 @@ import {
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
 
+<<<<<<< HEAD
 // Chart.js 요소 등록
+=======
+>>>>>>> develop
 ChartJS.register(LineElement, PointElement, LinearScale, Title, Tooltip, Legend, CategoryScale)
 
 const DailyStatisticsTable = () => {
@@ -24,6 +27,7 @@ const DailyStatisticsTable = () => {
     { name: '일별가입통계분석' },
   ]
 
+<<<<<<< HEAD
   const today = new Date()
   const currentYear = today.getFullYear()
   const currentMonth = (today.getMonth() + 1).toString().padStart(2, '0')
@@ -34,16 +38,50 @@ const DailyStatisticsTable = () => {
 
   const [startDate, setStartDate] = useState(defaultStartDate)
   const [endDate, setEndDate] = useState(defaultEndDate)
+=======
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+>>>>>>> develop
   const [dailyData, setDailyData] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
+<<<<<<< HEAD
+=======
+  // 날짜 범위 내의 모든 날짜를 생성하는 함수
+  const generateDateRange = (start, end) => {
+    const dates = []
+    let currentDate = new Date(start)
+    const endDate = new Date(end)
+
+    while (currentDate <= endDate) {
+      dates.push(currentDate.toISOString().split('T')[0])
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+    return dates
+  }
+
+>>>>>>> develop
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await API.get('/users')
         const data = response.data.result.data
 
+<<<<<<< HEAD
+=======
+        // API 호출 시점의 날짜를 기본값으로 설정
+        const queryDate = new Date()
+        const year = queryDate.getFullYear()
+        const month = (queryDate.getMonth() + 1).toString().padStart(2, '0')
+        const date = queryDate.getDate().toString().padStart(2, '0')
+        const formattedQueryDate = `${year}-${month}-${date}`
+
+        // 시작일과 종료일을 API 호출 시점으로 설정
+        setStartDate(formattedQueryDate)
+        setEndDate(formattedQueryDate)
+
+>>>>>>> develop
         const dailyCounts = {}
         data.forEach((user) => {
           const rawDate = user.createAt
@@ -71,7 +109,21 @@ const DailyStatisticsTable = () => {
 
   useEffect(() => {
     if (startDate && endDate) {
+<<<<<<< HEAD
       const filtered = dailyData.filter((entry) => entry.date >= startDate && entry.date <= endDate)
+=======
+      // 선택된 날짜 범위의 모든 날짜 생성
+      const allDates = generateDateRange(startDate, endDate)
+
+      // 각 날짜에 대해 가입자 수 매핑 (없으면 0)
+      const dailyDataMap = new Map(dailyData.map((item) => [item.date, item.count]))
+
+      const filtered = allDates.map((date) => ({
+        date,
+        count: dailyDataMap.get(date) || 0,
+      }))
+
+>>>>>>> develop
       setFilteredData(filtered)
     }
   }, [startDate, endDate, dailyData])

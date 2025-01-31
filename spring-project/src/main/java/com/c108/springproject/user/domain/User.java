@@ -67,7 +67,4 @@ public class User extends BaseEntity {
         this.phoneNumber = userDto.getPhoneNumber();
     }
 
-    public void deleteUser() {
-        super.delete();
-    }
 }
