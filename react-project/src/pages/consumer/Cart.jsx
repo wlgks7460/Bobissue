@@ -12,6 +12,7 @@ const Cart = () => {
   const [soldOut, setSoldOut] = useState([]) // 품절 상품
   const [totalPrice, setTotalPrice] = useState(0) // 총 원가
   const [totalSalePrice, setTotalSalePrice] = useState(0) // 총 구매가
+  const [deliveryFee, setDeliveryFee] = useState(3000) // 배송비
 
   // 상품 가격 , 찍기
   const addComma = (price) => {
@@ -31,6 +32,9 @@ const Cart = () => {
 
     setTotalPrice(totalPrice)
     setTotalSalePrice(totalSalePrice)
+    if (totalSalePrice >= 50000) {
+      setDeliveryFee(0)
+    }
   }
 
   // 수량 변경 함수
@@ -144,14 +148,11 @@ const Cart = () => {
                 <span>할인 금액</span> <span>{addComma(totalSalePrice)}원</span>
               </div>
               <div className='flex justify-between'>
-                <span>배송비</span> <span>{addComma(2500 * items.length)}원</span>
+                <span>배송비</span> <span>{addComma(deliveryFee)}원</span>
               </div>
             </div>
             <div className='flex justify-between mb-5'>
-              <span>총 금액</span>{' '}
-              <span>
-                {addComma(totalSalePrice + 2500 * items.reduce((acc, cur) => acc + cur.count, 0))}원
-              </span>
+              <span>총 금액</span> <span>{addComma(totalSalePrice + deliveryFee)}원</span>
             </div>
             <button
               className='w-full h-[50px] rounded bg-indigo-400 text-white hover:bg-indigo-600'
