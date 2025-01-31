@@ -42,18 +42,6 @@ public class Item extends BaseEntity {
     @Column(nullable = true)
     private int salePrice;
 
-//    @Column(nullable = false, length = 15)
-//    private String createdAt;
-
-//    @Column(nullable = false)
-//    private int createdUser ;
-
-//    @Column(nullable = false, length = 15)
-//    private String updatedAt;
-
-//    @Column(nullable = false)
-//    private int updatedUser ;
-
     @Column(nullable = true, length = 15)
     private String expiredAt;
 

@@ -1,6 +1,7 @@
 package com.c108.springproject.review.dto.response;
 
 import com.c108.springproject.review.domain.Report;
+import com.c108.springproject.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class ReportListResDto {
     private String status;
     private String createdAt;
     private int createdUser;
+
 
     public static ReportListResDto from(Report report) {
         return ReportListResDto.builder()

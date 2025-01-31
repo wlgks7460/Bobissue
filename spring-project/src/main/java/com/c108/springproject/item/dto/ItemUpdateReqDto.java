@@ -16,12 +16,12 @@ public class ItemUpdateReqDto {
     private String name;
     private int price;
     private int salePrice;
-    private String createdAt;
-    private int createdUser;
+//    private String createdAt;
+//    private int createdUser;
 //    private String updatedAt;
-    private int updatedUser;
+//    private int updatedUser;
     private String expiredAt;
     private String description;
     private int stock;
-    private String delYn;
+//    private String delYn;
 }
