@@ -135,6 +135,10 @@ public enum ResponseCode {
     MY_COUPON_NOT_FOUND("MY_COUPON_NOT_FOUND", "내가 받은 쿠폰 내역 조회 실패"),
     SUCCESS_USE_COUPON("SUCCESS_USE_COUPON", "쿠폰 사용 성공"),
     FAILED_USE_COUPON("FAILED_USE_COUPON", "쿠폰 사용 실패"),
+    SUCCESS_FIND_USER_NOTICE("SUCCESS_FIND_USER_NOTICE", "이용자 공지 사항 조회 성공"),
+    FAILED_FIND_USER_NOTICE("FAILED_FIND_USER_NOTICE", "이용자 공지 사항 조회 실패"),
+    SUCCESS_FIND_SELLER_NOTICE("SUCCESS_FIND_SELLER_NOTICE", "판매자 공지 사항 조회 성공"),
+    FAILED_FIND_SELLER_NOTICE("FAILED_FIND_SELLER_NOTICE", "판매자 공지 사항 조회 실패"),
     ;
 
     private final String code;

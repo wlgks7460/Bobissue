@@ -33,6 +33,16 @@ public class NotificationController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_NOTICE, new DefaultResponse.ListResponse<NotificationResDto>(notificationService.findAllNotifications()));
     }
 
+    @GetMapping("/user-only")
+    public ResponseDto findUserNotifications(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_USER_NOTICE, new DefaultResponse.ListResponse<NotificationResDto>(notificationService.findUserNotifications()));
+    }
+
+    @GetMapping("/seller-only")
+    public ResponseDto findSellerNotifications(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER_NOTICE, new DefaultResponse.ListResponse<NotificationResDto>(notificationService.findSellerNotifications()));
+    }
+
     @GetMapping("/{notification_no}")
     public ResponseDto findNotificationByNo(@PathVariable int notification_no){
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_NOTICE, new DefaultResponse<NotificationResDto>(notificationService.findNotificationByNo(notification_no)));
