@@ -7,55 +7,19 @@ const HomeItmeList = ({ category }) => {
   // 카테고리에 맞는 상품 불러오기
   useEffect(() => {
     // mount
-    // response 부분을 API 활용하는 것으로 교체하면 될 것
-    const response = {
-      data: [
-        {
-          itemNo: 1,
-          name: '상품명1',
-          price: 10000,
-          salePrice: 8000,
-          description: '상품에 대한 상세 정보입니다. 아주 좋은 상품이에요.',
-          stock: 100,
-        },
-        {
-          itemNo: 2,
-          name: '상품명2',
-          price: 20000,
-          salePrice: 15000,
-          description: '상품에 대한 상세 정보입니다. 아주 좋은 상품이에요.',
-          stock: 80,
-        },
-        {
-          itemNo: 3,
-          name: '상품명3',
-          price: 15000,
-          salePrice: 12000,
-          description: '상품에 대한 상세 정보입니다. 아주 좋은 상품이에요.',
-          stock: 1000,
-        },
-        {
-          itemNo: 4,
-          name: '상품명4',
-          price: 5000,
-          salePrice: 3000,
-          description: '상품에 대한 상세 정보입니다. 아주 좋은 상품이에요.',
-          stock: 20,
-        },
-      ],
-    }
-    setItems(response.data)
-
+    API.get(`/categories/${category.categoryNo}`).then((res) => {
+      setItems(res.data.result.data.items)
+    })
     // unmount
     return () => {}
-  }, [items])
+  }, [])
   return (
     <div className='w-[70rem]'>
       <div className='flex justify-between mb-5'>
-        <p className='text-xl'>{category}</p>
+        <p className='text-xl'>{category.name}</p>
         <button>+ 더보기</button>
       </div>
-      <div className='flex justify-between'>
+      <div className='grid grid-cols-4 gap-3'>
         {items.map((v) => (
           <HomeItem key={v.itemNo} item={v} />
         ))}

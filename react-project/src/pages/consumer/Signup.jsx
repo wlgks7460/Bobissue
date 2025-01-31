@@ -4,6 +4,7 @@ import { CheckCircleIcon as SolidCheckCircleIcon } from '@heroicons/react/24/sol
 import SignupTermsModal from '../../components/consumer/signup/SignupTermsModal'
 import TermsOfService from '../../components/consumer/signup/TermsOfService'
 import TermsOfPersonalData from '../../components/consumer/signup/TermsOfPersonalData'
+import API from '../../utils/API'
 
 const Signup = () => {
   // 회원 가입 관련 데이터
@@ -96,13 +97,15 @@ const Signup = () => {
         password: passwordRef.current.value,
         name: nameRef.current.value,
         birthday: birthRef.current.value.split('-').join(''),
-        phone_number: phoneRef.current.value,
+        phoneNumber: phoneRef.current.value,
         address: `(${postcode}) ${address} ${addressDetailRef.current.value}`,
         gender: gender,
-        height: heightRef.current.value,
-        weight: weightRef.current.value,
+        height: Number(heightRef.current.value) || 0.0,
+        weight: Number(weightRef.current.value) || 0.0,
       }
-      console.log(payload)
+      API.post('/users/sign-up', payload).then((res) => {
+        console.log(res)
+      })
     }
   }
   // 현재 날짜 가져오기

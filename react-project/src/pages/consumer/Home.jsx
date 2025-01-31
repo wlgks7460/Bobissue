@@ -1,19 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchBar from '../../components/consumer/SearchBar'
 import HomeEventBanner from '../../components/consumer/home/HomeEventBanner'
 import HomeLiveShopping from '../../components/consumer/home/HomeLiveShopping'
 import HomeItmeList from '../../components/consumer/home/HomeItmeList'
+import API from '../../utils/API'
 
 const Home = () => {
-  const [categories, setCategory] = useState([
-    '할인 / 특가',
-    '정기 배송',
-    '건강식',
-    '고단백',
-    '닭가슴살',
-    '간편식',
-    '식재료',
-  ])
+  const [categories, setCategory] = useState([])
+  useEffect(() => {
+    // mount
+    API.get('/categories')
+      .then((res) => {
+        setCategory(res.data.result.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    // unmount
+    return () => {}
+  }, [])
   return (
     <div>
       {/* search bar */}
@@ -24,8 +29,8 @@ const Home = () => {
       <HomeLiveShopping />
       {/*상품 section */}
       <div className='flex flex-col items-center gap-10'>
-        {categories.map((category, index) => (
-          <HomeItmeList key={index + category} category={category} />
+        {categories.map((v) => (
+          <HomeItmeList key={v.categoryNo} category={v} />
         ))}
       </div>
     </div>
