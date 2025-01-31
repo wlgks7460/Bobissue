@@ -7,6 +7,8 @@ import SearchBar from '../../components/consumer/SearchBar'
 const Payment = () => {
   const navigate = useNavigate()
 
+  const [deliveryFee, setDeliveryFee] = useState(3000) // 배송비
+
   // 배송 정보 상태
   const [postcode, setPostCode] = useState('')
   const [address, setAddress] = useState('')
@@ -46,8 +48,6 @@ const Payment = () => {
     setCouponDiscount(coupon ? coupon.discount : 0)
   }
 
-  const finalPrice = totalSalePrice - points - couponDiscount
-
   // 배송지 선택 함수
   const selectAddress = (addr) => {
     setPostCode(addr.postcode)
@@ -63,6 +63,9 @@ const Payment = () => {
   const updateTotalPrice = (updatedItems) => {
     const total = updatedItems.reduce((acc, item) => acc + item.itemData.salePrice * item.count, 0)
     setTotalSalePrice(total)
+    if (total >= 50000) {
+      setDeliveryFee(0)
+    }
   }
   const handlePayment = () => {
     // 결제 정보 생성
@@ -70,7 +73,7 @@ const Payment = () => {
       addressNo: 1, // 예시 주소 번호, 실제로는 주소 저장 후 반환된 값으로 대체
       payment: paymentMethod,
       couponCode: selectedCoupon ? selectedCoupon.code : null,
-      totalPrice: totalSalePrice + 2500 * items.length - points - couponDiscount,
+      totalPrice: totalSalePrice + deliveryFee - points - couponDiscount,
       orderDetails: items.map((item) => ({
         itemNo: item.itemData.itemNo,
         count: item.count,
@@ -84,6 +87,7 @@ const Payment = () => {
 
   // 결제 함수
   const callPayment = (paymentData) => {
+    console.log(paymentData)
     const { IMP } = window
     IMP.init(import.meta.env.VITE_PORTONE_STORE_ID) // 가맹점 식별 코드
 
@@ -202,6 +206,10 @@ const Payment = () => {
               <span>총 상품 금액</span>
               <span>{addComma(totalSalePrice)}원</span>
             </div>
+            <div className='flex justify-between'>
+              <span>배송비</span>
+              <span>{addComma(deliveryFee)}원</span>
+            </div>
             <div className='flex justify-between text-red-500'>
               <span>쿠폰 할인</span>
               <span>-{addComma(couponDiscount)}원</span>
@@ -212,7 +220,7 @@ const Payment = () => {
             </div>
             <div className='flex justify-between font-semibold mt-3 text-lg'>
               <span>최종 결제 금액</span>
-              <span>{addComma(finalPrice)}원</span>
+              <span>{addComma(totalSalePrice + deliveryFee - points - couponDiscount)}원</span>
             </div>
           </div>
 
