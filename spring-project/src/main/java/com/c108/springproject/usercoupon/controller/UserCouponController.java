@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/coupon")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserCouponController {
 
     private final UserCouponService userCouponService;
