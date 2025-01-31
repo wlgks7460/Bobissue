@@ -115,7 +115,7 @@ const CategoryManagementForm = () => {
             <th className='border px-4 py-2'>카테고리명</th>
             <th className='border px-4 py-2'>생성일</th>
             <th className='border px-4 py-2'>수정일</th>
-            <th className='border px-4 py-2'></th>
+            <th className='border px-4 py-2'>수정/삭제</th>
           </tr>
         </thead>
         <tbody>
