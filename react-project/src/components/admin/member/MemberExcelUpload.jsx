@@ -1,78 +1,132 @@
 import React, { useState } from 'react'
 import ExcelJS from 'exceljs'
 import Breadcrumb from '../common/Breadcrumb'
+import API from '../../../utils/API'
 
 const MemberExcelUpload = () => {
-  // Breadcrumb에 사용할 경로 데이터
-  const breadcrumbPaths = [
-    { name: 'Home' }, // 홈
-    { name: '회원관리' }, // 회원관리
-    { name: '회원엑셀일괄등록' }, // 현재 페이지
-  ]
-  // 파일 이름과 미리보기 데이터 상태 관리
+  const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원엑셀일괄등록' }]
   const [fileName, setFileName] = useState('')
   const [previewData, setPreviewData] = useState([])
+  const [errors, setErrors] = useState([])
+
+  // 템플릿 다운로드 핸들러
+  const downloadTemplate = () => {
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('회원정보')
+
+    // 템플릿 컬럼 정의
+    worksheet.columns = [
+      { header: '이름', key: 'name', width: 20 },
+      { header: '생년월일(YYYYMMDD)', key: 'birthday', width: 15 },
+      { header: '이메일', key: 'email', width: 25 },
+      { header: '비밀번호', key: 'password', width: 20 },
+      { header: '성별(M/F)', key: 'gender', width: 10 },
+      { header: '키(cm)', key: 'height', width: 10 },
+      { header: '몸무게(kg)', key: 'weight', width: 10 },
+      { header: '전화번호', key: 'phoneNumber', width: 15 },
+    ]
+
+    // 예시 데이터 추가
+    worksheet.addRow({
+      name: '홍길동',
+      birthday: '19900101',
+      email: 'hong@example.com',
+      password: 'password123',
+      gender: 'M',
+      height: 175.5,
+      weight: 70,
+      phoneNumber: '010-1234-5678',
+    })
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/octet-stream' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = '회원등록_템플릿.xlsx'
+      link.click()
+      window.URL.revokeObjectURL(url)
+    })
+  }
 
   // 파일 업로드 핸들러
   const handleFileUpload = async (event) => {
-    const file = event.target.files[0] // 업로드된 파일 가져오기
+    const file = event.target.files[0]
     if (file) {
-      setFileName(file.name) // 파일 이름 상태에 저장
+      setFileName(file.name)
 
-      // 엑셀 파일 읽기
       const workbook = new ExcelJS.Workbook()
-      const buffer = await file.arrayBuffer() // 파일을  ArrayBuffer 형식으로 변환
-      await workbook.xlsx.load(buffer) // 엑셀 데이터를 읽음
+      const buffer = await file.arrayBuffer()
+      await workbook.xlsx.load(buffer)
 
-      // 첫 번째 시트 데이터 추출
-      const worksheet = workbook.worksheets[0] // 첫번째 시트 선택
+      const worksheet = workbook.worksheets[0]
       const rows = []
       worksheet.eachRow((row, rowIndex) => {
         if (rowIndex > 1) {
-          // 첫 번째 줄(헤더)은 제외하고 데이터만 가져오기
-          rows.push(row.values.slice(1)) // 첫번째 열 제거하고 데이터 배열로 저장
+          const rowData = {
+            name: row.getCell(1).value,
+            birthday: row.getCell(2).value,
+            email: row.getCell(3).value,
+            password: row.getCell(4).value,
+            gender: row.getCell(5).value,
+            height: parseFloat(row.getCell(6).value),
+            weight: parseFloat(row.getCell(7).value),
+            phoneNumber: row.getCell(8).value,
+          }
+          rows.push(rowData)
         }
       })
-      setPreviewData(rows.slice(0, 10)) // 최대 10개의 행만 미리보기로 보여줌 -> 추후 모달창 등으로 전체 리스트 확인 가능하도록 수정 가능
+      setPreviewData(rows) // 전체 데이터 표시
     }
   }
 
-  //템플릿 다운로드 핸들러
-  const downloadTemplate = () => {
-    const workbook = new ExcelJS.Workbook() // 새 엑셀 파일 생성
-    const worksheet = workbook.addWorksheet('회원정보') // 새로운 시트 생성
-
-    // 컬럼 정의 -> 추후에 백엔드 저장 형식 확인하고 변경
-    worksheet.columns = [
-      { header: '번호', key: '번호', width: 10 },
-      { header: '이름', key: '이름', width: 20 },
-      { header: '전화번호', key: '전화번호', width: 15 },
-      { header: '이메일', key: '이메일', width: 25 },
-    ]
-
-    // 예시 데이터 추가 -> 마찬가지로 컬럼 변경시 동시에 변경해야함
-    worksheet.addRow(['1', '홍길동', '010-1234-5678', 'hong@example.com'])
-
-    // 파일 다운로드
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], { type: 'application/octet-stream' }) // Blob 객체 생성
-      const url = window.URL.createObjectURL(blob) // Blob 객체를 URL로 변환
-      const link = document.createElement('a') // 다운로드 링크 생성
-      link.href = url
-      link.download = '회원등록_템플릿.xlsx' // 다운로드 파일 이름 지정
-      link.click() // 링크 클릭하여 다운로드 실행
-      window.URL.revokeObjectURL(url) // URL 메모리 해제
-    })
-  }
-  // 데이터 제출 핸들러
-  const handleSubmit = () => {
+  // 데이터 제출 핸들러 (배치 등록)
+  const handleSubmit = async () => {
     if (previewData.length === 0) {
-      // 미리보기로 보여줄 데이터가 없을 경우 경고창
       alert('업로드된 데이터가 없습니다.')
       return
     }
-    console.log('전송할 데이터:', previewData) // 전송할 데이터 콘솔 출력해서 확인
-    alert('데이터가 성공적으로 전송되었습니다.')
+
+    try {
+      const batchSize = 10 // 🔥 10명씩 배치 처리
+      let successCount = 0
+      let failedCount = 0
+      let failedUsers = []
+
+      for (let i = 0; i < previewData.length; i += batchSize) {
+        const batch = previewData.slice(i, i + batchSize)
+
+        try {
+          await Promise.all(
+            batch.map((data) =>
+              API.post('/users/sign-up', {
+                name: data.name,
+                birthday: data.birthday.replace(/-/g, ''),
+                email: data.email,
+                password: data.password,
+                gender: data.gender,
+                height: data.height,
+                weight: data.weight,
+                phoneNumber: data.phoneNumber,
+              }),
+            ),
+          )
+          successCount += batch.length
+        } catch (error) {
+          console.error('회원 등록 오류:', error.response || error.message)
+          failedCount += batch.length
+          failedUsers.push(...batch.map((user) => user.email)) // 실패한 이메일 저장
+        }
+      }
+
+      alert(`회원 등록 완료: ${successCount}명\n등록 실패: ${failedCount}명`)
+      if (failedCount > 0) {
+        console.log('등록 실패한 회원 이메일 목록:', failedUsers)
+      }
+    } catch (error) {
+      console.error('회원 등록 전체 오류:', error.response || error.message)
+      alert('회원 등록 중 오류가 발생했습니다.')
+    }
   }
 
   return (
@@ -93,34 +147,39 @@ const MemberExcelUpload = () => {
       <div className='mb-6'>
         <input
           type='file'
-          accept='.xlsx, .xls' // 업로드 가능한 파일 형식 지정
-          onChange={handleFileUpload} // 파일 업로드 이벤트 핸들러
+          accept='.xlsx, .xls'
+          onChange={handleFileUpload}
           className='border border-gray-300 p-2 rounded-md'
         />
         {fileName && <p className='mt-2 text-sm text-gray-600'>선택된 파일: {fileName}</p>}
       </div>
 
-      {/* 미리보기 테이블 */}
+      {/* 미리보기 테이블 (전체 데이터 표시) */}
       {previewData.length > 0 && (
         <div className='mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>미리보기</h3>
+          <h3 className='text-lg font-semibold mb-4'>미리보기 (전체 데이터 표시)</h3>
           <table className='table-auto w-full border border-gray-300'>
             <thead>
               <tr>
-                <th className='border px-4 py-2'>번호</th>
                 <th className='border px-4 py-2'>이름</th>
-                <th className='border px-4 py-2'>전화번호</th>
+                <th className='border px-4 py-2'>생년월일</th>
                 <th className='border px-4 py-2'>이메일</th>
+                <th className='border px-4 py-2'>성별</th>
+                <th className='border px-4 py-2'>키</th>
+                <th className='border px-4 py-2'>몸무게</th>
+                <th className='border px-4 py-2'>전화번호</th>
               </tr>
             </thead>
             <tbody>
               {previewData.map((row, index) => (
                 <tr key={index}>
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className='border px-4 py-2'>
-                      {cell}
-                    </td>
-                  ))}
+                  <td className='border px-4 py-2'>{row.name}</td>
+                  <td className='border px-4 py-2'>{row.birthday}</td>
+                  <td className='border px-4 py-2'>{row.email}</td>
+                  <td className='border px-4 py-2'>{row.gender}</td>
+                  <td className='border px-4 py-2'>{row.height}</td>
+                  <td className='border px-4 py-2'>{row.weight}</td>
+                  <td className='border px-4 py-2'>{row.phoneNumber}</td>
                 </tr>
               ))}
             </tbody>
