@@ -76,11 +76,11 @@ const MemberExcelUpload = () => {
           rows.push(rowData)
         }
       })
-      setPreviewData(rows.slice(0, 10)) // 최대 10개의 데이터만 미리보기
+      setPreviewData(rows) // 전체 데이터 표시
     }
   }
 
-  // 데이터 제출 핸들러
+  // 데이터 제출 핸들러 (배치 등록)
   const handleSubmit = async () => {
     if (previewData.length === 0) {
       alert('업로드된 데이터가 없습니다.')
@@ -88,23 +88,44 @@ const MemberExcelUpload = () => {
     }
 
     try {
-      const promises = previewData.map((data) =>
-        API.post('/users/sign-up', {
-          name: data.name,
-          birthday: data.birthday.replace(/-/g, ''),
-          email: data.email,
-          password: data.password,
-          gender: data.gender,
-          height: data.height,
-          weight: data.weight,
-          phoneNumber: data.phoneNumber,
-        }),
-      )
-      await Promise.all(promises)
-      alert('회원 데이터가 성공적으로 등록되었습니다.')
+      const batchSize = 10 // 🔥 10명씩 배치 처리
+      let successCount = 0
+      let failedCount = 0
+      let failedUsers = []
+
+      for (let i = 0; i < previewData.length; i += batchSize) {
+        const batch = previewData.slice(i, i + batchSize)
+
+        try {
+          await Promise.all(
+            batch.map((data) =>
+              API.post('/users/sign-up', {
+                name: data.name,
+                birthday: data.birthday.replace(/-/g, ''),
+                email: data.email,
+                password: data.password,
+                gender: data.gender,
+                height: data.height,
+                weight: data.weight,
+                phoneNumber: data.phoneNumber,
+              }),
+            ),
+          )
+          successCount += batch.length
+        } catch (error) {
+          console.error('회원 등록 오류:', error.response || error.message)
+          failedCount += batch.length
+          failedUsers.push(...batch.map((user) => user.email)) // 실패한 이메일 저장
+        }
+      }
+
+      alert(`회원 등록 완료: ${successCount}명\n등록 실패: ${failedCount}명`)
+      if (failedCount > 0) {
+        console.log('등록 실패한 회원 이메일 목록:', failedUsers)
+      }
     } catch (error) {
-      console.error('회원 등록 오류:', error.response || error.message)
-      alert('회원 등록에 실패했습니다.')
+      console.error('회원 등록 전체 오류:', error.response || error.message)
+      alert('회원 등록 중 오류가 발생했습니다.')
     }
   }
 
@@ -133,10 +154,10 @@ const MemberExcelUpload = () => {
         {fileName && <p className='mt-2 text-sm text-gray-600'>선택된 파일: {fileName}</p>}
       </div>
 
-      {/* 미리보기 테이블 */}
+      {/* 미리보기 테이블 (전체 데이터 표시) */}
       {previewData.length > 0 && (
         <div className='mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>미리보기</h3>
+          <h3 className='text-lg font-semibold mb-4'>미리보기 (전체 데이터 표시)</h3>
           <table className='table-auto w-full border border-gray-300'>
             <thead>
               <tr>

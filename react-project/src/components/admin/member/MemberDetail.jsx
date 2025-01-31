@@ -12,11 +12,12 @@ const MemberDetail = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({})
-  const formatDate = (dateString, forInput = false) => {
-    if (!dateString) return '' // null 또는 undefined 체크
-    const cleanedDate = dateString.replace(/[^0-9]/g, '') // 숫자만 남김
 
-    if (cleanedDate.length !== 8) return dateString // 이미 YYYY-MM-DD 형식이면 그대로 반환
+  const formatDate = (dateString, forInput = false) => {
+    if (!dateString) return ''
+    const cleanedDate = dateString.replace(/[^0-9]/g, '')
+
+    if (cleanedDate.length !== 8) return dateString
 
     const year = cleanedDate.slice(0, 4)
     const month = cleanedDate.slice(4, 6)
@@ -33,12 +34,12 @@ const MemberDetail = () => {
 
         const formattedData = {
           ...userData,
-          birthday: formatDate(userData.birthday, true), // YYYY-MM-DD로 변환
+          birthday: formatDate(userData.birthday, true),
+          gender: userData.gender || '', // 기본값을 ''로 설정하여 강제 'M' 방지
         }
-        console.log(response.data)
-        console.log(formattedData)
+
         setUser(formattedData)
-        setFormData(formattedData) // ✅ 수정 모드에서도 YYYY-MM-DD 유지
+        setFormData(formattedData)
       } catch (error) {
         console.error('회원 상세 정보 조회 오류:', error.response || error.message)
         alert('회원 상세 정보를 가져오는 데 실패했습니다.')
@@ -61,9 +62,14 @@ const MemberDetail = () => {
 
   const handleSave = async () => {
     try {
-      await API.put(`/users/${userNo}`, formData)
+      const updatedData = {
+        ...formData,
+        birthday: formData.birthday.replace(/-/g, ''), // YYYY-MM-DD → YYYYMMDD 변환
+      }
+
+      await API.put(`/users/${userNo}`, updatedData)
       alert('회원 정보가 수정되었습니다.')
-      setUser(formData)
+      setUser(updatedData)
       setIsEditing(false)
     } catch (error) {
       console.error('회원 수정 오류:', error.response || error.message)
@@ -148,10 +154,11 @@ const MemberDetail = () => {
           {isEditing ? (
             <select
               name='gender'
-              value={formData.gender}
+              value={formData.gender || ''} // 기본값을 ''로 유지하여 강제 M 설정 방지
               onChange={handleChange}
               className='w-full border border-gray-300 rounded-md px-3 py-2'
             >
+              <option value=''>성별 선택</option>
               <option value='M'>남성</option>
               <option value='F'>여성</option>
             </select>
@@ -167,12 +174,12 @@ const MemberDetail = () => {
             <input
               type='date'
               name='birthday'
-              value={formData.birthday || ''} // ✅ YYYY-MM-DD 형식 유지
+              value={formData.birthday || ''} // 빈 값 허용하여 예외 방지
               onChange={handleChange}
               className='w-full border border-gray-300 rounded-md px-3 py-2'
             />
           ) : (
-            formatDate(user.birthday) // YYYY-MM-DD 형식으로 표시
+            formatDate(user.birthday)
           )}
         </p>
       </div>
@@ -182,13 +189,13 @@ const MemberDetail = () => {
           <>
             <button
               onClick={handleSave}
-              className='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600'
+              className='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 min-w-[80px]'
             >
               저장
             </button>
             <button
               onClick={handleEditToggle}
-              className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600'
+              className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 min-w-[80px]'
             >
               취소
             </button>
@@ -196,14 +203,14 @@ const MemberDetail = () => {
         ) : (
           <button
             onClick={handleEditToggle}
-            className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+            className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 min-w-[80px]'
           >
             수정
           </button>
         )}
         <button
           onClick={handleDelete}
-          className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600'
+          className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 min-w-[80px]'
         >
           삭제
         </button>

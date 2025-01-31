@@ -70,8 +70,13 @@ const MemberRegister = () => {
         phoneNumber: formData.phoneNumber,
       })
 
-      if (response.status === 201) {
+      console.log('회원 등록 응답:', response) // API 응답 확인
+
+      // 🔥 회원 등록이 정상적으로 처리되었는지 `data.status` 확인
+      if (response.data?.status === 'CREATED') {
         alert('회원 등록이 완료되었습니다!')
+
+        // 입력 필드 초기화
         setFormData({
           name: '',
           birthday: '',
@@ -84,7 +89,7 @@ const MemberRegister = () => {
           phoneNumber: '',
         })
       } else {
-        alert(`회원 등록 실패: ${response.statusText}`)
+        alert(`회원 등록 실패: ${response.data?.message?.label || response.statusText}`)
       }
     } catch (error) {
       console.error('회원 등록 오류:', error.response || error.message)
