@@ -26,6 +26,7 @@ const CategoryManagementForm = () => {
       try {
         const response = await API.get('/categories')
         setCategories(response.data.result.data)
+        console.log(response.data.result.data)
       } catch (error) {
         console.error('카테고리 데이터를 불러오는 중 오류 발생:', error)
         alert('카테고리 데이터를 불러오는 데 실패했습니다.')
@@ -33,14 +34,12 @@ const CategoryManagementForm = () => {
     }
     fetchCategories()
   }, [])
-
-  // 입력 값 변경 핸들러
+  // 입력 값 변경 핸들러 (카테고리 입력 시 실행됨)
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  // 새로운 카테고리 저장
   const handleSave = async () => {
     if (formData.categoryName.trim() === '') {
       alert('카테고리명을 입력해주세요.')
@@ -49,10 +48,14 @@ const CategoryManagementForm = () => {
 
     try {
       const response = await API.post('/categories', { name: formData.categoryName })
-      const newCategory = response.data.result
+
+      // API 응답에서 새로 추가된 카테고리 정보 추출
+      const newCategory = response.data.result.data
+
+      // 목록에 즉시 반영
       setCategories((prev) => [...prev, newCategory])
-      setFormData({ categoryName: '' })
-      setShowForm(false)
+      setFormData({ categoryName: '' }) // 입력값 초기화
+      setShowForm(false) // 폼 닫기
       alert('카테고리가 저장되었습니다.')
     } catch (error) {
       console.error('카테고리 저장 중 오류 발생:', error)
@@ -107,7 +110,7 @@ const CategoryManagementForm = () => {
       <h1 className='text-2xl font-bold mb-6'>카테고리 관리</h1>
 
       {/* 카테고리 목록 */}
-      <h2 className='text-lg font-semibold mb-4'>카테고리 목록</h2>
+      <h2 className='text-lg font-semibold mb-4'>| 카테고리 목록</h2>
       <table className='table-auto w-full border mb-6'>
         <thead>
           <tr className='bg-gray-100'>
