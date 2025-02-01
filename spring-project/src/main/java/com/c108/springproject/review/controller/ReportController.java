@@ -28,7 +28,7 @@ public class ReportController {
 
     // 리뷰 신고
     @PostMapping("/item/{itemNo}/review/{reviewNo}/report")
-    public ResponseDto createReport(@PathVariable int reviewNo, @RequestBody ReportCreateReqDto request) {
+    public ResponseDto createReport(@PathVariable Long reviewNo, @RequestBody ReportCreateReqDto request) {
         ReportResDto response = reportService.createReport(reviewNo, request);
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_REPORT, new DefaultResponse<>(response));
 
@@ -36,7 +36,7 @@ public class ReportController {
 
     // 관리자: 신고 상태 변경
     @PutMapping("/admin/report/{reportNo}")
-    public ResponseDto updateReportStatus(@PathVariable int reportNo, @RequestBody ReportUpdateReqDto request) {
+    public ResponseDto updateReportStatus(@PathVariable Long reportNo, @RequestBody ReportUpdateReqDto request) {
         ReportResDto response = reportService.updateReportStatus(reportNo, request);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_REPORT, new DefaultResponse<>(response));
 

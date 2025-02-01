@@ -9,6 +9,8 @@ import com.c108.springproject.review.domain.Review;
 import com.c108.springproject.review.dto.request.*;
 import com.c108.springproject.review.dto.response.*;
 import com.c108.springproject.review.repository.*;
+import com.c108.springproject.user.domain.User;
+import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +24,17 @@ public class ReviewService {
     private final ReportCategoryRepository reportCategoryRepository;
     private final ItemRepository itemRepository;
 
+    private final UserRepository userRepository;
+
     public ReviewService(ReviewRepository reviewRepository,
                          ReportRepository reportRepository,
                          ReportCategoryRepository reportCategoryRepository,
-                         ItemRepository itemRepository) {
+                         ItemRepository itemRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.reportRepository = reportRepository;
         this.reportCategoryRepository = reportCategoryRepository;
         this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -60,15 +65,20 @@ public class ReviewService {
     }
 
     // 특정 상품의 리뷰 목록 조회
-
     @Transactional
     public List<ReviewListResDto> getReviewsByItem(int itemNo) {
+
+
         // 상품 확인
         itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
         return reviewRepository.findByItemNoAndDelYn(itemNo, "N").stream()
-                .map(ReviewListResDto::toDto)
+                .map(review -> {
+                    User user = userRepository.findById(review.getCreatedUser())
+                            .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+                    return ReviewListResDto.toDto(review, user);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -86,7 +96,7 @@ public class ReviewService {
 
     // 리뷰 상세 조회
     @Transactional
-    public ReviewDetailResDto getReview(int reviewNo) {
+    public ReviewDetailResDto getReview(Long reviewNo) {
         Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.REVIEW_NOT_FOUND));
 
@@ -95,7 +105,7 @@ public class ReviewService {
 
     // 리뷰 수정
     @Transactional
-    public ReviewUpdateResDto updateReview(int reviewNo, ReviewUpdateReqDto request) {
+    public ReviewUpdateResDto updateReview(Long reviewNo, ReviewUpdateReqDto request) {
         Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.REVIEW_NOT_FOUND));
 
@@ -115,7 +125,7 @@ public class ReviewService {
     // 리뷰 삭제
 
     @Transactional
-    public void deleteReview(int reviewNo) {
+    public void deleteReview(Long reviewNo) {
         Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.REVIEW_NOT_FOUND));
         review.delete();

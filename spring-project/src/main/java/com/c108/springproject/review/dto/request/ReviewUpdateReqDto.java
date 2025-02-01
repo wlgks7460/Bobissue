@@ -12,7 +12,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewUpdateReqDto {
-    private BigInteger imageNo;
+    private Long imageNo;
     private String content;
     private int rating;
     private int updatedUser;

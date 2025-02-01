@@ -12,11 +12,11 @@ import java.math.BigInteger;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order_detail")
+@Table(name = "orderdetail")
 public class OrderDetail extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int orderDetailNo;
+    private Long orderDetailNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_no", nullable = false)

@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RecipeCreateReqDto {
     private int categoryNo;
-    private BigInteger imageNo;
+    private Long imageNo;
     private String name;
     private int time;
     private int createdUser;

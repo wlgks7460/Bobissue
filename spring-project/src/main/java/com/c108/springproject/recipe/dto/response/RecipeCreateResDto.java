@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RecipeCreateResDto {
     private int recipeNo;
-    private BigInteger imageNo;
+    private Long imageNo;
     private int categoryNo;
     private String categoryName;
     private String name;

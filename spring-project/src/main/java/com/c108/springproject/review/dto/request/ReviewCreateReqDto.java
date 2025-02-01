@@ -13,7 +13,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 public class ReviewCreateReqDto {
     private int itemNo;
-    private BigInteger imageNo;
+    private Long imageNo;
     private String content;
     private int rating;
     private int createdUser;
