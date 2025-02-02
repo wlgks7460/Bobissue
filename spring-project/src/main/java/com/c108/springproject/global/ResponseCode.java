@@ -148,7 +148,12 @@ public enum ResponseCode {
     FAILED_UPDATE_CAST("FAILED_UPDATE_CAST", "방송 수정 실패"),
     SUCCESS_DELETE_CAST("SUCCESS_DELETE_CAST", "방송 삭제 완료"),
     FAILED_DELETE_CAST("FAILED_DELETE_CAST", "방송 삭제 실패"),
-
+    REFRESH_TOKEN_NOT_FOUND("REFRESH_TOKEN_NOT_FOUND", "리프레쉬 토큰 찾기 실패"),
+    SUCCESS_LOGIN("SUCCESS_LOGIN", "로그인 성공"),
+    FAILED_LOGIN("FAILED_LOGIN", "로그인 실패"),
+    SUCCESS_LOGOUT("SUCCESS_LOGOUT", "로그아웃 성공"),
+    FAILED_LOGOUT("FAILED_LOGOUT", "로그아웃 실패"),
+    FAIL_PASSWORD_CHECK("FAIL_PASSWORD_CHECK", "비밀번호 오류")
     ;
 
     private final String code;

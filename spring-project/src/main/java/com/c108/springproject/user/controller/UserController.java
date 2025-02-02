@@ -3,6 +3,7 @@ package com.c108.springproject.user.controller;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
+import com.c108.springproject.user.dto.LoginReqDto;
 import com.c108.springproject.user.dto.SignUpReqDto;
 import com.c108.springproject.user.dto.UserDto;
 import com.c108.springproject.user.dto.UserResDto;
@@ -15,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     private final UserService userService;
@@ -54,5 +54,10 @@ public class UserController {
     public ResponseDto deleteUser(@PathVariable int userNo) {
         userService.deleteUser(userNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_USER, null);
+    }
+
+    @PostMapping("/doLogin")
+    public ResponseDto userLogin(@RequestBody LoginReqDto loginReqDto){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN, new DefaultResponse<>(userService.doLogin(loginReqDto)));
     }
 }
