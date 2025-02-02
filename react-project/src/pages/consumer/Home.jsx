@@ -9,13 +9,13 @@ const Home = () => {
   const [categories, setCategory] = useState([])
   useEffect(() => {
     // mount
-    API.get('/categories')
-      .then((res) => {
-        setCategory(res.data.result.data)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    // API.get('/categories')
+    //   .then((res) => {
+    //     setCategory(res.data.result.data)
+    //   })
+    //   .catch((err) => {
+    //     console.error(err)
+    //   })
     // unmount
     return () => {}
   }, [])
