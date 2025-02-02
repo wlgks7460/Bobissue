@@ -139,6 +139,16 @@ public enum ResponseCode {
     FAILED_FIND_USER_NOTICE("FAILED_FIND_USER_NOTICE", "이용자 공지 사항 조회 실패"),
     SUCCESS_FIND_SELLER_NOTICE("SUCCESS_FIND_SELLER_NOTICE", "판매자 공지 사항 조회 성공"),
     FAILED_FIND_SELLER_NOTICE("FAILED_FIND_SELLER_NOTICE", "판매자 공지 사항 조회 실패"),
+    SUCCESS_CREATE_CAST("SUCCESS_CREATE_CAST", "방송 신청 완료"),
+    FAILED_CREATE_CAST("FAILED_CREATE_CAST", "방송 신청 실패"),
+    SUCCESS_FIND_ALL_CAST("SUCCESS_FIND_ALL_CAST", "방송 전체 목록 조회 성공"),
+    SUCCESS_FIND_CAST("SUCCESS_FIND_CAST", "방송 조회 성공"),
+    CAST_NOT_FOUND("CAST_NOT_FOUND", "방송 조회 실패"),
+    SUCCESS_UPDATE_CAST("SUCCESS_UPDATE_CAST", "방송 수정 성공"),
+    FAILED_UPDATE_CAST("FAILED_UPDATE_CAST", "방송 수정 실패"),
+    SUCCESS_DELETE_CAST("SUCCESS_DELETE_CAST", "방송 삭제 완료"),
+    FAILED_DELETE_CAST("FAILED_DELETE_CAST", "방송 삭제 실패"),
+
     ;
 
     private final String code;

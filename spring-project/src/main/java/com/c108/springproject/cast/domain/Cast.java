@@ -1,5 +1,6 @@
 package com.c108.springproject.cast.domain;
 
+import com.c108.springproject.cast.dto.requset.CastReqDto;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.seller.domain.Seller;
 import jakarta.persistence.*;
@@ -36,6 +37,13 @@ public class Cast extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private int castTime;
+
+    public void updateCast(CastReqDto castReqDto){
+        this.title = castReqDto.getTitle();
+        this.content = castReqDto.getContent();
+        this.startAt = castReqDto.getStartAt();
+        this.castTime = castReqDto.getCastTime();
+    }
 
 
 

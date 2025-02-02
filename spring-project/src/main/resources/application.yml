@@ -7,7 +7,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://93306/test
+    url: jdbc:mysql://i12c108.p.ssafy.io:3306/test
     username: ssafy
     password: C108bob!!
 
