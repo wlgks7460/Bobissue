@@ -73,7 +73,7 @@ public class CouponService {
         Coupon coupon = couponRepository.findByCouponNo(coupon_no).orElseThrow(()-> new BobIssueException(ResponseCode.COUPON_NOT_FOUND));
         try{
             coupon.delete();
-            return coupon_no;
+            return coupon.getCouponNo();
         }catch (BobIssueException e){
             throw new BobIssueException(ResponseCode.FAILED_DELETE_COUPON);
         }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Integer> {
@@ -21,5 +22,7 @@ public interface SellerRepository extends JpaRepository<Seller, Integer> {
 
     @Query("SELECT s.status FROM Seller s WHERE s.sellerNo = :sellerNo")
     String findSellerStatus(int sellerNo);
+
+    Optional<Seller> findBySellerNo(int sellerNo);
 
 }

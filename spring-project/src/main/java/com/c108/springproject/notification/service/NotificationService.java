@@ -52,6 +52,35 @@ public class NotificationService {
     }
 
     @Transactional
+    public List<NotificationResDto> findUserNotifications(){
+        try{
+            List<Notification> notifications = notificationRepository.findByReader(NotificationRead.이용자);
+            List<NotificationResDto> notificationResDtos = new ArrayList<>();
+            for(Notification notification : notifications){
+                notificationResDtos.add(NotificationResDto.toDto(notification));
+            }
+            return notificationResDtos;
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_FIND_USER_NOTICE);
+        }
+    }
+
+    @Transactional
+    public List<NotificationResDto> findSellerNotifications(){
+        try{
+            List<Notification> notifications = notificationRepository.findByReader(NotificationRead.판매자);
+            List<NotificationResDto> notificationResDtos = new ArrayList<>();
+            for(Notification notification : notifications){
+                notificationResDtos.add(NotificationResDto.toDto(notification));
+            }
+            return notificationResDtos;
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_FIND_SELLER_NOTICE);
+        }
+    }
+
+    //추후에 권환 확인 필요
+    @Transactional
     public NotificationResDto findNotificationByNo(int notification_no){
         Notification notification = notificationRepository.findByNoticeNo(notification_no).orElseThrow(() -> new BobIssueException(ResponseCode.NOTICE_NOT_FOUND));
         return NotificationResDto.toDto(notification);
