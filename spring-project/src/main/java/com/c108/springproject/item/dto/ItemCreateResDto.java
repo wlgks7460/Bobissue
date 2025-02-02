@@ -13,7 +13,7 @@ import java.math.BigInteger;
 public class ItemCreateResDto {
     private int itemNo;
     private ItemCategoryResDto category;
-    private BigInteger imageNo;
+    private Long imageNo;
     private int companyNo;
     private String name;
     private int price;

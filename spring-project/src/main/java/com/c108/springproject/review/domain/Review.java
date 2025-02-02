@@ -19,13 +19,13 @@ import java.util.List;
 public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int reviewNo;
+    private Long reviewNo;
 
     @Column(nullable = false)
     private int itemNo;
 
     @Column(nullable = true)
-    private BigInteger imageNo;
+    private Long imageNo;
 
     @Column(nullable = false, length = 255)
     private String content;
@@ -37,7 +37,7 @@ public class Review extends BaseEntity {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Report> reports = new ArrayList<>();
 
-    public void update(String content, int rating, BigInteger imageNo) {
+    public void update(String content, int rating, Long imageNo) {
         this.content = content;
         this.rating = rating;
         this.imageNo = imageNo;

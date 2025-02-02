@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderListResDto {
-    private int orderNo;
+    private Long orderNo;
     private int userNo;
     private String payment;
     private int totalPrice;

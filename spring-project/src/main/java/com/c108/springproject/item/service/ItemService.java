@@ -7,6 +7,7 @@ import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemCategory;
 import com.c108.springproject.item.dto.*;
 import com.c108.springproject.item.repository.ItemRepository;
+import com.c108.springproject.review.domain.Review;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
@@ -46,14 +47,9 @@ public class ItemService {
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())
-//                .createdAt(reqDto.getCreatedAt())
-//                .createdUser(reqDto.getCreatedUser())
-//                .updatedAt(reqDto.getUpdatedAt())
-//                .updatedUser(reqDto.getUpdatedUser())
                 .expiredAt(reqDto.getExpiredAt())
                 .description(reqDto.getDescription())
                 .stock(reqDto.getStock())
-//                .delYn(reqDto.getDelYn())
                 .build());
 
         // ResponseDto로 변환하여 반환
@@ -93,12 +89,7 @@ public class ItemService {
                         .companyNo(item.getCompanyNo())
                         .price(item.getPrice())
                         .salePrice(item.getSalePrice())
-//                        .createdAt(item.getCreatedAt())
-//                        .updatedAt(item.getUpdatedAt())
-//                        .expiredAt(item.getExpiredAt())
                         .description(item.getDescription())
-//                        .stock(item.getStock())
-//                        .delYn(item.getDelYn())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -115,6 +106,8 @@ public class ItemService {
                 .category(ItemCategoryResDto.builder()
                         .categoryNo(category.getCategoryNo())
                         .name(category.getName())
+                        .createdAt(category.getCreatedAt())
+                        .updatedAt(category.getUpdatedAt())
                         .build())
                 .imageNo(item.getImageNo())
                 .companyNo(item.getCompanyNo())
@@ -145,14 +138,9 @@ public class ItemService {
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())
-//                .createdAt(item.getCreatedAt())
-//                .createdUser(item.getCreatedUser())
-//                .updatedAt(reqDto.getUpdatedAt())
-//                .updatedUser(reqDto.getUpdatedUser()) // 수정한 유저
                 .expiredAt(reqDto.getExpiredAt())
                 .description(reqDto.getDescription())
                 .stock(reqDto.getStock())
-//                .delYn(item.getDelYn())
                 .build();
 
         // Item 클래스의 BaseEntity 상속부분에서 createdAt과 updatedAt을 상속했기 때문에 builder 패턴에서 직접 접근X.
@@ -168,6 +156,8 @@ public class ItemService {
                 .category(ItemCategoryResDto.builder()
                         .categoryNo(category.getCategoryNo())
                         .name(category.getName())
+                        .createdAt(category.getCreatedAt())
+                        .updatedAt(category.getUpdatedAt())
                         .build())
                 .imageNo(updatedItem.getImageNo())
                 .companyNo(updatedItem.getCompanyNo())
@@ -189,9 +179,11 @@ public class ItemService {
     // 상품 삭제
     @Transactional
     public void deleteItem(int itemNo) {
-        if (itemRepository.existsById(itemNo)) {
-            itemRepository.deleteById(itemNo);
-        }
+        Item item = itemRepository.findById(itemNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+        item.delete();
+        itemRepository.save(item);
     }
-
 }
+
+

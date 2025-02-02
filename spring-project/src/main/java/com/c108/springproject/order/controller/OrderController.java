@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderNo}")
-    public ResponseDto getOrder(@PathVariable int orderNo) {
+    public ResponseDto getOrder(@PathVariable Long orderNo) {
         return new ResponseDto(
                 HttpStatus.OK,
                 ResponseCode.SUCCESS_FIND_ORDER,
@@ -48,7 +48,7 @@ public class OrderController {
         );
     }
     @PutMapping("/{orderNo}")
-    public ResponseDto updateOrder(@PathVariable int orderNo, @RequestBody OrderUpdateReqDto orderUpdateReqDto) {
+    public ResponseDto updateOrder(@PathVariable Long orderNo, @RequestBody OrderUpdateReqDto orderUpdateReqDto) {
         return new ResponseDto(
                 HttpStatus.OK,
                 ResponseCode.SUCCESS_UPDATE_ORDER,

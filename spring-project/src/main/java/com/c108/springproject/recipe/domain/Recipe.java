@@ -21,7 +21,7 @@ public class Recipe extends BaseEntity {
     private int recipeNo;
 
     @Column(nullable = false)
-    private BigInteger imageNo;
+    private Long imageNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_no", nullable = false)

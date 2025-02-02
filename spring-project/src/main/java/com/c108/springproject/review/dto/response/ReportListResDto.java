@@ -1,6 +1,7 @@
 package com.c108.springproject.review.dto.response;
 
 import com.c108.springproject.review.domain.Report;
+import com.c108.springproject.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +15,14 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportListResDto {
-    private BigInteger reportNo;
-    private int reviewNo;
+    private Long reportNo;
+    private Long reviewNo;
     private String categoryName;
     private String title;
     private String status;
     private String createdAt;
     private int createdUser;
+
 
     public static ReportListResDto from(Report report) {
         return ReportListResDto.builder()

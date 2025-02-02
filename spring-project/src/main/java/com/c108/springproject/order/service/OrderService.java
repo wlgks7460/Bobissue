@@ -139,7 +139,7 @@ public class OrderService {
 
     // 상세 조회
     @Transactional
-    public OrderDetailResDto findOrder(int orderNo) {
+    public OrderDetailResDto findOrder(Long orderNo) {
         Order order = orderRepository.findById(orderNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
         String orderStatus = getOrderStatus(order.getOrderCategoryNo());
@@ -160,7 +160,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderUpdateResDto updateOrder(int orderNo, OrderUpdateReqDto request) {
+    public OrderUpdateResDto updateOrder(Long orderNo, OrderUpdateReqDto request) {
         try {
             // 주문 조회
             Order order = orderRepository.findById(orderNo)

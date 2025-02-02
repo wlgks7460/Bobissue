@@ -17,7 +17,7 @@ import java.util.List;
 public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int orderNo;
+    private Long orderNo;
 
     @Column(nullable = false)
     private int userNo;
@@ -26,7 +26,7 @@ public class Order extends BaseEntity {
     private int addressNo;
 
     @Column(nullable = true)
-    private BigInteger userCouponNo;
+    private Long userCouponNo;
 
     @Column(nullable = false)
     private int orderCategoryNo;

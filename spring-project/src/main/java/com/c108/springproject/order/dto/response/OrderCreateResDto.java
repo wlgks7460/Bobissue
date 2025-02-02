@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderCreateResDto {
-    private int orderNo;             // 생성된 주문 번호
+    private Long orderNo;             // 생성된 주문 번호
     private int userNo;              // 주문자 번호
-    private BigInteger userCouponNo; // 사용된 쿠폰 번호
+    private Long userCouponNo; // 사용된 쿠폰 번호
     private int totalPrice;          // 총 주문 금액
     private String payment;          // 결제 방식
     private String requests;         // 배송 요청사항

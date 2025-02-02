@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderUpdateResDto {
-    private int orderNo;
+    private Long orderNo;
     private int userNo;
     private int addressNo;
-    private BigInteger userCouponNo;
+    private Long userCouponNo;
     private String payment;
     private int totalPrice;
     private String requests;

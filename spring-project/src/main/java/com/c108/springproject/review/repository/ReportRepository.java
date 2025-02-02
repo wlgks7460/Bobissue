@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReportRepository extends JpaRepository<Report, Integer> {
+public interface ReportRepository extends JpaRepository<Report, Long> {
     // 일단 나중에 쓸만한 것들 만들어 달라고 했습니다
 
     // 특정 상태의 신고 목록 조회

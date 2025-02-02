@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
+@Table(name = "reportcategory")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportCategory {
