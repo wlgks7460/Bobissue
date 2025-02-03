@@ -21,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/items")
+@RequestMapping("/api/item")
 public class ItemController {
 
     private final ItemService itemService;
