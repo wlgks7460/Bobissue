@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import Navbar from '../../components/consumer/Navbar'
-import Footer from '../../components/consumer/Footer'
+import Navbar from '../../components/consumer/common/Navbar'
+import Footer from '../../components/consumer/common/Footer'
 
 const ConsumerRoot = () => {
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import HomeItem from '../home/HomeItem'
+import ItemCard from '../common/ItemCard'
 
 const SearchItemList = ({ keyword }) => {
   const [searchItems, setSearchItems] = useState([])
@@ -68,7 +68,7 @@ const SearchItemList = ({ keyword }) => {
       {/* 아이템 컨테이너 */}
       <div className='grid grid-cols-4 gap-3'>
         {searchItems?.map((v) => (
-          <HomeItem key={v.itemNo} item={v} />
+          <ItemCard key={v.itemNo} item={v} />
         ))}
       </div>
     </div>

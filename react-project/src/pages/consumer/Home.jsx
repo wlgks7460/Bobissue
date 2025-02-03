@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import SearchBar from '../../components/consumer/SearchBar'
+import SearchBar from '../../components/consumer/common/SearchBar'
 import HomeEventBanner from '../../components/consumer/home/HomeEventBanner'
 import HomeLiveShopping from '../../components/consumer/home/HomeLiveShopping'
 import HomeItemList from '../../components/consumer/home/HomeItemList'
