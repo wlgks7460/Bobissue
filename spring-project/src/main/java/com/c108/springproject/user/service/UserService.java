@@ -6,12 +6,14 @@ import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.global.jwt.JwtTokenProvider;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshToken;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository;
+import com.c108.springproject.global.redis.RedisService;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.dto.LoginReqDto;
 import com.c108.springproject.user.dto.SignUpReqDto;
 import com.c108.springproject.user.dto.UserDto;
 import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +30,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
 
 
     public UserService(UserRepository userRepository,
                        RefreshTokenRepository refreshTokenRepository,
-                       JwtTokenProvider jwtTokenProvider
+                       JwtTokenProvider jwtTokenProvider,
+                       RedisService redisService
                        ) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.redisService = redisService;
     }
 
     @Transactional
@@ -105,10 +110,6 @@ public class UserService {
             String accessToken = jwtTokenProvider.createAccessToken(String.format("%s:%s", user.getEmail(), "USER"));
             String refreshToken = jwtTokenProvider.createRefreshToken("USER", user.getUserNo());
 
-            System.out.println("로그인");
-            System.out.println(accessToken);
-            System.out.println(refreshToken);
-
             refreshTokenRepository.findByUserEmail(user.getEmail())
                     .ifPresentOrElse(
                             it -> it.updateRefreshToken(refreshToken),
@@ -124,6 +125,21 @@ public class UserService {
         }catch (BobIssueException e){
             throw new BobIssueException(ResponseCode.FAILED_LOGIN);
         }
+    }
+
+
+    @Transactional
+    public int doLogout(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+        RefreshToken refreshToken = refreshTokenRepository.findByUserEmail(user.getEmail()).orElseThrow(
+                () -> new BobIssueException(ResponseCode.REFRESH_TOKEN_NOT_FOUND)
+        );
+
+        refreshTokenRepository.delete(refreshToken);
+        redisService.deleteValues("USER" + "" + user.getUserNo());
+        return user.getUserNo();
     }
 
 

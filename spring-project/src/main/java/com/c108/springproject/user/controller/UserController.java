@@ -60,4 +60,9 @@ public class UserController {
     public ResponseDto userLogin(@RequestBody LoginReqDto loginReqDto){
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN, new DefaultResponse<>(userService.doLogin(loginReqDto)));
     }
+
+    @PostMapping("/doLogout")
+    public ResponseDto userLogout(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGOUT, new DefaultResponse<Integer>(userService.doLogout()));
+    }
 }

@@ -49,6 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = parseBearerToken(request, HttpHeaders.AUTHORIZATION);
             log.info("Filter is running");
             if (token != null && !token.equalsIgnoreCase("null")) {
+                System.out.println(token);
                 User user = parseUserSpecification(token);
                 AbstractAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(user, token, user.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetails(request));

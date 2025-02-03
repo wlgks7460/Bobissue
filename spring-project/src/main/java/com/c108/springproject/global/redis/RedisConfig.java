@@ -14,7 +14,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableCaching// Spring의 캐싱 기능 활성화
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host")
+    @Value("${spring.data.redis.host}")
     private String redisHost;
 
     @Value("${spring.data.redis.port}")
