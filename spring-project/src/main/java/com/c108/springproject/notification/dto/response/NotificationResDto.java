@@ -12,6 +12,7 @@ public class NotificationResDto {
     private String title;
     private String content;
     private int adminNo;
+    private String reader;
     private String createAt;
     private int createdUser;
     private String updatedAt;
@@ -24,6 +25,7 @@ public class NotificationResDto {
                 .title(notification.getTitle())
                 .content(notification.getContent())
                 .adminNo(notification.getAdminNo())
+                .reader(String.valueOf(notification.getReader()))
                 .createAt(notification.getCreatedAt())
                 .createdUser(notification.getCreatedUser())
                 .updatedAt(notification.getUpdatedAt())
