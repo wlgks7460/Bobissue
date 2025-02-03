@@ -25,9 +25,7 @@ public class SellerController {
 
     @PostMapping("sign-up")
     public ResponseDto signUp(@RequestBody SignUpReqDto signUpDto) {
-        sellerService.signUp(signUpDto);
-
-        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_SELLER,null);
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_SELLER,sellerService.signUp(signUpDto));
     }
 
     @GetMapping

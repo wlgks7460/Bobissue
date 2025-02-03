@@ -23,14 +23,17 @@ public class SellerService {
     }
 
     @Transactional
-    public void signUp(SignUpReqDto signUpDto) {
+    public int signUp(SignUpReqDto signUpDto) {
         Seller new_seller = Seller.builder()
                 .email(signUpDto.getEmail())
                 .password(signUpDto.getPassword())
+                .callNumber(signUpDto.getCallNumber())
+                .name(signUpDto.getName())
                 .status("Y")
                 .build();
 
         sellerRepository.save(new_seller);
+        return new_seller.getSellerNo();
     }
 
     @Transactional

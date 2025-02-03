@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import SearchBar from '../../components/consumer/SearchBar'
+import SearchBar from '../../components/consumer/common/SearchBar'
 import { useParams } from 'react-router-dom'
 import API from '../../utils/API'
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import ItemDetailTab from '../../components/consumer/itemDetail/ItemDetailTab'
-import axios from 'axios'
 
 const ItemDetail = () => {
   // 파라미터 정보

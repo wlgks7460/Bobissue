@@ -3,6 +3,7 @@ package com.c108.springproject.global.security;
 import com.c108.springproject.global.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,6 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.List;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -49,7 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/sign-up",
                                 "/api/users/social",
-                                "/api/seller/sign-up",
+                                "/api/sellers/sign-up",
                                 "/api/check-password",
                                 "/api/check-email",
                                 "/api/auths/user-login",
@@ -69,7 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/{user-no}",
                                 "/api/change-password",
-                                "/api/auths/logout",
+//                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/items/{item-no}/like",
                                 "/api/orders/**",
@@ -86,7 +88,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/sellers/{seller-no}",
                                 "/api/change-password",
-                                "/api/auths/logout",
+//                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/items",
                                 "/api/items/{item-no}",
@@ -106,7 +108,7 @@ public class SecurityConfig {
                                 "/api/sellers",
                                 "/api/admin/**",
                                 "/api/api",
-                                "/api/auths/logout",
+//                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/items/{item-no}",
                                 "/api/categories",
