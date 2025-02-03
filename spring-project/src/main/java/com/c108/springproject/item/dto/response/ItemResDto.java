@@ -1,12 +1,11 @@
-package com.c108.springproject.item.dto;
+package com.c108.springproject.item.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.c108.springproject.item.dto.ItemCategoryResDto;
+import com.c108.springproject.item.dto.response.ItemCategoryResDto;
 
-import java.math.BigInteger;
 @AllArgsConstructor
 @Builder
 @Data

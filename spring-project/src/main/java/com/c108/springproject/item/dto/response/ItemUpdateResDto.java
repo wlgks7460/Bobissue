@@ -1,9 +1,8 @@
-package com.c108.springproject.item.dto;
+package com.c108.springproject.item.dto.response;
 
-import java.math.BigInteger;
+import com.c108.springproject.item.dto.response.ItemCategoryResDto;
 import lombok.*;
 import lombok.AllArgsConstructor;
-import com.c108.springproject.item.dto.ItemCategoryReqDto;
 
 @AllArgsConstructor
 @Builder

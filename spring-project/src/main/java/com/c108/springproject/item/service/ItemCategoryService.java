@@ -3,14 +3,12 @@ package com.c108.springproject.item.service;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.item.domain.ItemCategory;
-import com.c108.springproject.item.dto.ItemCategoryReqDto;
-import com.c108.springproject.item.dto.ItemCategoryResDto;
+import com.c108.springproject.item.dto.request.ItemCategoryReqDto;
+import com.c108.springproject.item.dto.response.ItemCategoryResDto;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 

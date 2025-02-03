@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,8 +29,11 @@ public class Item extends BaseEntity {
     private ItemCategory categoryNo;
 
     // 나중에 연결a
-    @Column(nullable = false)
-    private Long imageNo;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<ItemImage> images = new ArrayList<>();
+    // CascadeType.ALL은 Item 엔티티에 대해 수행하는 모든 작업이 ItemImage 엔티티에도 동일하게 적용
+    // orphanRemoval = true 이거는 쓰지 않을 듯
+
     // 나중에 연결
     @Column(nullable = false)
     private int companyNo;

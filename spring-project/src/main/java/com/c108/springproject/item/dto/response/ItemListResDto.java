@@ -1,4 +1,4 @@
-package com.c108.springproject.item.dto;
+package com.c108.springproject.item.dto.response;
 
 
 import lombok.AllArgsConstructor;

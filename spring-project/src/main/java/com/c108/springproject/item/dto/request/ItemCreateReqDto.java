@@ -1,15 +1,15 @@
-package com.c108.springproject.item.dto;
+package com.c108.springproject.item.dto.request;
 
-
-import java.math.BigInteger;
 import lombok.*;
 import lombok.AllArgsConstructor;
+
+import java.math.BigInteger;
 
 @AllArgsConstructor
 @Builder
 @Data
 @NoArgsConstructor
-public class ItemUpdateReqDto {
+public class ItemCreateReqDto {
     private int categoryNo;
     private Long imageNo;
     private int companyNo;

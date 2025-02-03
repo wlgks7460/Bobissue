@@ -2,14 +2,13 @@ package com.c108.springproject.item.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
-import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemCategory;
-import com.c108.springproject.item.dto.*;
+import com.c108.springproject.item.dto.request.ItemCreateReqDto;
+import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
+import com.c108.springproject.item.dto.response.*;
 import com.c108.springproject.item.repository.ItemRepository;
-import com.c108.springproject.review.domain.Review;
 import jakarta.transaction.Transactional;
-import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;

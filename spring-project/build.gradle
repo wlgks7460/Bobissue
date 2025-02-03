@@ -40,7 +40,9 @@ dependencies {
 	implementation 'io.lettuce:lettuce-core:6.2.1.RELEASE' // Lettuce 클라이언트
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
 	implementation 'org.glassfish.jaxb:jaxb-runtime:3.0.1'
-
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.780' // S3 버킷 접근
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.1.1' // SpringBoot AWS 통합 라이브러리
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
