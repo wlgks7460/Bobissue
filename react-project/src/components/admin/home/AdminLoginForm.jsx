@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
-
+import API from '../../../utils/API'
 const AdminLoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
-  const handlesubmit = (e) => {
-    e.preventDefault()
-    if (username === 'admin' && password === 'admin123') {
-      onLogin(username) // 로그인 성공시  username을 전달
-    } else {
-      alert('아이디 또는 비밀번호가 올바르지 않습니다.')
-    }
+  const AdminLoginForm = ({ onLogin }) => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+  }
+  const handlesubmit = async (e) => {
+    e.preventDefault
   }
 
   return (
