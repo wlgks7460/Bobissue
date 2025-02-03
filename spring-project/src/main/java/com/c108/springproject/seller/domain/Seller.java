@@ -17,7 +17,7 @@ public class Seller extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int sellerNo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

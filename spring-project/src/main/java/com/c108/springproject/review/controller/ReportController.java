@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173")
 public class ReportController {
 
     private final ReportService reportService;
@@ -48,6 +47,13 @@ public class ReportController {
         List<ReportListResDto> response = reportService.getReportsByStatus(status);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_REPORT, new DefaultResponse<>(response));
 
+    }
+
+    // 신고 상세 조회
+    @GetMapping("admin/reports/{reportNo}")
+    public ResponseDto getReport(@PathVariable Long reportNo) {
+        ReportResDto response = reportService.getReport(reportNo);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_REPORT, new DefaultResponse<>(response));
     }
 
 }
