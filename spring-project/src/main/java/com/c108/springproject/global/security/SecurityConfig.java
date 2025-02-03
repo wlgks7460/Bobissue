@@ -3,6 +3,7 @@ package com.c108.springproject.global.security;
 import com.c108.springproject.global.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,6 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.List;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -47,11 +49,80 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //해당 url은 인증 필요 x
                         .requestMatchers(
-                                "/api/users/doLogin",
-                                "/api/users/sign-up"
+                                "/api/users/sign-up",
+                                "/api/users/social",
+                                "/api/sellers/sign-up",
+                                "/api/check-password",
+                                "/api/check-email",
+                                "/api/auths/user-login",
+                                "/api/auths/seller-login",
+                                "/api/auths/admin-login",
+                                "/api/items",
+                                "/api/items/{item-no}",
+                                "/api/categories",
+                                "/api/categories/{category-no}",
+                                "/api/item/{item_no}/review",
+                                "/api/item/{item_no}/review/{review_no}",
+                                "/api/cast",
+                                "/api/cast/{cast_no}",
+                                "/api/cast/{chat-no}/chat"
                         ).permitAll()
 //                        // 특정 권한이 있어야만 특정 API에 접근할 수 있도록 설정
-//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/api/users/{user-no}",
+                                "/api/change-password",
+//                                "/api/auths/logout",
+                                "/api/auths/token",
+                                "/api/items/{item-no}/like",
+                                "/api/orders/**",
+                                "/api/payments/**",
+                                "/api/item/{item_no}/review/**",
+                                "/api/questions",
+                                "/api/questions/{question_no}",
+                                "/api/questions/{question_no}/answer",
+                                "/api/notification/user-only",
+                                "/api/notification/{notification_no}",
+                                "/api/cast/{chat-no}/chat",
+                                "/api/recipe"
+                        ).hasRole("USER")
+                        .requestMatchers(
+                                "/api/sellers/{seller-no}",
+                                "/api/change-password",
+//                                "/api/auths/logout",
+                                "/api/auths/token",
+                                "/api/items",
+                                "/api/items/{item-no}",
+                                "/api/item/{item_no}/review/{review_no}/report",
+                                "/api/questions/",
+                                "/api/questions/{question_no}",
+                                "/api/questions/{question_no}/answer",
+                                "/api/notification/seller-only",
+                                "/api/notification/{notification_no}",
+                                "/api/cast/",
+                                "/api/cast/{chat-no}/chat"
+                        ).hasRole("SELLER")
+                        .requestMatchers(
+                                "/api/users/{user-no}",
+                                "/api/users",
+                                "/api/sellers/{seller-no}",
+                                "/api/sellers",
+                                "/api/admin/**",
+                                "/api/api",
+//                                "/api/auths/logout",
+                                "/api/auths/token",
+                                "/api/items/{item-no}",
+                                "/api/categories",
+                                "/api/categories/{category-no}",
+                                "/api/orders/**",
+                                "/api/payments/**",
+                                "/api/item/{item_no}/review/{review_no}/report",
+                                "/api/questions",
+                                "/api/questions/{question_no}",
+                                "/api/questions/{question_no}/answer",
+                                "/api/notification/**",
+                                "/api/cast/**",
+                                "/api/recipe"
+                        ).hasRole("ADMIN")
                         //나머지 요청은 인증이 되어야함
                         .anyRequest().authenticated()
                 )

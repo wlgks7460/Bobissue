@@ -65,7 +65,7 @@ public class ReportService {
             report.setUpdatedUser(request.getCreatedUser());
 
             Report savedReport = reportRepository.save(report);
-            return ReportResDto.from(savedReport);
+            return ReportResDto.toDto(savedReport);
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
@@ -88,7 +88,7 @@ public class ReportService {
             report.setUpdatedUser(request.getUpdatedUser());
 
             Report updatedReport = reportRepository.save(report);
-            return ReportResDto.from(updatedReport);
+            return ReportResDto.toDto(updatedReport);
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
@@ -110,13 +110,22 @@ public class ReportService {
                     reportRepository.findAll();
 
             return reports.stream()
-                    .map(ReportListResDto::from)
+                    .map(ReportListResDto::toDto)
                     .collect(Collectors.toList());
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_FIND_REPORT);
         }
+    }
+
+    // 신고 상태 조회
+    @Transactional
+    public ReportResDto getReport(Long reportNo) {
+        Report report = reportRepository.findById(reportNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.REPORT_NOT_FOUND));
+        return ReportResDto.toDto(report);
+
     }
 
 
