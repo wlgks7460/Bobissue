@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
@@ -9,16 +9,51 @@ const MemberInfoManagement = () => {
 
   const [searchKeyword, setSearchKeyword] = useState('')
   const [searchType, setSearchType] = useState('user-no')
-  const [level, setLevel] = useState('전체')
-  const [filteredUsers, setFilteredUsers] = useState(null) // 초기값을 null로 변경하여 "회원 정보가 없습니다" 문구 제거
+  const [filteredUsers, setFilteredUsers] = useState([])
   const [selectedUsers, setSelectedUsers] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+
+  // 페이지네이션 상태
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10 // 한 페이지당 10명
+
+  useEffect(() => {
+    console.log('🔍 useEffect 실행됨, 현재 경로:', window.location.pathname)
+    if (window.location.pathname === '/users') {
+      console.warn('🚨 예상치 못한 /users 이동 발생!')
+    }
+    fetchUsers()
+
+    return () => {
+      console.log('🛑 useEffect Cleanup 실행됨')
+    }
+  }, [])
+
+  const fetchUsers = async () => {
+    setIsLoading(true)
+    try {
+      const response = await API.get('/users')
+      console.log('🛠 API 응답:', response.data)
+
+      if (response.status === 302) {
+        console.warn('🚨 API에서 강제 리다이렉트 감지!')
+      }
+
+      setFilteredUsers(response.data.result.data)
+    } catch (error) {
+      console.error('회원 조회 중 오류 발생:', error)
+      alert('회원 조회에 실패했습니다.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSearch = async () => {
     setIsLoading(true)
     try {
       const response = await API.get('/users')
       setFilteredUsers(response.data.result.data)
+      setCurrentPage(1) // 검색 시 첫 페이지로 이동
     } catch (error) {
       console.error('회원 조회 중 오류 발생:', error)
       alert('회원 조회에 실패했습니다.')
@@ -31,20 +66,33 @@ const MemberInfoManagement = () => {
     navigate(`/admin/members/${userNo}`)
   }
 
+  const handleDeleteUser = async (userNo) => {
+    if (!window.confirm('해당 회원을 삭제하시겠습니까?')) return
+
+    try {
+      await API.delete(`/users/${userNo}`)
+      alert('회원이 삭제되었습니다.')
+
+      fetchUsers() // 삭제 후 회원 목록 새로고침
+      console.log('🚀 회원 삭제 후 navigate 실행!')
+      navigate('/admin/members/info', { replace: true })
+    } catch (error) {
+      console.error('회원 삭제 오류:', error)
+      alert('회원 삭제에 실패했습니다.')
+    }
+  }
+
   const handleSelectUser = (userNo) => {
-    setSelectedUsers(
-      (prevSelected) =>
-        prevSelected.includes(userNo)
-          ? prevSelected.filter((id) => id !== userNo) // 선택 해제
-          : [...prevSelected, userNo], // 선택 추가
+    setSelectedUsers((prev) =>
+      prev.includes(userNo) ? prev.filter((id) => id !== userNo) : [...prev, userNo],
     )
   }
 
   const handleSelectAll = () => {
     if (selectedUsers.length === filteredUsers.length) {
-      setSelectedUsers([]) // 전체 선택 해제
+      setSelectedUsers([])
     } else {
-      setSelectedUsers(filteredUsers.map((user) => user.userNo)) // 모든 회원 선택
+      setSelectedUsers(filteredUsers.map((user) => user.userNo))
     }
   }
 
@@ -60,7 +108,7 @@ const MemberInfoManagement = () => {
         await API.delete(`/users/${userNo}`)
       }
       alert('선택한 회원이 삭제되었습니다.')
-      setFilteredUsers((prev) => prev.filter((user) => !selectedUsers.includes(user.userNo)))
+      fetchUsers()
       setSelectedUsers([])
     } catch (error) {
       console.error('회원 삭제 오류:', error)
@@ -68,13 +116,18 @@ const MemberInfoManagement = () => {
     }
   }
 
+  // 페이지네이션 관련 로직
+  const indexOfLastUser = currentPage * itemsPerPage
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser)
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
+
   return (
     <div className='p-6'>
-      {/* Breadcrumb */}
       <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>회원정보관리</h1>
 
-      {/* 검색 섹션 */}
       <section className='mb-6'>
         <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
         <div className='flex items-center space-x-4'>
@@ -102,31 +155,27 @@ const MemberInfoManagement = () => {
         </div>
       </section>
 
-      {/* 조회 결과가 있을 때만 선택 삭제 버튼 표시 */}
-      {filteredUsers && filteredUsers.length > 0 && (
-        <div className='flex justify-between items-center mb-4'>
-          <h2 className='text-lg font-semibold'>| 조회 결과</h2>
-          <button
-            onClick={handleDeleteSelected}
-            className='bg-red-500 text-white px-4 py-2 rounded-md'
-          >
-            선택 삭제
-          </button>
-        </div>
-      )}
+      {isLoading ? (
+        <div className='text-center'>로딩 중...</div>
+      ) : currentUsers.length > 0 ? (
+        <section>
+          <div className='flex justify-between items-center mb-4'>
+            <h2 className='text-lg font-semibold'>| 조회 결과</h2>
+            <button
+              onClick={handleDeleteSelected}
+              className='bg-red-500 text-white px-4 py-2 rounded-md'
+            >
+              선택 삭제
+            </button>
+          </div>
 
-      {/* 조회 결과 */}
-      <section>
-        {isLoading ? (
-          <div className='text-center'>로딩 중...</div>
-        ) : filteredUsers && filteredUsers.length > 0 ? (
           <table className='table-auto w-full border'>
             <thead>
               <tr className='bg-gray-100'>
                 <th className='border px-4 py-2'>
                   <input
                     type='checkbox'
-                    checked={selectedUsers.length === filteredUsers.length}
+                    checked={selectedUsers.length === currentUsers.length}
                     onChange={handleSelectAll}
                   />
                 </th>
@@ -139,7 +188,7 @@ const MemberInfoManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user) => (
+              {currentUsers.map((user) => (
                 <tr key={user.userNo}>
                   <td className='border px-4 py-2 text-center'>
                     <input
@@ -165,14 +214,23 @@ const MemberInfoManagement = () => {
               ))}
             </tbody>
           </table>
-        ) : (
-          !isLoading &&
-          filteredUsers !== null &&
-          filteredUsers.length === 0 && (
-            <div className='text-center text-gray-500'>회원 정보가 없습니다.</div>
-          )
-        )}
-      </section>
+
+          {/* 페이지네이션 버튼 */}
+          <div className='flex justify-center mt-4'>
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentPage(index + 1)}
+                className={`mx-1 px-3 py-1 border ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <div className='text-center text-gray-500'>회원 정보가 없습니다.</div>
+      )}
     </div>
   )
 }
