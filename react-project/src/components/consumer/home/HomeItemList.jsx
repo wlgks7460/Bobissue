@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import HomeItem from './HomeItem'
 import API from '../../../utils/API'
 
-const HomeItmeList = ({ category }) => {
+const HomeItemList = ({ category }) => {
   const [items, setItems] = useState([]) // 상품 데이터 리스트
   // 카테고리에 맞는 상품 불러오기
   useEffect(() => {
@@ -28,4 +28,4 @@ const HomeItmeList = ({ category }) => {
   )
 }
 
-export default HomeItmeList
+export default HomeItemList
