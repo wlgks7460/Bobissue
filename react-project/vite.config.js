@@ -13,12 +13,12 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      proxy: {
-        '/api': {
-          target: env.VITE_BOBISUUE_BASE_URL,
-          changeOrigin: true,
-        },
-      },
+      // proxy: {
+      //   '/api': {
+      //     target: env.VITE_BOBISUUE_BASE_URL,
+      //     changeOrigin: true,
+      //   },
+      // },
     },
   }
 })

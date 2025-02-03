@@ -3,7 +3,8 @@ import store from '../redux/store'
 import { userReducerActions } from '../redux/reducers/userSlice'
 
 const API = axios.create({
-  baseURL: '/api',
+  // baseURL: '/api',
+  baseURL: import.meta.env.VITE_BOBISUUE_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -15,6 +16,7 @@ API.interceptors.request.use((config) => {
   if (access_token) {
     console.log('토큰 있음', access_token)
     config.headers.Authorization = `Bearer ${access_token}`
+    config.headers['refresh-token'] = store.getState().user.refreshToken
   }
 
   return config
@@ -23,6 +25,7 @@ API.interceptors.request.use((config) => {
 // 응답 interceptors: 토큰 갱신
 API.interceptors.response.use((res) => {
   // access_token 갱신
+  console.log(res)
   if (res.headers['authorization']) {
     const newAccessToken = res.headers['authorization']
     store.dispatch(
