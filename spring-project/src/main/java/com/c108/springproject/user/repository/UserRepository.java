@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -22,5 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u.status FROM User u WHERE u.userNo = :userNo")
     String findUserStatus(int userNo);
+
+    Optional<User> findByEmail(String user);
 
 }

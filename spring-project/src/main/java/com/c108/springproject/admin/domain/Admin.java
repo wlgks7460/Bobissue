@@ -18,7 +18,7 @@ public class Admin  {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int adminNo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String adminId;
 
     @Column(nullable = false)

@@ -7,9 +7,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test
-    username: root
-    password: 1234
+    url: jdbc:mysql://i12c108.p.ssafy.io:3306/test
+    username: ssafy
+    password: C108bob!!
 
   jpa:
     database: mysql
@@ -18,3 +18,19 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  data:
+    redis:
+      host: 43.202.60.173
+      port: 6379
+
+#  config:
+#    import: optional:classpath:jwt-config.yml
+
+jwt:
+  secretKey: MzY4IHN1cGVyIHNlY3JldCBrZXkgdGhhdCBpcyBhd2Vzb21l...
+  access:
+    expiration-minutes: 30
+  refresh:
+    expiration-hours: 24
+  issuer: BobIssue

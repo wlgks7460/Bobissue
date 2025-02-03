@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/notification")
-@CrossOrigin(origins = "http://localhost:5173")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -31,6 +30,16 @@ public class NotificationController {
     @GetMapping("")
     public ResponseDto findAllNotifications(){
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_NOTICE, new DefaultResponse.ListResponse<NotificationResDto>(notificationService.findAllNotifications()));
+    }
+
+    @GetMapping("/user-only")
+    public ResponseDto findUserNotifications(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_USER_NOTICE, new DefaultResponse.ListResponse<NotificationResDto>(notificationService.findUserNotifications()));
+    }
+
+    @GetMapping("/seller-only")
+    public ResponseDto findSellerNotifications(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER_NOTICE, new DefaultResponse.ListResponse<NotificationResDto>(notificationService.findSellerNotifications()));
     }
 
     @GetMapping("/{notification_no}")
