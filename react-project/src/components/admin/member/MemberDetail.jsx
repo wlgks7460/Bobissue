@@ -82,7 +82,7 @@ const MemberDetail = () => {
       try {
         await API.delete(`/users/${userNo}`)
         alert('회원 삭제가 완료되었습니다.')
-        navigate('/users')
+        navigate('/admin/members/info')
       } catch (error) {
         console.error('회원 삭제 오류:', error.response || error.message)
         alert('회원 삭제에 실패했습니다.')
