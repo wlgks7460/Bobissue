@@ -40,6 +40,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseDto userProfile(){
+        System.out.println("!!!");
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_USER, new DefaultResponse<UserResDto>(userService.userProfile()));
     }
 
