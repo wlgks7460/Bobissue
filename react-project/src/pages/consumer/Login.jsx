@@ -1,9 +1,14 @@
 import React, { useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import naverLogo from '../../assets/consumer/naverLoginLogo.png'
 import kakaoLogo from '../../assets/consumer/kakaoLoginLogo.png'
+import API from '../../utils/API'
+import { useDispatch } from 'react-redux'
+import { userReducerActions } from '../../redux/reducers/userSlice'
 
 const Login = () => {
+  const dispatch = useDispatch()
+
   // 페이지 이동
   const navigate = useNavigate()
 
@@ -14,7 +19,18 @@ const Login = () => {
   // 로그인 요청 함수
   const login = (e) => {
     e.preventDefault()
-    console.log(emailRef.current.value, passwordRef.current.value)
+    const payload = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    }
+    API.post('/auths/user-login', payload)
+      .then((res) => {
+        dispatch(userReducerActions.login(res.data.result.data))
+        navigate('/')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   // 네이버 로그인 함수
