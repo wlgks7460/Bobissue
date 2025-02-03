@@ -27,7 +27,7 @@ public class ReportResDto {
     private String updatedAt;
     private int updatedUser;
 
-    public static ReportResDto from(Report report) {
+    public static ReportResDto toDto(Report report) {
         return ReportResDto.builder()
                 .reportNo(report.getReportNo())
                 .reviewNo(report.getReview().getReviewNo())

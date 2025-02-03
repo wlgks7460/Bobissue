@@ -50,4 +50,11 @@ public class ReportController {
 
     }
 
+    // 신고 상세 조회
+    @GetMapping("admin/reports/{reportNo}")
+    public ResponseDto getReport(@PathVariable Long reportNo) {
+        ReportResDto response = reportService.getReport(reportNo);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_REPORT, new DefaultResponse<>(response));
+    }
+
 }
