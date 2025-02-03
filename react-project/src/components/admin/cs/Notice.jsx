@@ -25,7 +25,9 @@ const Notice = () => {
 
       const response = await API.get(url)
       if (response.data.status === 'OK') {
-        setNotices(response.data.result.data)
+        // 🔹 삭제되지 않은 공지만 필터링
+        const activeNotices = response.data.result.data.filter((notice) => notice.delYN === 'N')
+        setNotices(activeNotices)
       } else {
         alert('공지사항을 불러오는데 실패했습니다.')
       }
