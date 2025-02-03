@@ -38,6 +38,11 @@ public class UserController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FOUND_USER_LIST, new DefaultResponse<List<UserResDto>>(userList));
     }
 
+    @GetMapping("/profile")
+    public ResponseDto userProfile(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_USER, new DefaultResponse<UserResDto>(userService.userProfile()));
+    }
+
     @GetMapping("/{userNo}")
     public ResponseDto findUserById(@PathVariable int userNo) {
         UserResDto userResDto = userService.findUserById(userNo);

@@ -83,7 +83,8 @@ public class SecurityConfig {
                                 "/api/notification/user-only",
                                 "/api/notification/{notification_no}",
                                 "/api/cast/{chat-no}/chat",
-                                "/api/recipe"
+                                "/api/recipe",
+                                "/api/users/profile"
                         ).hasRole("USER")
                         .requestMatchers(
                                 "/api/sellers/{seller-no}",
@@ -103,7 +104,7 @@ public class SecurityConfig {
                         ).hasRole("SELLER")
                         .requestMatchers(
                                 "/api/users/{user-no}",
-                                "/api/users",
+//                                "/api/users",
                                 "/api/sellers/{seller-no}",
                                 "/api/sellers",
                                 "/api/admin/**",
