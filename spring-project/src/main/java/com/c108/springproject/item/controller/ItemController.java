@@ -12,14 +12,16 @@ import com.c108.springproject.item.dto.response.ItemUpdateResDto;
 import com.c108.springproject.item.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/item")
+@RequestMapping("/api/items")
 public class ItemController {
 
     private final ItemService itemService;
@@ -30,9 +32,11 @@ public class ItemController {
     }
 
     // 살품 생성
-    @PostMapping("")
-    public ResponseDto createItem(@RequestBody ItemCreateReqDto itemCreateReqDto) {
-        ItemCreateResDto resDto = itemService.createItem(itemCreateReqDto);
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseDto createItem(
+            @RequestPart ItemCreateReqDto itemCreateReqDto,
+            @RequestPart(required = false) List<MultipartFile> images) {
+        ItemCreateResDto resDto = itemService.createItem(itemCreateReqDto, images);
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ITEM, new DefaultResponse<>(resDto));
     }
 
@@ -51,9 +55,12 @@ public class ItemController {
     }
 
     // 상품 수정
-    @PutMapping("/{itemNo}")
-    public ResponseDto updateItem(@PathVariable int itemNo, @RequestBody ItemUpdateReqDto reqDto) {
-        ItemUpdateResDto updatedItem = itemService.updateItem(itemNo, reqDto);
+    @PutMapping(value = "/{itemNo}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseDto updateItem(
+            @PathVariable int itemNo,
+            @RequestPart ItemUpdateReqDto reqDto,
+            @RequestPart(required = false) List<MultipartFile> images) {
+        ItemUpdateResDto updatedItem = itemService.updateItem(itemNo, reqDto, images);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_ITEM, new DefaultResponse<>(updatedItem));
     }
     

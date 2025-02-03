@@ -21,13 +21,10 @@ public class ItemImage extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_no")
-    private Item itemNo;
+    private Item item;
 
     @Column(nullable = false, length = 255)
     private String originalName;
-
-    @Column(nullable = false, length = 255)
-    private String storageName;
 
     @Column(nullable = false, length = 255)
     private String imageUrl;
