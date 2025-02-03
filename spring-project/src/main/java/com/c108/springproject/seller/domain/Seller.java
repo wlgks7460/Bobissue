@@ -26,8 +26,15 @@ public class Seller extends BaseEntity {
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
 
-    @Column(columnDefinition = "INT DEFAULT 0")
-    private int companyNo;
+    @OneToOne
+    @JoinColumn(name = "company_no")
+    private Company companyNo;
+
+    @Column(nullable = false, length = 15)
+    private String callNumber;
+
+    @Column(nullable = false, length = 50)
+    private String name;
 
 
 }

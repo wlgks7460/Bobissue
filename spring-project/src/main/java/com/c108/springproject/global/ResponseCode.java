@@ -153,7 +153,9 @@ public enum ResponseCode {
     FAILED_LOGIN("FAILED_LOGIN", "로그인 실패"),
     SUCCESS_LOGOUT("SUCCESS_LOGOUT", "로그아웃 성공"),
     FAILED_LOGOUT("FAILED_LOGOUT", "로그아웃 실패"),
-    FAIL_PASSWORD_CHECK("FAIL_PASSWORD_CHECK", "비밀번호 오류")
+    FAIL_PASSWORD_CHECK("FAIL_PASSWORD_CHECK", "비밀번호 오류"),
+    ADMIN_NOT_FOUND("ADMIN_NOT_FOUND", "관리자 조회 실패"),
+    COMPANY_NOT_FOUND("COMPANY_NOT_FOUND", "존재하지 않는 회사입니다."),
     ;
 
     private final String code;

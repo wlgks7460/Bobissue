@@ -2,6 +2,7 @@ package com.c108.springproject.coupon.domain;
 
 import com.c108.springproject.coupon.dto.request.CouponReqDto;
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.seller.domain.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,10 @@ public class Coupon extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private int term;
+
+    @ManyToOne
+    @JoinColumn(name = "company_no", nullable = false)
+    private Company companyNo;
 
     public void updateCoupon(CouponReqDto couponReqDto){
         this.name = couponReqDto.getName();
