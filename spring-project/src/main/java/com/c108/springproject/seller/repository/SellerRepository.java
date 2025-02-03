@@ -24,5 +24,6 @@ public interface SellerRepository extends JpaRepository<Seller, Integer> {
     String findSellerStatus(int sellerNo);
 
     Optional<Seller> findBySellerNo(int sellerNo);
+    Optional<Seller> findByEmail(String email);
 
 }

@@ -3,7 +3,7 @@ package com.c108.springproject.user.controller;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
-import com.c108.springproject.user.dto.LoginReqDto;
+import com.c108.springproject.auths.dto.request.LoginReqDto;
 import com.c108.springproject.user.dto.SignUpReqDto;
 import com.c108.springproject.user.dto.UserDto;
 import com.c108.springproject.user.dto.UserResDto;
@@ -56,13 +56,4 @@ public class UserController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_USER, null);
     }
 
-    @PostMapping("/doLogin")
-    public ResponseDto userLogin(@RequestBody LoginReqDto loginReqDto){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN, new DefaultResponse<>(userService.doLogin(loginReqDto)));
-    }
-
-    @PostMapping("/doLogout")
-    public ResponseDto userLogout(){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGOUT, new DefaultResponse<Integer>(userService.doLogout()));
-    }
 }
