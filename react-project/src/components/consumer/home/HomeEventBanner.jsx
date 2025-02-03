@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ItemsCarousel from 'react-items-carousel'
-import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/solid'
+import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/outline'
 import HomeEventBannerItem from './HomeEventBannerItem'
 
 const HomeEventBanner = () => {
@@ -28,16 +28,18 @@ const HomeEventBanner = () => {
           activeItemIndex={activeItemIndex}
           numberOfCards={1}
           slidesToScroll={1}
-          leftChevron={<button>{<ArrowLeftCircleIcon className='w-10' />}</button>}
-          rightChevron={<button>{<ArrowRightCircleIcon className='w-10' />}</button>}
+          leftChevron={<button>{<ArrowLeftCircleIcon className='w-12 text-black/40' />}</button>}
+          rightChevron={<button>{<ArrowRightCircleIcon className='w-12 text-black/40' />}</button>}
           infiniteLoop={true}
+          chevronWidth={300}
+          className='px-10'
         >
           {events.map((v) => (
             <HomeEventBannerItem key={v.eventNo} event={v} />
           ))}
         </ItemsCarousel>
-        <div className='absolute left-1/2 -translate-x-1/2 bottom-5'>
-          <p className='text-gray-300'>{`${(activeItemIndex % events.length) + 1} / ${events.length}`}</p>
+        <div className='absolute w-[70px] left-1/2 -translate-x-1/2 bottom-5 bg-black/20 rounded-full flex justify-center items-center'>
+          <p className='text-gray-300'>{`${(((activeItemIndex % events.length) + events.length) % events.length) + 1} / ${events.length}`}</p>
         </div>
       </div>
     </>
