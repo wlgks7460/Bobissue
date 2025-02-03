@@ -34,3 +34,10 @@ jwt:
   refresh:
     expiration-hours: 24
   issuer: BobIssue
+
+logging:
+  file:
+    name: logs/application.log
+  level:
+    org.springframework.web.socket: DEBUG
+    org.springframework.security: DEBUG

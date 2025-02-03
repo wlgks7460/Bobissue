@@ -40,6 +40,7 @@ dependencies {
 	implementation 'io.lettuce:lettuce-core:6.2.1.RELEASE' // Lettuce 클라이언트
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
 	implementation 'org.glassfish.jaxb:jaxb-runtime:3.0.1'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket:3.3.2'
 
 }
 
