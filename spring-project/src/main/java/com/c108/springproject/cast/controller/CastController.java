@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cast")
-@CrossOrigin(origins = "http://localhost:5173")
 public class CastController {
 
     private final CastService castService;

@@ -19,3 +19,18 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  data:
+    redis:
+      host: 43.202.60.173
+      port: 6379
+
+#  config:
+#    import: optional:classpath:jwt-config.yml
+
+jwt:
+  secretKey: MzY4IHN1cGVyIHNlY3JldCBrZXkgdGhhdCBpcyBhd2Vzb21l...
+  access:
+    expiration-minutes: 30
+  refresh:
+    expiration-hours: 24
+  issuer: BobIssue
