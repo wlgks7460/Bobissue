@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class SignUpReqDto {
     private String email;
     private String password;
+    private String callNumber;
+    private String name;
 }

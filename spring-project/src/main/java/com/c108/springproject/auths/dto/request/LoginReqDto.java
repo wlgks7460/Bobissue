@@ -1,4 +1,4 @@
-package com.c108.springproject.user.dto;
+package com.c108.springproject.auths.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

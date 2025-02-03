@@ -18,7 +18,7 @@ public class SellerDto {
     public SellerDto(Seller seller) {
         this.email = seller.getEmail();
         this.status = seller.getStatus();
-        this.companyNo = seller.getCompanyNo();
+        this.companyNo = seller.getCompanyNo().getCompanyNo();
     }
 
 }
