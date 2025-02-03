@@ -31,6 +31,7 @@ API.interceptors.response.use((res) => {
         refresh_token: store.getState().user.refreshToken,
       }),
     )
+    console.log('토큰 갱신됨:', newAccessToken)
   }
   return res
 })
