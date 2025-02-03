@@ -1,5 +1,7 @@
 package com.c108.springproject.user.dto;
 
+import com.c108.springproject.notification.domain.Notification;
+import com.c108.springproject.notification.dto.response.NotificationResDto;
 import com.c108.springproject.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +39,24 @@ public class UserResDto {
         this.createAt = user.getCreatedAt();
         this.updateAt = user.getUpdatedAt();
         this.gradeNo = user.getGradeNo();
+    }
+
+
+    public static UserResDto toDto(User user){
+        return UserResDto.builder()
+                .userNo(user.getUserNo())
+                .name(user.getName())
+                .birthday(user.getBirthday())
+                .gender(user.getGender())
+                .email(user.getEmail())
+                .height(user.getHeight())
+                .weight(user.getWeight())
+                .loginType(user.getLoginType())
+                .phoneNumber(user.getPhoneNumber())
+                .createAt(user.getCreatedAt())
+                .updateAt(user.getUpdatedAt())
+                .gradeNo(user.getGradeNo())
+                .build();
     }
 
 }

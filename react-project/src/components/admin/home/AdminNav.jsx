@@ -1,6 +1,18 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { userReducerActions } from '../../../redux/reducers/userSlice'
 
-const AdminNav = ({ onLogout }) => {
+const AdminNav = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  // 🔥 로그아웃 핸들러
+  const handleLogout = () => {
+    dispatch(userReducerActions.logout()) // Redux에서 토큰 삭제
+    navigate('/admin') // 로그인 페이지로 이동
+  }
+
   return (
     <nav className='fixed top-0 left-64 w-[calc(100%-16rem)] bg-white shadow-md z-50'>
       <div className='px-6 py-3 flex justify-between items-center'>
@@ -10,7 +22,10 @@ const AdminNav = ({ onLogout }) => {
         {/* 관리자 정보 및 로그아웃 버튼 */}
         <div className='flex items-center space-x-4'>
           <div className='text-gray-800 font-medium'>admin님</div>
-          <button onClick={onLogout} className='text-black px-4 py-2 rounded-md'>
+          <button
+            onClick={handleLogout}
+            className='text-black px-4 py-2 rounded-md hover:bg-gray-200 transition'
+          >
             로그아웃
           </button>
         </div>
