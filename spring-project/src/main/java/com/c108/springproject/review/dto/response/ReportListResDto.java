@@ -24,7 +24,7 @@ public class ReportListResDto {
     private int createdUser;
 
 
-    public static ReportListResDto from(Report report) {
+    public static ReportListResDto toDto(Report report) {
         return ReportListResDto.builder()
                 .reportNo(report.getReportNo())
                 .reviewNo(report.getReview().getReviewNo())
