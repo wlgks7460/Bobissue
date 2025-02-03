@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import API from '../../utils/API'
 import PaymentAddressModal from '../../components/consumer/payment/PaymentAddressModal'
-import SearchBar from '../../components/consumer/SearchBar'
+import SearchBar from '../../components/consumer/common/SearchBar'
 
 const Payment = () => {
   const navigate = useNavigate()

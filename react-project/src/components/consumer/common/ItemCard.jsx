@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import HomeItemModal from './HomeItemModal'
+import ItemtoCartModal from './ItemtoCartModal'
 import { Link } from 'react-router-dom'
 
 const HomeItem = ({ item }) => {
@@ -51,7 +51,7 @@ const HomeItem = ({ item }) => {
             ''
           )}
           {isOpen ? (
-            <HomeItemModal
+            <ItemtoCartModal
               isOpen={isOpen}
               setIsOpen={setIsOpen}
               setIsHovering={setIsHovering}
