@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userReducerActions } from '../../../redux/reducers/userSlice'
 import API from '../../../utils/API'
+import { faL } from '@fortawesome/free-solid-svg-icons'
 
 const AdminLoginForm = () => {
   const [email, setUsername] = useState('')
@@ -10,10 +11,11 @@ const AdminLoginForm = () => {
   const [error, setError] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const [isLoading, setIsLoading] = useState(false)
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setIsLoading(true)
 
     try {
       // 🚀 로그인 API 호출
@@ -26,9 +28,11 @@ const AdminLoginForm = () => {
       dispatch(userReducerActions.login({ access_token, refresh_token }))
 
       // ✅ 로그인 성공 후 대시보드로 이동
-      navigate('/admin/home')
+      // navigate('/admin/home')
     } catch (err) {
       setError('아이디 또는 비밀번호가 올바르지 않습니다.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -39,7 +43,11 @@ const AdminLoginForm = () => {
     >
       <h2 className='text-2xl font-semibold text-center mb-6'>관리자 로그인</h2>
 
-      {error && <p className='text-red-500 text-center mb-4'>{error}</p>}
+      {error && (
+        <div className='mb-4 text-center bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded'>
+          {error}
+        </div>
+      )}
 
       <div className='mb-4'>
         <input
