@@ -2,15 +2,34 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userReducerActions } from '../../../redux/reducers/userSlice'
+import API from '../../../utils/API'
+import { useSelector } from 'react-redux'
 
 const AdminNav = () => {
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  if (!isAuthenticated) {
+    return null // 로그인되지 않은 경우 네비바를 렌더링하지 않음
+  }
+
   // 🔥 로그아웃 핸들러
-  const handleLogout = () => {
-    dispatch(userReducerActions.logout()) // Redux에서 토큰 삭제
-    navigate('/admin') // 로그인 페이지로 이동
+  const handleLogout = (e) => {
+    e.preventDefault()
+
+    // 확인 창 띄우기
+    const isConfirmed = window.confirm('로그아웃 하시겠습니까?')
+    if (isConfirmed) {
+      API.post('/auths/logout')
+        .then((res) => {
+          dispatch(userReducerActions.logout())
+          navigate('/admin') // 로그아웃 후 로그인 페이지로 이동
+        })
+        .catch((error) => {
+          console.log('로그아웃 실패:', error)
+        })
+    }
   }
 
   return (

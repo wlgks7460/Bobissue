@@ -104,7 +104,7 @@ const router = createBrowserRouter([
         ],
       },
       //판매자 회원가입,로그인
- 
+
       {
         path: 'seller/login',
         element: <Seller.Login />,
@@ -143,7 +143,7 @@ const router = createBrowserRouter([
             path: 'products/inquiry',
             element: <Seller.Inquiry />,
           },
-        
+
           //주문 배송 관련
           {
             path: 'delivery/delivers',
@@ -257,14 +257,17 @@ const router = createBrowserRouter([
         element: <AdminRoot />,
         children: [
           {
-            // admin - HomePage
+            index: true,
             path: '',
-            element: <AdminLoginPage />,
+            element: <AdminHome />,
           },
           {
-            // admin - LoginPage
             path: 'home',
             element: <AdminHome />,
+          },
+          {
+            path: 'login',
+            element: <AdminLoginPage />,
           },
           {
             // 회원관리 섹션
