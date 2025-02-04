@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import './Info.css' // 스타일 재사용
 
 const Withdrawal = () => {
   const [formData, setFormData] = useState({
@@ -7,7 +6,6 @@ const Withdrawal = () => {
     password: '',
     reason: '',
   })
-  const [message, setMessage] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -28,63 +26,72 @@ const Withdrawal = () => {
 
     if (response.ok) {
       const data = await response.json()
-      alert(data.message) // 성공 메시지
-      setFormData({ email: '', password: '', reason: '' }) // 입력값 초기화
-      setMessage('')
+      alert(data.message)
+      setFormData({ email: '', password: '', reason: '' })
     } else {
-      alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.') // 실패 메시지
+      alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.')
     }
   }
 
   return (
-    <div className='info-container'>
-      <h2>회원 탈퇴</h2>
-      <form onSubmit={handleSubmit} className='info-form'>
-        <div className='info-item'>
-          <label htmlFor='email'>이메일:</label>
+    <div className='p-6 bg-white rounded-lg w-[600px] border border-gray-300'>
+      <h1 className='text-[28px] font-bold mb-6'>회원 탈퇴</h1>
+      <form onSubmit={handleSubmit} className='space-y-4 bg-white p-6 border rounded-lg'>
+        {/* 이메일 */}
+        <div className='flex items-center gap-4'>
+          <label htmlFor='email' className='w-1/4 text-sm font-medium text-gray-700'>
+            이메일:
+          </label>
           <input
             type='email'
             id='email'
             name='email'
             value={formData.email}
             onChange={handleChange}
-            placeholder='이메일을 입력하세요'
             required
+            className='w-3/4 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
           />
         </div>
-        <div className='info-item'>
-          <label htmlFor='password'>비밀번호:</label>
+
+        {/* 비밀번호 */}
+        <div className='flex items-center gap-4'>
+          <label htmlFor='password' className='w-1/4 text-sm font-medium text-gray-700'>
+            비밀번호:
+          </label>
           <input
             type='password'
             id='password'
             name='password'
             value={formData.password}
             onChange={handleChange}
-            placeholder='비밀번호를 입력하세요'
             required
+            className='w-3/4 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
           />
         </div>
-        <div className='info-item'>
-          <label htmlFor='reason'>탈퇴 사유:</label>
-          <select
+
+        {/* 탈퇴 사유 */}
+        <div className='flex items-center gap-4'>
+          <label htmlFor='reason' className='w-1/4 text-sm font-medium text-gray-700'>
+            탈퇴 사유:
+          </label>
+          <textarea
             id='reason'
             name='reason'
             value={formData.reason}
             onChange={handleChange}
-            required
-          >
-            <option value=''>선택해주세요</option>
-            <option value='서비스가 필요없음'>서비스가 필요없음</option>
-            <option value='복잡한 사용 과정'>복잡한 사용 과정</option>
-            <option value='개인정보 문제'>개인정보 문제</option>
-            <option value='기타'>기타</option>
-          </select>
+            rows='3'
+            className='w-3/4 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-none'
+          />
         </div>
-        <button type='submit' className='info-button'>
-          탈퇴하기
+
+        {/* 제출 버튼 */}
+        <button
+          type='submit'
+          className='w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400'
+        >
+          회원 탈퇴하기
         </button>
       </form>
-      {message && <p style={{ color: 'red' }}>{message}</p>}
     </div>
   )
 }
