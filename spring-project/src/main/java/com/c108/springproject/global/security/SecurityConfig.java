@@ -71,7 +71,6 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/{user-no}",
                                 "/api/change-password",
-                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/item/{item-no}/like",
                                 "/api/orders/**",
@@ -89,7 +88,6 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/sellers/{seller-no}",
                                 "/api/change-password",
-                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/item",
                                 "/api/item/{item-no}",
@@ -109,7 +107,6 @@ public class SecurityConfig {
                                 "/api/sellers",
                                 "/api/admin/**",
                                 "/api/api",
-                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/item/{item-no}",
                                 "/api/categories",

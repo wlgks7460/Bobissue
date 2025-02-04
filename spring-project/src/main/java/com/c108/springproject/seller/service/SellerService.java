@@ -4,6 +4,7 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.dto.SellerDto;
+import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
 import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.repository.UserRepository;
@@ -51,6 +52,16 @@ public class SellerService {
                 .filter(seller -> !"Y".equals(seller.getDelYn()))
                 .map(SellerDto::new)
                 .orElse(null);
+    }
+
+    @Transactional
+    public void updateSeller(int sellerNo, SellerUpdateReq sellerUpdateReq) {
+        try{
+            Seller seller = sellerRepository.findById(sellerNo).orElse(null);
+            seller.updateSeller(sellerUpdateReq);
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_SELLER);
+        }
     }
 
     @Transactional
