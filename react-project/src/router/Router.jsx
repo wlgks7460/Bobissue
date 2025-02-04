@@ -266,6 +266,10 @@ const router = createBrowserRouter([
             element: <AdminHome />,
           },
           {
+            path: 'login',
+            element: <AdminLoginPage />,
+          },
+          {
             // 회원관리 섹션
             path: 'members',
             children: [
