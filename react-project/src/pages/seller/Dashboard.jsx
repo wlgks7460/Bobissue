@@ -18,7 +18,7 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className='w-full p-6 bg-blue-100'>
+    <div className='w-[1400px] p-6 bg-blue-100'>
       {/* 상단 카드 */}
       <div className='grid grid-cols-3 gap-6 mb-6'>
         <div className='bg-white p-6 rounded-lg border flex flex-col justify-between'>
