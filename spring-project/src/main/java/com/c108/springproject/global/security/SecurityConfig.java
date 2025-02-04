@@ -37,7 +37,7 @@ public class SecurityConfig {
                     ));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
-                    corsConfiguration.addExposedHeader("newAccessnToken");
+                    corsConfiguration.addExposedHeader("newAccessToken");
                     return corsConfiguration;
                 }))
                 //Basic Authentication 을 비활성화
