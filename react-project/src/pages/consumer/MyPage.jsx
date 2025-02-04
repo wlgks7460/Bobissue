@@ -9,8 +9,6 @@ const MyPage = () => {
     API.get('/users/profile')
       .then((res) => {
         console.log(res)
-        const newAccessToken = res.headers.get('newAccessToken')
-        console.log(newAccessToken)
       })
       .catch((err) => {
         console.error(err)
