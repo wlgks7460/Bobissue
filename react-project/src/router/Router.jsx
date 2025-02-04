@@ -256,16 +256,15 @@ const router = createBrowserRouter([
         path: 'admin',
         element: <AdminRoot />,
         children: [
-          // {
-          // admin
-          //   path: '',
-          //   element: <AdminLoginPage />,
-          // },
-          // {
-          //   // admin - LoginPage
-          //   path: 'home',
-          //   element: <AdminHome />,
-          // },
+          {
+            index: true,
+            path: '',
+            element: <AdminHome />,
+          },
+          {
+            path: 'home',
+            element: <AdminHome />,
+          },
           {
             // 회원관리 섹션
             path: 'members',
