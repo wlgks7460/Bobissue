@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import TopNavbar from './components/TopNavbar';
-import Sidebar from './components/Sidebar';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-
+import React, { useState, useEffect } from 'react'
+import TopNavbar from './components/TopNavbar'
+import Sidebar from './components/Sidebar'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 const SellerMainPage = () => {
-  const location =useLocation()
-  const navigate = useNavigate();
-  const [token, setToken] = useState(null); // token 상태를 useState로 관리
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [token, setToken] = useState(null)
   const [menuState, setMenuState] = useState({
     product: false,
     delivery: false,
@@ -17,70 +16,66 @@ const SellerMainPage = () => {
     liveCommerce: false,
     salesStats: false,
     notices: false,
-  });
+  })
 
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
- 
-
-  // 로그인 여부를 확인하고 리디렉션 처리
   useEffect(() => {
-    const savedToken = localStorage.getItem('SELLER_AUTH_TOKEN'); // 로컬스토리지에서 토큰 가져오기
-    
+    const savedToken = localStorage.getItem('SELLER_AUTH_TOKEN')
+
     if (!savedToken) {
-      // 토큰이 없는 경우 로그인 페이지로 리디렉션
-      const redirectPath = `${location.pathname}${location.search}`;
-      console.log(location.pathname);
-      console.log(redirectPath);
-      navigate(`/seller/login?path=${encodeURIComponent(redirectPath)}`, { replace: true });
+      const redirectPath = `${location.pathname}${location.search}`
+      navigate(`/seller/login?path=${encodeURIComponent(redirectPath)}`, { replace: true })
     } else {
-      // 토큰이 있는 경우 상태 업데이트
-      setToken(savedToken);
+      setToken(savedToken)
     }
-  }, [navigate, location.pathname, location.search]); // 의존성 배열 수정
-  
+  }, [navigate, location.pathname, location.search])
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {
       const updatedState = Object.keys(prevState).reduce((acc, key) => {
-        acc[key] = key === menu ? !prevState[key] : false;
-        return acc;
-      }, {});
-      return updatedState;
-    });
-  };
+        acc[key] = key === menu ? !prevState[key] : false
+        return acc
+      }, {})
+      return updatedState
+    })
+  }
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  // 로그인 상태가 확인될 때까지 컴포넌트 렌더링 방지
-  // if (token) {
-  //   return null; // 로그인 상태를 확인할 때까지 아무것도 렌더링하지 않음
-  // }
+    setSidebarOpen(!sidebarOpen)
+  }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      {/* Top Navbar */}
-      <TopNavbar toggleSidebar={toggleSidebar} />
-      <div className="flex flex-1">
-        {/* Sidebar */}
-        {sidebarOpen && (
+    <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
+      {/* Top Navbar (Sticky 적용) */}
+      <div className='fixed top-0 z-50 w-full h-16 bg-white border-b border-gray-300'>
+        <TopNavbar toggleSidebar={toggleSidebar} />
+      </div>
+
+      <div className='flex flex-1 mt-16 min-h-[calc(100vh-64px)]'>
+        {/* Sidebar (탑 메뉴바 아래로 배치, 슬라이딩 효과 적용) */}
+        <div
+          className={`fixed left-0 top-16 h-[calc(100%-64px)] z-40 transition-transform duration-300 ease-in-out bg-white border-r border-gray-300
+            ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}
+          `}
+        >
           <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} menuState={menuState} />
-        )}
-        {/* Main Content */}
+        </div>
+
+        {/* Main Content (Sidebar가 열릴 때 밀려나도록 조정) */}
         <main
-          className={`p-6 bg-gray-50 transition-all duration-300 ${sidebarOpen ? 'lg:ml-32' : ''}`}
+          className={`flex-1 p-2  transition-all relative duration-300 mt-2 min-h-[calc(80vh-32px)] ${sidebarOpen ? 'ml-64' : 'ml-0'}`}
         >
           <Outlet />
         </main>
       </div>
-      {/* Footer */}
-      <footer className="text-center py-4 bg-gray-100 text-gray-600 text-sm border-t">
+
+      {/* Footer (스크롤 시 항상 바닥에 고정) */}
+      <footer className='w-full text-center py-4 bg-gray-100 text-gray-600 text-sm border-t border-gray-300 mt-auto'>
         &copy; 2025 판매자 플랫폼. 모든 권리 보유.
       </footer>
     </div>
-  );
-};
+  )
+}
 
-export default SellerMainPage;
+export default SellerMainPage
