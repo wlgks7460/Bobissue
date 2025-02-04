@@ -177,4 +177,30 @@ public class AuthsService {
 
     }
 
+    @Transactional
+    public Map<String, String>  oauth2Login(){
+        try{
+
+
+
+            String accessToken = jwtTokenProvider.createAccessToken(String.format("%s:%s", user.getEmail(), "USER"));
+            String refreshToken = jwtTokenProvider.createRefreshToken("USER", user.getUserNo());
+
+            refreshTokenRepository.findByUserEmail(user.getEmail())
+                    .ifPresentOrElse(
+                            it -> it.updateRefreshToken(refreshToken),
+                            () -> refreshTokenRepository.save(new RefreshToken(user, refreshToken))
+                    );
+
+            Map<String, String> result = new HashMap<>();
+
+            result.put("access_token", accessToken);
+            result.put("refresh_token", refreshToken);
+
+            return result;
+        }catch (BobIssueException e){
+            throw new BobIssueException(ResponseCode.FAILED_LOGIN);
+        }
+    }
+
 }

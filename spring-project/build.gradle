@@ -44,6 +44,8 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-s3'
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.1.1' // SpringBoot AWS 통합 라이브러리
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'com.auth0:java-jwt:4.4.0'
 }
 
 tasks.named('test') {

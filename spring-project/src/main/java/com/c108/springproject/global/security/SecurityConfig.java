@@ -23,6 +23,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+
         httpSecurity
                 //CSRF(Cross-Site Request Forgery) 공격을 방지하는 기능을 끔
                 //JWT 기반 인증, rest api는 CSRF 보호가 필요하지 않음

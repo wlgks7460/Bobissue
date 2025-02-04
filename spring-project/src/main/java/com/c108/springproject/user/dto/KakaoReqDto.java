@@ -9,13 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpReqDto {
-    private String name;
-    private String birthday;
+public class KakaoReqDto {
     private String email;
-    private String password;
-    private String gender;
-    private float height;
-    private float weight;
-    private String phoneNumber;
+    private String loginType = "Kakao";
+
 }
