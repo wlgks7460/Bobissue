@@ -3,7 +3,8 @@ import store from '../redux/store'
 import { userReducerActions } from '../redux/reducers/userSlice'
 
 const API = axios.create({
-  baseURL: '/api',
+  // baseURL: '/api',
+  baseURL: import.meta.env.VITE_BOBISUUE_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
