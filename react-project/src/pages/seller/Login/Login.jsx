@@ -20,15 +20,33 @@ const SellerLoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault()
+
     try {
       const response = await API.post('/auths/seller-login', { email, password })
-      localStorage.setItem('SELLER_AUTH_TOKEN', response.data.token)
 
-      const queryParams = new URLSearchParams(location.search)
-      const redirectPath = queryParams.get('path') || '/seller'
-      navigate(redirectPath)
+      // 로그인 성공 시 response 구조 확인
+      if (response.status === 200 || response.status === 201) {
+        // 서버에서 응답받은 토큰 정보
+        const { access_token, refresh_token } = response.data.result.data
+
+        // 로컬 스토리지에 토큰 저장
+        localStorage.setItem('SELLER_AUTH_TOKEN', access_token)
+        localStorage.setItem('SELLER_REFRESH_TOKEN', refresh_token)
+
+        // 로그인 성공 후 리디렉션
+        const queryParams = new URLSearchParams(location.search)
+        const redirectPath = queryParams.get('path') || '/seller'
+        navigate(redirectPath)
+      } else {
+        setError('로그인 실패. 다시 시도해 주세요.')
+      }
     } catch (err) {
-      setError('이메일 또는 비밀번호를 확인하세요.')
+      // 400번대 오류 발생 시 페이지 이동 X, 에러 메시지만 표시
+      if (err.response && err.response.status >= 400 && err.response.status < 500) {
+        setError('이메일 또는 비밀번호를 확인하세요.')
+      } else {
+        setError('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.')
+      }
     }
   }
 

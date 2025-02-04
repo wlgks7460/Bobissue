@@ -46,7 +46,7 @@ const SellerRegisterPage = () => {
       email: formData.email,
       password: formData.password,
       name: formData.name,
-      call_number: fullPhoneNumber, // 전화번호 합침
+      callNumber: fullPhoneNumber, // 전화번호 합침
     }
 
     // API 요청 보내기
