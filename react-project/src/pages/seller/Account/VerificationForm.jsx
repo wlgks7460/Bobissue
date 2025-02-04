@@ -8,7 +8,7 @@ const VerificationForm = () => {
   const [message, setMessage] = useState('')
 
   // URL에서 redirect 값을 가져오거나 기본값 설정
-  const redirectPath = new URLSearchParams(location.search).get('redirect') || 'info'
+  const Path = '/seller/account/vender/info'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -19,32 +19,32 @@ const VerificationForm = () => {
     if (response.ok) {
       const data = await response.json()
       localStorage.setItem('VerificationToken', data.token)
-      navigate(redirectPath) // 리다이렉트 실행
+      navigate(Path) // 리다이렉트 실행
     } else {
       setMessage('비밀번호가 올바르지 않습니다.')
     }
   }
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gray-100'>
-      <form onSubmit={handleSubmit} className='w-full max-w-md bg-white p-6 rounded-lg shadow-md'>
-        <h2 className='text-2xl font-semibold text-gray-800 mb-4 text-center'>
-          비밀번호를 입력하세요
-        </h2>
-        <div className='mb-4'>
+    <div className='p-4'>
+      <h1 className='text-2xl font-semibold text-gray-700 mb-6'>비밀번호 확인</h1>
+      <form onSubmit={handleSubmit}>
+        <div className='mb-6'>
           <input
             type='password'
+            id='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className='p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none'
             placeholder='비밀번호를 입력하세요'
             required
-            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none'
+            style={{ width: '400px' }}
           />
         </div>
-        {message && <p className='text-sm text-center text-red-500 mb-4'>{message}</p>}
+        {message && <p className='text-red-500 text-center mt-2'>{message}</p>}
         <button
           type='submit'
-          className='w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors'
+          className='mt-4 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
         >
           확인
         </button>
