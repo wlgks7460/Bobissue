@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const TopNavbar = ({ toggleSidebar }) => {
   return (
-    <nav className="flex items-center justify-between bg-gray-100 px-4 py-3 shadow-md relative z-50">
+    <nav className="flex items-center justify-between bg-gray-100 px-4 py-3 border-b-2 relative z-50">
       {/* 햄버거 버튼 */}
       
       <button

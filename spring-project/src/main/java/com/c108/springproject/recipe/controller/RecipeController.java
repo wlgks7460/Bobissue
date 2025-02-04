@@ -3,7 +3,6 @@ package com.c108.springproject.recipe.controller;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
-import com.c108.springproject.item.dto.ItemListResDto;
 import com.c108.springproject.recipe.dto.request.RecipeCreateReqDto;
 import com.c108.springproject.recipe.dto.request.RecipeUpdateReqDto;
 import com.c108.springproject.recipe.dto.response.RecipeListResDto;
