@@ -42,7 +42,7 @@ public class JwtTokenProvider {
     public JwtTokenProvider(
             @Value("${jwt.secretKey}") // 암호화할 키
             String secretKey,
-            @Value("${jwt.access.expiration-minutes}") // 엑세스 토크 유효시간
+            @Value("${jwt.access.expiration}") // 엑세스 토크 유효시간
             long accessTokenExpirationMinutes,
             @Value("${jwt.refresh.expiration-hours}") // 리프레시 토큰 유효시간
             long refreshTokenExpirationHours,
@@ -66,7 +66,7 @@ public class JwtTokenProvider {
                 .setSubject(userSpecification) // JWT 토큰제목 (이메일이 들어감)
                 .setIssuer(issuer) // JWT 토큰 발급자
                 .setIssuedAt(Timestamp.valueOf(LocalDateTime.now())) // JWT 토큰 발급 시간
-                .setExpiration(Date.from(Instant.now().plus(accessTokenExpirationMinutes, ChronoUnit.HOURS))) // JWT 토큰의 만료시간 설정
+                .setExpiration(Date.from(Instant.now().plus(accessTokenExpirationMinutes, ChronoUnit.SECONDS))) // JWT 토큰의 만료시간 설정
                 .compact(); // JWT 토큰 생성
         return accessToken;
     }
@@ -83,11 +83,25 @@ public class JwtTokenProvider {
     }
 
     public String validateTokenAndGetSubject(String token){
-        return Jwts.parser()
-                .setSigningKey(secretKey.getBytes())
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+//        return Jwts.parser()
+//                .setSigningKey(secretKey.getBytes())
+//                .parseClaimsJws(token)
+//                .getBody()
+//                .getSubject();
+
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey.getBytes())
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            log.warn("토큰 만료됨");
+            throw e;  // 여기서 반드시 예외를 다시 던져야 함
+        } catch (Exception e) {
+            log.warn("토큰 검증 실패");
+            return null;
+        }
     }
 
     @Transactional
