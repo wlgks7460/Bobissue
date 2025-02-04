@@ -1,42 +1,42 @@
-
-export { default as SellerHome } from './SellerHome';
-export { default as SMain } from './SMain';
+export { default as SellerHome } from './SellerHome'
+export { default as Dashboard } from './Dashboard'
 //판매자 회원가입 관련
-export {default as Login} from './Login/Login'
-export {default as Signup} from './Login/Signup'
+export { default as Login } from './Login/Login'
+export { default as Signup } from './Login/Signup'
 // 상품 관리 관련
-export { default as Register } from './Products/Register';
-export { default as Inquiry } from './Products/Inquiry';
-export { default as Update } from './Products/Update';
-export { default as PrView } from './Products/View';
-export { default as PrUpdate } from './Products/Detail/Update';
-export { default as PrDelete } from './Products/Detail/Delete';
+export { default as Register } from './Products/Register'
+export { default as Inquiry } from './Products/Inquiry'
+
+export { default as PrView } from './Products/View'
+export { default as PrUpdate } from './Products/Detail/Update'
+export { default as PrDelete } from './Products/Detail/Delete'
 // 주문 배송 관련
-export { default as Delivery } from './Delivery/Delivers';
-export { default as Orders } from './Delivery/Orders';
-export { default as Exchange } from './Delivery/Exchange';
-export { default as Return } from './Delivery/Return';
-export { default as Ship } from './Delivery/Ship';
-export { default as OrDetail } from './Delivery/Details';
+export { default as Delivery } from './Delivery/Delivers'
+export { default as Orders } from './Delivery/Orders'
+export { default as Exchange } from './Delivery/Exchange'
+export { default as Return } from './Delivery/Return'
+export { default as Ship } from './Delivery/Ship'
+export { default as OrDetail } from './Delivery/Details'
 // 정산 관련
-export { default as Overview } from './Settlement/Overview';
-export { default as Settleview } from './Settlement/View';
-export { default as Details } from './Settlement/Details';
-export { default as Accounts } from './Settlement/Accounts';
+export { default as Overview } from './Settlement/Overview'
+export { default as Settleview } from './Settlement/View'
+export { default as Details } from './Settlement/Details'
+export { default as Accounts } from './Settlement/Accounts'
 // 판매자 정보 관련
-export { default as Info } from './Account/ProtectedRoute/Info';
-export { default as UpdateInfo } from './Account/ProtectedRoute/Update-Info';
-export { default as UpdatePassword } from './Account/ProtectedRoute/Update-Password';
-export { default as Withdrawal } from './Account/ProtectedRoute/Withdrawal';
-export { default as AcVerification } from './Account/Verification';
+export { default as Info } from './Account/ProtectedRoute/Info'
+export { default as UpdateInfo } from './Account/ProtectedRoute/Update-Info'
+export { default as UpdatePassword } from './Account/ProtectedRoute/Update-Password'
+export { default as Withdrawal } from './Account/ProtectedRoute/Withdrawal'
+export { default as AcVerification } from './Account/Verification'
+export { default as AcVerificationForm } from './Account/VerificationForm'
 // 문의 관련
-export { default as InView } from './Inquiry/View';
-export { default as InList } from './Inquiry/List';
-export { default as InReply } from './Inquiry/Reply';
-export { default as InReplylist } from './Inquiry/Replylist';
+export { default as InView } from './Inquiry/View'
+export { default as InList } from './Inquiry/List'
+export { default as InReply } from './Inquiry/Reply'
+export { default as InReplylist } from './Inquiry/Replylist'
 // 판매 통계 관련
-export { default as Performance } from './stats/Performance';
-export { default as Products } from './stats/Products';
+export { default as Performance } from './stats/Performance'
+export { default as Products } from './stats/Products'
 // 공지사항 관련
-export { default as Notices } from './Notices/Notices';
-export { default as NoticesView } from './Notices/View';
+export { default as Notices } from './Notices/Notices'
+export { default as NoticesView } from './Notices/View'

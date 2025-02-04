@@ -2,13 +2,12 @@ package com.c108.springproject.user.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
-import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.global.jwt.JwtTokenProvider;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshToken;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository;
 import com.c108.springproject.global.redis.RedisService;
 import com.c108.springproject.user.domain.User;
-import com.c108.springproject.user.dto.LoginReqDto;
+import com.c108.springproject.auths.dto.request.LoginReqDto;
 import com.c108.springproject.user.dto.SignUpReqDto;
 import com.c108.springproject.user.dto.UserDto;
 import com.c108.springproject.user.dto.UserResDto;
@@ -17,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +60,15 @@ public class UserService {
     }
 
     @Transactional
+    public UserResDto userProfile(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new BobIssueException(ResponseCode.USER_NOT_FOUND)
+        );
+        return UserResDto.toDto(user);
+    }
+
+    @Transactional
     public List<UserResDto> findUserList() {
 
         return userRepository.findAllActiveUsers().stream()
@@ -95,51 +101,6 @@ public class UserService {
                 new BobIssueException(ResponseCode.FAILED_DELETE_USER));
 
         user.delete();
-    }
-
-
-    @Transactional
-    public Map<String, String> doLogin(LoginReqDto loginReqDto){
-        try{
-            User user = userRepository.findByEmail(loginReqDto.getEmail()).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
-
-            if(!loginReqDto.getPassword().equals(user.getPassword())){
-                throw new BobIssueException(ResponseCode.FAIL_PASSWORD_CHECK);
-            }
-
-            String accessToken = jwtTokenProvider.createAccessToken(String.format("%s:%s", user.getEmail(), "USER"));
-            String refreshToken = jwtTokenProvider.createRefreshToken("USER", user.getUserNo());
-
-            refreshTokenRepository.findByUserEmail(user.getEmail())
-                    .ifPresentOrElse(
-                            it -> it.updateRefreshToken(refreshToken),
-                            () -> refreshTokenRepository.save(new RefreshToken(user, refreshToken))
-                    );
-
-            Map<String, String> result = new HashMap<>();
-
-            result.put("access_token", accessToken);
-            result.put("refresh_token", refreshToken);
-
-            return result;
-        }catch (BobIssueException e){
-            throw new BobIssueException(ResponseCode.FAILED_LOGIN);
-        }
-    }
-
-
-    @Transactional
-    public int doLogout(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(email);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
-        RefreshToken refreshToken = refreshTokenRepository.findByUserEmail(user.getEmail()).orElseThrow(
-                () -> new BobIssueException(ResponseCode.REFRESH_TOKEN_NOT_FOUND)
-        );
-
-        refreshTokenRepository.delete(refreshToken);
-        redisService.deleteValues("USER" + "" + user.getUserNo());
-        return user.getUserNo();
     }
 
 

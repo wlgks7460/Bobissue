@@ -8,6 +8,8 @@ import ConsumerSignup from '../pages/consumer/Signup'
 import ConsumerItemDetail from '../pages/consumer/ItemDetail'
 import ConsumerCart from '../pages/consumer/Cart'
 import ConsumerPayment from '../pages/consumer/Payment'
+import ConsumerSearch from '../pages/consumer/Search'
+import ConsumerMypage from '../pages/consumer/MyPage'
 
 // 관리자 section
 
@@ -80,6 +82,14 @@ const router = createBrowserRouter([
             element: <ConsumerSignup />,
           },
           {
+            path: 'mypage',
+            element: <ConsumerMypage />,
+          },
+          {
+            path: 'search',
+            element: <ConsumerSearch />,
+          },
+          {
             path: 'item/:itemNo',
             element: <ConsumerItemDetail />,
           },
@@ -94,6 +104,7 @@ const router = createBrowserRouter([
         ],
       },
       //판매자 회원가입,로그인
+
       {
         path: 'seller/login',
         element: <Seller.Login />,
@@ -110,7 +121,7 @@ const router = createBrowserRouter([
           //상품 관리 관련
           {
             path: '',
-            element: <Seller.SMain />,
+            element: <Seller.Dashboard />,
           },
           {
             path: 'products/view/:productId',
@@ -132,10 +143,7 @@ const router = createBrowserRouter([
             path: 'products/inquiry',
             element: <Seller.Inquiry />,
           },
-          {
-            path: 'products/update',
-            element: <Seller.Update />,
-          },
+
           //주문 배송 관련
           {
             path: 'delivery/delivers',
@@ -180,25 +188,31 @@ const router = createBrowserRouter([
           },
           //판매자정보 관련
           {
-            path: 'account/verification',
+            path: 'account',
             element: <Seller.AcVerification />,
+            children: [
+              {
+                path: 'info',
+                element: <Seller.Info />,
+              },
+              {
+                path: 'update-info',
+                element: <Seller.UpdateInfo />,
+              },
+              {
+                path: 'update-password',
+                element: <Seller.UpdatePassword />,
+              },
+              //판매자 탈퇴
+              {
+                path: 'withdrawal',
+                element: <Seller.Withdrawal />,
+              },
+            ],
           },
           {
-            path: 'account/info',
-            element: <Seller.Info />,
-          },
-          {
-            path: 'account/update-info',
-            element: <Seller.UpdateInfo />,
-          },
-          {
-            path: 'account/update-password',
-            element: <Seller.UpdatePassword />,
-          },
-          //판매자 탈퇴
-          {
-            path: 'account/withdrawal',
-            element: <Seller.Withdrawal />,
+            path: 'account/verification',
+            element: <Seller.AcVerificationForm />,
           },
           //문의 관련
           {
@@ -243,14 +257,17 @@ const router = createBrowserRouter([
         element: <AdminRoot />,
         children: [
           {
-            // admin - HomePage
+            index: true,
             path: '',
-            element: <AdminLoginPage />,
+            element: <AdminHome />,
           },
           {
-            // admin - LoginPage
             path: 'home',
             element: <AdminHome />,
+          },
+          {
+            path: 'login',
+            element: <AdminLoginPage />,
           },
           {
             // 회원관리 섹션

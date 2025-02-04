@@ -3,6 +3,7 @@ package com.c108.springproject.global.security;
 import com.c108.springproject.global.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,6 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.List;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -22,10 +24,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
-                //CSRF(Cross-Site Request Forgery) 공격을 방지하는 기능을 끔
-                //JWT 기반 인증, rest api는 CSRF 보호가 필요하지 않음
                 .csrf(csrf -> csrf.disable())
-                //CORS 설정
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowedOrigins(List.of(
@@ -35,27 +34,36 @@ public class SecurityConfig {
                     ));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
-                    corsConfiguration.addExposedHeader("New-Access-Token");
+                    corsConfiguration.addExposedHeader("newAccessToken");
                     return corsConfiguration;
                 }))
-                //Basic Authentication 을 비활성화
-                //JWT 기반 인증 사용
                 .httpBasic(basic -> basic.disable())
-                //JWT 인증 방식에서는 서버가 세션을 유지할 필요가 없음 -> 세션을 사용하지 않음
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //인증 및 권한 설정
+                .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        //해당 url은 인증 필요 x
+                        .requestMatchers("/ws-stomp/**").permitAll()
                         .requestMatchers(
-                                "/api/users/doLogin",
-                                "/api/users/sign-up"
+                                "/api/users/sign-up",
+                                "/api/users/social",
+                                "/api/sellers/sign-up",
+                                "/api/check-password",
+                                "/api/check-email",
+                                "/api/auths/user-login",
+                                "/api/auths/seller-login",
+                                "/api/auths/admin-login",
+                                "/api/item",
+                                "/api/item/{itemNo}",
+                                "/api/categories",
+                                "/api/categories/{categoryNo}",
+                                "/api/item/{itemNo}/review",
+                                "/api/item/{itemNo}/review/{reviewNo}",
+                                "/api/cast",
+                                "/api/cast/{castNo}",
+                                "/api/cast/{chatNo}/chat"
                         ).permitAll()
-//                        // 특정 권한이 있어야만 특정 API에 접근할 수 있도록 설정
-//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        //나머지 요청은 인증이 되어야함
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class);
-    return httpSecurity.build();
+        return httpSecurity.build();
     }
 }

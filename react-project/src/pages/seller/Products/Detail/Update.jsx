@@ -1,126 +1,213 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import API from '@/utils/API'
+//import PostForm from './Form/PostForm'
 
-const Update = () => {
-  const product = useLocation() // 부모에서 전달된 productId
-
-  const [productImage, setProductImage] = useState(null) // 이미지 미리보기 상태
-  const [formData, setFormData] = useState({
+const EditProduct = () => {
+  const { id } = useParams() // URL에서 상품 ID 가져오기
+  const [product, setProduct] = useState({
     name: '',
-    category: '',
+    categoryNo: '',
+    companyNo: '',
     price: '',
+    salePrice: '',
     stock: '',
-    img: null,
+    productImage: null,
+    previewImage: null,
+    description: '',
+    expiredAt: '',
   })
+  const [createdUser] = useState(localStorage.getItem('SELLER_AUTH_TOKEN')) // 인증된 사용자
+  const [updatedUser] = useState(localStorage.getItem('SELLER_AUTH_TOKEN')) // 인증된 사용자
+  const navigate = useNavigate()
 
-  // 초기 데이터 로드
   useEffect(() => {
-    // 서버에서 기존 상품 데이터를 가져옴
-    setFormData({
-      name: product.state.name,
-      category: product.state.category,
-      price: product.state.price,
-      stock: product.state.stock, // 실제 서버의 img 데이터가 있다면 활용
-    })
-    setProductImage(product.state.img) // 기본 이미지 URL 설정
-  }, [])
+    // 상품 데이터 로드
+    const fetchProductData = async () => {
+      try {
+        const response = await API.get(`api/items/${id}`)
+        setProduct({
+          ...response.data,
+          previewImage: response.data.productImage ? `/images/${response.data.productImage}` : null, // 이미지 미리보기
+        })
+      } catch (error) {
+        console.error('상품 데이터를 불러오는 데 실패했습니다.', error)
+        alert('상품 데이터를 불러오는 데 실패했습니다.')
+      }
+    }
 
-  // 폼 입력 값 변경 핸들러
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    fetchProductData()
+  }, [id])
 
-  // 이미지 업로드 핸들러
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0]
     if (file) {
-      setFormData((prev) => ({ ...prev, img: file }))
-      const reader = new FileReader()
-      reader.onload = () => setProductImage(reader.result) // 미리보기 이미지 설정
-      reader.readAsDataURL(file)
+      setProduct((prev) => ({
+        ...prev,
+        productImage: file,
+        previewImage: URL.createObjectURL(file),
+      }))
     }
   }
 
-  // 수정 폼 제출 핸들러
-  const handleSubmit = () => {
-    // 이미지 파일을 포함한 FormData 객체 생성
-    const formDataToSend = new FormData()
-    formDataToSend.append('name', formData.name)
-    formDataToSend.append('category', formData.category)
-    formDataToSend.append('price', formData.price)
-    formDataToSend.append('stock', formData.stock)
-    if (formData.img) {
-      formDataToSend.append('img', formData.img) // 파일 추가
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!localStorage.getItem('SELLER_AUTH_TOKEN')) {
+      alert('상품 수정에 대한 인증이 필요합니다.')
+      return
     }
 
-    fetch(`/api/products/${productId}`, {
-      method: 'PUT',
-      body: formDataToSend,
-    })
-      .then((res) => res.json())
-      .then(() => {
-        alert('수정 요청이 접수되었습니다. 관리자 승인을 기다려주세요.')
+    if (
+      !product.name ||
+      !product.categoryNo ||
+      !product.companyNo ||
+      !product.price ||
+      !product.salePrice ||
+      !product.stock ||
+      !product.productImage ||
+      !product.expiredAt ||
+      !product.description
+    ) {
+      alert('모든 항목을 입력해주세요.')
+      return
+    }
+
+    try {
+      const formData = new FormData()
+      formData.append('name', product.name)
+      formData.append('categoryNo', product.categoryNo)
+      formData.append('companyNo', product.companyNo)
+      formData.append('price', parseFloat(product.price))
+      formData.append('salePrice', parseFloat(product.salePrice))
+      formData.append('stock', parseInt(product.stock, 10))
+      formData.append('expiredAt', product.expiredAt)
+      formData.append('description', product.description)
+      formData.append('productImage', product.productImage)
+      formData.append('createdUser', createdUser)
+      formData.append('updatedUser', updatedUser)
+
+      const response = await API.put(`api/items/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
-      .catch((err) => console.error('수정 요청 실패:', err))
+
+      console.log('수정 성공:', response.data)
+      alert('상품이 수정되었습니다!')
+      navigate('/seller/products/inquiry')
+    } catch (error) {
+      console.error('수정 실패:', error)
+      alert('수정 중 오류가 발생했습니다.')
+    }
   }
 
   return (
-    <div className='bg-white p-6 rounded-lg shadow-md w-full max-w-md mx-auto'>
-      <h2 className='text-2xl font-bold mb-4'>상품 수정</h2>
-      <label className='block mb-4'>
-        <span className='block text-gray-700'>상품명:</span>
+    <div className='p-6'>
+      <h1 className='font-bold text-[32px] mb-10'>상품 수정</h1>
+
+      {/* 상품명 */}
+      <div className='flex items-center space-x-2'>
+        <h2 className='text-[16px] font-bold'>상품명</h2>
+      </div>
+      <input
+        className='w-[800px] mt-3 p-3 border rounded-md'
+        type='text'
+        value={product.name}
+        onChange={(e) => setProduct({ ...product, name: e.target.value })}
+        placeholder='상품명을 입력해주세요'
+      />
+
+      {/* 카테고리 선택 */}
+      <div className='mt-3'>
+        <label className='block text-[16px] font-bold mb-2'>카테고리</label>
+        <select
+          className='w-[400px] p-2 border rounded-md'
+          value={product.categoryNo}
+          onChange={(e) => setProduct({ ...product, categoryNo: e.target.value })}
+        >
+          <option value=''>카테고리 선택</option>
+          <option value='1'>식품</option>
+          <option value='2'>비식품</option>
+        </select>
+      </div>
+
+      {/* 회사명 선택 */}
+      <div className='mt-3'>
+        <label className='block text-[16px] font-bold mb-2'>회사명</label>
         <input
-          name='name'
-          value={formData.name}
-          onChange={handleChange}
-          className='w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200'
+          className='w-[400px] p-3 border rounded-md'
+          type='text'
+          placeholder='회사명을 입력하세요'
+          value={product.companyNo}
+          onChange={(e) => setProduct({ ...product, companyNo: e.target.value })}
         />
-      </label>
-      <section className='mb-4'>
-        <h2 className='text-lg font-semibold'>상품 이미지</h2>
-        <input type='file' accept='image/*' onChange={handleImageChange} className='mt-2' />
-        {productImage && (
-          <div className='mt-4 border p-2 rounded-lg'>
-            <img src={productImage} alt='상품 이미지 미리보기' className='w-full rounded-md' />
-          </div>
-        )}
-      </section>
-      <label className='block mb-4'>
-        <span className='block text-gray-700'>카테고리:</span>
+      </div>
+
+      {/* 상품 이미지 업로드 */}
+      <div className='mt-5'>
+        <h2 className='text-[16px] font-bold'>상품 이미지</h2>
+        <label className='mt-3 flex items-center justify-center w-[300px] h-[300px] border-2 border-dashed border-gray-400 rounded-lg cursor-pointer overflow-hidden bg-gray-100 hover:bg-gray-200'>
+          {product.previewImage ? (
+            <img
+              src={product.previewImage}
+              alt='상품 이미지 미리보기'
+              className='w-full h-full object-cover'
+            />
+          ) : (
+            <span className='text-gray-500'>클릭하여 이미지를 업로드하세요</span>
+          )}
+          <input type='file' accept='image/*' onChange={handleImageUpload} className='hidden' />
+        </label>
+      </div>
+
+      {/* 상품 정보 */}
+      <div className='mt-5 p-2 border rounded-lg bg-gray-50'>
+        <h2 className='text-[16px] font-bold'>상품 주요 정보</h2>
         <input
-          name='category'
-          value={formData.category}
-          onChange={handleChange}
-          className='w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200'
+          className='w-[400px] mt-2 p-3 border rounded-md'
+          type='number'
+          value={product.price}
+          onChange={(e) => setProduct({ ...product, price: e.target.value })}
+          placeholder='상품 가격'
         />
-      </label>
-      <label className='block mb-4'>
-        <span className='block text-gray-700'>가격:</span>
         <input
-          name='price'
-          value={formData.price}
-          onChange={handleChange}
-          className='w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200'
+          className='w-[400px] mt-2 p-3 border rounded-md'
+          type='number'
+          value={product.salePrice}
+          onChange={(e) => setProduct({ ...product, salePrice: e.target.value })}
+          placeholder='할인 가격'
         />
-      </label>
-      <label className='block mb-4'>
-        <span className='block text-gray-700'>재고:</span>
         <input
-          name='stock'
-          value={formData.stock}
-          onChange={handleChange}
-          className='w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-200'
+          className='w-[400px] mt-2 p-3 border rounded-md'
+          type='number'
+          value={product.stock}
+          onChange={(e) => setProduct({ ...product, stock: e.target.value })}
+          placeholder='재고 수량'
         />
-      </label>
-      <button
-        onClick={handleSubmit}
-        className='w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:ring focus:ring-blue-300'
-      >
-        저장
+        <textarea
+          className='w-[800px] mt-2 p-3 border rounded-md h-[100px]'
+          value={product.description}
+          onChange={(e) => setProduct({ ...product, description: e.target.value })}
+          placeholder='상품의 특징을 입력해주세요'
+        ></textarea>
+      </div>
+
+      {/* 판매 종료일 */}
+      <div className='flex items-center space-x-2 mt-5'>
+        <h2 className='text-[16px] font-bold'>판매 종료일</h2>
+      </div>
+      <input
+        className='w-[400px] mt-3 p-2 border rounded-md'
+        type='date'
+        value={product.expiredAt}
+        onChange={(e) => setProduct({ ...product, expiredAt: e.target.value })}
+      />
+
+      {/* 상품 수정 버튼 */}
+      <button className='mt-5 p-3 bg-blue-500 text-white rounded-md' onClick={handleSubmit}>
+        상품 수정
       </button>
     </div>
   )
 }
 
-export default Update
+export default EditProduct

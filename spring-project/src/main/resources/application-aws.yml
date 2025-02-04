@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAYXWBOCW45WD44ZFM
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    s3:
+      bucket: bobissue-dev-storage-ap
