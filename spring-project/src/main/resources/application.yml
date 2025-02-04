@@ -35,12 +35,12 @@ jwt:
   access:
     expiration: 30
   refresh:
-    expiration-hours: 864000
+    expiration-hours: 24
   issuer: BobIssue
 
-logging:
-  file:
-    name: logs/application.log
-  level:
-    org.springframework.web.socket: DEBUG
-    org.springframework.security: DEBUG
+#logging:
+#  file:
+#    name: logs/application.log
+#  level:
+#    org.springframework.web.socket: DEBUG
+#    org.springframework.security: DEBUG
