@@ -13,10 +13,11 @@ const API = axios.create({
 // 요청 interceptors: 요청에 jwt 추가
 API.interceptors.request.use((config) => {
   const access_token = store.getState().user.accessToken
+  const refresh_token = store.getState().user.refreshToken
   if (access_token) {
     console.log('토큰 있음', access_token)
     config.headers.Authorization = `Bearer ${access_token}`
-    config.headers['refresh-token'] = store.getState().user.refreshToken
+    config.headers['refreshToken'] = `Bearer ${refresh_token}`
   }
 
   return config
@@ -26,6 +27,8 @@ API.interceptors.request.use((config) => {
 API.interceptors.response.use((res) => {
   // access_token 갱신
   console.log(res)
+  const newAccessToken = res.headers.get('newAccessToken')
+  console.log(newAccessToken)
   if (res.headers['authorization']) {
     const newAccessToken = res.headers['authorization']
     store.dispatch(
