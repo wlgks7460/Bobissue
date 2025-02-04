@@ -100,18 +100,35 @@ public class ItemService {
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
-        // 2. 새 이미지 업로드 및 처리
-        List<ItemImage> updatedImages = new ArrayList<>(item.getImages()); // 기존 이미지 유지
+        List<ItemImage> updatedImages = new ArrayList<>();
+
+        // 유지할 이미지 처리
+        if (reqDto.getKeepImageIds() != null && !reqDto.getKeepImageIds().isEmpty()) {
+            updatedImages.addAll(item.getImages().stream()
+                    .filter(img -> reqDto.getKeepImageIds().contains(img.getImageNo()))
+                    .collect(Collectors.toList()));
+        }
+
+        // 삭제할 이미지 처리
+        List<String> deleteUrls = item.getImages().stream()
+                .filter(img -> reqDto.getKeepImageIds() == null ||
+                        !reqDto.getKeepImageIds().contains(img.getImageNo()))
+                .map(ItemImage::getImageUrl)
+                .collect(Collectors.toList());
+
+        if (!deleteUrls.isEmpty()) {
+            s3Service.deleteFiles(deleteUrls);
+        }
+
+        // 2-3. 새 이미지 업로드 및 처리
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 String imageUrl = s3Service.uploadFile("item", file);
-
                 ItemImage itemImage = ItemImage.builder()
                         .item(item)
                         .originalName(file.getOriginalFilename())
                         .imageUrl(imageUrl)
                         .build();
-
                 updatedImages.add(itemImage);
             }
         }
@@ -145,6 +162,18 @@ public class ItemService {
     public void deleteItem(int itemNo) {
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+
+        // 상품 삭제시 이미지도 삭제
+        List<String> deleteUrls = item.getImages().stream()
+                .map(ItemImage::getImageUrl)
+                .collect(Collectors.toList());
+
+        if (!deleteUrls.isEmpty()) {
+            s3Service.deleteFiles(deleteUrls);
+        }
+
+        item.getImages().clear();
+
         item.delete();
         itemRepository.save(item);
     }
