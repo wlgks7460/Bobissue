@@ -49,13 +49,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = parseBearerToken(request, HttpHeaders.AUTHORIZATION);
             log.info("Filter is running");
             if (token != null && !token.equalsIgnoreCase("null")) {
-                System.out.println(token);
                 User user = parseUserSpecification(token);
                 AbstractAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(user, token, user.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (ExpiredJwtException e) {
+            log.warn("Access Token 만료됨, 재발급 시도");
             reissueAccessToken(request, response, e);
         } catch (Exception exception) {
             logger.error("could not set user authentication in security context", exception);
@@ -87,19 +87,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             String refreshToken = parseBearerToken(request, "refreshToken");
             if (refreshToken == null) {
+                log.error("Refresh 없음");
                 throw exception;
             }
             String oldAccessToken = parseBearerToken(request, HttpHeaders.AUTHORIZATION);
+//            jwtTokenProvider.validateRefreshToken(refreshToken, oldAccessToken);
+            log.info("Refresh Token 검증 시작 - Refresh Token: {}", refreshToken);
             jwtTokenProvider.validateRefreshToken(refreshToken, oldAccessToken);
+            log.info("Refresh Token 검증 완료");
             String newAccessToken = jwtTokenProvider.recreateAccessToken(oldAccessToken);
             User user = parseUserSpecification(newAccessToken);
             UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken.authenticated(user, newAccessToken, user.getAuthorities());
             authenticated.setDetails(new WebAuthenticationDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticated);
-
+            System.out.println("재발급이요" + newAccessToken);
+            log.info("재발급된 Access Token: {}", newAccessToken);
             response.setHeader("newAccessToken", newAccessToken);
         } catch (Exception e) {
             request.setAttribute("exception", e);
+            log.info("재발급 실패");
         }
     }
 

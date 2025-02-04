@@ -45,8 +45,10 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 //JWT 인증 방식에서는 서버가 세션을 유지할 필요가 없음 -> 세션을 사용하지 않음
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .securityMatcher("/api/**") // API 요청만 Security 적용
                 //인증 및 권한 설정
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/ws-stomp/**").permitAll()
                         //해당 url은 인증 필요 x
                         .requestMatchers(
                                 "/api/users/sign-up",
