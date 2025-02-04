@@ -248,14 +248,17 @@ const router = createBrowserRouter([
         element: <AdminRoot />,
         children: [
           {
-            // admin - HomePage
+            index: true,
             path: '',
-            element: <AdminLoginPage />,
+            element: <AdminHome />,
           },
           {
-            // admin - LoginPage
             path: 'home',
             element: <AdminHome />,
+          },
+          {
+            path: 'login',
+            element: <AdminLoginPage />,
           },
           {
             // 회원관리 섹션

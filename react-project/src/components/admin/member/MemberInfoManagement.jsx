@@ -184,7 +184,7 @@ const MemberInfoManagement = () => {
                 <th className='border px-4 py-2'>이메일</th>
                 <th className='border px-4 py-2'>전화번호</th>
                 <th className='border px-4 py-2'>회원 등급</th>
-                <th className='border px-4 py-2'>상세보기</th>
+                <th className='border px-4 py-2'>상세페이지</th>
               </tr>
             </thead>
             <tbody>
@@ -198,16 +198,16 @@ const MemberInfoManagement = () => {
                     />
                   </td>
                   <td className='border px-4 py-2 text-center'>{user.userNo}</td>
-                  <td className='border px-4 py-2'>{user.name}</td>
-                  <td className='border px-4 py-2'>{user.email}</td>
-                  <td className='border px-4 py-2'>{user.phoneNumber}</td>
-                  <td className='border px-4 py-2 text-center'>{user.level}</td>
+                  <td className='border px-4 py-2 text-center'>{user.name}</td>
+                  <td className='border px-4 py-2 text-center'>{user.email}</td>
+                  <td className='border px-4 py-2 text-center'>{user.phoneNumber}</td>
+                  <td className='border px-4 py-2 text-center '>{user.level}</td>
                   <td className='border px-4 py-2 text-center'>
                     <button
                       onClick={() => handleNavigateToDetail(user.userNo)}
-                      className='bg-blue-500 text-white px-2 py-1 rounded-md'
+                      className='bg-transparent text-blue-500'
                     >
-                      상세보기
+                      조회
                     </button>
                   </td>
                 </tr>
@@ -216,7 +216,7 @@ const MemberInfoManagement = () => {
           </table>
 
           {/* 페이지네이션 버튼 */}
-          <div className='flex justify-center mt-4'>
+          <div className='flex justify-center mt-10 '>
             {[...Array(totalPages)].map((_, index) => (
               <button
                 key={index}
