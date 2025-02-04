@@ -2163,3 +2163,290 @@ This generated password is for development use only. Your security configuration
 2025-02-04T11:36:47.986+09:00  INFO 12432 --- [spring-project] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-02-04T11:36:47.987+09:00  INFO 12432 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-02-04T11:36:48.132+09:00  INFO 12432 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-04T11:40:45.427+09:00  INFO 20464 --- [spring-project] [main] c.c.s.SpringProjectApplication           : Starting SpringProjectApplication using Java 17.0.13 with PID 20464 (C:\Users\SSAFY\Desktop\C108\S12P11C108\spring-project\build\classes\java\main started by SSAFY in C:\Users\SSAFY\Desktop\C108\S12P11C108)
+2025-02-04T11:40:45.429+09:00  INFO 20464 --- [spring-project] [main] c.c.s.SpringProjectApplication           : The following 1 profile is active: "aws"
+2025-02-04T11:40:45.910+09:00  WARN 20464 --- [spring-project] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalStateException: Error processing condition on org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration.propertySourcesPlaceholderConfigurer
+2025-02-04T11:40:45.916+09:00  INFO 20464 --- [spring-project] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-02-04T11:40:45.947+09:00 ERROR 20464 --- [spring-project] [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalStateException: Error processing condition on org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration.propertySourcesPlaceholderConfigurer
+	at org.springframework.boot.autoconfigure.condition.SpringBootCondition.matches(SpringBootCondition.java:60) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	at org.springframework.context.annotation.ConditionEvaluator.shouldSkip(ConditionEvaluator.java:99) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForBeanMethod(ConfigurationClassBeanDefinitionReader.java:184) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:145) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:121) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:430) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609) ~[spring-context-6.2.1.jar:6.2.1]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.4.1.jar:3.4.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.1.jar:3.4.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.1.jar:3.4.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.1.jar:3.4.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.4.1.jar:3.4.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.4.1.jar:3.4.1]
+	at com.c108.springproject.SpringProjectApplication.main(SpringProjectApplication.java:12) ~[main/:na]
+Caused by: java.lang.IllegalStateException: Failed to introspect Class [com.c108.springproject.global.s3.S3Config] from ClassLoader [jdk.internal.loader.ClassLoaders$AppClassLoader@5e481248]
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:483) ~[spring-core-6.2.1.jar:6.2.1]
+	at org.springframework.util.ReflectionUtils.doWithMethods(ReflectionUtils.java:360) ~[spring-core-6.2.1.jar:6.2.1]
+	at org.springframework.util.ReflectionUtils.getUniqueDeclaredMethods(ReflectionUtils.java:417) ~[spring-core-6.2.1.jar:6.2.1]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.lambda$getTypeForFactoryMethod$1(AbstractAutowireCapableBeanFactory.java:751) ~[spring-beans-6.2.1.jar:6.2.1]
+	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1708) ~[na:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.getTypeForFactoryMethod(AbstractAutowireCapableBeanFactory.java:750) ~[spring-beans-6.2.1.jar:6.2.1]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineTargetType(AbstractAutowireCapableBeanFactory.java:683) ~[spring-beans-6.2.1.jar:6.2.1]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.predictBeanType(AbstractAutowireCapableBeanFactory.java:654) ~[spring-beans-6.2.1.jar:6.2.1]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.isFactoryBean(AbstractBeanFactory.java:1683) ~[spring-beans-6.2.1.jar:6.2.1]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doGetBeanNamesForType(DefaultListableBeanFactory.java:592) ~[spring-beans-6.2.1.jar:6.2.1]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForType(DefaultListableBeanFactory.java:564) ~[spring-beans-6.2.1.jar:6.2.1]
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.collectBeanDefinitionsForType(OnBeanCondition.java:332) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.getBeanDefinitionsForType(OnBeanCondition.java:324) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.getBeanDefinitionsForType(OnBeanCondition.java:314) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.getMatchingBeans(OnBeanCondition.java:213) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.evaluateConditionalOnMissingBean(OnBeanCondition.java:196) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.getMatchOutcome(OnBeanCondition.java:143) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	at org.springframework.boot.autoconfigure.condition.SpringBootCondition.matches(SpringBootCondition.java:47) ~[spring-boot-autoconfigure-3.4.1.jar:3.4.1]
+	... 17 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: com/amazonaws/auth/AWSCredentials
+	at java.base/java.lang.Class.getDeclaredMethods0(Native Method) ~[na:na]
+	at java.base/java.lang.Class.privateGetDeclaredMethods(Class.java:3402) ~[na:na]
+	at java.base/java.lang.Class.getDeclaredMethods(Class.java:2504) ~[na:na]
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:465) ~[spring-core-6.2.1.jar:6.2.1]
+	... 34 common frames omitted
+Caused by: java.lang.ClassNotFoundException: com.amazonaws.auth.AWSCredentials
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641) ~[na:na]
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188) ~[na:na]
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[na:na]
+	... 38 common frames omitted
+
+2025-02-04T11:41:51.318+09:00  INFO 17148 --- [spring-project] [main] c.c.s.SpringProjectApplication           : Starting SpringProjectApplication using Java 17.0.13 with PID 17148 (C:\Users\SSAFY\Desktop\C108\S12P11C108\spring-project\build\classes\java\main started by SSAFY in C:\Users\SSAFY\Desktop\C108\S12P11C108)
+2025-02-04T11:41:51.320+09:00  INFO 17148 --- [spring-project] [main] c.c.s.SpringProjectApplication           : The following 1 profile is active: "aws"
+2025-02-04T11:41:51.957+09:00  INFO 17148 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-02-04T11:41:51.959+09:00  INFO 17148 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-04T11:41:52.140+09:00  INFO 17148 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 175 ms. Found 22 JPA repository interfaces.
+2025-02-04T11:41:52.149+09:00  INFO 17148 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-02-04T11:41:52.150+09:00  INFO 17148 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-02-04T11:41:52.179+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.admin.repository.AdminRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.180+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.answer.repository.AnswerRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.180+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.cast.repository.CastRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.180+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.coupon.repository.CouponRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.181+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.181+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.item.repository.ItemCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.181+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.item.repository.ItemRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.181+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.notification.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.182+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.DeliveryStatusRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.182+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderDetailRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.182+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.182+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderStatusRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.182+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.question.repository.QuestionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.182+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.recipe.repository.RecipeCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.183+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.recipe.repository.RecipeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.183+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReportCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.183+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReportRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.183+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReviewRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.183+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.seller.repository.CompanyRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.183+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.seller.repository.SellerRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.183+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.usercoupon.repository.UserCouponRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.184+09:00  INFO 17148 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.user.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-04T11:41:52.184+09:00  INFO 17148 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 0 Redis repository interfaces.
+2025-02-04T11:41:52.691+09:00  INFO 17148 --- [spring-project] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-04T11:41:52.700+09:00  INFO 17148 --- [spring-project] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-04T11:41:52.700+09:00  INFO 17148 --- [spring-project] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-02-04T11:41:52.758+09:00  INFO 17148 --- [spring-project] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-04T11:41:52.759+09:00  INFO 17148 --- [spring-project] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1410 ms
+2025-02-04T11:41:53.019+09:00  INFO 17148 --- [spring-project] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-04T11:41:53.066+09:00  INFO 17148 --- [spring-project] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-04T11:41:53.093+09:00  INFO 17148 --- [spring-project] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-02-04T11:41:53.323+09:00  INFO 17148 --- [spring-project] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-04T11:41:53.344+09:00  INFO 17148 --- [spring-project] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-04T11:41:53.677+09:00  INFO 17148 --- [spring-project] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1e7113f8
+2025-02-04T11:41:53.679+09:00  INFO 17148 --- [spring-project] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-04T11:41:53.723+09:00  WARN 17148 --- [spring-project] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-04T11:41:53.725+09:00  WARN 17148 --- [spring-project] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-02-04T11:41:53.739+09:00  INFO 17148 --- [spring-project] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-04T11:41:54.704+09:00  INFO 17148 --- [spring-project] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-04T11:41:55.540+09:00  INFO 17148 --- [spring-project] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-04T11:41:55.883+09:00  INFO 17148 --- [spring-project] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-04T11:41:56.460+09:00  WARN 17148 --- [spring-project] [main] com.amazonaws.util.VersionInfoUtils      : The AWS SDK for Java 1.x entered maintenance mode starting July 31, 2024 and will reach end of support on December 31, 2025. For more information, see https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-1-x-is-in-maintenance-mode-effective-july-31-2024/
+You can print where on the file system the AWS SDK for Java 1.x core runtime is located by setting the AWS_JAVA_V1_PRINT_LOCATION environment variable or aws.java.v1.printLocation system property to 'true'.
+This message can be disabled by setting the AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT environment variable or aws.java.v1.disableDeprecationAnnouncement system property to 'true'.
+The AWS SDK for Java 1.x is being used here:
+at java.base/java.lang.Thread.getStackTrace(Thread.java:1619)
+at com.amazonaws.util.VersionInfoUtils.printDeprecationAnnouncement(VersionInfoUtils.java:81)
+at com.amazonaws.util.VersionInfoUtils.<clinit>(VersionInfoUtils.java:59)
+at com.amazonaws.internal.EC2ResourceFetcher.<clinit>(EC2ResourceFetcher.java:44)
+at com.amazonaws.auth.InstanceMetadataServiceCredentialsFetcher.<init>(InstanceMetadataServiceCredentialsFetcher.java:38)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:111)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:91)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:75)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<clinit>(InstanceProfileCredentialsProvider.java:58)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.initializeProvider(EC2ContainerCredentialsProviderWrapper.java:66)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.<init>(EC2ContainerCredentialsProviderWrapper.java:55)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<init>(DefaultAWSCredentialsProviderChain.java:60)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<clinit>(DefaultAWSCredentialsProviderChain.java:54)
+at com.amazonaws.services.s3.AmazonS3ClientBuilder.standard(AmazonS3ClientBuilder.java:46)
+at com.c108.springproject.global.s3.S3Config.amazonS3Client(S3Config.java:25)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$0.CGLIB$amazonS3Client$0(<generated>)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$FastClass$$1.invoke(<generated>)
+at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:258)
+at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:348)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$0.amazonS3Client(<generated>)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
+at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:489)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1357)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1187)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:336)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:289)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:334)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1573)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1519)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1377)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1214)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:336)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:289)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:334)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1122)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1093)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1030)
+at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+at com.c108.springproject.SpringProjectApplication.main(SpringProjectApplication.java:12)
+2025-02-04T11:41:57.162+09:00  WARN 17148 --- [spring-project] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-04T11:41:57.190+09:00  WARN 17148 --- [spring-project] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3c2f9c9e-d69d-437e-850a-1e9cd218a3ea
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-04T11:41:57.203+09:00  INFO 17148 --- [spring-project] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-02-04T11:41:57.263+09:00 DEBUG 17148 --- [spring-project] [main] o.s.w.s.s.s.WebSocketHandlerMapping      : Patterns [/ws-stomp] in 'webSocketHandlerMapping'
+2025-02-04T11:41:57.294+09:00 DEBUG 17148 --- [spring-project] [main] o.s.w.s.s.s.WebSocketHandlerMapping      : Patterns [/ws-stomp/**] in 'stompWebSocketHandlerMapping'
+2025-02-04T11:41:57.498+09:00 DEBUG 17148 --- [spring-project] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Or [Mvc [pattern='/api/**']] with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-02-04T11:41:57.518+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AdminController:
+	
+2025-02-04T11:41:57.519+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AnswerController:
+	
+2025-02-04T11:41:57.519+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AuthsController:
+	
+2025-02-04T11:41:57.519+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.CastController:
+	
+2025-02-04T11:41:57.521+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.ChatController:
+	{[MESSAGE],[/messages]}: send2(ChatMessageDto)
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.CouponController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.i.c.ItemCategoryController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.i.c.ItemController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.n.c.NotificationController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.o.c.OrderController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.q.c.QuestionController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.RecipeCategoryController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.RecipeController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.ReportController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.ReviewController:
+	
+2025-02-04T11:41:57.522+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.s.c.SellerController:
+	
+2025-02-04T11:41:57.523+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.u.c.UserCouponController:
+	
+2025-02-04T11:41:57.523+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.u.c.UserController:
+	
+2025-02-04T11:41:57.523+09:00 DEBUG 17148 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-02-04T11:41:57.789+09:00  INFO 17148 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-02-04T11:41:57.789+09:00  INFO 17148 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@45eeea37]]
+2025-02-04T11:41:57.790+09:00  INFO 17148 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-02-04T11:41:57.819+09:00  INFO 17148 --- [spring-project] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-04T11:41:57.826+09:00  INFO 17148 --- [spring-project] [main] c.c.s.SpringProjectApplication           : Started SpringProjectApplication in 6.864 seconds (process running for 7.317)
+2025-02-04T11:42:31.703+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-04T11:42:31.703+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-02-04T11:42:31.704+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-02-04T11:42:31.719+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/auths/user-login
+2025-02-04T11:42:31.723+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-1] c.c.s.global.jwt.JwtAuthFilter           : Filter is running
+2025-02-04T11:42:31.724+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-02-04T11:42:31.725+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured POST /api/auths/user-login
+2025-02-04T11:42:57.789+09:00  INFO 17148 --- [spring-project] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-02-04T11:43:08.365+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/users/profile
+2025-02-04T11:43:08.365+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-3] c.c.s.global.jwt.JwtAuthFilter           : Filter is running
+2025-02-04T11:43:08.378+09:00  WARN 17148 --- [spring-project] [http-nio-8080-exec-3] c.c.s.global.jwt.JwtTokenProvider        : 토큰 만료됨
+2025-02-04T11:43:08.381+09:00  WARN 17148 --- [spring-project] [http-nio-8080-exec-3] c.c.s.global.jwt.JwtAuthFilter           : Access Token 만료됨, 재발급 시도
+2025-02-04T11:43:08.382+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-3] c.c.s.global.jwt.JwtAuthFilter           : Refresh Token 검증 시작 - Refresh Token: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJCb2JJc3N1ZSIsImlhdCI6MTczODYzNjk1MSwiZXhwIjoxNzM4NzIzMzUxfQ.FgX4CUiFXHmHMr83cxtLypdz_zgwslib1btDFEKFT-I
+2025-02-04T11:43:08.508+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-3] c.c.s.global.jwt.JwtAuthFilter           : Refresh Token 검증 완료
+2025-02-04T11:43:08.608+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-3] c.c.s.global.jwt.JwtAuthFilter           : 재발급된 Access Token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbTpVU0VSIiwiaXNzIjoiQm9iSXNzdWUiLCJpYXQiOjE3Mzg2MzY5ODgsImV4cCI6MTczODYzNzAxOH0.SQ6XJ5AeZNDvGMae698mdhR1E_HrBwFDrTFog04fieE
+2025-02-04T11:43:08.609+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/users/profile
+2025-02-04T12:12:57.794+09:00  INFO 17148 --- [spring-project] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2025-02-04T12:42:57.800+09:00  INFO 17148 --- [spring-project] [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2025-02-04T13:12:57.814+09:00  INFO 17148 --- [spring-project] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]
+2025-02-04T13:24:43.143+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing POST /api/auths/logout
+2025-02-04T13:24:43.144+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-6] c.c.s.global.jwt.JwtAuthFilter           : Filter is running
+2025-02-04T13:24:43.149+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured POST /api/auths/logout
+2025-02-04T13:25:38.249+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing POST /api/auths/logout
+2025-02-04T13:25:38.250+09:00  INFO 17148 --- [spring-project] [http-nio-8080-exec-7] c.c.s.global.jwt.JwtAuthFilter           : Filter is running
+2025-02-04T13:25:38.252+09:00 DEBUG 17148 --- [spring-project] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured POST /api/auths/logout
+2025-02-04T13:42:57.816+09:00  INFO 17148 --- [spring-project] [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 5, active threads = 1, queued tasks = 0, completed tasks = 4]
+2025-02-04T13:51:36.141+09:00  INFO 17148 --- [spring-project] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-04T13:51:36.294+09:00  INFO 17148 --- [spring-project] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-04T13:51:36.419+09:00  INFO 17148 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-02-04T13:51:36.419+09:00  INFO 17148 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@45eeea37]]
+2025-02-04T13:51:36.419+09:00  INFO 17148 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-02-04T13:51:36.462+09:00  INFO 17148 --- [spring-project] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-04T13:51:36.464+09:00  INFO 17148 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-04T13:51:36.606+09:00  INFO 17148 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
