@@ -33,7 +33,12 @@ const AdminSideBar = () => {
     <div className='fixed top-0 left-0 h-full w-64 bg-white shadow-md p-4 overflow-y-auto'>
       {/* 로고 */}
       <div className='mb-4'>
-        <h1 className='text-2xl font-bold text-blue-600 ms-3'>LOGO</h1>
+        <h1
+          className='text-2xl font-bold text-blue-600 ms-3 cursor-pointer'
+          onClick={() => navigate('/admin')} // 클릭 시 admin 페이지로 이동
+        >
+          LOGO
+        </h1>{' '}
       </div>
 
       {/* 메뉴 리스트 */}
