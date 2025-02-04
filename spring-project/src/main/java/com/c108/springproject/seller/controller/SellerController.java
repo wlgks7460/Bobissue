@@ -4,6 +4,7 @@ import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.seller.dto.SellerDto;
+import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
 import com.c108.springproject.seller.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,13 @@ public class SellerController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER, new DefaultResponse<SellerDto>(sellerList));
 
     }
+
+    @PutMapping("/{sellerNo}")
+    public ResponseDto updateSeller(@PathVariable int sellerNo, @RequestBody SellerUpdateReq sellerUpdateReq) {
+        sellerService.updateSeller(sellerNo, sellerUpdateReq);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_SELLER, new DefaultResponse<SellerUpdateReq>(sellerUpdateReq));
+    }
+
 
     @DeleteMapping("/{sellerNo}")
     public ResponseDto deleteSeller(@PathVariable int sellerNo) {
