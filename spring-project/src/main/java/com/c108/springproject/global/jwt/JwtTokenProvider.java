@@ -66,7 +66,7 @@ public class JwtTokenProvider {
                 .setSubject(userSpecification) // JWT 토큰제목 (이메일이 들어감)
                 .setIssuer(issuer) // JWT 토큰 발급자
                 .setIssuedAt(Timestamp.valueOf(LocalDateTime.now())) // JWT 토큰 발급 시간
-                .setExpiration(Date.from(Instant.now().plus(accessTokenExpirationMinutes, ChronoUnit.SECONDS))) // JWT 토큰의 만료시간 설정
+                .setExpiration(Date.from(Instant.now().plus(accessTokenExpirationMinutes, ChronoUnit.HOURS))) // JWT 토큰의 만료시간 설정
                 .compact(); // JWT 토큰 생성
         return accessToken;
     }
@@ -76,7 +76,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .setIssuer(issuer)
                 .setIssuedAt(Timestamp.valueOf(LocalDateTime.now()))
-                .setExpiration(Date.from(Instant.now().plus(refreshTokenExpirationHours, ChronoUnit.SECONDS)))
+                .setExpiration(Date.from(Instant.now().plus(refreshTokenExpirationHours, ChronoUnit.HOURS)))
                 .compact();
         redisService.setValues(role+id ,refreshToken, Duration.ofHours(24L));
         return refreshToken;
