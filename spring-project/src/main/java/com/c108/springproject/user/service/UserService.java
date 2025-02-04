@@ -60,6 +60,15 @@ public class UserService {
     }
 
     @Transactional
+    public UserResDto userProfile(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new BobIssueException(ResponseCode.USER_NOT_FOUND)
+        );
+        return UserResDto.toDto(user);
+    }
+
+    @Transactional
     public List<UserResDto> findUserList() {
 
         return userRepository.findAllActiveUsers().stream()

@@ -71,7 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/{user-no}",
                                 "/api/change-password",
-//                                "/api/auths/logout",
+                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/items/{item-no}/like",
                                 "/api/orders/**",
@@ -83,12 +83,13 @@ public class SecurityConfig {
                                 "/api/notification/user-only",
                                 "/api/notification/{notification_no}",
                                 "/api/cast/{chat-no}/chat",
-                                "/api/recipe"
-                        ).hasRole("USER")
+                                "/api/recipe",
+                                "/api/users/profile"
+                        ).hasAuthority("USER")
                         .requestMatchers(
                                 "/api/sellers/{seller-no}",
                                 "/api/change-password",
-//                                "/api/auths/logout",
+                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/items",
                                 "/api/items/{item-no}",
@@ -100,15 +101,15 @@ public class SecurityConfig {
                                 "/api/notification/{notification_no}",
                                 "/api/cast/",
                                 "/api/cast/{chat-no}/chat"
-                        ).hasRole("SELLER")
+                        ).hasAuthority("SELLER")
                         .requestMatchers(
                                 "/api/users/{user-no}",
-                                "/api/users",
+//                                "/api/users",
                                 "/api/sellers/{seller-no}",
                                 "/api/sellers",
                                 "/api/admin/**",
                                 "/api/api",
-//                                "/api/auths/logout",
+                                "/api/auths/logout",
                                 "/api/auths/token",
                                 "/api/items/{item-no}",
                                 "/api/categories",
@@ -122,7 +123,7 @@ public class SecurityConfig {
                                 "/api/notification/**",
                                 "/api/cast/**",
                                 "/api/recipe"
-                        ).hasRole("ADMIN")
+                        ).hasAuthority("ADMIN")
                         //나머지 요청은 인증이 되어야함
                         .anyRequest().authenticated()
                 )

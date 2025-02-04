@@ -39,7 +39,6 @@ public class CouponService {
     @PreAuthorize("hasAnyAuthority('ADMIN','SELLER')")
     public Coupon createCoupon(CouponReqDto couponReqDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("여기 " + authentication.getName());
 
         boolean isAdmin = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(role-> role.equals("ADMIN"));
