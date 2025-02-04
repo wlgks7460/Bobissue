@@ -44,7 +44,7 @@ const AdminLoginForm = () => {
       <div className='mb-4'>
         <input
           type='text'
-          placeholder='아이디'
+          placeholder='이메일'
           value={email}
           onChange={(e) => setUsername(e.target.value)}
           className='w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500'
@@ -60,12 +60,18 @@ const AdminLoginForm = () => {
           onChange={(e) => setPassword(e.target.value)}
           className='w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500'
           required
+          autoComplete='off'
         />
       </div>
 
       <button
         type='submit'
-        className='w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition'
+        className={`w-full py-2 rounded-md transition ${
+          email && password
+            ? 'bg-blue-500 text-white hover:bg-blue-600'
+            : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+        }`}
+        disabled={!email || !password}
       >
         로그인
       </button>
