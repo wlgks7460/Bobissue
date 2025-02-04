@@ -132,4 +132,31 @@ public class S3Service {
         if (lastIndex == -1) return ""; // 확장자가 없는 경우
         return fileName.substring(lastIndex); // 확장자 반환 (점 포함)
     }
+
+    private void deleteFile(String fileUrl) {
+        try {
+            // 추출한 키를 삭제
+            String key =extractKeyFromUrl(fileUrl);
+            amazonS3Client.deleteObject(bucket, key);
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_IMAGE);
+        }
+    }
+
+    private void deleteFiles(List<String> fileUrls) {
+        for (String fileUrl:fileUrls) {
+            deleteFile(fileUrl);
+        }
+    }
+
+
+    private String extractKeyFromUrl(String fileUrl) {
+        try {
+            // 버킷 이름 이후 경로 추출
+            return fileUrl.substring(fileUrl.indexOf(bucket) + bucket.length() + 1);
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.INVALID_FILE_URL);
+        }
+    }
+
 }
