@@ -5,6 +5,9 @@ spring:
   application:
     name: spring-project
 
+  profiles:
+    include: aws
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://i12c108.p.ssafy.io:3306/test
