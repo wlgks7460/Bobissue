@@ -5,8 +5,11 @@ import SignupTermsModal from '../../components/consumer/signup/SignupTermsModal'
 import TermsOfService from '../../components/consumer/signup/TermsOfService'
 import TermsOfPersonalData from '../../components/consumer/signup/TermsOfPersonalData'
 import API from '../../utils/API'
+import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
+  const navigate = useNavigate()
+
   // 회원 가입 관련 데이터
   const emailRef = useRef() // 이메일
   const passwordRef = useRef() // 비밀번호
@@ -18,7 +21,7 @@ const Signup = () => {
   const [postcode, setPostCode] = useState('') // 우편번호
   const [address, setAddress] = useState('') // 주소
   const addressDetailRef = useRef() // 상세주소
-  const [gender, setGender] = useState('m') // 성별
+  const [gender, setGender] = useState('M') // 성별
   const heightRef = useRef() // 키
   const weightRef = useRef() // 몸무게
 
@@ -105,7 +108,7 @@ const Signup = () => {
       }
       API.post('/users/sign-up', payload)
         .then((res) => {
-          console.log(res)
+          navigate('/login')
         })
         .catch((err) => {
           console.error(err)
@@ -263,7 +266,7 @@ const Signup = () => {
                   type='radio'
                   id='male'
                   name='gender'
-                  value='m'
+                  value='M'
                   className='w-5 h-5 me-5 accent-indigo-600'
                   onChange={handleGender}
                   defaultChecked
@@ -275,7 +278,7 @@ const Signup = () => {
                   type='radio'
                   id='female'
                   name='gender'
-                  value='f'
+                  value='F'
                   className='w-5 h-5 me-5 accent-indigo-600'
                   onChange={handleGender}
                 />

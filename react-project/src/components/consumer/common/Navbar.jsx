@@ -1,11 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { userReducerActions } from '../../../redux/reducers/userSlice'
 import API from '../../../utils/API'
 
 const Navbar = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   // 로그인 유무
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
@@ -15,8 +16,9 @@ const Navbar = () => {
     e.preventDefault()
     API.post('/auths/logout')
       .then((res) => {
-        console.log(res)
         dispatch(userReducerActions.logout())
+        alert('로그아웃 되었습니다.')
+        navigate('/login')
       })
       .catch((err) => {
         console.error(err)
