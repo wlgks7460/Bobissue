@@ -76,7 +76,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .setIssuer(issuer)
                 .setIssuedAt(Timestamp.valueOf(LocalDateTime.now()))
-                .setExpiration(Date.from(Instant.now().plus(refreshTokenExpirationHours, ChronoUnit.HOURS)))
+                .setExpiration(Date.from(Instant.now().plus(refreshTokenExpirationHours, ChronoUnit.SECONDS)))
                 .compact();
         redisService.setValues(role+id ,refreshToken, Duration.ofHours(24L));
         return refreshToken;

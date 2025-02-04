@@ -104,7 +104,7 @@ public class SecurityConfig {
                         ).hasAuthority("SELLER")
                         .requestMatchers(
                                 "/api/users/{user-no}",
-//                                "/api/users",
+                                "/api/users",
                                 "/api/sellers/{seller-no}",
                                 "/api/sellers",
                                 "/api/admin/**",
