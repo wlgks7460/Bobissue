@@ -4,6 +4,7 @@ import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.seller.dto.SellerDto;
+import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
 import com.c108.springproject.seller.service.SellerService;
@@ -26,7 +27,7 @@ public class SellerController {
 
     @PostMapping("sign-up")
     public ResponseDto signUp(@RequestBody SignUpReqDto signUpDto) {
-        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_SELLER,sellerService.signUp(signUpDto));
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_SELLER, sellerService.signUp(signUpDto));
     }
 
     @GetMapping
@@ -53,5 +54,10 @@ public class SellerController {
     public ResponseDto deleteSeller(@PathVariable int sellerNo) {
         sellerService.deleteSeller(sellerNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_USER, null);
+    }
+
+    @GetMapping("/profile")
+    public ResponseDto sellerProfile() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER, new DefaultResponse<SellerProfiltResDto>(sellerService.sellerProfile()));
     }
 }
