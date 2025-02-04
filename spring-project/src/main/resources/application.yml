@@ -5,6 +5,9 @@ spring:
   application:
     name: spring-project
 
+  profiles:
+    include: aws
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://i12c108.p.ssafy.io:3306/test
@@ -30,7 +33,14 @@ spring:
 jwt:
   secretKey: MzY4IHN1cGVyIHNlY3JldCBrZXkgdGhhdCBpcyBhd2Vzb21l...
   access:
-    expiration-minutes: 30
+    expiration: 30
   refresh:
     expiration-hours: 24
   issuer: BobIssue
+
+logging:
+  file:
+    name: logs/application.log
+  level:
+    org.springframework.web.socket: DEBUG
+    org.springframework.security: DEBUG
