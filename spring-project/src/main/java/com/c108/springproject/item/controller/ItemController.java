@@ -61,7 +61,7 @@ public class ItemController {
     }
 
     // 상품 상세 조회
-    @GetMapping("/{item-no}")
+    @GetMapping("/{itemNo}")
     public ResponseDto getItem(@PathVariable int itemNo) {
         ItemResDto item = itemService.getItem(itemNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ITEM, new DefaultResponse<>(item));
@@ -90,7 +90,7 @@ public class ItemController {
     }
     
     // 상품 삭제
-    @DeleteMapping("/{item-no}")
+    @DeleteMapping("/{itemNo}")
     public ResponseEntity<Void> deleteItem(@PathVariable int itemNo) {
         itemService.deleteItem(itemNo);
         return ResponseEntity.noContent().build();

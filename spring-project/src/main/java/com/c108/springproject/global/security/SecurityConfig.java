@@ -52,14 +52,14 @@ public class SecurityConfig {
                                 "/api/auths/seller-login",
                                 "/api/auths/admin-login",
                                 "/api/item",
-                                "/api/item/{item-no}",
+                                "/api/item/{itemNo}",
                                 "/api/categories",
-                                "/api/categories/{category-no}",
-                                "/api/item/{item_no}/review",
-                                "/api/item/{item_no}/review/{review_no}",
+                                "/api/categories/{categoryNo}",
+                                "/api/item/{itemNo}/review",
+                                "/api/item/{itemNo}/review/{reviewNo}",
                                 "/api/cast",
-                                "/api/cast/{cast_no}",
-                                "/api/cast/{chat-no}/chat"
+                                "/api/cast/{castNo}",
+                                "/api/cast/{chatNo}/chat"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
