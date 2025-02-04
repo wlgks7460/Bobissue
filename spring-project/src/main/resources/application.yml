@@ -35,7 +35,7 @@ jwt:
   access:
     expiration: 30
   refresh:
-    expiration-hours: 30
+    expiration-hours: 864000
   issuer: BobIssue
 
 logging:
