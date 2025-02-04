@@ -3,8 +3,6 @@ package com.c108.springproject.recipe.controller;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
-import com.c108.springproject.item.dto.ItemCategoryReqDto;
-import com.c108.springproject.item.dto.ItemCategoryResDto;
 import com.c108.springproject.recipe.domain.RecipeCategory;
 import com.c108.springproject.recipe.dto.request.RecipeCategoryReqDto;
 import com.c108.springproject.recipe.dto.response.RecipeCategoryResDto;

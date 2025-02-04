@@ -37,7 +37,7 @@ public class SecurityConfig {
                     ));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
-                    corsConfiguration.addExposedHeader("New-Access-Token");
+                    corsConfiguration.addExposedHeader("newAccessnToken");
                     return corsConfiguration;
                 }))
                 //Basic Authentication 을 비활성화
@@ -45,8 +45,10 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 //JWT 인증 방식에서는 서버가 세션을 유지할 필요가 없음 -> 세션을 사용하지 않음
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .securityMatcher("/api/**") // API 요청만 Security 적용
                 //인증 및 권한 설정
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/ws-stomp/**").permitAll()
                         //해당 url은 인증 필요 x
                         .requestMatchers(
                                 "/api/users/sign-up",
@@ -57,8 +59,8 @@ public class SecurityConfig {
                                 "/api/auths/user-login",
                                 "/api/auths/seller-login",
                                 "/api/auths/admin-login",
-                                "/api/items",
-                                "/api/items/{item-no}",
+                                "/api/item",
+                                "/api/item/{item-no}",
                                 "/api/categories",
                                 "/api/categories/{category-no}",
                                 "/api/item/{item_no}/review",
@@ -71,9 +73,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/users/{user-no}",
                                 "/api/change-password",
-                                "/api/auths/logout",
                                 "/api/auths/token",
-                                "/api/items/{item-no}/like",
+                                "/api/item/{item-no}/like",
                                 "/api/orders/**",
                                 "/api/payments/**",
                                 "/api/item/{item_no}/review/**",
@@ -89,10 +90,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/sellers/{seller-no}",
                                 "/api/change-password",
-                                "/api/auths/logout",
                                 "/api/auths/token",
-                                "/api/items",
-                                "/api/items/{item-no}",
+                                "/api/item",
+                                "/api/item/{item-no}",
                                 "/api/item/{item_no}/review/{review_no}/report",
                                 "/api/questions/",
                                 "/api/questions/{question_no}",
@@ -109,9 +109,8 @@ public class SecurityConfig {
                                 "/api/sellers",
                                 "/api/admin/**",
                                 "/api/api",
-                                "/api/auths/logout",
                                 "/api/auths/token",
-                                "/api/items/{item-no}",
+                                "/api/item/{item-no}",
                                 "/api/categories",
                                 "/api/categories/{category-no}",
                                 "/api/orders/**",
