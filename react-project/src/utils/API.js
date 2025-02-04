@@ -23,21 +23,33 @@ API.interceptors.request.use((config) => {
 })
 
 // 응답 interceptors: 토큰 갱신
-API.interceptors.response.use((res) => {
-  // access_token 갱신
-  console.log(res)
-  const newAccessToken = res.headers['newaccesstoken']
-  console.log(newAccessToken)
-  if (newAccessToken) {
-    store.dispatch(
-      userReducerActions.login({
-        access_token: newAccessToken,
-        refresh_token: store.getState().user.refreshToken,
-      }),
-    )
-    console.log('토큰 갱신됨:', newAccessToken)
-  }
-  return res
-})
+API.interceptors.response.use(
+  (res) => {
+    // access_token 갱신
+    const newAccessToken = res.headers['newaccesstoken']
+    if (newAccessToken) {
+      store.dispatch(
+        userReducerActions.login({
+          access_token: newAccessToken,
+          refresh_token: store.getState().user.refreshToken,
+        }),
+      )
+      console.log('토큰 갱신됨')
+    }
+    return res
+  },
+  (err) => {
+    // refreshToken이 만료되었다면 로그아웃
+    if (err.response) {
+      const { status, data } = err.response
+      if (status === 401 || status === 403) {
+        console.warn('인증 실패: 로그아웃')
+        store.dispatch(userReducerActions.logout())
+        window.location.href = '/login'
+      }
+    }
+    return Promise.reject(err)
+  },
+)
 
 export default API
