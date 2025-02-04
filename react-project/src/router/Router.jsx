@@ -188,31 +188,22 @@ const router = createBrowserRouter([
           },
           //판매자정보 관련
           {
-            path: 'account',
-            element: <Seller.AcVerification />,
-            children: [
-              {
-                path: 'info',
-                element: <Seller.Info />,
-              },
-              {
-                path: 'update-info',
-                element: <Seller.UpdateInfo />,
-              },
-              {
-                path: 'update-password',
-                element: <Seller.UpdatePassword />,
-              },
-              //판매자 탈퇴
-              {
-                path: 'withdrawal',
-                element: <Seller.Withdrawal />,
-              },
-            ],
+            path: 'account/verification',
+            element: <Seller.VerificationForm />,
           },
+          {
+            path: 'accont/update-password',
+            element: <Seller.UpdatePassword />,
+          },
+          //판매자 탈퇴
+
           {
             path: 'account/verification',
             element: <Seller.AcVerificationForm />,
+          },
+          {
+            path: 'account/vender/info',
+            element: <Seller.VenderInfo />,
           },
           //문의 관련
           {
