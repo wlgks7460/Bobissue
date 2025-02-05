@@ -192,15 +192,10 @@ const router = createBrowserRouter([
             element: <Seller.VerificationForm />,
           },
           {
-            path: 'accont/update-password',
+            path: 'account/update-password',
             element: <Seller.UpdatePassword />,
           },
           //판매자 탈퇴
-
-          {
-            path: 'account/verification',
-            element: <Seller.AcVerificationForm />,
-          },
           {
             path: 'account/vender/info',
             element: <Seller.VenderInfo />,

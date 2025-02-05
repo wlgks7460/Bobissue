@@ -10,7 +10,7 @@ const Withdrawal = ({ userInfo }) => {
     try {
       setLoading(true)
 
-      const token = localStorage.getItem('SELLER_AUTH_TOKEN')
+      const token = localStorage.getItem('access_token')
       if (!token) {
         throw new Error('인증 토큰이 없습니다.')
       }

@@ -21,7 +21,7 @@ const SellerMainPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('SELLER_AUTH_TOKEN')
+    const savedToken = localStorage.getItem('access_token')
 
     if (!savedToken) {
       const redirectPath = `${location.pathname}${location.search}`
