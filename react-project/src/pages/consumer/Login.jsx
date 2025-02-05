@@ -5,6 +5,7 @@ import kakaoLogo from '../../assets/consumer/kakaoLoginLogo.png'
 import API from '../../utils/API'
 import { useDispatch } from 'react-redux'
 import { userReducerActions } from '../../redux/reducers/userSlice'
+import { v4 as uuidv4 } from 'uuid'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -37,10 +38,9 @@ const Login = () => {
   const naverLogin = (e) => {
     e.preventDefault()
     const naverClientId = import.meta.env.VITE_NAVER_LOGIN_CLIENT_ID
-    const naverStateString = import.meta.env.VITE_NAVER_LOGIN_CLIENT_SECRET
+    const naverStateString = uuidv4()
     const naverRedirectURL = import.meta.env.VITE_NAVER_LOGIN_REDIRECT_URL
-    const naverAuthURL = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&response_type=code&redirect_uri=${naverRedirectURL}&state=${naverStateString}`
-    window.open(naverAuthURL, '_blank', 'width=500,height=600,scrollbars=yes')
+    window.location.href = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&response_type=code&redirect_uri=${naverRedirectURL}&state=${naverStateString}`
   }
 
   // 카카오 로그인 함수

@@ -1,0 +1,37 @@
+import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import API from '../../utils/API'
+import NaverJoin from '../../components/consumer/socialLogin/NaverJoin'
+import ClipLoader from 'react-spinners/ClipLoader'
+
+const NaverLogin = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  // 가입하지 않은 회원에게 보일 가입 폼
+  const [showJoinForm, setShowJoinForm] = useState(false)
+
+  useEffect(() => {
+    const naverToken = searchParams.get('code')
+    const state = searchParams.get('state')
+    console.log(naverToken)
+    API.post('/auths/social')
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }, [])
+  return (
+    <div className='w-full min-h-[70vh]'>
+      {showJoinForm ? (
+        <NaverJoin />
+      ) : (
+        <div className='w-full min-h-[70vh] flex justify-center items-center'>
+          <ClipLoader size={150} color='#000' loading={!showJoinForm} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default NaverLogin
