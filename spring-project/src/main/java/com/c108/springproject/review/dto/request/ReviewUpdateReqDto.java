@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Getter
 @Builder
@@ -16,4 +17,5 @@ public class ReviewUpdateReqDto {
     private String content;
     private int rating;
     private int updatedUser;
+    private List<Long> keepImageIds;
 }

@@ -1,5 +1,6 @@
 package com.c108.springproject.review.controller;
 
+import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
@@ -7,9 +8,12 @@ import com.c108.springproject.review.dto.request.ReviewCreateReqDto;
 import com.c108.springproject.review.dto.request.ReviewUpdateReqDto;
 import com.c108.springproject.review.dto.response.*;
 import com.c108.springproject.review.service.ReviewService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,12 +29,25 @@ public class ReviewController {
     }
 
     // 리뷰 생성
-    @PostMapping("")
+    @PostMapping(value = "", consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE  // 이걸 추가
+    })
     public ResponseDto createReview(
             @PathVariable int itemNo,
-            @RequestBody ReviewCreateReqDto request) {
-        ReviewCreateResDto response = reviewService.createReview(request);
-        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_REVIEW, new DefaultResponse<>(response));
+            @RequestPart(value = "reviewCreateReqDto") String reviewCreateReqDtoString,
+            @RequestPart(value = "images", required = false)List<MultipartFile> images
+    ) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ReviewCreateReqDto reviewCreateReqDto = objectMapper.readValue(reviewCreateReqDtoString, ReviewCreateReqDto.class);
+            ReviewCreateResDto resDto = reviewService.createReview(reviewCreateReqDto, images);
+            return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_REVIEW, new DefaultResponse<>(resDto));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
+        }
+
     }
 
     // 아이템의 전체 리뷰 조회
@@ -60,13 +77,27 @@ public class ReviewController {
     }
 
     // 리뷰 수정
-    @PutMapping("/{reviewNo}")
+    @PutMapping(value = "/{reviewNo}", consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE
+    })
     public ResponseDto updateReview(
             @PathVariable int itemNo,
             @PathVariable Long reviewNo,
-            @RequestBody ReviewUpdateReqDto request) {
-        ReviewUpdateResDto response = reviewService.updateReview(reviewNo, request);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_REVIEW, new DefaultResponse<>(response));
+            @RequestPart(value = "reviewUpdateReqDto") String reviewUpdateReqDtoString,
+            @RequestPart(value = "images", required = false)List<MultipartFile> images
+    ) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ReviewUpdateReqDto request = objectMapper.readValue(reviewUpdateReqDtoString, ReviewUpdateReqDto.class);
+
+            ReviewUpdateResDto response = reviewService.updateReview(reviewNo, request, images);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_REVIEW, new DefaultResponse<>(response));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
+        }
+
     }
 
     // 리뷰 삭제

@@ -163,6 +163,7 @@ public enum ResponseCode {
     FILE_SIZE_EXCEED("FILE_SIZE_EXCEED", "파일 크기가 제한을 초과"),
     INVALID_FILE_URL("INVALID_FILE_URL", "파일 경로가 잘못되었습니다"),
     FAILED_DELETE_IMAGE("FAILED_DELETE_IMAGE", "이미지 삭제 실패"),
+    SUCCESS_DELETE_ITEM("SUCCESS_DELETE_ITEM", "아이템 삭제 성공"),
 
     ;
 
