@@ -48,8 +48,7 @@ const Login = () => {
     e.preventDefault()
     const kakaoClientId = import.meta.env.VITE_KAKAO_LOGIN_CLIENT_ID
     const kakaoRedirectURL = import.meta.env.VITE_KAKAO_LOGIN_REDIRECT_URL
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectURL}&response_type=code&prompt=login`
-    window.open(kakaoAuthUrl, '_blank', 'width=500,height=600,scrollbars=yes')
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectURL}&response_type=code&prompt=login`
   }
   return (
     <div className='min-h-[70vh] flex justify-center pt-16'>

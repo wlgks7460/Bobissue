@@ -11,6 +11,7 @@ import ConsumerPayment from '../pages/consumer/Payment'
 import ConsumerSearch from '../pages/consumer/Search'
 import ConsumerMypage from '../pages/consumer/MyPage'
 import ConsumerNaverLogin from '../pages/consumer/NaverLogin'
+import ConsumerKakaoLogin from '../pages/consumer/KakaoLogin'
 
 // 관리자 section
 
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
           {
             path: 'naver-login',
             element: <ConsumerNaverLogin />,
+          },
+          {
+            path: 'kakao-login',
+            element: <ConsumerKakaoLogin />,
           },
           {
             path: 'signup',
