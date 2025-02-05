@@ -23,9 +23,10 @@ export { default as Settleview } from './Settlement/View'
 export { default as Details } from './Settlement/Details'
 export { default as Accounts } from './Settlement/Accounts'
 // 판매자 정보 관련
+
 export { default as UpdatePassword } from './Account/Update-Password'
+export { default as Verification } from './Account/Verification'
 export { default as VenderInfo } from './Account/VenderInfo'
-export { default as VerificationForm } from './Account/VerificationForm'
 // 문의 관련
 export { default as InView } from './Inquiry/View'
 export { default as InList } from './Inquiry/List'

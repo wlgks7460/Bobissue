@@ -89,11 +89,7 @@ const VenderInfo = () => {
   return (
     <div>
       {isUpdatePage ? (
-        <UpdateInfo
-          userInfo={userInfo}
-          onClose={() => setIsUpdatePage(false)}
-          onSave={handleSave}
-        />
+        <UpdateInfo userInfo={userInfo} onSave={handleSave} />
       ) : (
         <Info userInfo={userInfo} />
       )}
