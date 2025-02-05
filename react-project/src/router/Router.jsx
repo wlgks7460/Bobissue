@@ -104,7 +104,6 @@ const router = createBrowserRouter([
         ],
       },
       //판매자 회원가입,로그인
-
       {
         path: 'seller/login',
         element: <Seller.Login />,
@@ -188,22 +187,16 @@ const router = createBrowserRouter([
           },
           //판매자정보 관련
           {
-            path: 'account/verification',
-            element: <Seller.VerificationForm />,
-          },
-          {
-            path: 'accont/update-password',
-            element: <Seller.UpdatePassword />,
-          },
-          //판매자 탈퇴
-
-          {
-            path: 'account/verification',
-            element: <Seller.AcVerificationForm />,
-          },
-          {
             path: 'account/vender/info',
             element: <Seller.VenderInfo />,
+          },
+          {
+            path: 'account/update-password',
+            element: <Seller.UpdatePassword />,
+          },
+          {
+            path: 'account/verification',
+            element: <Seller.Verification />,
           },
           //문의 관련
           {
@@ -242,6 +235,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+
       {
         // admin section
         path: 'admin',
