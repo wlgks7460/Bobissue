@@ -11,7 +11,6 @@ const NaverLogin = () => {
 
   useEffect(() => {
     const naverToken = searchParams.get('code')
-    const state = searchParams.get('state')
     console.log(naverToken)
     API.post('/auths/social')
       .then((res) => {
@@ -19,6 +18,11 @@ const NaverLogin = () => {
       })
       .catch((err) => {
         console.error(err)
+        if (err.response.status === 404) {
+          setShowJoinForm(true)
+        } else {
+          window.location.href = '/login'
+        }
       })
   }, [])
   return (
