@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import SearchBar from '../../components/consumer/common/SearchBar'
-import API from '../../utils/API'
-import MypageSidebar from '../../components/consumer/mypage/MypageSidebar'
+import SearchBar from '../../../components/consumer/common/SearchBar'
+import API from '../../../utils/API'
+import MypageSidebar from '../../../components/consumer/mypage/MypageSidebar'
+import { Outlet } from 'react-router-dom'
 
 const MyPage = () => {
   // 사용자 정보
@@ -11,7 +12,6 @@ const MyPage = () => {
     // mount
     API.get('/users/profile')
       .then((res) => {
-        console.log(res)
         setUserInfo(res.data.result.data)
       })
       .catch((err) => {
@@ -27,7 +27,9 @@ const MyPage = () => {
         <div className='w-[70rem] flex justify-between gap-10 my-10'>
           <MypageSidebar userInfo={userInfo} />
           {/* 마이페이지 컨테이너 */}
-          <div className='grow'>우라라랄</div>
+          <div className='grow h-auto border border-gray-300 rounded'>
+            <Outlet context={{ userNo: userInfo.userNo }} />
+          </div>
         </div>
       </div>
     </div>
