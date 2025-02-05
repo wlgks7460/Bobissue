@@ -91,8 +91,8 @@ public class ItemController {
     
     // 상품 삭제
     @DeleteMapping("/{itemNo}")
-    public ResponseEntity<Void> deleteItem(@PathVariable int itemNo) {
+    public ResponseDto deleteItem(@PathVariable int itemNo) {
         itemService.deleteItem(itemNo);
-        return ResponseEntity.noContent().build();
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_ITEM, new DefaultResponse<>(itemNo));
     }
 }

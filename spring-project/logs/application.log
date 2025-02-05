@@ -14948,3 +14948,407 @@ This generated password is for development use only. Your security configuration
 2025-02-05T21:40:53.096+09:00  INFO 29700 --- [spring-project] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-02-05T21:40:53.098+09:00  INFO 29700 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-02-05T21:40:53.102+09:00  INFO 29700 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-05T21:53:59.729+09:00  INFO 13832 --- [spring-project] [main] c.c.s.SpringProjectApplication           : Starting SpringProjectApplication using Java 17.0.12 with PID 13832 (C:\Users\82102\Desktop\250205\S12P11C108\spring-project\build\classes\java\main started by 82102 in C:\Users\82102\Desktop\250205\S12P11C108\spring-project)
+2025-02-05T21:53:59.732+09:00  INFO 13832 --- [spring-project] [main] c.c.s.SpringProjectApplication           : The following 1 profile is active: "aws"
+2025-02-05T21:54:00.528+09:00  INFO 13832 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-02-05T21:54:00.530+09:00  INFO 13832 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-05T21:54:00.784+09:00  INFO 13832 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 245 ms. Found 22 JPA repository interfaces.
+2025-02-05T21:54:00.794+09:00  INFO 13832 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-02-05T21:54:00.795+09:00  INFO 13832 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-02-05T21:54:00.854+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.admin.repository.AdminRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.855+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.answer.repository.AnswerRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.855+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.cast.repository.CastRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.855+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.coupon.repository.CouponRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.855+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.856+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.item.repository.ItemCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.856+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.item.repository.ItemRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.856+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.notification.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.856+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.DeliveryStatusRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.857+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderDetailRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.857+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.857+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderStatusRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.857+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.question.repository.QuestionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.857+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.recipe.repository.RecipeCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.858+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.recipe.repository.RecipeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.858+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReportCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.858+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReportRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.858+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReviewRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.858+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.seller.repository.CompanyRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.859+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.seller.repository.SellerRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.859+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.usercoupon.repository.UserCouponRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.859+09:00  INFO 13832 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.user.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:00.859+09:00  INFO 13832 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 56 ms. Found 0 Redis repository interfaces.
+2025-02-05T21:54:01.468+09:00  INFO 13832 --- [spring-project] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-05T21:54:01.478+09:00  INFO 13832 --- [spring-project] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-05T21:54:01.478+09:00  INFO 13832 --- [spring-project] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-02-05T21:54:01.536+09:00  INFO 13832 --- [spring-project] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-05T21:54:01.536+09:00  INFO 13832 --- [spring-project] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1762 ms
+2025-02-05T21:54:01.849+09:00  INFO 13832 --- [spring-project] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-05T21:54:01.895+09:00  INFO 13832 --- [spring-project] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-05T21:54:01.925+09:00  INFO 13832 --- [spring-project] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-02-05T21:54:02.202+09:00  INFO 13832 --- [spring-project] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-05T21:54:02.237+09:00  INFO 13832 --- [spring-project] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-05T21:54:02.908+09:00  INFO 13832 --- [spring-project] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6d45dd4
+2025-02-05T21:54:02.910+09:00  INFO 13832 --- [spring-project] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-05T21:54:02.960+09:00  WARN 13832 --- [spring-project] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-05T21:54:02.962+09:00  WARN 13832 --- [spring-project] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-02-05T21:54:02.979+09:00  INFO 13832 --- [spring-project] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-05T21:54:04.285+09:00  INFO 13832 --- [spring-project] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-05T21:54:05.307+09:00  INFO 13832 --- [spring-project] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05T21:54:06.313+09:00  INFO 13832 --- [spring-project] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-05T21:54:08.517+09:00  WARN 13832 --- [spring-project] [main] com.amazonaws.util.VersionInfoUtils      : The AWS SDK for Java 1.x entered maintenance mode starting July 31, 2024 and will reach end of support on December 31, 2025. For more information, see https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-1-x-is-in-maintenance-mode-effective-july-31-2024/
+You can print where on the file system the AWS SDK for Java 1.x core runtime is located by setting the AWS_JAVA_V1_PRINT_LOCATION environment variable or aws.java.v1.printLocation system property to 'true'.
+This message can be disabled by setting the AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT environment variable or aws.java.v1.disableDeprecationAnnouncement system property to 'true'.
+The AWS SDK for Java 1.x is being used here:
+at java.base/java.lang.Thread.getStackTrace(Thread.java:1621)
+at com.amazonaws.util.VersionInfoUtils.printDeprecationAnnouncement(VersionInfoUtils.java:81)
+at com.amazonaws.util.VersionInfoUtils.<clinit>(VersionInfoUtils.java:59)
+at com.amazonaws.internal.EC2ResourceFetcher.<clinit>(EC2ResourceFetcher.java:44)
+at com.amazonaws.auth.InstanceMetadataServiceCredentialsFetcher.<init>(InstanceMetadataServiceCredentialsFetcher.java:38)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:111)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:91)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:75)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<clinit>(InstanceProfileCredentialsProvider.java:58)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.initializeProvider(EC2ContainerCredentialsProviderWrapper.java:66)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.<init>(EC2ContainerCredentialsProviderWrapper.java:55)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<init>(DefaultAWSCredentialsProviderChain.java:60)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<clinit>(DefaultAWSCredentialsProviderChain.java:54)
+at com.amazonaws.services.s3.AmazonS3ClientBuilder.standard(AmazonS3ClientBuilder.java:46)
+at com.c108.springproject.global.s3.S3Config.amazonS3Client(S3Config.java:25)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$0.CGLIB$amazonS3Client$0(<generated>)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$FastClass$$1.invoke(<generated>)
+at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:258)
+at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:348)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$0.amazonS3Client(<generated>)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
+at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:489)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1357)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1187)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:336)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:289)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:334)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1573)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1519)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1377)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1214)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:336)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:289)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:334)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1122)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1093)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1030)
+at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+at com.c108.springproject.SpringProjectApplication.main(SpringProjectApplication.java:12)
+2025-02-05T21:54:09.868+09:00  WARN 13832 --- [spring-project] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-05T21:54:09.904+09:00  WARN 13832 --- [spring-project] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: fa5d145c-2587-4ffb-a66a-3c1b3fb6626c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-05T21:54:09.920+09:00  INFO 13832 --- [spring-project] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-02-05T21:54:09.999+09:00 DEBUG 13832 --- [spring-project] [main] o.s.w.s.s.s.WebSocketHandlerMapping      : Patterns [/ws] in 'webSocketHandlerMapping'
+2025-02-05T21:54:10.048+09:00 DEBUG 13832 --- [spring-project] [main] o.s.w.s.s.s.WebSocketHandlerMapping      : Patterns [/ws-stomp/**] in 'stompWebSocketHandlerMapping'
+2025-02-05T21:54:10.278+09:00 DEBUG 13832 --- [spring-project] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Or [Mvc [pattern='/api/**']] with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-02-05T21:54:10.308+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AdminController:
+	
+2025-02-05T21:54:10.309+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AnswerController:
+	
+2025-02-05T21:54:10.309+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AuthsController:
+	
+2025-02-05T21:54:10.309+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.CastController:
+	
+2025-02-05T21:54:10.312+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.ChatController:
+	{[MESSAGE],[/messages]}: send2(ChatMessageDto)
+2025-02-05T21:54:10.313+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.CouponController:
+	
+2025-02-05T21:54:10.313+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.i.c.ItemCategoryController:
+	
+2025-02-05T21:54:10.313+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.i.c.ItemController:
+	
+2025-02-05T21:54:10.313+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.n.c.NotificationController:
+	
+2025-02-05T21:54:10.314+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.o.c.OrderController:
+	
+2025-02-05T21:54:10.314+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.q.c.QuestionController:
+	
+2025-02-05T21:54:10.314+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.RecipeCategoryController:
+	
+2025-02-05T21:54:10.314+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.RecipeController:
+	
+2025-02-05T21:54:10.315+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.ReportController:
+	
+2025-02-05T21:54:10.315+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.ReviewController:
+	
+2025-02-05T21:54:10.315+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.s.c.SellerController:
+	
+2025-02-05T21:54:10.315+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.u.c.UserCouponController:
+	
+2025-02-05T21:54:10.315+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.u.c.UserController:
+	
+2025-02-05T21:54:10.316+09:00 DEBUG 13832 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-02-05T21:54:10.768+09:00  INFO 13832 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-02-05T21:54:10.769+09:00  INFO 13832 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4c1ea0ab]]
+2025-02-05T21:54:10.770+09:00  INFO 13832 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-02-05T21:54:10.800+09:00  INFO 13832 --- [spring-project] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-05T21:54:10.809+09:00  INFO 13832 --- [spring-project] [main] c.c.s.SpringProjectApplication           : Started SpringProjectApplication in 11.86 seconds (process running for 12.966)
+2025-02-05T21:54:45.193+09:00  INFO 13832 --- [spring-project] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-05T21:54:46.069+09:00  INFO 13832 --- [spring-project] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-05T21:54:46.184+09:00  INFO 13832 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-02-05T21:54:46.185+09:00  INFO 13832 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4c1ea0ab]]
+2025-02-05T21:54:46.185+09:00  INFO 13832 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-02-05T21:54:46.225+09:00  INFO 13832 --- [spring-project] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05T21:54:46.226+09:00  INFO 13832 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-05T21:54:46.329+09:00  INFO 13832 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-02-05T21:54:53.173+09:00  INFO 19372 --- [spring-project] [main] c.c.s.SpringProjectApplication           : Starting SpringProjectApplication using Java 17.0.12 with PID 19372 (C:\Users\82102\Desktop\250205\S12P11C108\spring-project\build\classes\java\main started by 82102 in C:\Users\82102\Desktop\250205\S12P11C108\spring-project)
+2025-02-05T21:54:53.175+09:00  INFO 19372 --- [spring-project] [main] c.c.s.SpringProjectApplication           : The following 1 profile is active: "aws"
+2025-02-05T21:54:54.087+09:00  INFO 19372 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-02-05T21:54:54.088+09:00  INFO 19372 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-02-05T21:54:54.377+09:00  INFO 19372 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 283 ms. Found 22 JPA repository interfaces.
+2025-02-05T21:54:54.388+09:00  INFO 19372 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-02-05T21:54:54.389+09:00  INFO 19372 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-02-05T21:54:54.450+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.admin.repository.AdminRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.451+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.answer.repository.AnswerRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.451+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.cast.repository.CastRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.452+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.coupon.repository.CouponRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.452+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.453+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.item.repository.ItemCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.453+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.item.repository.ItemRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.453+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.notification.repository.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.453+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.DeliveryStatusRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.453+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderDetailRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.453+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.454+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.order.repository.OrderStatusRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.454+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.question.repository.QuestionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.454+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.recipe.repository.RecipeCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.454+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.recipe.repository.RecipeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.454+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReportCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.454+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReportRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.455+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.review.repository.ReviewRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.455+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.seller.repository.CompanyRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.455+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.seller.repository.SellerRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.455+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.usercoupon.repository.UserCouponRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.455+09:00  INFO 19372 --- [spring-project] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.c108.springproject.user.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-02-05T21:54:54.455+09:00  INFO 19372 --- [spring-project] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59 ms. Found 0 Redis repository interfaces.
+2025-02-05T21:54:55.119+09:00  INFO 19372 --- [spring-project] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-05T21:54:55.129+09:00  INFO 19372 --- [spring-project] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-05T21:54:55.130+09:00  INFO 19372 --- [spring-project] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-02-05T21:54:55.192+09:00  INFO 19372 --- [spring-project] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-05T21:54:55.192+09:00  INFO 19372 --- [spring-project] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1983 ms
+2025-02-05T21:54:55.540+09:00  INFO 19372 --- [spring-project] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-02-05T21:54:55.590+09:00  INFO 19372 --- [spring-project] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-02-05T21:54:55.621+09:00  INFO 19372 --- [spring-project] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-02-05T21:54:55.855+09:00  INFO 19372 --- [spring-project] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-02-05T21:54:55.881+09:00  INFO 19372 --- [spring-project] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-02-05T21:54:56.205+09:00  INFO 19372 --- [spring-project] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5213b887
+2025-02-05T21:54:56.207+09:00  INFO 19372 --- [spring-project] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-02-05T21:54:56.254+09:00  WARN 19372 --- [spring-project] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-02-05T21:54:56.255+09:00  WARN 19372 --- [spring-project] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-02-05T21:54:56.270+09:00  INFO 19372 --- [spring-project] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-02-05T21:54:57.496+09:00  INFO 19372 --- [spring-project] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-02-05T21:54:58.269+09:00  INFO 19372 --- [spring-project] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05T21:54:58.778+09:00  INFO 19372 --- [spring-project] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-02-05T21:54:59.570+09:00  WARN 19372 --- [spring-project] [main] com.amazonaws.util.VersionInfoUtils      : The AWS SDK for Java 1.x entered maintenance mode starting July 31, 2024 and will reach end of support on December 31, 2025. For more information, see https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-1-x-is-in-maintenance-mode-effective-july-31-2024/
+You can print where on the file system the AWS SDK for Java 1.x core runtime is located by setting the AWS_JAVA_V1_PRINT_LOCATION environment variable or aws.java.v1.printLocation system property to 'true'.
+This message can be disabled by setting the AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT environment variable or aws.java.v1.disableDeprecationAnnouncement system property to 'true'.
+The AWS SDK for Java 1.x is being used here:
+at java.base/java.lang.Thread.getStackTrace(Thread.java:1621)
+at com.amazonaws.util.VersionInfoUtils.printDeprecationAnnouncement(VersionInfoUtils.java:81)
+at com.amazonaws.util.VersionInfoUtils.<clinit>(VersionInfoUtils.java:59)
+at com.amazonaws.internal.EC2ResourceFetcher.<clinit>(EC2ResourceFetcher.java:44)
+at com.amazonaws.auth.InstanceMetadataServiceCredentialsFetcher.<init>(InstanceMetadataServiceCredentialsFetcher.java:38)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:111)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:91)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:75)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<clinit>(InstanceProfileCredentialsProvider.java:58)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.initializeProvider(EC2ContainerCredentialsProviderWrapper.java:66)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.<init>(EC2ContainerCredentialsProviderWrapper.java:55)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<init>(DefaultAWSCredentialsProviderChain.java:60)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<clinit>(DefaultAWSCredentialsProviderChain.java:54)
+at com.amazonaws.services.s3.AmazonS3ClientBuilder.standard(AmazonS3ClientBuilder.java:46)
+at com.c108.springproject.global.s3.S3Config.amazonS3Client(S3Config.java:25)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$0.CGLIB$amazonS3Client$0(<generated>)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$FastClass$$1.invoke(<generated>)
+at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:258)
+at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:348)
+at com.c108.springproject.global.s3.S3Config$$SpringCGLIB$$0.amazonS3Client(<generated>)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
+at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:489)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1357)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1187)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:336)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:289)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:334)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1573)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1519)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1377)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1214)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:336)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:289)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:334)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1122)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1093)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1030)
+at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+at com.c108.springproject.SpringProjectApplication.main(SpringProjectApplication.java:12)
+2025-02-05T21:55:00.494+09:00  WARN 19372 --- [spring-project] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-02-05T21:55:00.533+09:00  WARN 19372 --- [spring-project] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 7dfeb918-dd3c-41a0-9167-dbaf02b5c1a6
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-02-05T21:55:00.547+09:00  INFO 19372 --- [spring-project] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-02-05T21:55:00.623+09:00 DEBUG 19372 --- [spring-project] [main] o.s.w.s.s.s.WebSocketHandlerMapping      : Patterns [/ws] in 'webSocketHandlerMapping'
+2025-02-05T21:55:00.666+09:00 DEBUG 19372 --- [spring-project] [main] o.s.w.s.s.s.WebSocketHandlerMapping      : Patterns [/ws-stomp/**] in 'stompWebSocketHandlerMapping'
+2025-02-05T21:55:00.883+09:00 DEBUG 19372 --- [spring-project] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Or [Mvc [pattern='/api/**']] with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-02-05T21:55:00.906+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AdminController:
+	
+2025-02-05T21:55:00.906+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AnswerController:
+	
+2025-02-05T21:55:00.906+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.a.c.AuthsController:
+	
+2025-02-05T21:55:00.907+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.CastController:
+	
+2025-02-05T21:55:00.912+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.ChatController:
+	{[MESSAGE],[/messages]}: send2(ChatMessageDto)
+2025-02-05T21:55:00.912+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.c.c.CouponController:
+	
+2025-02-05T21:55:00.913+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.i.c.ItemCategoryController:
+	
+2025-02-05T21:55:00.913+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.i.c.ItemController:
+	
+2025-02-05T21:55:00.913+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.n.c.NotificationController:
+	
+2025-02-05T21:55:00.913+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.o.c.OrderController:
+	
+2025-02-05T21:55:00.913+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.q.c.QuestionController:
+	
+2025-02-05T21:55:00.913+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.RecipeCategoryController:
+	
+2025-02-05T21:55:00.914+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.RecipeController:
+	
+2025-02-05T21:55:00.914+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.ReportController:
+	
+2025-02-05T21:55:00.914+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.r.c.ReviewController:
+	
+2025-02-05T21:55:00.914+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.s.c.SellerController:
+	
+2025-02-05T21:55:00.914+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.u.c.UserCouponController:
+	
+2025-02-05T21:55:00.914+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	c.c.s.u.c.UserController:
+	
+2025-02-05T21:55:00.915+09:00 DEBUG 19372 --- [spring-project] [main] .WebSocketAnnotationMethodMessageHandler : 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-02-05T21:55:01.253+09:00  INFO 19372 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-02-05T21:55:01.253+09:00  INFO 19372 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a405b0f]]
+2025-02-05T21:55:01.254+09:00  INFO 19372 --- [spring-project] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-02-05T21:55:01.274+09:00  INFO 19372 --- [spring-project] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-05T21:55:01.282+09:00  INFO 19372 --- [spring-project] [main] c.c.s.SpringProjectApplication           : Started SpringProjectApplication in 8.48 seconds (process running for 9.108)
+2025-02-05T21:55:28.323+09:00  INFO 19372 --- [spring-project] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-02-05T21:55:29.056+09:00  INFO 19372 --- [spring-project] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-02-05T21:55:29.180+09:00  INFO 19372 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-02-05T21:55:29.181+09:00  INFO 19372 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a405b0f]]
+2025-02-05T21:55:29.181+09:00  INFO 19372 --- [spring-project] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-02-05T21:55:29.217+09:00  INFO 19372 --- [spring-project] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-02-05T21:55:29.218+09:00  INFO 19372 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-02-05T21:55:29.324+09:00  INFO 19372 --- [spring-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
