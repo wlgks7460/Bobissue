@@ -20,11 +20,13 @@ public class Recipe extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int recipeNo;
 
-    @Column(nullable = false)
-    private Long imageNo;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<RecipeImage> images = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_no", nullable = false)
+    @JsonIgnore
     private RecipeCategory category;
 
     @Column(nullable = false, length = 100)
