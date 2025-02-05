@@ -1,12 +1,10 @@
 package com.c108.springproject.recipe.dto.response;
 import com.c108.springproject.recipe.domain.Recipe;
-import com.c108.springproject.recipe.dto.request.MaterialReqDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RecipeCreateResDto {
     private int recipeNo;
-    private Long imageNo;
+    private List<RecipeImageDto> images;
     private int categoryNo;
     private String categoryName;
     private String name;
@@ -30,7 +28,10 @@ public class RecipeCreateResDto {
     public static RecipeCreateResDto toDto(Recipe recipe) {
         return RecipeCreateResDto.builder()
                 .recipeNo(recipe.getRecipeNo())
-                .imageNo(recipe.getImageNo())
+                .images(recipe.getImages().stream()
+                        .map(image -> RecipeImageDto.toDto(image))
+                        .collect(Collectors.toList())
+                )
                 .categoryNo(recipe.getCategory().getCategoryNo())
                 .categoryName(recipe.getCategory().getName())
                 .name(recipe.getName())
