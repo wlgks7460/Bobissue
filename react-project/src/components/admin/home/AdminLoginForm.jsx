@@ -23,7 +23,7 @@ const AdminLoginForm = () => {
       console.log(response)
 
       const { access_token, refresh_token } = response.data.result.data
-      dispatch(userReducerActions.login({ access_token, refresh_token }))
+      dispatch(userReducerActions.login({ ...response.data.result.data, status: 'admin' }))
 
       navigate('/admin/home') // 로그인 성공 시 대시보드로 이동
     } catch (err) {
