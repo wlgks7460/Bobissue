@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import API from '../../../utils/API'
 import Breadcrumb from '../common/Breadcrumb'
-
+import { FaEdit, FaTrash } from 'react-icons/fa'
 const MemberDetail = () => {
   const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원상세정보' }]
-
   const { userNo } = useParams()
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
@@ -35,7 +34,6 @@ const MemberDetail = () => {
         const formattedData = {
           ...userData,
           birthday: formatDate(userData.birthday, true),
-          gender: userData.gender || '', // 기본값을 ''로 설정하여 강제 'M' 방지
         }
 
         setUser(formattedData)
@@ -99,121 +97,142 @@ const MemberDetail = () => {
   }
 
   return (
-    <div className='p-6'>
-      {/* Breadcrumb */}
-      <Breadcrumb paths={breadcrumbPaths} />
-      <h1 className='text-2xl font-bold mb-6'>회원 상세 정보</h1>
-      <div className='space-y-4'>
-        <p>
-          <strong>회원번호:</strong> {user.userNo}
-        </p>
-        <p>
-          <strong>이름: </strong>
-          {isEditing ? (
-            <input
-              type='text'
-              name='name'
-              value={formData.name}
-              onChange={handleChange}
-              className='w-full border border-gray-300 rounded-md px-3 py-2'
-            />
-          ) : (
-            user.name
-          )}
-        </p>
-        <p>
-          <strong>이메일: </strong>
-          {isEditing ? (
-            <input
-              type='email'
-              name='email'
-              value={formData.email}
-              onChange={handleChange}
-              className='w-full border border-gray-300 rounded-md px-3 py-2'
-            />
-          ) : (
-            user.email
-          )}
-        </p>
-        <p>
-          <strong>전화번호: </strong>
-          {isEditing ? (
-            <input
-              type='text'
-              name='phoneNumber'
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className='w-full border border-gray-300 rounded-md px-3 py-2'
-            />
-          ) : (
-            user.phoneNumber
-          )}
-        </p>
-        <p>
-          <strong>성별: </strong>
-          {isEditing ? (
-            <select
-              name='gender'
-              value={formData.gender || ''} // 기본값을 ''로 유지하여 강제 M 설정 방지
-              onChange={handleChange}
-              className='w-full border border-gray-300 rounded-md px-3 py-2'
-            >
-              <option value=''>성별 선택</option>
-              <option value='M'>남성</option>
-              <option value='F'>여성</option>
-            </select>
-          ) : user.gender === 'M' ? (
-            '남성'
-          ) : (
-            '여성'
-          )}
-        </p>
-        <p>
-          <strong>생년월일: </strong>
-          {isEditing ? (
-            <input
-              type='date'
-              name='birthday'
-              value={formData.birthday || ''} // 빈 값 허용하여 예외 방지
-              onChange={handleChange}
-              className='w-full border border-gray-300 rounded-md px-3 py-2'
-            />
-          ) : (
-            formatDate(user.birthday)
-          )}
-        </p>
-      </div>
+    <div className='p-6 flex '>
+      <div className='max-w-xl w-full'>
+        {/* Breadcrumb */}
+        <Breadcrumb paths={breadcrumbPaths} />
+        <h1 className='text-2xl font-bold mb-6'>회원 상세 정보</h1>
 
-      <div className='mt-6 flex space-x-4'>
-        {isEditing ? (
-          <>
-            <button
-              onClick={handleSave}
-              className='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 min-w-[80px]'
-            >
-              저장
-            </button>
+        {/* 정보 테이블 */}
+        <table className='table-auto w-full border border-gray-300'>
+          <tbody>
+            <tr>
+              <th className='border px-4 py-2 text-left bg-gray-100 w-1/3'>회원번호</th>
+              <td className='border px-4 py-2'>{user.userNo}</td>
+            </tr>
+            <tr>
+              <th className='border px-4 py-2 text-left bg-gray-100'>이름</th>
+              <td className='border px-4 py-2'>
+                {isEditing ? (
+                  <input
+                    type='text'
+                    name='name'
+                    value={formData.name}
+                    onChange={handleChange}
+                    className='w-full border border-gray-300 rounded-md px-3 py-2'
+                  />
+                ) : (
+                  user.name
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th className='border px-4 py-2 text-left bg-gray-100'>이메일</th>
+              <td className='border px-4 py-2'>
+                {isEditing ? (
+                  <input
+                    type='email'
+                    name='email'
+                    value={formData.email}
+                    onChange={handleChange}
+                    className='w-full border border-gray-300 rounded-md px-3 py-2'
+                  />
+                ) : (
+                  user.email
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th className='border px-4 py-2 text-left bg-gray-100'>전화번호</th>
+              <td className='border px-4 py-2'>
+                {isEditing ? (
+                  <input
+                    type='text'
+                    name='phoneNumber'
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    className='w-full border border-gray-300 rounded-md px-3 py-2'
+                  />
+                ) : (
+                  user.phoneNumber
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th className='border px-4 py-2 text-left bg-gray-100'>성별</th>
+              <td className='border px-4 py-2'>
+                {isEditing ? (
+                  <select
+                    name='gender'
+                    value={formData.gender || ''}
+                    onChange={handleChange}
+                    className='w-full border border-gray-300 rounded-md px-3 py-2'
+                  >
+                    <option value=''>성별 선택</option>
+                    <option value='M'>남성</option>
+                    <option value='F'>여성</option>
+                  </select>
+                ) : user.gender === 'M' ? (
+                  '남성'
+                ) : (
+                  '여성'
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th className='border px-4 py-2 text-left bg-gray-100'>생년월일</th>
+              <td className='border px-4 py-2'>
+                {isEditing ? (
+                  <input
+                    type='date'
+                    name='birthday'
+                    value={formData.birthday || ''}
+                    onChange={handleChange}
+                    className='w-full border border-gray-300 rounded-md px-3 py-2'
+                  />
+                ) : (
+                  formatDate(user.birthday)
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* 버튼 */}
+        <div className='mt-6 flex space-x-4'>
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                className='flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition'
+              >
+                <FaEdit />
+                저장
+              </button>
+              <button
+                onClick={handleDelete}
+                className='flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition'
+              >
+                <FaTrash />
+                회원 삭제
+              </button>
+              <button
+                onClick={handleEditToggle}
+                className='flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition'
+              >
+                취소
+              </button>
+            </>
+          ) : (
             <button
               onClick={handleEditToggle}
-              className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 min-w-[80px]'
+              className='flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition'
             >
-              취소
+              <FaEdit />
+              회원정보 수정
             </button>
-          </>
-        ) : (
-          <button
-            onClick={handleEditToggle}
-            className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 min-w-[80px]'
-          >
-            수정
-          </button>
-        )}
-        <button
-          onClick={handleDelete}
-          className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 min-w-[80px]'
-        >
-          삭제
-        </button>
+          )}
+        </div>
       </div>
     </div>
   )

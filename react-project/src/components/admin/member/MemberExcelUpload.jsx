@@ -7,14 +7,14 @@ const MemberExcelUpload = () => {
   const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원엑셀일괄등록' }]
   const [fileName, setFileName] = useState('')
   const [previewData, setPreviewData] = useState([])
-  const [errors, setErrors] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10 // 한 페이지당 표시할 데이터 수
 
   // 템플릿 다운로드 핸들러
   const downloadTemplate = () => {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('회원정보')
 
-    // 템플릿 컬럼 정의
     worksheet.columns = [
       { header: '이름', key: 'name', width: 20 },
       { header: '생년월일(YYYYMMDD)', key: 'birthday', width: 15 },
@@ -26,7 +26,6 @@ const MemberExcelUpload = () => {
       { header: '전화번호', key: 'phoneNumber', width: 15 },
     ]
 
-    // 예시 데이터 추가
     worksheet.addRow({
       name: '홍길동',
       birthday: '19900101',
@@ -76,11 +75,10 @@ const MemberExcelUpload = () => {
           rows.push(rowData)
         }
       })
-      setPreviewData(rows) // 전체 데이터 표시
+      setPreviewData(rows)
+      setCurrentPage(1) // 파일 업로드 시 첫 페이지로 초기화
     }
   }
-
-  // 데이터 제출 핸들러 (배치 등록)
   const handleSubmit = async () => {
     if (previewData.length === 0) {
       alert('업로드된 데이터가 없습니다.')
@@ -115,7 +113,7 @@ const MemberExcelUpload = () => {
         } catch (error) {
           console.error('회원 등록 오류:', error.response || error.message)
           failedCount += batch.length
-          failedUsers.push(...batch.map((user) => user.email)) // 실패한 이메일 저장
+          failedUsers.push(...batch.map((user) => user.email))
         }
       }
 
@@ -129,21 +127,24 @@ const MemberExcelUpload = () => {
     }
   }
 
+  // 페이지네이션 관련 계산
+  const indexOfLastUser = currentPage * itemsPerPage
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage
+  const currentUsers = previewData.slice(indexOfFirstUser, indexOfLastUser)
+  const totalPages = Math.ceil(previewData.length / itemsPerPage)
+
   return (
     <div className='p-6'>
-      {/* Breadcrumb */}
       <Breadcrumb paths={breadcrumbPaths} />
-      <h1 className='text-2xl font-bold mb-6'>회원엑셀일괄등록</h1>
+      <h1 className='text-2xl font-bold mb-6'>회원 엑셀 일괄등록</h1>
 
-      {/* 템플릿 다운로드 버튼 */}
       <button
         onClick={downloadTemplate}
         className='bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 mb-4'
       >
-        엑셀파일 템플릿 다운로드
+        엑셀 파일 템플릿 다운로드
       </button>
 
-      {/* 파일 업로드 입력 */}
       <div className='mb-6'>
         <input
           type='file'
@@ -154,10 +155,9 @@ const MemberExcelUpload = () => {
         {fileName && <p className='mt-2 text-sm text-gray-600'>선택된 파일: {fileName}</p>}
       </div>
 
-      {/* 미리보기 테이블 (전체 데이터 표시) */}
       {previewData.length > 0 && (
         <div className='mb-6'>
-          <h3 className='text-lg font-semibold mb-4'>미리보기 (전체 데이터 표시)</h3>
+          <h1 className='text-lg font-semibold mb-4'>| 선택된 파일 회원 데이터</h1>
           <table className='table-auto w-full border border-gray-300'>
             <thead>
               <tr>
@@ -171,28 +171,42 @@ const MemberExcelUpload = () => {
               </tr>
             </thead>
             <tbody>
-              {previewData.map((row, index) => (
+              {currentUsers.map((row, index) => (
                 <tr key={index}>
-                  <td className='border px-4 py-2'>{row.name}</td>
-                  <td className='border px-4 py-2'>{row.birthday}</td>
-                  <td className='border px-4 py-2'>{row.email}</td>
-                  <td className='border px-4 py-2'>{row.gender}</td>
-                  <td className='border px-4 py-2'>{row.height}</td>
-                  <td className='border px-4 py-2'>{row.weight}</td>
-                  <td className='border px-4 py-2'>{row.phoneNumber}</td>
+                  <td className='border px-4 py-2 text-center'>{row.name}</td>
+                  <td className='border px-4 py-2 text-center'>{row.birthday}</td>
+                  <td className='border px-4 py-2 text-center'>{row.email}</td>
+                  <td className='border px-4 py-2 text-center'>{row.gender}</td>
+                  <td className='border px-4 py-2 text-center'>{row.height}</td>
+                  <td className='border px-4 py-2 text-center'>{row.weight}</td>
+                  <td className='border px-4 py-2 text-center'>{row.phoneNumber}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {/* 페이지네이션 버튼 */}
+          <div className='flex justify-center mt-4 space-x-2'>
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentPage(index + 1)}
+                className={`px-3 py-1 border rounded-md ${
+                  currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* 제출 버튼 */}
       <button
-        onClick={handleSubmit}
+        onClick={handleSubmit} // 회원 등록 API 호출
         className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
       >
-        제출
+        회원 등록
       </button>
     </div>
   )

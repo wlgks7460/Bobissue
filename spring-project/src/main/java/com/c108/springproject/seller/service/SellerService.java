@@ -4,10 +4,12 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.dto.SellerDto;
+import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
 import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +73,13 @@ public class SellerService {
         seller.delete();
     }
 
+    @Transactional
+    public SellerProfiltResDto sellerProfile(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return SellerProfiltResDto.toDto(seller);
+    }
 
 
 }
