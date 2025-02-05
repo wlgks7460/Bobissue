@@ -7,23 +7,26 @@ import ClipLoader from 'react-spinners/ClipLoader'
 const NaverLogin = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   // 가입하지 않은 회원에게 보일 가입 폼
-  const [showJoinForm, setShowJoinForm] = useState(false)
+  const [showJoinForm, setShowJoinForm] = useState(true)
 
   useEffect(() => {
     const naverToken = searchParams.get('code')
+    const payload = {
+      accessToken: naverToken,
+    }
     console.log(naverToken)
-    API.post('/auths/social')
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.error(err)
-        if (err.response.status === 404) {
-          setShowJoinForm(true)
-        } else {
-          window.location.href = '/login'
-        }
-      })
+    // API.post('/auths/social', payload)
+    //   .then((res) => {
+    //     console.log(res)
+    //   })
+    //   .catch((err) => {
+    //     console.error(err)
+    //     if (err.response.status === 404) {
+    //       setShowJoinForm(true)
+    //     } else {
+    //       window.location.href = '/login'
+    //     }
+    //   })
   }, [])
   return (
     <div className='w-full min-h-[70vh]'>
