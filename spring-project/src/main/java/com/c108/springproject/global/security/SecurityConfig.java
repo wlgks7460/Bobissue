@@ -59,7 +59,11 @@ public class SecurityConfig {
                                 "/api/item/{itemNo}/review/{reviewNo}",
                                 "/api/cast",
                                 "/api/cast/{castNo}",
-                                "/api/cast/{chatNo}/chat"
+                                "/api/cast/{chatNo}/chat",
+                                "/api/recipecategory",
+                                "/api/recipecategory/{recipeCategoryNo}",
+                                "/api/recipe",
+                                "/api/recipe/{recipeNo}"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

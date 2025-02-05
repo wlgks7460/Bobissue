@@ -14,7 +14,6 @@ const API = axios.create({
 API.interceptors.request.use((config) => {
   const { accessToken, refreshToken } = store.getState().user
   if (accessToken) {
-    console.log('토큰 있음', accessToken)
     config.headers.Authorization = `Bearer ${accessToken}`
     config.headers['refreshToken'] = `Bearer ${refreshToken}`
   }

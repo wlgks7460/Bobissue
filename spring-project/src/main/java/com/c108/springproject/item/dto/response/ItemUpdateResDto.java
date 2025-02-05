@@ -1,7 +1,6 @@
 package com.c108.springproject.item.dto.response;
 
 import com.c108.springproject.item.domain.Item;
-import com.c108.springproject.item.dto.response.ItemCategoryResDto;
 import lombok.*;
 import lombok.AllArgsConstructor;
 

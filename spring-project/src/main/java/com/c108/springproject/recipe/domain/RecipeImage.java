@@ -1,29 +1,28 @@
-package com.c108.springproject.item.domain;
+package com.c108.springproject.recipe.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.lang.reflect.Type;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "itemimage")
+@Table(name = "recipeimage")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemImage extends BaseEntity {
-
+public class RecipeImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long imageNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_no")
+    @JoinColumn(name = "recipe_no")
     @JsonIgnore
-    private Item item;
+    private Recipe recipe;
 
     @Column(nullable = false, length = 255)
     private String originalName;

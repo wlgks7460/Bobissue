@@ -5,6 +5,7 @@ import kakaoLogo from '../../assets/consumer/kakaoLoginLogo.png'
 import API from '../../utils/API'
 import { useDispatch } from 'react-redux'
 import { userReducerActions } from '../../redux/reducers/userSlice'
+import { v4 as uuidv4 } from 'uuid'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -34,10 +35,21 @@ const Login = () => {
   }
 
   // 네이버 로그인 함수
-  const naverLogin = () => {}
+  const naverLogin = (e) => {
+    e.preventDefault()
+    const naverClientId = import.meta.env.VITE_NAVER_LOGIN_CLIENT_ID
+    const naverStateString = uuidv4()
+    const naverRedirectURL = import.meta.env.VITE_NAVER_LOGIN_REDIRECT_URL
+    window.location.href = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&response_type=code&redirect_uri=${naverRedirectURL}&state=${naverStateString}`
+  }
 
   // 카카오 로그인 함수
-  const kakaoLogin = () => {}
+  const kakaoLogin = (e) => {
+    e.preventDefault()
+    const kakaoClientId = import.meta.env.VITE_KAKAO_LOGIN_CLIENT_ID
+    const kakaoRedirectURL = import.meta.env.VITE_KAKAO_LOGIN_REDIRECT_URL
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectURL}&response_type=code&prompt=login`
+  }
   return (
     <div className='min-h-[70vh] flex justify-center pt-16'>
       <div className='flex flex-col'>
