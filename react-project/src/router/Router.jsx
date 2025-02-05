@@ -247,6 +247,10 @@ const router = createBrowserRouter([
             path: 'inquiries/replylist',
             element: <Seller.InReplylist />,
           },
+          {
+            path: 'inquiries/report',
+            element: <Seller.Report />,
+          },
           //판매통계 관련
           {
             path: 'stats/performance',

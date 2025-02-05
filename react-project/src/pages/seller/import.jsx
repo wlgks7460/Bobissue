@@ -28,6 +28,7 @@ export { default as UpdatePassword } from './Account/Update-Password'
 export { default as Verification } from './Account/Verification'
 export { default as VenderInfo } from './Account/VenderInfo'
 // 문의 관련
+export { default as Report } from './Inquiry/Report'
 export { default as InView } from './Inquiry/View'
 export { default as InList } from './Inquiry/List'
 export { default as InReply } from './Inquiry/Reply'
