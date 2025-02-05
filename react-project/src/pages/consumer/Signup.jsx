@@ -101,7 +101,9 @@ const Signup = () => {
         name: nameRef.current.value,
         birthday: birthRef.current.value.split('-').join(''),
         phoneNumber: phoneRef.current.value,
-        address: `(${postcode}) ${address} ${addressDetailRef.current.value}`,
+        postcode: postcode,
+        address: address,
+        addressDetail: addressDetailRef.current.value,
         gender: gender,
         height: Number(heightRef.current.value) || 0.0,
         weight: Number(weightRef.current.value) || 0.0,
@@ -119,7 +121,7 @@ const Signup = () => {
   useEffect(() => {
     // mount
     const tempDate = new Date()
-    const year = tempDate.getFullYear()
+    const year = tempDate.getFullYear() - 14
     const month = `${tempDate.getMonth() + 1}`.padStart(2, '0')
     const date = tempDate.getDate().toString().padStart(2, '0')
     setToday(`${year}-${month}-${date}`)
