@@ -140,8 +140,8 @@ const router = createBrowserRouter([
             element: <Seller.Register />,
           },
           {
-            path: 'products/inquiry',
-            element: <Seller.Inquiry />,
+            path: 'products/Search',
+            element: <Seller.Search />,
           },
 
           //주문 배송 관련
