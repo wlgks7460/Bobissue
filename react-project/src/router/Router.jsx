@@ -10,6 +10,7 @@ import ConsumerCart from '../pages/consumer/Cart'
 import ConsumerPayment from '../pages/consumer/Payment'
 import ConsumerSearch from '../pages/consumer/Search'
 import ConsumerMypage from '../pages/consumer/MyPage'
+import ConsumerNaverLogin from '../pages/consumer/NaverLogin'
 
 // 관리자 section
 
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
           {
             path: 'login',
             element: <ConsumerLogin />,
+          },
+          {
+            path: 'naver-login',
+            element: <ConsumerNaverLogin />,
           },
           {
             path: 'signup',
