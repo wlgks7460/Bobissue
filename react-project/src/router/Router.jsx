@@ -3,15 +3,19 @@ import RootPage from '../pages/RootPage'
 // 이용자 section
 import ConsumerRoot from '../pages/consumer/ConsumerRoot'
 import ConsumerHome from '../pages/consumer/Home'
+// 이용자 로그인, 회원가입
 import ConsumerLogin from '../pages/consumer/Login'
 import ConsumerSignup from '../pages/consumer/Signup'
+import ConsumerNaverLogin from '../pages/consumer/NaverLogin'
+import ConsumerKakaoLogin from '../pages/consumer/KakaoLogin'
+// 이용자 상품 구매
 import ConsumerItemDetail from '../pages/consumer/ItemDetail'
 import ConsumerCart from '../pages/consumer/Cart'
 import ConsumerPayment from '../pages/consumer/Payment'
 import ConsumerSearch from '../pages/consumer/Search'
-import ConsumerMypage from '../pages/consumer/MyPage'
-import ConsumerNaverLogin from '../pages/consumer/NaverLogin'
-import ConsumerKakaoLogin from '../pages/consumer/KakaoLogin'
+// 이용자 마이페이지지
+import ConsumerMypage from '../pages/consumer/mypage/MyPage'
+import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
 
 // 관리자 section
 
@@ -94,6 +98,15 @@ const router = createBrowserRouter([
           {
             path: 'mypage',
             element: <ConsumerMypage />,
+            children: [
+              {
+                path: 'order',
+              },
+              {
+                path: 'info',
+                element: <ConsumerMyPageInfo />,
+              },
+            ],
           },
           {
             path: 'search',

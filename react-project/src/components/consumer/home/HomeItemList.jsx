@@ -7,9 +7,17 @@ const HomeItemList = ({ category }) => {
   // 카테고리에 맞는 상품 불러오기
   useEffect(() => {
     // mount
-    API.get(`/categories/${category.categoryNo}`).then((res) => {
-      setItems(res.data.result.data.items)
-    })
+    API.get(`/categories/${category.categoryNo}`)
+      .then((res) => {
+        console.log(res)
+        const result = res.data.result?.data.items
+        if (result) {
+          setItems(result)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
     // unmount
     return () => {}
   }, [])
