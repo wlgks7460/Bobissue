@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import dummyData from '../Dummy/Inquiries/inquiry' // 더미 데이터 import
 import { useNavigate, useLocation } from 'react-router-dom'
+import ReplyForm from './Form/Reply' // ReplyForm import
+import API from '@/utils/API' // API import
 
 const Inquiry = () => {
   const location = useLocation()
@@ -8,20 +10,31 @@ const Inquiry = () => {
   const id = queryParams.get('id')
   const [inquiry, setInquiry] = useState(null) // Inquiry 상태
   const navigate = useNavigate()
+  const debug_mode = true // debug_mode 설정
 
   useEffect(() => {
     console.log(id)
-    // id에 해당하는 데이터를 검색하여 상태 업데이트
+
     const fetchInquiry = () => {
-      const numericId = parseInt(id, 10) // 문자열 id를 숫자로 변환
-      const foundInquiry = dummyData.find((item) => item.id === numericId) // ID로 데이터 검색
-      setInquiry(foundInquiry)
+      if (debug_mode) {
+        // 더미 데이터에서 해당 ID의 문의 가져오기
+        const numericId = parseInt(id, 10)
+        const foundInquiry = dummyData.find((item) => item.id === numericId)
+        setInquiry(foundInquiry)
+      } else {
+        // API에서 문의 데이터 가져오기
+        API.get(`/questions/seller/${localStorage.getItem('seller_email')}/inquiry/${id}`)
+          .then((response) => {
+            setInquiry(response.data)
+          })
+          .catch((error) => console.error('문의 불러오기 실패:', error))
+      }
     }
+
     fetchInquiry()
-  }, [id]) // id가 변경될 때마다 useEffect 실행
+  }, [id, debug_mode])
 
   const handleClickReply = () => {
-    // 쿼리 스트링을 사용하여 데이터를 전달
     const queryParams = new URLSearchParams({
       id: inquiry.id,
       buyerId: inquiry.buyerId,
@@ -31,16 +44,16 @@ const Inquiry = () => {
   }
 
   const handleClickDelete = () => {
-    if (window.confirm('삭제하시겠겠습니까?')) {
+    if (window.confirm('삭제하시겠습니까?')) {
       alert('삭제되었습니다.')
-      navigate('/seller/inquiries/list') // 리스트 페이지로 이동
+      navigate('/seller/inquiries/list')
     } else {
       alert('삭제가 취소되었습니다.')
     }
   }
 
   const handleClickReport = () => {
-    navigate(`/seller/inquiries/report?id=${id}`) // report 페이지로 이동
+    navigate(`/seller/inquiries/report?id=${id}`)
   }
 
   return (
@@ -84,6 +97,9 @@ const Inquiry = () => {
               🚨 신고
             </button>
           </div>
+
+          {/* 답변 폼 추가 */}
+          <ReplyForm inquiryId={id} debug_mode={debug_mode} />
         </div>
       ) : (
         <p className='text-center text-gray-500'>게시글을 불러오는 중...</p>

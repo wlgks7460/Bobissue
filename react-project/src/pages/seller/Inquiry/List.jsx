@@ -1,20 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import API from '@/utils/API' // Import API
 import dummyData from '../Dummy/Inquiries/Inquiry'
 
 const View = () => {
   const [inquiries, setInquiries] = useState([]) // 전체 문의 목록
   const [filteredInquiries, setFilteredInquiries] = useState([]) // 필터링된 문의 목록
-  const [answerFilter, setAnswerFilter] = useState('all') // 답변 여부 필터 ('all', 'unanswered', 'answered')
+  const [answerFilter, setAnswerFilter] = useState('all') // 답변 여부 필터
   const [typeFilter, setTypeFilter] = useState('all') // 문의 유형 필터
-
   const navigate = useNavigate() // 네비게이션 훅
+  const debug_mode = true // 디버그 모드 설정
+  const sellerEmail = localStorage.getItem('userId') // 판매자 이메일 가져오기
 
-  // 더미 데이터 설정
+  // 데이터 로딩
   useEffect(() => {
-    setInquiries(dummyData)
-    setFilteredInquiries(dummyData) // 초기값 설정
-  }, [])
+    if (debug_mode) {
+      setInquiries(dummyData)
+      setFilteredInquiries(dummyData)
+    } else {
+      API.get(`/questions/seller/${sellerEmail}`)
+        .then((response) => {
+          setInquiries(response.data)
+          setFilteredInquiries(response.data)
+        })
+        .catch((error) => console.error('Error fetching inquiries:', error))
+    }
+  }, [debug_mode, sellerEmail])
 
   // 필터 변경 핸들러 (답변 여부)
   const handleAnswerFilterChange = (e) => {

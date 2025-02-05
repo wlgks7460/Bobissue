@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import API from '@/utils/API' // API 호출용
 
 const Reply = () => {
   const location = useLocation() // 현재 URL 정보
   const navigate = useNavigate()
+  const debug_mode = true // 디버그 모드 설정
 
   // 쿼리 스트링에서 데이터 추출
   const queryParams = new URLSearchParams(location.search)
@@ -12,20 +14,41 @@ const Reply = () => {
   const title = queryParams.get('title') // ?title=문의제목
 
   const [replyContent, setReplyContent] = useState('')
+  const sellerEmail = localStorage.getItem('seller_email')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // 메시지를 구매자에게 전송하는 로직
-    const message = `문의번호 '${inquiryId}'로 답변이 등록되었습니다.`
-    console.log(`구매자 ID: ${buyerId}, 메시지: ${message}`)
+    if (!replyContent.trim()) {
+      alert('답변을 입력해주세요.')
+      return
+    }
+
+    if (debug_mode) {
+      console.log(
+        `디버그 모드: 답변이 전송되었습니다. (문의번호: ${inquiryId}, 내용: ${replyContent})`,
+      )
+      alert('디버그 모드: 답변이 전송되었습니다.')
+    } else {
+      try {
+        await API.post(`/questions/reply/${inquiryId}`, {
+          sellerEmail,
+          buyerId,
+          reply: replyContent,
+        })
+
+        alert('답변이 성공적으로 전송되었습니다.')
+      } catch (error) {
+        console.error('답변 전송 실패:', error)
+        alert('답변 전송에 실패했습니다.')
+      }
+    }
 
     // 메시지 전송 후 페이지 이동
     navigate(`/seller/inquiries/view?id=${inquiryId}`)
   }
 
   const handleCancel = () => {
-    // 취소 버튼 클릭 시 이전 페이지로 이동
     navigate(-1) // 브라우저 히스토리에서 뒤로 가기
   }
 
