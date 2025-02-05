@@ -42,10 +42,17 @@ API.interceptors.response.use(
     // refreshToken이 만료되었다면 로그아웃
     if (err.response) {
       const { status, data } = err.response
+      const loginStatus = store.getState().user.status
       if (status === 401 || status === 403) {
         console.warn('인증 실패: 로그아웃')
         store.dispatch(userReducerActions.logout())
-        window.location.href = '/login'
+        if (loginStatus === 'seller') {
+          window.location.href = '/seller'
+        } else if (loginStatus === 'admin') {
+          window.location.href = '/admin'
+        } else {
+          window.location.href = '/login'
+        }
       }
     }
     return Promise.reject(err)

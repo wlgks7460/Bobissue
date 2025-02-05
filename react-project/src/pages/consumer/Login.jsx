@@ -25,7 +25,7 @@ const Login = () => {
     }
     API.post('/auths/user-login', payload)
       .then((res) => {
-        dispatch(userReducerActions.login(res.data.result.data))
+        dispatch(userReducerActions.login({ ...res.data.result.data, status: 'consumer' }))
         navigate('/')
       })
       .catch((err) => {
