@@ -18,24 +18,18 @@ const PasswordVerification = () => {
     e.preventDefault()
 
     try {
-      const response = await API.get('/api/verify-password', {
-        headers: {
-          Authorization: `Bearer ${password}`, // 비밀번호를 Authorization 헤더로 전달
-        },
+      const response = await API.post('/api/verify-password', {
+        password, // ✅ POST 요청 body로 비밀번호 전송
       })
 
       if (response.status !== 200) {
         throw new Error('비밀번호 인증에 실패했습니다.')
       }
 
-      // 인증 성공 시 토큰 저장
       const { token } = response.data
       localStorage.setItem('VerificationToken', token)
-
-      // 인증 성공 후 지정된 경로로 이동
       navigate(redirectPath)
     } catch (err) {
-      navigate(redirectPath)
       setError(err.message)
     }
   }
