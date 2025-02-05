@@ -18,11 +18,7 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className='w-[1400px] min-h-screen flex flex-col'>
-      <div className='bg-blue-500 text-white p-4'>
-        <h1 className='text-xl font-bold'>Dashboard</h1>
-      </div>
-
+    <div className='w-[1200px] p-6 bg-blue-100'>
       <div className='flex flex-1'>
         {/* Main Content */}
         <div className='flex-1 p-6 bg-blue-100'>
@@ -31,7 +27,7 @@ const Dashboard = () => {
             <div className='bg-white p-6 rounded-lg border flex flex-col justify-between'>
               <h3 className='text-lg font-semibold'>상품 관리</h3>
               <p className='text-sm text-gray-600'>등록된 상품을 확인하고 관리하세요.</p>
-              <Link to='products/inquiry' className='mt-4'>
+              <Link to='products/search' className='mt-4'>
                 <button className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'>
                   상품 목록 보기
                 </button>

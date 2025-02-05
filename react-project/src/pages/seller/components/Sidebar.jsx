@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             icon: <FaBox className='inline-block mr-2' />,
             links: [
               { to: 'products/register', text: '상품 등록하기' },
-              { to: 'products/inquiry', text: '상품 조회하기' },
+              { to: 'products/Search', text: '상품 조회하기' },
             ],
           },
           {

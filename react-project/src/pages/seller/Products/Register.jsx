@@ -14,8 +14,8 @@ const Register = () => {
   const [previewImage, setPreviewImage] = useState(null)
   const [description, setDescription] = useState('') // 상품 설명 -> description
   const [expiredAt, setExpiredAt] = useState('') // 판매 종료일 -> expiredAt
-  const [createdUser, setCreatedUser] = useState(localStorage.getItem('SELLER_AUTH_TOKEN')) // createdUser -> 인증된 사용자 (토큰)
-  const [updatedUser, setUpdatedUser] = useState(localStorage.getItem('SELLER_AUTH_TOKEN')) // updatedUser -> 인증된 사용자 (토큰)
+  const [createdUser, setCreatedUser] = useState(localStorage.getItem('access_token')) // createdUser -> 인증된 사용자 (토큰)
+  const [updatedUser, setUpdatedUser] = useState(localStorage.getItem('access_token')) // updatedUser -> 인증된 사용자 (토큰)
 
   const navigate = useNavigate()
 
@@ -30,7 +30,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!localStorage.getItem('SELLER_AUTH_TOKEN')) {
+    if (!localStorage.getItem('access_token')) {
       alert('상품 등록을 위한 인증이 필요합니다.')
       return
     }

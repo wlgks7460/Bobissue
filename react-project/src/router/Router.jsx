@@ -149,8 +149,8 @@ const router = createBrowserRouter([
             element: <Seller.Register />,
           },
           {
-            path: 'products/inquiry',
-            element: <Seller.Inquiry />,
+            path: 'products/Search',
+            element: <Seller.Search />,
           },
 
           //주문 배송 관련
@@ -196,6 +196,15 @@ const router = createBrowserRouter([
             element: <Seller.Accounts />,
           },
           //판매자정보 관련
+          {
+            path: 'account/verification',
+            element: <Seller.VerificationForm />,
+          },
+          {
+            path: 'account/update-password',
+            element: <Seller.UpdatePassword />,
+          },
+          //판매자 탈퇴
           {
             path: 'account/vender/info',
             element: <Seller.VenderInfo />,

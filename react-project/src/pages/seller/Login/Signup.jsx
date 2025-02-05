@@ -16,7 +16,7 @@ const SellerRegisterPage = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const SELLER_AUTH_TOKEN = localStorage.getItem('SELLER_AUTH_TOKEN')
+    const SELLER_AUTH_TOKEN = localStorage.getItem('access_token')
     if (SELLER_AUTH_TOKEN) {
       navigate('/seller')
     }
