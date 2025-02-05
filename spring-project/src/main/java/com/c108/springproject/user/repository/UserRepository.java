@@ -13,17 +13,16 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    @Query("SELECT u FROM User u WHERE u.delYn = 'N'")
-    List<User> findAllActiveUsers();
+    List<User> findByDelYn(String delYn);
+
+    Optional<String> findStatusByUserNo(int userNo);
+
+    Optional<User> findByEmailAndDelYnAndStatus(String email, String delYn, String status);
+
+    boolean existsByEmail(String email);
 
     @Modifying
-    @Transactional
     @Query("UPDATE User u SET u.status = CASE WHEN u.status = 'Y' THEN 'N' ELSE 'Y' END WHERE u.userNo = :userNo")
-    void changeUserStatus(int userNo);
-
-    @Query("SELECT u.status FROM User u WHERE u.userNo = :userNo")
-    String findUserStatus(int userNo);
-
-    Optional<User> findByEmail(String user);
+    String changeUserStatus(int userNo);
 
 }

@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum ResponseCode {
 
 
-    SUCCESS_CREATE_QUESTION("SUCCESS_CREATE_QUESTION","문의글 작성 완료"),
-    SUCCESS_CREATE_USER("SUCCESS_CREATE_USER","회원가입 완료"),
+    SUCCESS_CREATE_QUESTION("SUCCESS_CREATE_QUESTION", "문의글 작성 완료"),
+    SUCCESS_CREATE_USER("SUCCESS_CREATE_USER", "회원가입 완료"),
     SUCCESS_FOUND_USER_LIST("SUCCESS_FOUND_USER_LIST", "회원 리스트 조회 완료"),
     SUCCESS_FIND_ALL_QUESTION("SUCCESS_FIND_ALL_QUESTION", "전체 문의글 조회 완료"),
     SUCCESS_FIND_QUESTION("SUCCESS_FIND_QUESTION", "문의글 조회 완료"),
@@ -163,6 +163,7 @@ public enum ResponseCode {
     FILE_SIZE_EXCEED("FILE_SIZE_EXCEED", "파일 크기가 제한을 초과했습니다"),
     SUCCESS_SOCIAL_LOGIN("SUCCESS_SOCIAL_LOGIN", "소셜 로그인 성공"),
     FAILED_SOCIAL_LOGIN("FAILED_SOCIAL_LOGIN", "소셜 로그인 실패"),
+    INVALID_TOKEN("INVALID_TOKEN", "유효하지 않은 토큰"),
 
     ;
 
