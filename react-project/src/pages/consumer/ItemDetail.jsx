@@ -27,7 +27,7 @@ const ItemDetail = () => {
       // 1개보다 작게 되는것 막기
       setItemCount(1)
     } else if (e.target.value > item.stock) {
-      // 재고보다 많아지는 것것막기
+      // 재고보다 많아지는 것 막기
       setItemCount(item.stock)
     } else {
       setItemCount(e.target.value)

@@ -1,0 +1,28 @@
+import React from 'react'
+import ItemCard from '../common/ItemCard'
+
+const CategoryItemList = ({ items }) => {
+  return (
+    <div>
+      {/* 정렬 */}
+      <div className='flex justify-between mb-3'>
+        <div>
+          <span>총 {items.length}건</span>
+        </div>
+        <div className='flex gap-3 text-sm text-gray-600'>
+          <button>신상품</button>
+          <button>낮은 가격순</button>
+          <button>높은 가격순</button>
+        </div>
+      </div>
+      {/* 아이템 컨테이너 */}
+      <div className='grid grid-cols-4 gap-3'>
+        {items?.map((v) => (
+          <ItemCard key={v.itemNo} item={v} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default CategoryItemList

@@ -124,7 +124,7 @@ const router = createBrowserRouter([
             element: <ConsumerSearch />,
           },
           {
-            path: 'categry/:categoyNo',
+            path: 'category/:categoryNo',
             element: <ConsumerCategory />,
           },
           {
