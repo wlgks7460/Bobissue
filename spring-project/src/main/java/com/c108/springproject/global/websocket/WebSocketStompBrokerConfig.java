@@ -28,7 +28,7 @@ public class WebSocketStompBrokerConfig implements WebSocketMessageBrokerConfigu
         //addEndpoint : 클라이언트가 WebSocket에 연결하기 위한 엔드포이트를 "/ws-stomp"로 설정
         //withSockJs : webSocket을 지원하지 않는 브라우저에서도 SockJS를 통해 webSocket 기능을 사용할 수 있게 합니다.
         registry
-                .addEndpoint("/ws-stomp")
+                .addEndpoint("/ws/chat")
                 .setAllowedOrigins("*")
                 .withSockJS();
     }
