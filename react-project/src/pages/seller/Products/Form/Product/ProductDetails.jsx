@@ -2,7 +2,7 @@ import React from 'react'
 
 const ProductDetails = ({ product, setProduct }) => {
   return (
-    <div className='mt-5 p-2 border border-black bg-gray-50 space-y-2'>
+    <div className='w-[700px] mt-5 p-2 border border-black bg-gray-50 space-y-2'>
       <h2 className='text-[16px] font-bold'>상품 주요 정보</h2>
 
       {/* 가격 입력 */}
@@ -40,7 +40,7 @@ const ProductDetails = ({ product, setProduct }) => {
 
       {/* 상품 설명 */}
       <textarea
-        className='w-[800px] mt-2 p-3 border h-[100px]'
+        className='w-[600px] mt-2 p-3 border border-black h-[100px]'
         value={product.description}
         onChange={(e) => setProduct((prev) => ({ ...prev, description: e.target.value }))}
         placeholder='상품의 특징을 입력해주세요'

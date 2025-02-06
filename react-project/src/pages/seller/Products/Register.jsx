@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import API from '@/utils/API'
 import ProductInfo from './Form/Product/ProductInfo'
@@ -7,6 +7,8 @@ import ProductDetails from './Form/Product/ProductDetails'
 import ProductDate from './Form/Product/ProductDate'
 
 const Register = () => {
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const [product, setProduct] = useState({
     name: '',
     categoryNo: '',
@@ -14,31 +16,40 @@ const Register = () => {
     price: '',
     salePrice: '',
     stock: '',
-    images: [], // API 응답의 images 배열을 그대로 사용
+    images: [], // API 응답과 동일한 구조 유지
     description: '',
     expiredAt: '',
   })
-  const [createdUser] = useState(localStorage.getItem('access_token'))
 
-  const navigate = useNavigate()
+  const [createdUser, setCreatedUser] = useState(null)
 
-  // 이미지 업로드 핸들러 (API 응답 구조 반영, 중복 검사)
+  // 🔍 토큰 확인 및 인증이 없으면 로그인 페이지로 이동
+  useEffect(() => {
+    const token = localStorage.getItem('access_token')
+    if (!token) {
+      alert('상품 등록을 위해 로그인해주세요.')
+      navigate('/login')
+    } else {
+      setCreatedUser(token)
+    }
+  }, [navigate])
+
+  // 📸 이미지 업로드 핸들러 (미리보기 추가)
   const handleImageUpload = (event) => {
     const file = event.target.files[0]
     if (file) {
-      // 중복 검사 (이미 API에서 받은 이미지 또는 업로드한 파일이 있는지 확인)
+      // 중복 검사 (이미 동일한 파일이 있는지 확인)
       const isDuplicate = product.images.some((img) => img.originalName === file.name)
-
       if (isDuplicate) {
         alert('이미 업로드된 이미지입니다.')
         return
       }
 
-      // 새 이미지 객체 추가 (previewUrl 제거, API 응답과 동일한 구조 유지)
+      // 새로운 이미지 객체 생성
       const newImage = {
-        imageNo: null, // 새 이미지에는 ID 없음
-        imageUrl: '', // API에서 저장된 URL을 받을 때까지 비워둠
-        originalName: file.name, // 원본 파일 이름 저장
+        imageNo: null, // 새 이미지이므로 ID 없음
+        imageUrl: URL.createObjectURL(file), // 미리보기용 URL 생성
+        originalName: file.name,
         file: file, // 실제 파일 저장
       }
 
@@ -49,14 +60,9 @@ const Register = () => {
     }
   }
 
-  // 상품 등록 핸들러 (API 응답 구조 반영)
+  // ✅ 상품 등록 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    if (!localStorage.getItem('access_token')) {
-      alert('상품 등록을 위한 인증이 필요합니다.')
-      return
-    }
 
     if (
       !product.name ||
@@ -73,6 +79,8 @@ const Register = () => {
       return
     }
 
+    setLoading(true) // 로딩 상태 활성화
+
     try {
       const formData = new FormData()
       formData.append('name', product.name)
@@ -85,10 +93,10 @@ const Register = () => {
       formData.append('description', product.description)
       formData.append('createdUser', createdUser)
 
-      // API 응답과 동일한 images 배열을 유지
+      // 이미지 파일 추가
       product.images.forEach((img) => {
         if (img.file) {
-          formData.append('productImages', img.file) // 새 이미지 업로드
+          formData.append('productImages', img.file) // 파일 업로드
         }
       })
 
@@ -99,7 +107,6 @@ const Register = () => {
       if (response.data.status === 'CREATED') {
         const registeredProduct = response.data.result.data
 
-        // API 응답을 기반으로 product 상태 업데이트
         setProduct({
           name: registeredProduct.name,
           categoryNo: registeredProduct.category.categoryNo,
@@ -107,32 +114,40 @@ const Register = () => {
           price: registeredProduct.price,
           salePrice: registeredProduct.salePrice,
           stock: registeredProduct.stock,
-          images: registeredProduct.images, // API에서 받은 이미지 그대로 저장
+          images: registeredProduct.images, // API 응답 이미지 그대로 저장
           description: registeredProduct.description,
           expiredAt: registeredProduct.expiredAt,
         })
 
-        alert('상품이 등록되었습니다!')
+        alert('✅ 상품이 성공적으로 등록되었습니다!')
         navigate('/seller/products/inquiry')
       } else {
-        alert('상품 등록에 실패했습니다.')
+        alert(`❌ 상품 등록 실패: ${response.data.message || '알 수 없는 오류'}`)
       }
     } catch (error) {
-      console.error('저장 실패:', error)
-      alert('저장 중 오류가 발생했습니다.')
+      console.error('상품 저장 실패:', error)
+      alert('❌ 저장 중 오류가 발생했습니다.')
+    } finally {
+      setLoading(false) // 로딩 종료
     }
   }
 
   return (
     <div className='p-6'>
-      <h1 className='font-bold text-[32px] mb-10'>상품 등록</h1>
+      <h1 className='font-bold text-[32px] mb-10'>🛍️ 상품 등록</h1>
       <form onSubmit={handleSubmit}>
-        <ProductInfo product={product} setProduct={setProduct} />
         <ProductImage product={product} setProduct={setProduct} />
+        <ProductInfo product={product} setProduct={setProduct} />
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
-        <button type='submit' className='mt-5 p-3 bg-blue-500 text-white border-black'>
-          상품 등록
+        <button
+          type='submit'
+          className={`mt-5 p-3 text-white border-black ${
+            loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+          }`}
+          disabled={loading}
+        >
+          {loading ? '등록 중...' : '상품 등록'}
         </button>
       </form>
     </div>
