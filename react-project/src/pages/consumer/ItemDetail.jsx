@@ -12,6 +12,8 @@ const ItemDetail = () => {
   const [item, setItem] = useState({})
   // 상품 수량 정보
   const [itemCount, setItemCount] = useState(1)
+  // 상품 이미지 url
+  const [itemImg, setItemImg] = useState('')
 
   // 상품 가격 , 찍기
   const addComma = (price) => {
@@ -73,6 +75,9 @@ const ItemDetail = () => {
       .then((res) => {
         console.log(res)
         setItem(res.data.result.data)
+        if (res.data.result.data.images.length > 0) {
+          setItemImg(res.data.result.data.images[0].imageUrl)
+        }
       })
       .catch((err) => {
         console.error(err)
@@ -89,8 +94,8 @@ const ItemDetail = () => {
           {/* 상품 카드 */}
           <div className='flex gap-10'>
             <img
-              src=''
-              alt=''
+              src={itemImg}
+              alt={`${item.name} 이미지`}
               className='w-[400px] h-[500px] flex-none border border-gray-300 rounded'
             />
             {/* 상품 정보 */}

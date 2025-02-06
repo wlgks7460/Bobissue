@@ -211,7 +211,7 @@ const router = createBrowserRouter([
           //판매자정보 관련
           {
             path: 'account/verification',
-            element: <Seller.VerificationForm />,
+            element: <Seller.Verification />,
           },
           {
             path: 'account/update-password',
