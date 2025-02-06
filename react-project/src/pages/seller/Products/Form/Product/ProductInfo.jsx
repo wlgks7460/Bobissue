@@ -19,7 +19,7 @@ const ProductInfo = ({ product, setProduct }) => {
   }, [])
 
   return (
-    <div className='border-black border p-2'>
+    <div className='w-[700px] border-black border p-2'>
       <h2 className='text-[16px] font-bold'>상품 기본 정보</h2>
 
       {/* 상품명 입력 */}

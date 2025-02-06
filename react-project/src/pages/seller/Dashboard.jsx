@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 
 const Dashboard = () => {
   const [hasPendingProduct, setHasPendingProduct] = useState(false)
+  const [hasBusinessRegistrationCertificate, setHasBusinessRegistrationCertificate] =
+    useState(false)
 
   useEffect(() => {
     const fetchPendingProduct = async () => {
@@ -14,7 +16,20 @@ const Dashboard = () => {
         console.error('Error fetching pending product status:', error)
       }
     }
+
+    // 🔹 사업자 등록증 상태 확인 (추후 API 연동 가능)
+    const fetchBusinessRegistration = async () => {
+      try {
+        const response = await fetch('/api/business/status') // 예제 API 엔드포인트
+        const data = await response.json()
+        setHasBusinessRegistrationCertificate(data.isRegistered)
+      } catch (error) {
+        console.error('Error fetching business registration status:', error)
+      }
+    }
+
     fetchPendingProduct()
+    fetchBusinessRegistration()
   }, [])
 
   return (
@@ -54,26 +69,51 @@ const Dashboard = () => {
           </div>
 
           {/* 상품 등록 및 이어서 등록 */}
-          <div className='bg-white p-6 rounded-lg flex justify-between items-center mb-6 border'>
-            {hasPendingProduct ? (
-              <div>
-                <p className='text-lg font-semibold'>이어서 상품 등록하기</p>
-                <Link to='products/register'>
-                  <button className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 mt-2'>
-                    이어서 등록하기
-                  </button>
-                </Link>
-              </div>
-            ) : (
-              <div>
-                <p className='text-lg font-semibold'>새로운 상품을 등록하세요</p>
-                <Link to='products/register'>
-                  <button className='bg-yellow-500 text-white px-6 py-2 rounded-md hover:bg-yellow-600 mt-2'>
-                    상품 등록하기
-                  </button>
-                </Link>
-              </div>
-            )}
+          <div className='grid grid-cols-2 space-x-6'>
+            <div className='bg-white p-5 rounded-lg flex  justify-between items-center mb-6 border'>
+              {hasPendingProduct ? (
+                <div>
+                  <p className='text-lg font-semibold'>이어서 상품 등록하기</p>
+                  <Link to='products/register'>
+                    <button className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 mt-2'>
+                      이어서 등록하기
+                    </button>
+                  </Link>
+                </div>
+              ) : (
+                <div>
+                  <p className='text-lg font-semibold'>새로운 상품을 등록하세요</p>
+                  <Link to='products/register'>
+                    <button className='bg-yellow-500 text-white px-6 py-2 rounded-md hover:bg-yellow-600 mt-2'>
+                      상품 등록하기
+                    </button>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* 🔹 사업자 등록증 여부에 따른 버튼 표시 */}
+            <div className='bg-white p-6 rounded-lg flex justify-between items-center mb-6 border'>
+              {hasBusinessRegistrationCertificate ? (
+                <div>
+                  <p className='text-lg font-semibold'>라이브 커머스를 신청하세요</p>
+                  <Link to='live/apply'>
+                    <button className='bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 mt-2'>
+                      라이브 신청하기
+                    </button>
+                  </Link>
+                </div>
+              ) : (
+                <div>
+                  <p className='text-lg font-semibold'>사업자 등록증을 먼저 등록하세요</p>
+                  <Link to='business/register'>
+                    <button className='bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 mt-2'>
+                      사업자 등록하기
+                    </button>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* 추가 정보 섹션 */}
