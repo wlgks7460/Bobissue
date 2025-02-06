@@ -127,7 +127,6 @@ const MemberInfoManagement = () => {
     <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>회원정보관리</h1>
-
       <section className='mb-6'>
         <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
         <div className='flex items-center space-x-4'>
@@ -154,7 +153,7 @@ const MemberInfoManagement = () => {
           </div>
         </div>
       </section>
-
+      bg-blue-500 text-white px-4 py-2 rounded-md
       {isLoading ? (
         <div className='text-center'>로딩 중...</div>
       ) : currentUsers.length > 0 ? (
