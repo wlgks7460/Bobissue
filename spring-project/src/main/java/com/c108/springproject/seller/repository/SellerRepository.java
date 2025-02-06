@@ -17,10 +17,8 @@ public interface SellerRepository extends JpaRepository<Seller, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Seller s SET s.status = CASE WHEN s.status = 'Y' THEN 'N' ELSE 'Y' END WHERE s.sellerNo = :sellerNo")
     void changeSellerStatus(int sellerNo);
 
-    @Query("SELECT s.status FROM Seller s WHERE s.sellerNo = :sellerNo")
     String findSellerStatus(int sellerNo);
 
     Optional<Seller> findBySellerNo(int sellerNo);
