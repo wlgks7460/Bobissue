@@ -31,7 +31,8 @@ const Reply = () => {
       alert('디버그 모드: 답변이 전송되었습니다.')
     } else {
       try {
-        await API.post(`/questions/reply/${inquiryId}`, {
+        const question_no = inquiryId
+        await API.post(`/questions/${question_no}/answer`, {
           sellerEmail,
           buyerId,
           reply: replyContent,

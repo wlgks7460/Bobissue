@@ -85,8 +85,8 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             label: '라이브 커머스',
             icon: <FaVideo className='inline-block mr-2' />,
             links: [
-              { to: 'live/home', text: '라이브 홈' },
-              { to: 'live/apply', text: '라이브 신청하기' },
+              { to: 'lives/home', text: '라이브 홈' },
+              { to: 'lives/apply', text: '라이브 신청하기' },
             ],
           },
           {

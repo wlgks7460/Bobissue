@@ -22,7 +22,7 @@ const PasswordVerification = () => {
     }
 
     try {
-      const response = await API.post('/api/verify-password', {
+      const response = await API.post('/check-password', {
         password, // ✅ POST 요청 body로 비밀번호 전송
       })
 

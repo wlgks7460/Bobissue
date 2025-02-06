@@ -39,3 +39,5 @@ export { default as Products } from './stats/Products'
 // 공지사항 관련
 export { default as Notices } from './Notices/Notices'
 export { default as NoticesView } from './Notices/View'
+//라이브커머스
+export { default as LiveHome } from './Lives/LiveHome'

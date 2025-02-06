@@ -18,7 +18,7 @@ const InquiryList = () => {
       setInquiries(dummyData)
       setFilteredInquiries(dummyData)
     } else {
-      API.get(`/questions/seller/${sellerEmail}`)
+      API.get(`/questions/`)
         .then((response) => {
           setInquiries(response.data)
           setFilteredInquiries(response.data)
