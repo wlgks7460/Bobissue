@@ -31,6 +31,7 @@ API.interceptors.response.use(
         userReducerActions.login({
           access_token: newAccessToken,
           refresh_token: store.getState().user.refreshToken,
+          status: store.getState().user.status,
         }),
       )
       console.log('토큰 갱신됨')
@@ -38,23 +39,27 @@ API.interceptors.response.use(
     return res
   },
   (err) => {
-    // refreshToken이 만료되었다면 로그아웃
-    if (err.response) {
-      const { status, data } = err.response
-      const loginStatus = store.getState().user.status
-      if (status === 401 || status === 403) {
-        console.warn('인증 실패: 로그아웃')
-        store.dispatch(userReducerActions.logout())
-        if (loginStatus === 'seller') {
-          window.location.href = '/seller'
-        } else if (loginStatus === 'admin') {
-          window.location.href = '/admin'
-        } else {
-          window.location.href = '/login'
+    // 로그인이 되어있을 경우에만
+    if (store.getState().user.isAuthenticated) {
+      // refreshToken이 만료되었다면 로그아웃
+      if (err.response) {
+        const { status, data } = err.response
+        const loginStatus = store.getState().user.status
+        if (status === 401 || status === 403 || status === 409) {
+          console.warn('인증 실패: 로그아웃')
+          store.dispatch(userReducerActions.logout())
+          alert('인증이 만료되었습니다.')
+          if (loginStatus === 'seller') {
+            window.location.href = '/seller'
+          } else if (loginStatus === 'admin') {
+            window.location.href = '/admin'
+          } else {
+            window.location.href = '/login'
+          }
         }
       }
+      return Promise.reject(err)
     }
-    return Promise.reject(err)
   },
 )
 

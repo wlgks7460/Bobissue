@@ -60,7 +60,11 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
             <div className='h-full flex flex-col'>
               {/* 상품 카드 */}
               <div className='flex gap-3'>
-                <img src='' alt='' className='w-[100px] h-[100px] flex-none bg-gray-400 rounded' />
+                <img
+                  src={item.images[0].imageUrl}
+                  alt={`${item.name} 이미지`}
+                  className='w-[100px] h-[100px] flex-none bg-gray-400 rounded'
+                />
                 {/* 상품 정보 */}
                 <div className=' grow flex flex-col justify-between'>
                   <p className='text-lg font-semibold'>{item.name}</p> {/* 상품명 */}
@@ -70,7 +74,7 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
                     <p className='text-lg'>
                       {/* 할인율 */}
                       <span className='text-red-500 me-5'>
-                        {((item.price - item.salePrice) / item.price) * 100}%
+                        {Math.round(((item.price - item.salePrice) / item.price) * 100)}%
                       </span>
                       {/* 판매가 */}
                       {addComma(item.salePrice)}원

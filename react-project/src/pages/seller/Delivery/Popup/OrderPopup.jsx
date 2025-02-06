@@ -1,83 +1,64 @@
-import React from 'react'
-import './OrderPopup.css' // 스타일 파일 추가
+import React, { useEffect } from 'react'
 
 const OrderPopup = ({ order, onClose }) => {
-  //order 정보 받아옴옴
-  const productDetails = {
-    orderId: 1001,
-    productId: 501,
-    productName: order.productName,
-    category: '전자기기',
-    price: 120000,
-    stock: 50,
-    isSoldOut: false,
-    orderQuantity: 2,
-    shipFromName: '서울 물류 센터',
-    shipFromAddress: '서울특별시 강남구 테헤란로 123',
-    shipFromContact: '02-123-4567',
-    returnToName: '서울 반품 센터',
-  }
+  useEffect(() => {
+    // ESC 키를 누르면 팝업 닫기
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [onClose])
 
   return (
-    <div className='popup-overlay'>
-      <div className='popup-container'>
-        <button className='popup-close' onClick={onClose}>
-          닫기
+    <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-30'>
+      <div className='bg-white w-full max-w-md md:max-w-lg rounded-lg shadow-lg p-6 relative'>
+        {/* 닫기 버튼 */}
+        <button
+          className='absolute top-3 right-3 text-gray-500 hover:text-gray-800'
+          onClick={onClose}
+        >
+          ✖
         </button>
-        <h2>상품 상세 정보</h2>
 
-        {/* 상품 정보 */}
-        <div className='popup-section'>
-          <h3>상품 정보</h3>
-          <div className='popup-info'>
-            <label>상품 ID</label>
-            <p>{productDetails.productId}</p>
-          </div>
-          <div className='popup-info'>
-            <label>상품명</label>
-            <p>{productDetails.productName}</p>
-          </div>
-          <div className='popup-info'>
-            <label>카테고리</label>
-            <p>{productDetails.category}</p>
-          </div>
-          <div className='popup-info'>
-            <label>판매가</label>
-            <p>{productDetails.price.toLocaleString()}원</p>
-          </div>
-          <div className='popup-info'>
-            <label>판매 가능 수량</label>
-            <p>{productDetails.stock}</p>
-          </div>
-          <div className='popup-info'>
-            <label>품절 여부</label>
-            <p>{productDetails.isSoldOut ? '품절' : '판매 중'}</p>
-          </div>
-          <div className='popup-info'>
-            <label>판매 수량</label>
-            <p>{order.quantity}</p>
+        {/* 타이틀 */}
+        <h2 className='text-2xl font-bold mb-4 text-center'>📦 상품 상세 정보</h2>
+
+        {/* 상품 정보 섹션 */}
+        <div className='mb-4'>
+          <h3 className='text-lg font-semibold border-b pb-2 mb-2'>🛍️ 상품 정보</h3>
+          <div className='space-y-2'>
+            <p>
+              <span className='font-semibold'>상품명:</span> {order.productName}
+            </p>
+            <p>
+              <span className='font-semibold'>옵션:</span> {order.option}
+            </p>
+            <p>
+              <span className='font-semibold'>판매가:</span>{' '}
+              {order.price ? `${order.price.toLocaleString()}원` : '가격 정보 없음'}
+            </p>
+            <p>
+              <span className='font-semibold'>수량:</span> {order.quantity} 개
+            </p>
+            <p>
+              <span className='font-semibold'>상태:</span> {order.status}
+            </p>
           </div>
         </div>
 
-        {/* 배송 정보 */}
-        <div className='popup-section'>
-          <h3>배송 정보</h3>
-          <div className='popup-info'>
-            <label>출고지명</label>
-            <p>{productDetails.shipFromName}</p>
-          </div>
-          <div className='popup-info'>
-            <label>출고지 주소</label>
-            <p>{productDetails.shipFromAddress}</p>
-          </div>
-          <div className='popup-info'>
-            <label>출고지 연락처</label>
-            <p>{productDetails.shipFromContact}</p>
-          </div>
-          <div className='popup-info'>
-            <label>반품지명</label>
-            <p>{productDetails.returnToName}</p>
-          </div>
+        {/* 닫기 버튼 */}
+        <div className='flex justify-center'>
+          <button
+            onClick={onClose}
+            className='w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-200'
+          >
+            닫기
+          </button>
         </div>
       </div>
     </div>

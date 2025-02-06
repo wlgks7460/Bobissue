@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,19 @@ public class SellerService {
 
     @Transactional
     public List<SellerDto> findSellerList() {
+
+//        List<Seller> sellers = sellerRepository.findAll();
+//        List<SellerDto> sellerDtos = new ArrayList<>();
+//
+//        try{
+//            for(Seller seller : sellers){
+//                sellerDtos.add(new SellerDto(seller));
+//            }
+//            return sellerDtos;
+//        }catch (BobIssueException e){
+//            throw new BobIssueException(ResponseCode.SELLER_NOT_FOUND);
+//        }
+
 
         return sellerRepository.findAllActiveSellers().stream()
                 .map(SellerDto::new)
