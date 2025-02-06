@@ -2,6 +2,7 @@ package com.c108.springproject.address.service;
 
 import com.c108.springproject.address.domain.Address;
 import com.c108.springproject.address.dto.AddressReqDto;
+import com.c108.springproject.address.dto.AddressResDto;
 import com.c108.springproject.address.repository.AddressRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
@@ -42,6 +43,12 @@ public class AddressService {
         }catch (BobIssueException e){
             throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_ADDRESS);
         }
+    }
+
+    @Transactional
+    public AddressResDto findAddressByNo(int addressNo) {
+        Address address = addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
+        return AddressResDto.toDto(address);
     }
 
 }
