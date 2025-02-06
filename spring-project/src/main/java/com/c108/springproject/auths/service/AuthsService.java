@@ -4,7 +4,9 @@ import com.c108.springproject.admin.domain.Admin;
 import com.c108.springproject.admin.repository.AdminRepository;
 import com.c108.springproject.auths.dto.request.LoginReqDto;
 import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.global.jwt.JwtTokenProvider;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshToken;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository;
@@ -13,13 +15,18 @@ import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.http.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +56,7 @@ public class AuthsService {
     @Transactional
     public Map<String, String> userLogin(LoginReqDto loginReqDto){
         try{
-            User user = userRepository.findByEmail(loginReqDto.getEmail()).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+            User user = userRepository.findByEmailAndDelYnAndStatus(loginReqDto.getEmail(),"N", "Y").orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
 
             if(!loginReqDto.getPassword().equals(user.getPassword())){
                 throw new BobIssueException(ResponseCode.FAIL_PASSWORD_CHECK);
@@ -144,7 +151,7 @@ public class AuthsService {
         System.out.println(role);
 
         if(role.equals("USER")){
-            User user = userRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+            User user = userRepository.findByEmailAndDelYnAndStatus(email, "N", "Y").orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
             RefreshToken refreshToken = refreshTokenRepository.findByUserEmail(user.getEmail()).orElseThrow(
                     () -> new BobIssueException(ResponseCode.REFRESH_TOKEN_NOT_FOUND)
             );
@@ -176,5 +183,46 @@ public class AuthsService {
         return email;
 
     }
+
+
+    @Transactional
+    public User findByEmail(String email) {
+        return userRepository.findByEmailAndDelYnAndStatus(email,"N", "Y").orElseThrow(()->new BobIssueException(ResponseCode.NOT_FOUND_USER));
+    }
+
+    @Transactional
+    public String getOauthUser(String provider, String accessToken) {
+
+        if (provider.equals("naver")) {
+            String url = "https://openapi.naver.com/v1/nid/me";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + accessToken);
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            ResponseEntity<Map> response = new RestTemplate().exchange(url, HttpMethod.GET, entity, Map.class);
+
+            Map<String, Object> responseBody = (Map<String, Object>) response.getBody().get("response");
+
+            return (String) responseBody.get("email");
+
+        } else if (provider.equals("kakao")) {
+            String url = "https://kapi.kakao.com/v2/user/me";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + accessToken);
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            ResponseEntity<Map> response = new RestTemplate().exchange(url, HttpMethod.GET, entity, Map.class);
+
+            Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
+            Map<String, Object> kakaoAccount = (Map<String, Object>) responseBody.get("kakao_account");
+
+            return (String) kakaoAccount.get("email");
+        }
+
+        return null;
+    }
+
 
 }

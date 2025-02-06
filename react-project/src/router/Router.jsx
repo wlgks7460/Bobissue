@@ -64,6 +64,9 @@ import NoticePage from '../pages/admin/cs/NoticePage'
 import FAQPage from '../pages/admin/cs/FAQPage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
+
+//채팅 - 웹소캣 관련 페이지(test용)
+import ChatRoomPage from '../pages/admin/chat/ChatPage'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -211,7 +214,7 @@ const router = createBrowserRouter([
           //판매자정보 관련
           {
             path: 'account/verification',
-            element: <Seller.VerificationForm />,
+            element: <Seller.Verification />,
           },
           {
             path: 'account/update-password',
@@ -483,6 +486,11 @@ const router = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        // 웹소캣 연결 테스트용 채팅방 라우터
+        path: '/chat',
+        element: <ChatRoomPage />,
       },
     ],
   },

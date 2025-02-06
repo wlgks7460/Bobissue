@@ -12,6 +12,13 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
+    // 웹소켓 관련 추가 코드
+    define: {
+      global: 'window', // ✅ global 변수를 window로 설정
+    },
+    optimizeDeps: {
+      exclude: ['@stomp/stompjs'], // ✅ 번들링에서 제외하여 직접 사용하도록 설정
+    },
     server: {
       // proxy: {
       //   '/api': {

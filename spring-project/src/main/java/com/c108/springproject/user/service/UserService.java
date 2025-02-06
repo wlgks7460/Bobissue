@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +52,6 @@ public class UserService {
                 .gender(signUpDto.getGender())
                 .height(signUpDto.getHeight())
                 .weight(signUpDto.getWeight())
-                .loginType(signUpDto.getLoginType())
                 .phoneNumber(signUpDto.getPhoneNumber())
                 .status("Y")
                 .build();
@@ -62,7 +62,7 @@ public class UserService {
     @Transactional
     public UserResDto userProfile(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email).orElseThrow(
+        User user = userRepository.findByEmailAndDelYnAndStatus(email,"N" ,"Y").orElseThrow(
                 () -> new BobIssueException(ResponseCode.USER_NOT_FOUND)
         );
         return UserResDto.toDto(user);
@@ -71,7 +71,7 @@ public class UserService {
     @Transactional
     public List<UserResDto> findUserList() {
 
-        return userRepository.findAllActiveUsers().stream()
+        return userRepository.findByDelYn("N").stream()
                 .map(UserResDto::new)
                 .collect(Collectors.toList());
     }
@@ -101,6 +101,11 @@ public class UserService {
                 new BobIssueException(ResponseCode.FAILED_DELETE_USER));
 
         user.delete();
+    }
+
+    @Transactional
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmailAndDelYnAndStatus(email,"N", "Y");
     }
 
 

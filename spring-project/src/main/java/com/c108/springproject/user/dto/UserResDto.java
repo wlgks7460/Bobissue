@@ -34,7 +34,6 @@ public class UserResDto {
         this.gender = user.getGender();
         this.height = user.getHeight();
         this.weight = user.getWeight();
-        this.loginType = user.getLoginType();
         this.phoneNumber = user.getPhoneNumber();
         this.createAt = user.getCreatedAt();
         this.updateAt = user.getUpdatedAt();
@@ -51,7 +50,6 @@ public class UserResDto {
                 .email(user.getEmail())
                 .height(user.getHeight())
                 .weight(user.getWeight())
-                .loginType(user.getLoginType())
                 .phoneNumber(user.getPhoneNumber())
                 .createAt(user.getCreatedAt())
                 .updateAt(user.getUpdatedAt())
