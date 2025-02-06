@@ -6,10 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import jakarta.persistence.Id;
 
 @Entity
@@ -59,6 +56,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private int gradeNo;
 
+    @Column
+    @Setter
+    private int baseAddress;
+
     public void updateUser(UserDto userDto) {
         this.name = userDto.getName();
         this.email = userDto.getEmail();
@@ -66,5 +67,6 @@ public class User extends BaseEntity {
         this.weight = userDto.getWeight();
         this.phoneNumber = userDto.getPhoneNumber();
     }
+
 
 }

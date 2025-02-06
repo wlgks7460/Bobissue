@@ -177,6 +177,10 @@ public enum ResponseCode {
     SUCCESS_DELETE_ADDRESS("SUCCESS_DELETE_ADDRESS", "주소 삭제 성공"),
     FAILED_DELETE_ADDRESS("FAILED_DELETE_ADDRESS", "주소 삭제 실패"),
     SUCCESS_DELETE_ITEM("SUCCESS_DELETE_ITEM", "아이템 삭제 성공"),
+    SUCCESS_SET_BASE_ADDRESS("SUCCESS_SET_BASE_ADDRESS", "기본 배송지 설정 성공"),
+    FAILED_SET_BASE_ADDRESS("FAILED_SET_BASE_ADDRESS", "기본 배송지 설정 실패"),
+    SUCCESS_FIND_BASE_ADDRESS("SUCCESS_FIND_BASE_ADDRESS", "기본 배송지 조회 성공"),
+    NOT_FOUND_BASE_ADDRESS("NOT_FOUND_BASE_ADDRESS", "기본 배송지 조회 실패"),
     ;
 
     private final String code;
