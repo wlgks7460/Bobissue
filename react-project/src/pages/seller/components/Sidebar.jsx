@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             icon: <FaBox className='inline-block mr-2' />,
             links: [
               { to: 'products/register', text: '상품 등록하기' },
-              { to: 'products/inquiry', text: '상품 조회하기' },
+              { to: 'products/Search', text: '상품 조회하기' },
             ],
           },
           {
@@ -66,8 +66,9 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             label: '판매자 정보 관리',
             icon: <FaUserCog className='inline-block mr-2' />,
             links: [
-              { to: 'account/verification', text: '계정 정보' },
-              { to: 'account/update-password', text: ' 비밀번호 변경' },
+              { to: 'account/verification', text: '판매자 정보 조회' },
+
+              { to: 'account/update-password', text: '판매자 비밀번호 수정' },
             ],
           },
           {

@@ -33,7 +33,7 @@ const Navbar = () => {
       {/* 로그인 상태에 따라 변화 */}
       {isAuthenticated ? (
         <div className='flex items-center gap-3'>
-          <Link to={'/mypage'}>마이페이지</Link>
+          <Link to={'/mypage/order'}>마이페이지</Link>
           <button onClick={logout}>로그아웃</button>
         </div>
       ) : (

@@ -173,7 +173,7 @@ public enum ResponseCode {
     FAILED_UPDATE_ADDRESS("FAILED_UPDATE_ADDRESS", "주소 수정 실패"),
     SUCCESS_DELETE_ADDRESS("SUCCESS_DELETE_ADDRESS", "주소 삭제 성공"),
     FAILED_DELETE_ADDRESS("FAILED_DELETE_ADDRESS", "주소 삭제 실패"),
-
+    SUCCESS_DELETE_ITEM("SUCCESS_DELETE_ITEM", "아이템 삭제 성공"),
     ;
 
     private final String code;

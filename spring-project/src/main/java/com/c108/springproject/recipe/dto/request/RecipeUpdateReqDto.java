@@ -14,9 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class RecipeUpdateReqDto {
     private int categoryNo;
-    private Long imageNo;
     private String name;
     private int time;
     private int updatedUser;
     private List<MaterialReqDto> materials;
+    private List<Long> keepImageIds; // 유지할 이미지를 받을 곳
 }

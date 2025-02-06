@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RecipeUpdateResDto {
     private int recipeNo;
-    private Long imageNo;
+    private List<RecipeImageDto> images;
     private int categoryNo;
     private String categoryName;
     private String name;
@@ -30,7 +30,10 @@ public class RecipeUpdateResDto {
     public static RecipeUpdateResDto toDto(Recipe recipe) {
         return RecipeUpdateResDto.builder()
                 .recipeNo(recipe.getRecipeNo())
-                .imageNo(recipe.getImageNo())
+                .images(recipe.getImages().stream()
+                        .map(image -> RecipeImageDto.toDto(image))
+                        .collect(Collectors.toList())
+                )
                 .categoryNo(recipe.getCategory().getCategoryNo())
                 .categoryName(recipe.getCategory().getName())
                 .name(recipe.getName())

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Getter
 @Builder
@@ -15,7 +16,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 public class ReviewListResDto {
     private Long reviewNo;
-    private Long imageNo;
+    private List<ReviewImageDto> images;
     private String content;
     private int rating;
     private String createdAt;
@@ -26,7 +27,13 @@ public class ReviewListResDto {
     public static ReviewListResDto toDto(Review review, User user) {
         return ReviewListResDto.builder()
                 .reviewNo(review.getReviewNo())
-                .imageNo(review.getImageNo())
+                .images(review.getImages().stream()
+                        .map(image -> ReviewImageDto.builder()
+                                .imageNo(image.getImageNo())
+                                .imageUrl(image.getImageUrl())
+                                .originalName(image.getOriginalName())
+                                .build())
+                        .collect(java.util.stream.Collectors.toList()))
                 .content(review.getContent())
                 .rating(review.getRating())
                 .createdAt(review.getCreatedAt())
