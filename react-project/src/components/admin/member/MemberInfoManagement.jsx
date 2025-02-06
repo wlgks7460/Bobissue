@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
-
+import { Search } from 'lucide-react'
 const MemberInfoManagement = () => {
   const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원정보관리' }]
   const navigate = useNavigate()
@@ -127,7 +127,6 @@ const MemberInfoManagement = () => {
     <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>회원정보관리</h1>
-
       <section className='mb-6'>
         <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
         <div className='flex items-center space-x-4'>
@@ -154,7 +153,6 @@ const MemberInfoManagement = () => {
           </div>
         </div>
       </section>
-
       {isLoading ? (
         <div className='text-center'>로딩 중...</div>
       ) : currentUsers.length > 0 ? (
@@ -201,13 +199,13 @@ const MemberInfoManagement = () => {
                   <td className='border px-4 py-2 text-center'>{user.name}</td>
                   <td className='border px-4 py-2 text-center'>{user.email}</td>
                   <td className='border px-4 py-2 text-center'>{user.phoneNumber}</td>
-                  <td className='border px-4 py-2 text-center '>{user.level}</td>
+                  <td className='border px-4 py-2 text-center'>{user.level}</td>
                   <td className='border px-4 py-2 text-center'>
                     <button
                       onClick={() => handleNavigateToDetail(user.userNo)}
-                      className='bg-transparent text-blue-500'
+                      className='bg-transparent text-blue-500 hover:text-blue-700 transition-colors p-1'
                     >
-                      조회
+                      <Search size={20} strokeWidth={2} />
                     </button>
                   </td>
                 </tr>
