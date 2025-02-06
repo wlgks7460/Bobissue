@@ -35,12 +35,12 @@ public class ReviewController {
     })
     public ResponseDto createReview(
             @PathVariable int itemNo,
-            @RequestPart(value = "reviewCreateReqDto") String reviewCreateReqDtoString,
+            @RequestPart(value = "review") String reviewString,
             @RequestPart(value = "images", required = false)List<MultipartFile> images
     ) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            ReviewCreateReqDto reviewCreateReqDto = objectMapper.readValue(reviewCreateReqDtoString, ReviewCreateReqDto.class);
+            ReviewCreateReqDto reviewCreateReqDto = objectMapper.readValue(reviewString, ReviewCreateReqDto.class);
             ReviewCreateResDto resDto = reviewService.createReview(reviewCreateReqDto, images);
             return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_REVIEW, new DefaultResponse<>(resDto));
         } catch (Exception e) {
@@ -84,12 +84,12 @@ public class ReviewController {
     public ResponseDto updateReview(
             @PathVariable int itemNo,
             @PathVariable Long reviewNo,
-            @RequestPart(value = "reviewUpdateReqDto") String reviewUpdateReqDtoString,
+            @RequestPart(value = "review") String reviewString,
             @RequestPart(value = "images", required = false)List<MultipartFile> images
     ) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            ReviewUpdateReqDto request = objectMapper.readValue(reviewUpdateReqDtoString, ReviewUpdateReqDto.class);
+            ReviewUpdateReqDto request = objectMapper.readValue(reviewString, ReviewUpdateReqDto.class);
 
             ReviewUpdateResDto response = reviewService.updateReview(reviewNo, request, images);
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_REVIEW, new DefaultResponse<>(response));
