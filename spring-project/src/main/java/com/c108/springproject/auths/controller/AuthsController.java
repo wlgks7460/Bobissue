@@ -49,7 +49,7 @@ public class AuthsController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGOUT, new DefaultResponse<String>(authsService.doLogout()));
     }
 
-    @PostMapping("/login")
+    @PostMapping("/social")
     public ResponseDto oauthLogin(@RequestParam String provider, @RequestParam String accessToken) {
         // 1. OAuth 제공자를 통해 사용자 정보 가져오기
         String email = authsService.getOauthUser(provider, accessToken);
@@ -60,17 +60,16 @@ public class AuthsController {
 
         if (user != null) {
             // 3. 계정이 있으면 로그인 처리 (JWT 발급)
-            LoginReqDto loginReqDto=user.builder()
-                    .
+            String new_accessToken = jwtTokenProvider.createAccessToken(email);
 
-            String acessToken = jwtTokenProvider.createAccessToken(email);
-
-            return ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN,new DefaultResponse<>(accessToken));
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN,new DefaultResponse<>(new_accessToken));
         } else {
             // 4. 계정이 없으면 회원가입 진행을 위해 사용자 정보를 반환
-            return ResponseDto(HttpStatus.NOT_FOUND, ResponseCode.NOT_FOUND_USER, new DefaultResponse<>(accessToken));
+            return new ResponseDto(HttpStatus.NOT_FOUND, ResponseCode.NOT_FOUND_USER, new DefaultResponse<>(accessToken));
         }
 
     }
+
+
 
 }
