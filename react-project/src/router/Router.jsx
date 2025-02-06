@@ -272,6 +272,16 @@ const router = createBrowserRouter([
             path: 'notices/view',
             element: <Seller.NoticesView />,
           },
+          //라이브 관련
+          {
+            path: 'lives',
+            children: [
+              {
+                path: 'home',
+                element: <Seller.LiveHome />,
+              },
+            ],
+          },
         ],
       },
 
