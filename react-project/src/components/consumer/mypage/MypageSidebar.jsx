@@ -62,7 +62,9 @@ const MypageSidebar = ({ userInfo }) => {
         <div className='flex flex-col gap-3'>
           {/* 구매 관련 */}
           <h3 className='text-sm text-gray-400'>쇼핑</h3>
-          <Link className='text-left'>주문 내역</Link>
+          <Link to={'/mypage/order'} className='text-left'>
+            주문 내역
+          </Link>
           <Link className='text-left'>상품 후기</Link>
           <Link className='text-left'>취소 / 반품 / 교환</Link>
           <Link className='text-left'>상품 문의</Link>

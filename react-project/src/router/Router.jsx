@@ -17,6 +17,7 @@ import ConsumerSearch from '../pages/consumer/Search'
 import ConsumerMypage from '../pages/consumer/mypage/MyPage'
 import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
 import ConsumerMyPageAddress from '../pages/consumer/mypage/MyPageAddress'
+import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
 
 // 관리자 section
 
@@ -105,6 +106,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: 'order',
+                element: <ConsumerMyPageOrder />,
               },
               {
                 path: 'info',

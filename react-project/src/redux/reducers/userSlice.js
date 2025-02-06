@@ -6,7 +6,7 @@ export const userSlice = createSlice({
     accessToken: localStorage.getItem('access_token') || null, // jwt access_token
     refreshToken: localStorage.getItem('refresh_token') || null, // jwt refresh_token
     isAuthenticated: !!localStorage.getItem('access_token'), // 로그인 상태
-    status: '',
+    status: localStorage.getItem('status') || '',
   },
   reducers: {
     /** 로그인 */
@@ -17,6 +17,7 @@ export const userSlice = createSlice({
       state.isAuthenticated = true
       localStorage.setItem('access_token', action.payload.access_token)
       localStorage.setItem('refresh_token', action.payload.refresh_token)
+      localStorage.setItem('status', action.payload.status)
     },
     /** 로그아웃 */
     logout: (state, action) => {
@@ -26,6 +27,7 @@ export const userSlice = createSlice({
       state.isAuthenticated = false
       localStorage.removeItem('access_token')
       localStorage.removeItem('refresh_token')
+      localStorage.removeItem('status')
     },
   },
 })
