@@ -65,7 +65,9 @@ public class SecurityConfig {
                                 "/api/recipecategory/{recipeCategoryNo}",
                                 "/api/recipe",
                                 "/api/recipe/{recipeNo}",
-                                "/api/question"
+                                "/api/question",
+                                "/api/question/{questionNo}"
+
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

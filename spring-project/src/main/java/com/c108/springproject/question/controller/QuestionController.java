@@ -60,9 +60,24 @@ public class QuestionController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_QUESTION, new DefaultResponse<QuestionResDto>(questionService.findQuestionByNo(question_no)));
     }
 
-    @PutMapping(value = "/{question_no}")
-    public ResponseDto updateQuestionByNo(@PathVariable Long question_no, @RequestBody QuestionUpdateReqDto questionUpdateReqDto){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_QUESTION, new DefaultResponse<QuestionResDto>(questionService.updateQuestion(question_no, questionUpdateReqDto)));
+    @PutMapping(value = "/{question_no}", consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE  // 이걸 추가
+    })
+    public ResponseDto updateQuestionByNo(
+            @PathVariable Long question_no,
+            @RequestPart(value = "question") String questionString,
+            @RequestPart(value = "images", required = false)List<MultipartFile> images
+    ){
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            QuestionUpdateReqDto request = objectMapper.readValue(questionString, QuestionUpdateReqDto.class);
+            QuestionResDto response = questionService.updateQuestion(question_no, request, images);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_QUESTION, new DefaultResponse<>(response));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
+        }
     }
 
     @DeleteMapping("{question_no}")
