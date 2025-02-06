@@ -33,13 +33,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         clientSession.forEach((key, value) -> {
             System.out.println("key :: " + key + " value :: "+ value);
-            if (!key.equals(session.getId())) {  //같은 아이디가 아니면 메시지를 전달합니다.
+//            if (!key.equals(session.getId())) {  //같은 아이디가 아니면 메시지를 전달합니다.
                 try {
                     value.sendMessage(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+//            }
         });
     }
 
