@@ -39,12 +39,12 @@ public class ItemController {
             MediaType.APPLICATION_OCTET_STREAM_VALUE  // 이걸 추가
     })
     public ResponseDto createItem(
-            @RequestPart(value = "itemCreateReqDto") String itemCreateReqDtoString,
+            @RequestPart(value = "item") String itemString,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            ItemCreateReqDto itemCreateReqDto = objectMapper.readValue(itemCreateReqDtoString, ItemCreateReqDto.class);
+            ItemCreateReqDto itemCreateReqDto = objectMapper.readValue(itemString, ItemCreateReqDto.class);
             ItemCreateResDto resDto = itemService.createItem(itemCreateReqDto, images);
             return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ITEM, new DefaultResponse<>(resDto));
         } catch (Exception e) {
@@ -74,12 +74,12 @@ public class ItemController {
     })
     public ResponseDto updateItem(
             @PathVariable int itemNo,
-            @RequestPart(value = "itemUpdateReqDto") String itemUpdateReqDtoString,
+            @RequestPart(value = "item") String itemString,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            ItemUpdateReqDto reqDto = objectMapper.readValue(itemUpdateReqDtoString, ItemUpdateReqDto.class);
+            ItemUpdateReqDto reqDto = objectMapper.readValue(itemString, ItemUpdateReqDto.class);
 
             ItemUpdateResDto updatedItem = itemService.updateItem(itemNo, reqDto, images);
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_ITEM, new DefaultResponse<>(updatedItem));
