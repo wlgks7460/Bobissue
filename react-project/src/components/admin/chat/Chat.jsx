@@ -1,67 +1,72 @@
-window.global = window // global 변수가 없을 때 자동으로 추가
+// ✅ 필요 시 자동으로 window.global 정의
+window.global = window
 
 import React, { useState, useEffect, useRef } from 'react'
-import SockJS from 'sockjs-client' // ✅ 기본 import 사용
-import { Client } from '@stomp/stompjs' // ✅ stompjs 대신 @stomp/stompjs 사용
+import SockJS from 'sockjs-client' // ✅ SockJS 사용
+import { Client } from '@stomp/stompjs' // ✅ STOMP 클라이언트
 
 const ChatRoom = ({ chattingRoomId }) => {
-  const [messages, setMessages] = useState([]) // 메시지 상태
-  const [message, setMessage] = useState('') // 입력된 메시지 상태
-  const stompClientRef = useRef(null) // WebSocket 클라이언트 상태 관리
+  const [messages, setMessages] = useState([]) // 메시지 상태 관리
+  const [message, setMessage] = useState('') // 입력된 메시지
+  const stompClientRef = useRef(null) // WebSocket 클라이언트 저장
 
   useEffect(() => {
-    // 1. SockJS WebSocket 생성
-    const socket = new SockJS('http://localhost:8080/ws-stomp') // ✅ WebSocket 엔드포인트
+    const socket = new SockJS('http://localhost:8080/ws/chat') // ✅ WebSocket 엔드포인트
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // 자동 재연결 (5초)
       onConnect: () => {
         console.log('✅ 웹소켓 연결 완료')
 
-        // ✅ 1. "/sub/message" 구독 (백엔드에서 메시지를 보내는 경로)
+        // 🌟 클라이언트 객체를 먼저 저장한 후 구독 설정
+        stompClientRef.current = client
+
         client.subscribe('/sub/message', (message) => {
           const receivedMessage = JSON.parse(message.body)
           console.log('📩 받은 메시지:', receivedMessage)
-          setMessages((prev) => [...prev, receivedMessage]) // 메시지 상태 업데이트
+          setMessages((prev) => [...prev, receivedMessage]) // 상태 업데이트
         })
-
-        stompClientRef.current = client // 클라이언트 저장
       },
       onStompError: (frame) => {
-        console.error('❌ STOMP 오류:', frame)
+        console.error('❌ STOMP 오류 발생:', frame)
       },
     })
 
-    client.activate() // ✅ 클라이언트 활성화
+    // 🌟 클라이언트를 먼저 저장 후 활성화
+    stompClientRef.current = client
+    client.activate()
 
     return () => {
       if (stompClientRef.current) {
-        stompClientRef.current.deactivate() // ✅ 클라이언트 안전하게 종료
+        stompClientRef.current.deactivate()
         console.log('❌ 웹소켓 연결 종료')
       }
     }
   }, [])
 
-  // ✅ 2. 메시지 전송 함수
+  // ✅ 메시지 전송 함수 (WebSocket 연결 여부 체크)
   const sendMessage = () => {
-    if (stompClientRef.current && message.trim() !== '') {
+    if (!stompClientRef.current || !stompClientRef.current.connected) {
+      console.warn('⚠️ 웹소켓이 아직 연결되지 않았습니다.')
+      return
+    }
+
+    if (message.trim() !== '') {
       const chatMessage = { content: message }
 
       stompClientRef.current.publish({
-        destination: '/pub/messages', // ✅ 백엔드의 "/messages"와 매칭
+        destination: '/pub/messages', // ✅ 백엔드에서 설정한 엔드포인트 확인
         body: JSON.stringify(chatMessage),
       })
 
       console.log('📤 메시지 전송:', chatMessage)
       setMessage('') // 입력창 초기화
-    } else {
-      console.warn('⚠️ 웹소켓이 아직 연결되지 않았거나, 메시지가 비어 있습니다.')
     }
   }
 
   return (
     <div className='w-full max-w-lg h-96 bg-white shadow-lg rounded-lg p-4 overflow-y-auto'>
-      <h2 className='text-lg font-bold mb-2'>STOMP 기반 채팅</h2>
+      <h2 className='text-lg font-bold mb-2 text-center'>밥이슈 채팅방</h2>
 
       <div className='h-64 overflow-y-auto border p-2 rounded-lg'>
         {messages.length === 0 ? (
