@@ -37,7 +37,7 @@ public class AddressService {
     @Transactional
     public List<Address> findAllAddress(int userNo) {
         try{
-            List<Address> addressList = addressRepository.findAllByUserId(userNo);
+            List<Address> addressList = addressRepository.findAllByUserNo(userNo);
             return addressList;
         }catch (BobIssueException e){
             throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_ADDRESS);

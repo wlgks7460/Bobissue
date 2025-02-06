@@ -35,13 +35,13 @@ public class AddressController {
         String email = authentication.getName();
 
         try{
-            int userNo = userService.findByEmail(email);
+            int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
             addressReqDto.setUserNo(userNo);
         }catch(BobIssueException e){
             throw new BobIssueException(ResponseCode.NOT_FOUND_USER);
         }
 
-        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ADDRESS, new DefaultResponse<Integer>(addressService.createAddress(addressReqDto).getAddressNo));
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ADDRESS, new DefaultResponse<Integer>(addressService.createAddress(addressReqDto).getAddressNo()));
     }
 
     @GetMapping("/address-list")
@@ -49,11 +49,8 @@ public class AddressController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        try{
-            int userNo = userService.findByEmail(email);
-        }catch(BobIssueException e){
-            throw new BobIssueException(ResponseCode.NOT_FOUND_USER);
-        }
+
+        int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
 
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ADDRESS, new DefaultResponse<List<Address>>(addressService.findAllAddress(userNo)));
     }
