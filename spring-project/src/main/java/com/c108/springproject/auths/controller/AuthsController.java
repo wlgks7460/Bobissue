@@ -67,7 +67,11 @@ public class AuthsController {
             // 4. 계정이 없으면 회원가입 진행을 위해 사용자 정보를 반환
             return new ResponseDto(HttpStatus.NOT_FOUND, ResponseCode.NOT_FOUND_USER, new DefaultResponse<>(accessToken));
         }
+    }
 
+    @PostMapping("/social/login")
+    public ResponseDto oauth(@RequestParam String provider, @RequestParam String accessToken){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN, new DefaultResponse<>(authsService.findOauthUser(provider, accessToken)));
     }
 
 

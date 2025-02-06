@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     boolean existsByEmail(String email);
 
+    Optional<User> findByEmail(String email);
+
     @Modifying
     @Query("UPDATE User u SET u.status = CASE WHEN u.status = 'Y' THEN 'N' ELSE 'Y' END WHERE u.userNo = :userNo")
     String changeUserStatus(int userNo);
