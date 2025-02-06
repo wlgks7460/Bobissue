@@ -28,13 +28,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowedOrigins(List.of(
+                    corsConfiguration.setAllowedOriginPatterns(List.of(
                             "http://localhost:5173",
                             "http://bobissue.duckdns.org",
                             "https://bobissue.duckdns.org:"
                     ));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
+                    corsConfiguration.setAllowCredentials(true);
                     corsConfiguration.addExposedHeader("newAccessToken");
                     return corsConfiguration;
                 }))
