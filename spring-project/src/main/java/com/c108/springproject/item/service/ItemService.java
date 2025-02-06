@@ -11,6 +11,9 @@ import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
 import com.c108.springproject.item.dto.response.*;
 import com.c108.springproject.item.repository.ItemRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,8 +41,14 @@ public class ItemService {
 
     // 상품 생성
     @Transactional
-    // Item 생성 메서드
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public ItemCreateResDto createItem(ItemCreateReqDto reqDto, List<MultipartFile> files) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+
+
         // 1. 카테고리 존재 확인 및 가져오기
         ItemCategory category = itemCategoryService.getCategory(reqDto.getCategoryNo());
 
