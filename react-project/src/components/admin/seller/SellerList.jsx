@@ -20,6 +20,8 @@ const SellerListTable = () => {
     const fetchSellers = async () => {
       try {
         const response = await API.get('/sellers')
+        console.log('📢 서버 응답:', response) // 응답 확인
+
         setSellers(response.data.result.data)
       } catch (error) {
         console.error('판매자 목록 조회 실패:', error)
@@ -113,7 +115,7 @@ const SellerListTable = () => {
         <p className='text-center text-red-500'>데이터를 불러오는 중 오류가 발생했습니다.</p>
       ) : (
         <>
-          <h2 className='text-lg font-semibold mt-8 mb-4'>조회 결과</h2>
+          <h2 className='text-lg font-semibold mt-8 mb-4'>| 조회 결과</h2>
           <table className='table-auto w-full border'>
             <thead>
               <tr className='bg-gray-100'>
