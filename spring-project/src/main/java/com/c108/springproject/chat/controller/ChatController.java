@@ -18,10 +18,11 @@ public class ChatController {
         this.template = template;
     }
 
-    @MessageMapping("/{chatRoomId}/messages")
+    @MessageMapping("/messages")
     //@DestinationVariable에 추가로 chattingRoomId를 괄호 쓰고 넣어줘야 파라미터 인식을 함.
-    public ChatMessageDto send2(@DestinationVariable("chatRoomId") int chattingRoomId , @RequestBody ChatMessageDto chatMessageDto) {
-        template.convertAndSend("/sub/" + chattingRoomId, chatMessageDto.getContent());       // 구독중인 모든 사용자에게 메시지를 전달합니다.
+    public ChatMessageDto send2( @RequestBody ChatMessageDto chatMessageDto) {
+        System.out.println(chatMessageDto.getContent());
+        template.convertAndSend("/sub/message", chatMessageDto.getContent());       // 구독중인 모든 사용자에게 메시지를 전달합니다.
         return chatMessageDto;
     }
 }

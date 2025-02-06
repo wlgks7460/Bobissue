@@ -9,6 +9,9 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,8 +30,11 @@ public class CastService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public Cast createCast(CastReqDto castReqDto){
-        Seller seller = sellerRepository.findBySellerNo(1).orElseThrow(()-> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+        Seller seller = sellerRepository.findByEmail(authentication.getName()).orElseThrow(()-> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
         try{
             Cast new_cast = Cast.builder()
                     .sellerNo(seller)

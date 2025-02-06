@@ -31,7 +31,9 @@ public class SecurityConfig {
                     corsConfiguration.setAllowedOriginPatterns(List.of(
                             "http://localhost:5173",
                             "http://bobissue.duckdns.org",
-                            "https://bobissue.duckdns.org:"
+                            "https://bobissue.duckdns.org:",
+                            "ws://**",
+                            "wss://**"
                     ));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
@@ -41,7 +43,7 @@ public class SecurityConfig {
                 }))
                 .httpBasic(basic -> basic.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .securityMatcher("/api/**")
+//                .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(
@@ -68,7 +70,6 @@ public class SecurityConfig {
                                 "/api/recipe/{recipeNo}",
                                 "/api/question",
                                 "/api/question/{questionNo}"
-
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
