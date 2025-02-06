@@ -158,7 +158,6 @@ public enum ResponseCode {
     COMPANY_NOT_FOUND("COMPANY_NOT_FOUND", "존재하지 않는 회사입니다."),
     SUCCESS_UPDATE_SELLER("SUCCESS_UPDATE_SELLER", "판매자 수정 성공"),
     FAILED_UPDATE_SELLER("FAILED_UPDATE_SELLER", "판매자 수정 실패"),
-<<<<<<< spring-project/src/main/java/com/c108/springproject/global/ResponseCode.java
     FILE_UPLOAD_ERROR("FILE_UPLOAD_ERROR", "파일 업로드에 실패했습니다"),
     INVALID_FILE_TYPE("INVALID_FILE_TYPE", "지원하지 않는 파일 형식입니다"),
     FILE_SIZE_EXCEED("FILE_SIZE_EXCEED", "파일 크기가 제한을 초과했습니다"),
