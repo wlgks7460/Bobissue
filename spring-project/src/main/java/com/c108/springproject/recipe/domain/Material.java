@@ -23,10 +23,12 @@ public class Material {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_no", nullable = false)
+    @JsonIgnore
     private Recipe recipe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_no", nullable = false)
+    @JsonIgnore
     private Item item;
 
     @Column(nullable = false)

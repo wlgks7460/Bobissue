@@ -158,13 +158,29 @@ public enum ResponseCode {
     COMPANY_NOT_FOUND("COMPANY_NOT_FOUND", "존재하지 않는 회사입니다."),
     SUCCESS_UPDATE_SELLER("SUCCESS_UPDATE_SELLER", "판매자 수정 성공"),
     FAILED_UPDATE_SELLER("FAILED_UPDATE_SELLER", "판매자 수정 실패"),
+<<<<<<< spring-project/src/main/java/com/c108/springproject/global/ResponseCode.java
     FILE_UPLOAD_ERROR("FILE_UPLOAD_ERROR", "파일 업로드에 실패했습니다"),
     INVALID_FILE_TYPE("INVALID_FILE_TYPE", "지원하지 않는 파일 형식입니다"),
     FILE_SIZE_EXCEED("FILE_SIZE_EXCEED", "파일 크기가 제한을 초과했습니다"),
     SUCCESS_SOCIAL_LOGIN("SUCCESS_SOCIAL_LOGIN", "소셜 로그인 성공"),
     FAILED_SOCIAL_LOGIN("FAILED_SOCIAL_LOGIN", "소셜 로그인 실패"),
     INVALID_TOKEN("INVALID_TOKEN", "유효하지 않은 토큰"),
-
+    FILE_UPLOAD_ERROR("FILE_UPLOAD_ERROR", "파일 업로드 실패"),
+    INVALID_FILE_TYPE("INVALID_FILE_TYPE", "지원하지 않는 파일 형식"),
+    FILE_SIZE_EXCEED("FILE_SIZE_EXCEED", "파일 크기가 제한을 초과"),
+    INVALID_FILE_URL("INVALID_FILE_URL", "파일 경로가 잘못되었습니다"),
+    FAILED_DELETE_IMAGE("FAILED_DELETE_IMAGE", "이미지 삭제 실패"),
+    SUCCESS_CREATE_ADDRESS("SUCCESS_CREATE_ADDRESS", "주소 등록 성공"),
+    FAILED_CREATE_ADDRESS("FAILED_CREATE_ADDRESS", "주소 등록 실패"),
+    SUCCESS_FIND_ALL_ADDRESS("SUCCESS_FIND_ALL_ADDRESS", "모든 주소 조회 성공"),
+    FAILED_FIND_ALL_ADDRESS("FAILED_FIND_ALL_ADDRESS", "모든 주소 조회 실패"),
+    SUCCESS_FIND_ADDRESS("SUCCESS_FIND_ADDRESS", "상세 주소 조회 성공"),
+    FAILED_FIND_ADDRESS("FAILED_FIND_ADDRESS", "상세 주소 조회 실패"),
+    SUCCESS_UPDATE_ADDRESS("SUCCESS_UPDATE_ADDRESS", "주소 수정 성공"),
+    FAILED_UPDATE_ADDRESS("FAILED_UPDATE_ADDRESS", "주소 수정 실패"),
+    SUCCESS_DELETE_ADDRESS("SUCCESS_DELETE_ADDRESS", "주소 삭제 성공"),
+    FAILED_DELETE_ADDRESS("FAILED_DELETE_ADDRESS", "주소 삭제 실패"),
+    SUCCESS_DELETE_ITEM("SUCCESS_DELETE_ITEM", "아이템 삭제 성공"),
     ;
 
     private final String code;

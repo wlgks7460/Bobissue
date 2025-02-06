@@ -1,6 +1,7 @@
 package com.c108.springproject.item.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class ItemImage extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_no")
+    @JsonIgnore
     private Item item;
 
     @Column(nullable = false, length = 255)

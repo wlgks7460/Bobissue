@@ -9,8 +9,11 @@ import {
 } from '@heroicons/react/24/outline'
 
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const AdminSideBar = () => {
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
+
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(0) // 상위 메뉴 상태
   const [subOpen, setSubOpen] = React.useState(0) // 중간 메뉴 상태
@@ -23,12 +26,19 @@ const AdminSideBar = () => {
   const handleSubOpen = (value) => {
     setSubOpen(subOpen === value ? 0 : value)
   }
-
+  if (!isAuthenticated) {
+    return null // 로그인되지 않은 경우 네비바를 렌더링하지 않음
+  }
   return (
     <div className='fixed top-0 left-0 h-full w-64 bg-white shadow-md p-4 overflow-y-auto'>
       {/* 로고 */}
       <div className='mb-4'>
-        <h1 className='text-2xl font-bold text-blue-600 ms-3'>LOGO</h1>
+        <h1
+          className='text-2xl font-bold text-blue-600 ms-3 cursor-pointer'
+          onClick={() => navigate('/admin')} // 클릭 시 admin 페이지로 이동
+        >
+          LOGO
+        </h1>{' '}
       </div>
 
       {/* 메뉴 리스트 */}

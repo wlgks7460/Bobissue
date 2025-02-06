@@ -1,6 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaBox, FaShippingFast, FaChartBar, FaUserCog, FaComments, FaVideo, FaBullhorn, FaChartLine } from 'react-icons/fa';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import {
+  FaBox,
+  FaShippingFast,
+  FaChartBar,
+  FaUserCog,
+  FaComments,
+  FaVideo,
+  FaBullhorn,
+  FaChartLine,
+} from 'react-icons/fa'
 
 const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
   return (
@@ -18,7 +27,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             icon: <FaBox className='inline-block mr-2' />,
             links: [
               { to: 'products/register', text: '상품 등록하기' },
-              { to: 'products/inquiry', text: '상품 조회하기' },
+              { to: 'products/Search', text: '상품 조회하기' },
             ],
           },
           {
@@ -57,10 +66,9 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             label: '판매자 정보 관리',
             icon: <FaUserCog className='inline-block mr-2' />,
             links: [
-              { to: 'account/info', text: '판매자 정보 조회' },
-              { to: 'account/update-info', text: '판매자 정보 수정' },
+              { to: 'account/verification', text: '판매자 정보 조회' },
+
               { to: 'account/update-password', text: '판매자 비밀번호 수정' },
-              { to: 'account/withdrawal', text: '판매자 탈퇴' },
             ],
           },
           {
@@ -93,7 +101,9 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
               onClick={() => toggleMenu(key)}
               className='w-full flex items-center justify-between px-4 py-3 text-gray-700 font-medium hover:bg-gray-100 rounded-md'
             >
-              <span className='flex items-center'>{icon} {label}</span>
+              <span className='flex items-center'>
+                {icon} {label}
+              </span>
               <span>{menuState[key] ? '▼' : '▶'}</span>
             </button>
             {menuState[key] && (
@@ -109,7 +119,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
         ))}
       </ul>
     </aside>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar
