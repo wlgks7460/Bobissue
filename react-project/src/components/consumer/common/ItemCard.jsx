@@ -35,7 +35,7 @@ const HomeItem = ({ item }) => {
           <Link to={`/item/${item.itemNo}`}>
             <img
               // 이미지 경로 수정 필요
-              src='https://cdn.pixabay.com/photo/2015/06/17/16/29/paper-bag-812728_640.png'
+              src={item.images[0].imageUrl}
               alt=''
               className='w-full h-[300px] bg-gray-400 rounded'
             />

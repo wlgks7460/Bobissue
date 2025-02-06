@@ -9,7 +9,7 @@ const ItemDetailTab = ({ itemNo }) => {
   return (
     <div className='w-[60rem] relative'>
       {/* 탭 bar */}
-      <div className='h-[45px] grid grid-cols-3 border-b border-black mb-5 sticky top-12 z-10'>
+      <div className='h-[45px] grid grid-cols-3 border-b border-black mb-5 sticky top-[61px] z-10'>
         <p
           className={`flex justify-center items-center cursor-pointer ${tabState === 'description' ? 'bg-indigo-600 text-white' : 'bg-white'}`}
           onClick={() => setTabState('description')}

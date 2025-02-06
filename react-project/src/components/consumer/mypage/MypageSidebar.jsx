@@ -48,7 +48,9 @@ const MypageSidebar = ({ userInfo }) => {
           <Link to={'/mypage/info'} className='text-left'>
             개인정보 수정
           </Link>
-          <Link className='text-left'>배송지관리</Link>
+          <Link to={'/mypage/address'} className='text-left'>
+            배송지관리
+          </Link>
         </div>
         <hr className='border-gray-300' />
         <div className='flex flex-col gap-3'>

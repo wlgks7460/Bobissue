@@ -14,21 +14,21 @@ const KakaoLogin = () => {
     const token = searchParams.get('code')
     setKakaoToken(token)
     const payload = {
-      accessToken: token,
+      provider: 'kakao',
     }
-    console.log(kakaoToken)
-    // API.post('/auths/social', payload)
-    //   .then((res) => {
-    //     console.log(res)
-    //   })
-    //   .catch((err) => {
-    //     console.error(err)
-    //     if (err.response.status === 404) {
-    //       setShowJoinForm(true)
-    //     } else {
-    //       window.location.href = '/login'
-    //     }
-    //   })
+    console.log(token)
+    API.post('/auths/social/login', payload, { headers: { accessToken: token } })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.error(err)
+        if (err.response.status === 404) {
+          setShowJoinForm(true)
+        } else {
+          window.location.href = '/login'
+        }
+      })
   }, [])
   return (
     <div>
@@ -37,7 +37,7 @@ const KakaoLogin = () => {
           <KakaoJoin kakaoToken={kakaoToken} />
         ) : (
           <div className='w-full min-h-[70vh] flex justify-center items-center'>
-            <ClipLoader size={150} color='#000' loading={!showJoinForm} />
+            <ClipLoader size={50} color='#4f39f6' loading={!showJoinForm} />
           </div>
         )}
       </div>
