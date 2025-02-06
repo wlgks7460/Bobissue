@@ -29,7 +29,7 @@ public class WebSocketStompBrokerConfig implements WebSocketMessageBrokerConfigu
         //withSockJs : webSocket을 지원하지 않는 브라우저에서도 SockJS를 통해 webSocket 기능을 사용할 수 있게 합니다.
         registry
                 .addEndpoint("/ws/chat")
-                .setAllowedOrigins("*")
+                .setAllowedOriginPatterns("http://localhost:5173", "http://bobissue.duckdns.org", "https://bobissue.duckdns.org")
                 .withSockJS();
     }
 }
