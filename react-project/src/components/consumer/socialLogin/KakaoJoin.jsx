@@ -19,7 +19,6 @@ const KakaoJoin = ({ kakaoToken }) => {
   const kakaoJoin = (e) => {
     e.preventDefault()
     const payload = {
-      accessToken: kakaoToken,
       name: nameRef.current.value,
       birthday: birthRef.current.value.split('-').join(''),
       phoneNumber: phoneRef.current.value,
@@ -33,7 +32,7 @@ const KakaoJoin = ({ kakaoToken }) => {
       alert('전화번호를 확인해주세요.')
     } else {
       console.log(payload)
-      API.post('/users/social', payload)
+      API.post('/auths/social/signup/kakao', payload, { headers: { accessToken: kakaoToken } })
         .then((res) => {
           console.log(res)
         })
@@ -57,6 +56,9 @@ const KakaoJoin = ({ kakaoToken }) => {
     <div className='w-full flex justify-center'>
       <form className='flex flex-col gap-5 my-10' onSubmit={kakaoJoin}>
         <h2 className='text-2xl text-center font-bold mb-5'>추가정보를 작성해주세요!</h2>
+        <p className='text-sm text-right mb-2'>
+          <span className='text-red-600'>*</span>필수 입력사항
+        </p>
         {/* 이름 */}
         <div className='flex items-center'>
           <label htmlFor='name' className='inline-block w-[150px] me-5'>

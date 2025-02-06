@@ -17,7 +17,7 @@ const KakaoLogin = () => {
       provider: 'kakao',
     }
     console.log(token)
-    API.post('/auths/social', payload, { headers: { accessToken: token } })
+    API.post('/auths/social/login', payload, { headers: { accessToken: token } })
       .then((res) => {
         console.log(res)
       })

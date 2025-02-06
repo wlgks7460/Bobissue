@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import API from '../../../utils/API'
 
 const NaverJoin = ({ naverToken }) => {
@@ -9,11 +9,10 @@ const NaverJoin = ({ naverToken }) => {
   const naverJoin = (e) => {
     e.preventDefault()
     const payload = {
-      accessToken: naverToken,
       height: heightRef.current.value || 0.0,
       weight: weightRef.current.value || 0.0,
     }
-    API.post('/users/social', payload)
+    API.post('/auths/social/signup/naver', payload, { headers: { accessToken: naverToken } })
       .then((res) => {
         console.log(res)
       })
@@ -25,6 +24,9 @@ const NaverJoin = ({ naverToken }) => {
     <div className='w-full flex justify-center'>
       <form className='flex flex-col gap-5 my-10' onSubmit={naverJoin}>
         <h2 className='text-2xl text-center font-bold mb-5'>추가정보를 작성해주세요!</h2>
+        <p className='text-sm text-right mb-2'>
+          <span className='text-red-600'>*</span>필수 입력사항
+        </p>
         {/* 키 */}
         <div className='flex items-center'>
           <label htmlFor='height' className='inline-block w-[150px] me-5'>
