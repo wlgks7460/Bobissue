@@ -10,7 +10,13 @@ import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
 import com.c108.springproject.item.dto.response.*;
 import com.c108.springproject.item.repository.ItemRepository;
+import com.c108.springproject.seller.domain.Company;
+import com.c108.springproject.seller.domain.Seller;
+import com.c108.springproject.seller.repository.SellerRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,26 +33,38 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemCategoryService itemCategoryService;
     private final S3Service s3Service;
+    private final SellerRepository sellerRepository;
 
 
-    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, S3Service s3Service) {
+    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, S3Service s3Service, SellerRepository sellerRepository) {
 
         this.itemRepository = itemRepository;
         this.itemCategoryService = itemCategoryService;
         this.s3Service = s3Service;
+        this.sellerRepository = sellerRepository;
     }
 
     // 상품 생성
     @Transactional
-    // Item 생성 메서드
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public ItemCreateResDto createItem(ItemCreateReqDto reqDto, List<MultipartFile> files) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Company company;
+        Seller seller = sellerRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+        company = seller.getCompanyNo();
+
+
+
         // 1. 카테고리 존재 확인 및 가져오기
         ItemCategory category = itemCategoryService.getCategory(reqDto.getCategoryNo());
 
         // 2. Item 엔티티 생성
         Item item = Item.builder()
                 .categoryNo(category)
-                .companyNo(reqDto.getCompanyNo())
+                .companyNo(company)
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())
@@ -95,7 +113,17 @@ public class ItemService {
 
     // 상품 수정
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public ItemUpdateResDto updateItem(int itemNo, ItemUpdateReqDto reqDto, List<MultipartFile> files) {
+
+        // 회사 정보 가져오는 로직
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Company company;
+        Seller seller = sellerRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+        company = seller.getCompanyNo();
+
         // 1. 기존 상품 조회
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
@@ -138,7 +166,7 @@ public class ItemService {
                 .itemNo(itemNo)
                 .categoryNo(itemCategoryService.getCategory(reqDto.getCategoryNo()))
                 .images(updatedImages)
-                .companyNo(reqDto.getCompanyNo())
+                .companyNo(company)
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())

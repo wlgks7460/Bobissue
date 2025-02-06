@@ -3,6 +3,7 @@ package com.c108.springproject.item.domain;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.seller.domain.Company;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,8 +33,9 @@ public class Item extends BaseEntity {
     private List<ItemImage> images = new ArrayList<>();
     // CascadeType.ALL은 Item 엔티티에 대해 수행하는 모든 작업이 ItemImage 엔티티에도 동일하게 적용
 
-    @Column(nullable = false)
-    private int companyNo;
+    @ManyToOne
+    @JoinColumn(name = "company_no", nullable = false)
+    private Company companyNo;
 
     @Column(nullable = false, length = 100)
     private String name;

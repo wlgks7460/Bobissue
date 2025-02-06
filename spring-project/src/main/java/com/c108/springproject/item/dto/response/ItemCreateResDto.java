@@ -1,6 +1,7 @@
 package com.c108.springproject.item.dto.response;
 
 import com.c108.springproject.item.domain.Item;
+import com.c108.springproject.seller.domain.Company;
 import lombok.*;
 
 @AllArgsConstructor
@@ -11,7 +12,7 @@ public class ItemCreateResDto {
     private int itemNo;
     private ItemCategoryResDto category;
     private java.util.List<ImageDto> images;  // ImageNo 대신 List<ImageDto>로 변경
-    private int companyNo;
+    private Company companyNo;
     private String name;
     private int price;
     private int salePrice;
