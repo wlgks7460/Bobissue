@@ -10,12 +10,16 @@ const PasswordVerification = () => {
   const [searchParams] = useSearchParams()
   const redirectPath = '/seller/account/vender/info' // 기본 리다이렉트 경로 설정
   const token = localStorage.getItem('VerificationToken')
-
+  const debug_mode = true
   // 컴포넌트 로드 시 로컬스토리지 확인
 
   // 비밀번호 인증 처리
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (debug_mode) {
+      console.log('debug_mode')
+      navigate('/seller/account/vender/info')
+    }
 
     try {
       const response = await API.post('/api/verify-password', {

@@ -8,8 +8,8 @@ export { default as Register } from './Products/Register'
 export { default as Search } from './Products/Search'
 
 export { default as PrView } from './Products/View'
-export { default as PrUpdate } from './Products/Detail/Update'
-export { default as PrDelete } from './Products/Detail/Delete'
+export { default as PrUpdate } from './Products/Update'
+export { default as PrDelete } from './Products/Delete'
 // 주문 배송 관련
 export { default as Delivery } from './Delivery/Delivers'
 export { default as Orders } from './Delivery/Orders'
