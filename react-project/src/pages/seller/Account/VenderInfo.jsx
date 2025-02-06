@@ -25,7 +25,7 @@ const VenderInfo = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = localStorage.getItem('SELLER_AUTH_TOKEN')
+        const token = localStorage.getItem('access_token')
         if (!token) {
           throw new Error('인증 토큰이 없습니다.')
         }
@@ -46,6 +46,8 @@ const VenderInfo = () => {
         } else {
           throw new Error('서버 오류가 발생했습니다.')
         }
+        //dummy
+        setUserInfo(dummyData)
       } catch (err) {
         setError(err.message)
         setUserInfo(dummyData)
@@ -62,10 +64,8 @@ const VenderInfo = () => {
   }
 
   const handleSave = async (updatedInfo) => {
-    console.log('hello')
-    console.log(updatedInfo)
     try {
-      const token = localStorage.getItem('SELLER_AUTH_TOKEN')
+      const token = localStorage.getItem('access_token')
       if (!token) {
         throw new Error('인증 토큰이 없습니다.')
       }
@@ -79,6 +79,7 @@ const VenderInfo = () => {
 
       if (response.status === 200) {
         setUserInfo(response.data.result)
+        setIsUpdatePage(false) // 수정 후 Info 페이지로 돌아가기
       }
     } catch (err) {
       setError(err.message)
@@ -88,20 +89,14 @@ const VenderInfo = () => {
   return (
     <div>
       {isUpdatePage ? (
-        <UpdateInfo
-          userInfo={userInfo}
-          onClose={() => setIsUpdatePage(false)}
-          onSave={handleSave}
-        />
+        <UpdateInfo userInfo={userInfo} onSave={handleSave} />
       ) : (
         <Info userInfo={userInfo} />
       )}
 
       <div className='mt-4'>
-        {/* isUpdatePage가 true일 때 취소 및 수정하기 버튼 표시 */}
-        {isUpdatePage ? (
-          <div />
-        ) : (
+        {/* 수정 페이지가 아니면 '개인정보 수정' 버튼을 보여줌 */}
+        {!isUpdatePage && (
           <button
             onClick={() => setIsUpdatePage(true)}
             className='mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
@@ -112,6 +107,7 @@ const VenderInfo = () => {
       </div>
 
       <div className='mt-6'>
+        {/* Withdrawal 컴포넌트를 여기서 추가 */}
         <Withdrawal userInfo={userInfo} />
       </div>
     </div>

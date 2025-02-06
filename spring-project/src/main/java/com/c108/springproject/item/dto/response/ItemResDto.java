@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.c108.springproject.item.dto.response.ItemCategoryResDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -14,7 +14,7 @@ const Info = ({ userInfo }) => {
       <div className='space-y-3 border border-gray-200 p-4 rounded-md'>
         <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>아이디</span>
-          <span className='text-gray-900 py-2'>{userInfo.sellerNo}</span>
+          <span className='text-gray-900 py-2'>{userInfo?.sellerNo}</span>
         </div>
         <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>비밀번호 </span>
@@ -27,23 +27,23 @@ const Info = ({ userInfo }) => {
         </div>
         <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>이름</span>
-          <span className='text-gray-900 py-2'>{userInfo.name}</span>
+          <span className='text-gray-900 py-2'>{userInfo?.name}</span>
         </div>
         <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>이메일</span>
-          <span className='text-gray-900 py-2'>{userInfo.email}</span>
+          <span className='text-gray-900 py-2'>{userInfo?.email}</span>
         </div>
         <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>회사명</span>
-          <span className='text-gray-900 py-2'>{userInfo.company.name}</span>
+          <span className='text-gray-900 py-2'>{userInfo.company?.name}</span>
         </div>
         <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>사업자번호</span>
-          <span className='text-gray-900 py-2'>{userInfo.company.license}</span>
+          <span className='text-gray-900 py-2'>{userInfo.company?.license}</span>
         </div>
         <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>전화번호</span>
-          <span className='text-gray-900 py-2'>{userInfo.callNumber}</span>
+          <span className='text-gray-900 py-2'>{userInfo?.callNumber}</span>
         </div>
       </div>
     </div>

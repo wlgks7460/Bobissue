@@ -5,7 +5,7 @@ export { default as Login } from './Login/Login'
 export { default as Signup } from './Login/Signup'
 // 상품 관리 관련
 export { default as Register } from './Products/Register'
-export { default as Inquiry } from './Products/Inquiry'
+export { default as Search } from './Products/Search'
 
 export { default as PrView } from './Products/View'
 export { default as PrUpdate } from './Products/Detail/Update'
@@ -23,10 +23,12 @@ export { default as Settleview } from './Settlement/View'
 export { default as Details } from './Settlement/Details'
 export { default as Accounts } from './Settlement/Accounts'
 // 판매자 정보 관련
+
 export { default as UpdatePassword } from './Account/Update-Password'
+export { default as Verification } from './Account/Verification'
 export { default as VenderInfo } from './Account/VenderInfo'
-export { default as VerificationForm } from './Account/VerificationForm'
 // 문의 관련
+export { default as Report } from './Inquiry/Report'
 export { default as InView } from './Inquiry/View'
 export { default as InList } from './Inquiry/List'
 export { default as InReply } from './Inquiry/Reply'

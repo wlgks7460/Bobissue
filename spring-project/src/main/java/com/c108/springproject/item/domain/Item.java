@@ -28,13 +28,10 @@ public class Item extends BaseEntity {
     @JsonIgnore // 순환참조 해결
     private ItemCategory categoryNo;
 
-    // 나중에 연결a
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemImage> images = new ArrayList<>();
     // CascadeType.ALL은 Item 엔티티에 대해 수행하는 모든 작업이 ItemImage 엔티티에도 동일하게 적용
-    // orphanRemoval = true 이거는 쓰지 않을 듯
 
-    // 나중에 연결
     @Column(nullable = false)
     private int companyNo;
 
