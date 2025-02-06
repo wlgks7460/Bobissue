@@ -13,9 +13,10 @@ import ConsumerItemDetail from '../pages/consumer/ItemDetail'
 import ConsumerCart from '../pages/consumer/Cart'
 import ConsumerPayment from '../pages/consumer/Payment'
 import ConsumerSearch from '../pages/consumer/Search'
-// 이용자 마이페이지지
+// 이용자 마이페이지
 import ConsumerMypage from '../pages/consumer/mypage/MyPage'
 import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
+import ConsumerMyPageAddress from '../pages/consumer/mypage/MyPageAddress'
 
 // 관리자 section
 
@@ -108,6 +109,10 @@ const router = createBrowserRouter([
               {
                 path: 'info',
                 element: <ConsumerMyPageInfo />,
+              },
+              {
+                path: 'address',
+                element: <ConsumerMyPageAddress />,
               },
             ],
           },
