@@ -18,7 +18,7 @@ const InquiryList = () => {
       setInquiries(dummyData)
       setFilteredInquiries(dummyData)
     } else {
-      API.get(`/questions/seller/${sellerEmail}`)
+      API.get(`/questions/`)
         .then((response) => {
           setInquiries(response.data)
           setFilteredInquiries(response.data)
@@ -60,7 +60,7 @@ const InquiryList = () => {
   }
 
   return (
-    <div className='max-w-3xl mx-auto mt-10 p-4 bg-white border border-gray-300 rounded-lg'>
+    <div className='w-[1000px] mx-auto mt-10 p-4 bg-white border border-gray-300 rounded-lg'>
       <h1 className='text-xl font-semibold text-gray-800 border-b pb-3'>📌 나의 문의 목록</h1>
 
       {/* 필터 선택 옵션 */}

@@ -37,12 +37,12 @@ public class RecipeController {
             MediaType.APPLICATION_OCTET_STREAM_VALUE
     })
     public ResponseDto createRecipe(
-            @RequestPart(value = "recipeCreateReqDto") String recipeCreateReqDtoString,
+            @RequestPart(value = "recipe") String recipeString,
             @RequestPart(value = "images", required = false)List<MultipartFile> images
         ) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            RecipeCreateReqDto recipeCreateReqDto = objectMapper.readValue(recipeCreateReqDtoString, RecipeCreateReqDto.class);
+            RecipeCreateReqDto recipeCreateReqDto = objectMapper.readValue(recipeString, RecipeCreateReqDto.class);
             RecipeCreateResDto recipeCreateResDto = recipeService.createRecipe(recipeCreateReqDto, images);
             return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_RECIPE, new DefaultResponse<>(recipeCreateResDto));
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class RecipeController {
     })
     public ResponseDto updateRecipe(
             @PathVariable int recipeNo,
-            @RequestPart(value = "recipeUpdateReqDto") String recipeUpdateReqDtoString,
+            @RequestPart(value = "recipe") String recipeString,
             @RequestPart(value = "images", required = false)List<MultipartFile> images
     ) {
         try {
@@ -69,7 +69,7 @@ public class RecipeController {
             // JSON 파싱 시 알 수 없는 속성 무시
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            RecipeUpdateReqDto recipeUpdateReqDto = objectMapper.readValue(recipeUpdateReqDtoString, RecipeUpdateReqDto.class);
+            RecipeUpdateReqDto recipeUpdateReqDto = objectMapper.readValue(recipeString, RecipeUpdateReqDto.class);
             // 디버깅용 로그
 //            System.out.println("Parsed DTO: " + recipeUpdateReqDto);
 

@@ -21,8 +21,7 @@ const SearchFilter = ({ onSearch }) => {
   const handleInquirySubmit = () => {
     const filters = {
       search: searchTerm,
-      companyName: companyName,
-      status: productState,
+
       startDate: customStartDate,
       endDate: customEndDate,
     }
@@ -32,34 +31,8 @@ const SearchFilter = ({ onSearch }) => {
 
   return (
     <div className='w-[400px] p-4 bg-white border border-gray-300 rounded-lg'>
-      {/* 검색어 입력 */}
-      <div className='flex flex-col border-b pb-3 mb-3 space-y-2'>
-        <div>
-          <label className='block text-gray-700 font-medium text-sm'>📌 등록상품명</label>
-          <input
-            className='w-full p-2 border border-gray-300 rounded text-sm'
-            type='text'
-            placeholder='등록상품명'
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className='block text-gray-700 font-medium text-sm'>🏢 회사명</label>
-          <input
-            className='w-full p-2 border border-gray-300 rounded text-sm'
-            type='text'
-            placeholder='회사명'
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* 판매 상태 */}
       <div className='border-b pb-3 mb-3'>
-        <label className='block text-gray-700 font-medium text-sm'>📦 판매 상태</label>
+        <label className='block text-gray-700 font-medium text-sm'>📦정산상태</label>
         <select
           className='w-full p-2 border border-gray-300 rounded text-sm'
           value={productState}

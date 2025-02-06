@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,8 +39,14 @@ public class Question extends BaseEntity implements Serializable {
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "item_no", nullable = false)
 //    private Item itemNo;
+
+    // null 이면 기타 문의
     @Column(nullable = false)
     private int itemNo;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<QuestionImage> images = new ArrayList<>();
 
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String isPrivate;
