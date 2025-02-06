@@ -5,6 +5,9 @@ import com.c108.springproject.question.domain.QuestionCategory;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Data
 @Builder
 public class QuestionResDto {
@@ -14,6 +17,7 @@ public class QuestionResDto {
     private String content;
     private String category;
     private int itemNo;
+    private List<QuestionImageDto> images;
     private String isPrivate;
     private int userNo;
     private String status;
@@ -30,6 +34,9 @@ public class QuestionResDto {
                 .content(question.getContent())
                 .category(question.getCategory().toString())
                 .itemNo(question.getItemNo())
+                .images(question.getImages().stream()
+                        .map(image -> QuestionImageDto.toDto(image))
+                        .collect(Collectors.toList()))
                 .isPrivate(question.getIsPrivate())
                 .userNo(question.getUserNo())
                 .status(question.getStatus())

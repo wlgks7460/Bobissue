@@ -2,14 +2,17 @@ package com.c108.springproject.question.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.s3.S3Service;
 import com.c108.springproject.question.domain.Question;
 import com.c108.springproject.question.domain.QuestionCategory;
+import com.c108.springproject.question.domain.QuestionImage;
 import com.c108.springproject.question.dto.request.QuestionReqDto;
 import com.c108.springproject.question.dto.request.QuestionUpdateReqDto;
 import com.c108.springproject.question.dto.response.QuestionResDto;
 import com.c108.springproject.question.repository.QuestionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,22 +21,42 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final S3Service s3Service;
 
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, S3Service s3Service) {
         this.questionRepository = questionRepository;
+        this.s3Service = s3Service;
     }
 
     @Transactional
-    public Question createQuestion(QuestionReqDto questionReqDto) {
+    public Question createQuestion(QuestionReqDto questionReqDto, List<MultipartFile> files) {
         try {
             QuestionCategory category = QuestionCategory.valueOf(questionReqDto.getCategory());
+            // 문의 생성
             Question new_question = Question.builder()
                     .title(questionReqDto.getTitle())
+                    .itemNo(questionReqDto.getItemNo()) // 아이템 번호가 0이면 기타 문의
                     .content(questionReqDto.getContent())
                     .category(category)
                     .isPrivate(questionReqDto.getIsPrivate())
                     .status("N")
                     .build();
+
+            // 이미지 생성
+            if (files != null && !files.isEmpty()) {
+                for (MultipartFile file : files) {
+                    String imageUrl = s3Service.uploadFile("question", file);
+
+                    QuestionImage questionImage = QuestionImage.builder()
+                            .question(new_question)
+                            .originalName(file.getOriginalFilename())
+                            .imageUrl(imageUrl)
+                            .build();
+                    new_question.getImages().add(questionImage);
+                }
+            }
+
+
             return questionRepository.save(new_question);
         }catch (BobIssueException e){
             throw new BobIssueException(ResponseCode.FAILED_CREATE_QUESTION);
