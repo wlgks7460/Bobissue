@@ -13,6 +13,7 @@ import ConsumerItemDetail from '../pages/consumer/ItemDetail'
 import ConsumerCart from '../pages/consumer/Cart'
 import ConsumerPayment from '../pages/consumer/Payment'
 import ConsumerSearch from '../pages/consumer/Search'
+import ConsumerCategory from '../pages/consumer/Category'
 // 이용자 마이페이지
 import ConsumerMypage from '../pages/consumer/mypage/MyPage'
 import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
           {
             path: 'search',
             element: <ConsumerSearch />,
+          },
+          {
+            path: 'categry/:categoyNo',
+            element: <ConsumerCategory />,
           },
           {
             path: 'item/:itemNo',
