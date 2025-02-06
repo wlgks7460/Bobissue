@@ -32,8 +32,7 @@ public class AdminService {
 
     @Transactional
     public String changeUserStatus(int userNo) {
-        userRepository.changeUserStatus(userNo);
-        return userRepository.findUserStatus(userNo);
+        return userRepository.changeUserStatus(userNo);
     }
 
     @Transactional

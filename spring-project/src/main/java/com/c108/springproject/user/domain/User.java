@@ -44,8 +44,8 @@ public class User extends BaseEntity {
     @Column
     private float weight;
 
-    @Column(nullable = false)
-    private int loginType;
+    @Column
+    private String loginType; //Kakao or Naver
 
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
