@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SellerDto {
+    private String name;
+    private String callNumber;
     private String email;
     private String status;
     private int companyNo;
@@ -19,6 +21,8 @@ public class SellerDto {
         this.email = seller.getEmail();
         this.status = seller.getStatus();
         this.companyNo = seller.getCompanyNo().getCompanyNo();
+        this.name = seller.getName();
+        this.callNumber = seller.getCallNumber();
     }
 
 }
