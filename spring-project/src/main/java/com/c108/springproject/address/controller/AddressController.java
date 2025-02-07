@@ -2,6 +2,7 @@ package com.c108.springproject.address.controller;
 
 import com.c108.springproject.address.domain.Address;
 import com.c108.springproject.address.dto.AddressReqDto;
+import com.c108.springproject.address.dto.AddressResDto;
 import com.c108.springproject.address.service.AddressService;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.DefaultResponse;
@@ -44,7 +45,7 @@ public class AddressController {
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ADDRESS, new DefaultResponse<Integer>(addressService.createAddress(addressReqDto).getAddressNo()));
     }
 
-    @GetMapping("/address-list")
+    @GetMapping("/list")
     public ResponseDto findAllAddress() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -53,6 +54,11 @@ public class AddressController {
         int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
 
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ADDRESS, new DefaultResponse<List<Address>>(addressService.findAllAddress(userNo)));
+    }
+
+    @GetMapping("/{address_no}")
+    public ResponseDto findAddress(@PathVariable int address_no) {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ADDRESS, new DefaultResponse<AddressResDto>(addressService.findAddressByNo(address_no)));
     }
 
 }

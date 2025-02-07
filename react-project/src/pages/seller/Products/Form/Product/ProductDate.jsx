@@ -18,7 +18,7 @@ const ProductDate = ({ product, setProduct }) => {
     <div className='mt-5'>
       <h2 className='text-[16px] font-bold'>판매 종료일</h2>
       <input
-        className='w-[400px] mt-3 p-2 border border-black'
+        className='w-[200px] mt-3 p-1 border-b  border-black'
         type='date'
         value={formatDate(product.expiredAt)} // 날짜 변환 후 표시
         onChange={(e) => setProduct((prev) => ({ ...prev, expiredAt: e.target.value }))} // 상태 업데이트

@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 public class ItemUpdateReqDto {
     private int categoryNo;
-    private int companyNo;
+//    private int companyNo;
     private String name;
     private int price;
     private int salePrice;

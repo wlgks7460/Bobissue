@@ -1,6 +1,7 @@
 package com.c108.springproject.item.dto.response;
 
 import com.c108.springproject.item.domain.Item;
+import com.c108.springproject.seller.domain.Company;
 import lombok.*;
 import lombok.AllArgsConstructor;
 
@@ -15,7 +16,7 @@ public class ItemUpdateResDto {
     private int itemNo;
     private ItemCategoryResDto category;
     private List<ImageDto> images;
-    private int companyNo;
+    private Company companyNo;
     private String name;
     private int price;
     private int salePrice;
