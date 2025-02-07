@@ -1,10 +1,16 @@
 import React from 'react'
 import {
+  UsersIcon,
+  BuildingStorefrontIcon,
+  CurrencyDollarIcon,
+  ChartBarIcon,
+  FolderIcon,
+  VideoCameraIcon,
+  ArchiveBoxIcon,
+  TicketIcon,
+  ComputerDesktopIcon,
+  ExclamationTriangleIcon,
   ChevronDownIcon,
-  UserCircleIcon,
-  ShoppingBagIcon,
-  PresentationChartBarIcon,
-  Cog6ToothIcon,
   InboxIcon,
 } from '@heroicons/react/24/outline'
 
@@ -52,7 +58,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <UserCircleIcon className='h-5 w-5' />
+              <UsersIcon className='h-5 w-5' />
               <span className='text-gray-700'>회원관리</span>
             </div>
             <ChevronDownIcon
@@ -188,7 +194,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <ShoppingBagIcon className='h-5 w-5' />
+              <BuildingStorefrontIcon className='h-5 w-5' />
               <span className='text-gray-700'>판매자 관리</span>
             </div>
             <ChevronDownIcon
@@ -288,6 +294,37 @@ const AdminSideBar = () => {
                   </div>
                 )}
               </div>
+              {/* 모니터링 */}
+              <div>
+                <div
+                  onClick={() => handleSubOpen(12)}
+                  className={`flex items-center justify-between p-2 cursor-pointer ${
+                    subOpen === 12 ? 'bg-gray-100' : ''
+                  }`}
+                >
+                  <span className='text-gray-700'>모니터링</span>
+                  <ChevronDownIcon
+                    strokeWidth={2.5}
+                    className={`h-4 w-4 transition-transform ${subOpen === 12 ? 'rotate-180' : ''}`}
+                  />
+                </div>
+                {subOpen === 12 && (
+                  <div className='pl-4 py-1 space-y-2'>
+                    <div
+                      onClick={() => navigate('/admin/seller/monitor/orders')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      주문현황
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/seller/monitor/products')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      상품현황
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -301,7 +338,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <Cog6ToothIcon className='h-5 w-5' />
+              <FolderIcon className='h-5 w-5' />
               <span onClick={() => navigate('/admin/category')} className='text-gray-700'>
                 카테고리 관리
               </span>
@@ -318,7 +355,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <PresentationChartBarIcon className='h-5 w-5' />
+              <VideoCameraIcon className='h-5 w-5' />
               <span className='text-gray-700'>라이브커머스 관리</span>
             </div>
             <ChevronDownIcon
@@ -452,7 +489,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <Cog6ToothIcon className='h-5 w-5' />
+              <ArchiveBoxIcon className='h-5 w-5' />
               <span className='text-gray-700'>컨텐츠 관리</span>
             </div>
             <ChevronDownIcon
@@ -585,19 +622,13 @@ const AdminSideBar = () => {
                 onClick={() => navigate('/admin/cs/cscenter')}
                 className='cursor-pointer p-2  hover:bg-gray-100'
               >
-                고객 센터 관리
+                문의현황
               </div>
               <div
                 onClick={() => navigate('/admin/cs/notice')}
                 className='cursor-pointer p-2  hover:bg-gray-100'
               >
                 공지사항
-              </div>
-              <div
-                onClick={() => navigate('/admin/cs/FAQ')}
-                className='cursor-pointer p-2  hover:bg-gray-100'
-              >
-                FAQ 운영
               </div>
             </div>
           )}

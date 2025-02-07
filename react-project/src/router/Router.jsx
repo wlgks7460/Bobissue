@@ -44,7 +44,8 @@ import SellerRegisterPage from '../pages/admin/seller/SellerRegisterPage'
 import SellerFeePage from '../pages/admin/seller/SellerFeePage'
 import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
 import SellerTreePage from '../pages/admin/seller/SellerTreePage'
-import SellerOrderPage from '../pages/admin/seller/SellerOrderPage'
+import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
+import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 // (관리자) 라이브커머스관리
@@ -64,7 +65,6 @@ import ReportDetailPage from '../pages/admin/report/DetailPage'
 import NotificationPage from '../pages/admin/cs/NotificationPage'
 import CSCenterPage from '../pages/admin/cs/CSCenterPage'
 import NoticePage from '../pages/admin/cs/NoticePage'
-import FAQPage from '../pages/admin/cs/FAQPage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
@@ -390,8 +390,17 @@ const router = createBrowserRouter([
                 element: <SellerTreePage />, // 판매자 트리구조 페이지
               },
               {
-                path: 'order',
-                element: <SellerOrderPage />, // 판매자 주문통계 페이지
+                path: 'monitor',
+                children: [
+                  {
+                    path: 'orders', // 주문 현황 페이지
+                    element: <MonitorOrders />,
+                  },
+                  {
+                    path: 'products',
+                    element: <MonitorProducts />,
+                  },
+                ],
               },
             ],
           },
@@ -500,10 +509,6 @@ const router = createBrowserRouter([
               {
                 path: 'notice', // 공지사항 페이지
                 element: <NoticePage />,
-              },
-              {
-                path: 'FAQ', // FAQ 운영 페이지
-                element: <FAQPage />,
               },
             ],
           },
