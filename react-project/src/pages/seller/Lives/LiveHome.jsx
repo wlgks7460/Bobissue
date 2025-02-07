@@ -4,6 +4,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
 import 'moment/locale/ko'
 import { Link } from 'react-router-dom'
+import { FaCalendarAlt, FaTimes, FaVideo } from 'react-icons/fa' // FontAwesome 아이콘
 import API from '@/utils/API' // 백엔드에서 데이터 가져오는 API
 
 moment.locale('ko') // 한글 설정
@@ -69,12 +70,14 @@ const LiveHome = () => {
   }
 
   return (
-    <div className='p-6'>
+    <div className='p-6 relative'>
       <h2 className='text-2xl font-bold mb-6'>📅 라이브 홈</h2>
 
       {/* 스케줄 캘린더 */}
       <div className='mb-6'>
-        <h3 className='text-lg font-semibold mb-4'>| 확정된 라이브 일정</h3>
+        <h3 className='text-lg font-semibold mb-4 flex items-center'>
+          <FaCalendarAlt className='mr-2 text-blue-500' /> 확정된 라이브 일정
+        </h3>
         <div className='bg-white border rounded-lg shadow-md p-4'>
           <Calendar
             localizer={localizer}
@@ -82,12 +85,12 @@ const LiveHome = () => {
             startAccessor='start'
             endAccessor='end'
             style={{ height: 500 }}
-            views={['month', 'week', 'day']}
+            views={['month']} // 📌 월별로만 표시
             defaultView='month'
             messages={{
-              next: '다음',
-              previous: '이전',
-              today: '오늘',
+              previous: '저번 달', // 📌 이전 달
+              next: '다음 달', // 📌 다음 달
+              today: '이번 달', // 📌 현재 달을 이번 달로 변경
               month: '월',
               week: '주',
               day: '일',
@@ -98,19 +101,37 @@ const LiveHome = () => {
               noEventsInRange: '확정된 라이브 일정이 없습니다.',
             }}
             components={{
-              event: ({ event }) => <span className='text-[10px]'>📌 방송 일정이 있습니다.</span>,
+              event: ({ event }) => (
+                <span className='text-[10px] flex items-center space-x-1'>
+                  <FaCalendarAlt className='text-blue-500' /> <span>방송 일정이 있습니다.</span>
+                </span>
+              ),
             }}
             onSelectEvent={handleEventClick} // 이벤트 클릭 시 모달 열기
           />
         </div>
       </div>
 
-      {/* 📌 모달 창 */}
+      {/* 📌 모달 창 (모든 요소의 최상위에 위치) */}
       {selectedEvent && (
-        <div className='fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center'>
-          <div className='bg-white p-6 rounded-lg shadow-lg w-[350px]'>
-            <h3 className='text-lg font-semibold'>{selectedEvent.title}</h3>
+        <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50'>
+          <div className='bg-white p-6 rounded-lg shadow-lg w-[350px] relative'>
+            {/* 닫기 버튼 */}
+            <button
+              onClick={closeModal}
+              className='absolute top-2 right-2 text-gray-500 hover:text-gray-700'
+            >
+              <FaTimes size={20} />
+            </button>
+
+            {/* 모달 내용 */}
+            <h3 className='text-lg font-semibold flex items-center'>
+              <FaVideo className='mr-2 text-red-500' />
+              {selectedEvent.title}
+            </h3>
             <p className='text-sm text-gray-600 mt-2'>⏰ 방송 시간: {selectedEvent.time}</p>
+
+            {/* 버튼 영역 */}
             <div className='mt-4 flex justify-end space-x-2'>
               <button
                 onClick={closeModal}
@@ -120,8 +141,9 @@ const LiveHome = () => {
               </button>
               <Link
                 to='/seller/lives/livestream'
-                className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
+                className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center'
               >
+                <FaVideo className='mr-2' />
                 라이브 하러 가기
               </Link>
             </div>
