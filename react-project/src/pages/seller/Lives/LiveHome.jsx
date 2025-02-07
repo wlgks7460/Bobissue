@@ -4,7 +4,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
 import 'moment/locale/ko'
 import { Link } from 'react-router-dom'
-import { FaCalendarAlt, FaTimes, FaVideo } from 'react-icons/fa' // FontAwesome 아이콘
+import { FaCalendarAlt, FaTimes, FaVideo, FaUser } from 'react-icons/fa' // FontAwesome 아이콘
 import API from '@/utils/API' // 백엔드에서 데이터 가져오는 API
 
 moment.locale('ko') // 한글 설정
@@ -26,17 +26,25 @@ const LiveHome = () => {
         setLiveSchedules([
           {
             id: 1,
-            title: '신상품 소개 라이브',
-            date: '2025-02-10',
-            time: '14:00-15:00',
-            duration: 60,
+            title: '봄 신상품 패션쇼',
+            description: '2025년 봄 시즌 신상품을 소개하는 라이브 방송입니다.',
+            category: '패션',
+            date: '2025-03-05',
+            time: '18:00-19:30',
+            duration: 90,
+            host: '김패션', // 신청자 이름 추가
+            thumbnail: 'https://example.com/images/fashion-live.jpg',
           },
           {
             id: 2,
-            title: '건강식품 라이브 방송',
-            date: '2025-02-12',
-            time: '10:00-11:30',
+            title: '건강식품 추천 라이브',
+            description: '건강을 위한 프리미엄 건강식품과 할인 혜택을 소개합니다.',
+            category: '식품',
+            date: '2025-03-08',
+            time: '12:00-13:30',
             duration: 90,
+            host: '이헬스', // 신청자 이름 추가
+            thumbnail: 'https://example.com/images/health-food-live.jpg',
           },
         ])
       }
@@ -56,6 +64,10 @@ const LiveHome = () => {
       end: end.toDate(),
       id: schedule.id,
       time: schedule.time,
+      description: schedule.description,
+      category: schedule.category,
+      host: schedule.host,
+      thumbnail: schedule.thumbnail,
     }
   })
 
@@ -112,10 +124,10 @@ const LiveHome = () => {
         </div>
       </div>
 
-      {/* 📌 모달 창 (모든 요소의 최상위에 위치) */}
+      {/* 📌 모달 창 */}
       {selectedEvent && (
         <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50'>
-          <div className='bg-white p-6 rounded-lg shadow-lg w-[350px] relative'>
+          <div className='bg-white p-6 rounded-lg shadow-lg w-[400px] relative'>
             {/* 닫기 버튼 */}
             <button
               onClick={closeModal}
@@ -125,11 +137,45 @@ const LiveHome = () => {
             </button>
 
             {/* 모달 내용 */}
-            <h3 className='text-lg font-semibold flex items-center'>
+            <h3 className='text-xl font-bold flex items-center mb-3'>
               <FaVideo className='mr-2 text-red-500' />
               {selectedEvent.title}
             </h3>
-            <p className='text-sm text-gray-600 mt-2'>⏰ 방송 시간: {selectedEvent.time}</p>
+
+            {/* 📌 방송 설명 */}
+            <p className='text-sm text-gray-700 mb-3'>
+              📝 {selectedEvent.description || '방송 설명 없음'}
+            </p>
+
+            {/* 📌 카테고리 */}
+            <p className='text-sm text-gray-600'>
+              📂 <strong>카테고리:</strong> {selectedEvent.category || '미선택'}
+            </p>
+
+            {/* 📌 방송 신청자 */}
+            <p className='text-sm text-gray-600 flex items-center mt-2'>
+              <FaUser className='mr-2 text-green-500' />
+              <strong>방송 신청자:</strong> {selectedEvent.host || '정보 없음'}
+            </p>
+
+            {/* 📌 방송 날짜 & 시간 */}
+            <p className='text-sm text-gray-600 mt-2'>
+              📅 <strong>방송 날짜:</strong> {selectedEvent.date}
+            </p>
+            <p className='text-sm text-gray-600'>
+              ⏰ <strong>방송 시간:</strong> {selectedEvent.time}
+            </p>
+
+            {/* 📌 썸네일 */}
+            {selectedEvent.thumbnail && (
+              <div className='mt-3'>
+                <img
+                  src={selectedEvent.thumbnail}
+                  alt='썸네일'
+                  className='w-full h-[200px] object-cover rounded-lg shadow'
+                />
+              </div>
+            )}
 
             {/* 버튼 영역 */}
             <div className='mt-4 flex justify-end space-x-2'>
@@ -142,6 +188,7 @@ const LiveHome = () => {
               <Link
                 to='/seller/lives/livestream'
                 className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center'
+                state={{ event: selectedEvent }}
               >
                 <FaVideo className='mr-2' />
                 라이브 하러 가기
