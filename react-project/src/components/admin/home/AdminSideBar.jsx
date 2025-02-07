@@ -288,6 +288,37 @@ const AdminSideBar = () => {
                   </div>
                 )}
               </div>
+              {/* 모니터링 */}
+              <div>
+                <div
+                  onClick={() => handleSubOpen(12)}
+                  className={`flex items-center justify-between p-2 cursor-pointer ${
+                    subOpen === 12 ? 'bg-gray-100' : ''
+                  }`}
+                >
+                  <span className='text-gray-700'>모니터링</span>
+                  <ChevronDownIcon
+                    strokeWidth={2.5}
+                    className={`h-4 w-4 transition-transform ${subOpen === 12 ? 'rotate-180' : ''}`}
+                  />
+                </div>
+                {subOpen === 12 && (
+                  <div className='pl-4 py-1 space-y-2'>
+                    <div
+                      onClick={() => navigate('/admin/seller/monitor/orders')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      주문 현황
+                    </div>
+                    <div
+                      onClick={() => navigate('/admin/seller/monitor/products')}
+                      className='cursor-pointer p-2 hover:bg-gray-100'
+                    >
+                      상품 현황
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

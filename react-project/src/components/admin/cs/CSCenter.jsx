@@ -15,7 +15,7 @@ const CSCenter = () => {
   const [filteredInquiries, setFilteredInquiries] = useState([])
   const [selectedInquiry, setSelectedInquiry] = useState(null)
 
-  // 답변 관련 상태태
+  // 답변 관련 상태
   const [replyText, setReplyText] = useState('')
   const [replyingInquiryId, setReplyingInquiryId] = useState(null)
 
