@@ -9,6 +9,7 @@ import com.c108.springproject.item.domain.ItemImage;
 import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
 import com.c108.springproject.item.dto.response.*;
+import com.c108.springproject.item.repository.ItemCategoryRepository;
 import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
@@ -32,14 +33,16 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemCategoryService itemCategoryService;
+    private final ItemCategoryRepository itemCategoryRepository;
     private final S3Service s3Service;
     private final SellerRepository sellerRepository;
 
 
-    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, S3Service s3Service, SellerRepository sellerRepository) {
+    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, ItemCategoryRepository itemCategoryRepository, S3Service s3Service, SellerRepository sellerRepository) {
 
         this.itemRepository = itemRepository;
         this.itemCategoryService = itemCategoryService;
+        this.itemCategoryRepository = itemCategoryRepository;
         this.s3Service = s3Service;
         this.sellerRepository = sellerRepository;
     }
@@ -59,7 +62,8 @@ public class ItemService {
 
 
         // 1. 카테고리 존재 확인 및 가져오기
-        ItemCategory category = itemCategoryService.getCategory(reqDto.getCategoryNo());
+        ItemCategory category = itemCategoryRepository.findById(reqDto.getCategoryNo())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
 
         // 2. Item 엔티티 생성
         Item item = Item.builder()
@@ -164,7 +168,7 @@ public class ItemService {
         // 3. 상품 정보 업데이트
         Item updatedItem = Item.builder()
                 .itemNo(itemNo)
-                .categoryNo(itemCategoryService.getCategory(reqDto.getCategoryNo()))
+//                .categoryNo(itemCategoryService.getCategory(reqDto.getCategoryNo()))
                 .images(updatedImages)
                 .companyNo(company)
                 .name(reqDto.getName())
