@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
 import { Search } from 'lucide-react'
+
 const MemberInfoManagement = () => {
   const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원정보관리' }]
   const navigate = useNavigate()
@@ -15,7 +16,7 @@ const MemberInfoManagement = () => {
 
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10 // 한 페이지당 10명
+  const itemsPerPage = 10
 
   useEffect(() => {
     console.log('🔍 useEffect 실행됨, 현재 경로:', window.location.pathname)
@@ -53,7 +54,7 @@ const MemberInfoManagement = () => {
     try {
       const response = await API.get('/users')
       setFilteredUsers(response.data.result.data)
-      setCurrentPage(1) // 검색 시 첫 페이지로 이동
+      setCurrentPage(1)
     } catch (error) {
       console.error('회원 조회 중 오류 발생:', error)
       alert('회원 조회에 실패했습니다.')
@@ -73,7 +74,7 @@ const MemberInfoManagement = () => {
       await API.delete(`/users/${userNo}`)
       alert('회원이 삭제되었습니다.')
 
-      fetchUsers() // 삭제 후 회원 목록 새로고침
+      fetchUsers()
       console.log('🚀 회원 삭제 후 navigate 실행!')
       navigate('/admin/members/info', { replace: true })
     } catch (error) {
@@ -82,6 +83,32 @@ const MemberInfoManagement = () => {
     }
   }
 
+  // handleToggleStatus 함수만 수정된 부분을 보여드립니다
+  const handleToggleStatus = async (userNo, currentStatus) => {
+    try {
+      const response = await API.put(`/admin/${userNo}/user-status`)
+
+      if (response.data.status === 'ACCEPTED') {
+        setFilteredUsers((users) =>
+          users.map((user) =>
+            user.userNo === userNo ? { ...user, status: response.data.result } : user,
+          ),
+        )
+
+        // 성공 메시지 표시
+        alert('사용자 상태가 변경되었습니다.')
+      } else {
+        alert('상태 변경에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('사용자 상태 변경 중 오류 발생:', error)
+      // API interceptor에서 401, 403, 409 에러를 처리하므로
+      // 여기서는 기타 에러만 처리합니다
+      if (!error.response || ![401, 403, 409].includes(error.response.status)) {
+        alert('상태 변경에 실패했습니다. 다시 시도해주세요.')
+      }
+    }
+  }
   const handleSelectUser = (userNo) => {
     setSelectedUsers((prev) =>
       prev.includes(userNo) ? prev.filter((id) => id !== userNo) : [...prev, userNo],
@@ -182,6 +209,7 @@ const MemberInfoManagement = () => {
                 <th className='border px-4 py-2'>이메일</th>
                 <th className='border px-4 py-2'>전화번호</th>
                 <th className='border px-4 py-2'>회원 등급</th>
+                <th className='border px-4 py-2'>회원 상태</th>
                 <th className='border px-4 py-2'>상세페이지</th>
               </tr>
             </thead>
@@ -202,6 +230,18 @@ const MemberInfoManagement = () => {
                   <td className='border px-4 py-2 text-center'>{user.level}</td>
                   <td className='border px-4 py-2 text-center'>
                     <button
+                      onClick={() => handleToggleStatus(user.userNo, user.status)}
+                      className={`px-3 py-1 rounded ${
+                        user.status === 'ACTIVE'
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-500 text-white'
+                      }`}
+                    >
+                      {user.status || 'ACTIVE'}
+                    </button>
+                  </td>
+                  <td className='border px-4 py-2 text-center'>
+                    <button
                       onClick={() => handleNavigateToDetail(user.userNo)}
                       className='bg-transparent text-blue-500 hover:text-blue-700 transition-colors p-1'
                     >
@@ -213,8 +253,7 @@ const MemberInfoManagement = () => {
             </tbody>
           </table>
 
-          {/* 페이지네이션 버튼 */}
-          <div className='flex justify-center mt-10 '>
+          <div className='flex justify-center mt-10'>
             {[...Array(totalPages)].map((_, index) => (
               <button
                 key={index}
