@@ -1,10 +1,13 @@
 package com.c108.springproject.global.security;
 
 import com.c108.springproject.global.jwt.JwtAuthFilter;
+import com.c108.springproject.global.oauth.CustomOAuthUserService;
+import com.c108.springproject.global.oauth.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -13,12 +16,20 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter){
+    private final CustomOAuthUserService customOAuthUserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
+                          CustomOAuthUserService customOAuthUserService,
+                          OAuth2SuccessHandler oAuth2SuccessHandler){
         this.jwtAuthFilter = jwtAuthFilter;
+        this.customOAuthUserService = customOAuthUserService;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
     }
 
     @Bean
@@ -72,6 +83,11 @@ public class SecurityConfig {
                                 "/api/question/{questionNo}"
                         ).permitAll()
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(
+                        oauth -> oauth
+                                .userInfoEndpoint(c -> c.userService(customOAuthUserService))
+                                .successHandler(oAuth2SuccessHandler)
                 )
                 .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class);
         return httpSecurity.build();
