@@ -3,7 +3,7 @@ import API from '../../../utils/API'
 import Breadcrumb from '../common/Breadcrumb'
 
 const CSCenter = () => {
-  const breadcrumbPaths = [{ name: 'Home' }, { name: 'CS관리' }, { name: '고객센터관리' }]
+  const breadcrumbPaths = [{ name: 'Home' }, { name: 'CS관리' }, { name: '문의현황' }]
 
   // 검색 관련 상태
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -15,7 +15,7 @@ const CSCenter = () => {
   const [filteredInquiries, setFilteredInquiries] = useState([])
   const [selectedInquiry, setSelectedInquiry] = useState(null)
 
-  // 답변 관련 상태태
+  // 답변 관련 상태
   const [replyText, setReplyText] = useState('')
   const [replyingInquiryId, setReplyingInquiryId] = useState(null)
 
