@@ -18,6 +18,7 @@ public class ItemCategoryResDto {
     private int categoryNo;
     private String name;
     private Integer parentNo;
+    private String parentName;
 //    private List<ItemCategoryResDto> children;
     private String createdAt;
     private String updatedAt;
@@ -28,6 +29,7 @@ public class ItemCategoryResDto {
                 .categoryNo(category.getCategoryNo())
                 .name(category.getName())
                 .parentNo(category.getParent() != null ? category.getParent().getCategoryNo() : null)
+                .parentName(category.getParent() != null ? category.getParent().getName() : null)
 //                .children(category.getChildren().stream()
 //                        .map(ItemCategoryResDto::toDto)
 //                        .collect(Collectors.toList()))

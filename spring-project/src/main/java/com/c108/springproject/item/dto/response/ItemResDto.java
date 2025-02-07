@@ -39,6 +39,8 @@ public class ItemResDto {
                         .name(item.getCategoryNo().getName())
                         .parentNo(item.getCategoryNo().getParent() != null ?
                                 item.getCategoryNo().getParent().getCategoryNo() : null)
+                        .parentName(item.getCategoryNo().getParent() != null ?
+                                item.getCategoryNo().getParent().getName() : null)
                         .build())
                 .images(item.getImages().stream()
                         .map(image -> ImageDto.toDto(image))

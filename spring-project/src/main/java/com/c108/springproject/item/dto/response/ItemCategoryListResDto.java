@@ -17,6 +17,7 @@ public class ItemCategoryListResDto {
     private int categoryNo;
     private String name;
     private Integer parentNo;
+    private String parentName;
     private List<ItemCategoryResDto> children;
 //    private String createdAt;
 //    private String updatedAt;
@@ -32,6 +33,7 @@ public class ItemCategoryListResDto {
                                 .name(child.getName())
                                 .createdAt(child.getCreatedAt())
                                 .parentNo(child.getParent() != null ? child.getParent().getCategoryNo() : null)
+                                .parentName(child.getParent() != null ? child.getParent().getName() : null)
                                 .updatedAt(child.getUpdatedAt())
                                 .build())
                         .collect(Collectors.toList()))
