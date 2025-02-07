@@ -3,7 +3,7 @@ package com.c108.springproject.global.oauth;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.user.domain.User;
-import jakarta.security.auth.message.AuthException;
+
 import lombok.Builder;
 
 import java.util.Map;
@@ -17,7 +17,6 @@ public record OAuth2UserInfo(
     public static OAuth2UserInfo of(String registrationId, Map<String, Object> attributes){
         return switch (registrationId){
             case "kakao" -> ofKakao(attributes);
-//            case "google" -> ofGoogle(attributes);
             default -> throw new BobIssueException(ResponseCode.ILLEGAL_REGISTRATION_ID);
         };
     }
@@ -25,6 +24,8 @@ public record OAuth2UserInfo(
     private static OAuth2UserInfo ofKakao(Map<String, Object> attributes){
         Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+
+        System.out.println((String) profile.get("nickname"));
 
         return OAuth2UserInfo.builder()
                 .name((String) profile.get("nickname"))
@@ -36,7 +37,14 @@ public record OAuth2UserInfo(
     public User toEntity(){
         return User.builder()
                 .name(name)
+                .birthday("20110206")
                 .email(email)
+                .password("11111")
+                .gender("M")
+                .status("Y")
+                .point(0)
+                .phoneNumber("010-1111-1111")
+                .gradeNo(0)
                 .build();
     }
 }

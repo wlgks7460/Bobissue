@@ -1,5 +1,7 @@
 package com.c108.springproject.global.oauth;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -27,10 +30,13 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
         //2. registrationId 가져오기 가져오기
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        System.out.println(registrationId);
+
 
         //3.userNameAttributeName 가져오기
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
+        System.out.println(userNameAttributeName);
 
         //4. 유저 정보 dto 생성
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes);
@@ -40,6 +46,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
         //6. OAuth2User로 반환
         return new PrincipalDetails(user, oAuth2UserAttributes, userNameAttributeName);
+//        return null;
     }
 
     private User getOrSave(OAuth2UserInfo oAuth2UserInfo){
