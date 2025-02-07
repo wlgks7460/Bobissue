@@ -585,19 +585,13 @@ const AdminSideBar = () => {
                 onClick={() => navigate('/admin/cs/cscenter')}
                 className='cursor-pointer p-2  hover:bg-gray-100'
               >
-                고객 센터 관리
+                문의현황
               </div>
               <div
                 onClick={() => navigate('/admin/cs/notice')}
                 className='cursor-pointer p-2  hover:bg-gray-100'
               >
                 공지사항
-              </div>
-              <div
-                onClick={() => navigate('/admin/cs/FAQ')}
-                className='cursor-pointer p-2  hover:bg-gray-100'
-              >
-                FAQ 운영
               </div>
             </div>
           )}

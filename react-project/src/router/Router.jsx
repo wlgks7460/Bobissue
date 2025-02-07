@@ -64,7 +64,6 @@ import ReportDetailPage from '../pages/admin/report/DetailPage'
 import NotificationPage from '../pages/admin/cs/NotificationPage'
 import CSCenterPage from '../pages/admin/cs/CSCenterPage'
 import NoticePage from '../pages/admin/cs/NoticePage'
-import FAQPage from '../pages/admin/cs/FAQPage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
@@ -500,10 +499,6 @@ const router = createBrowserRouter([
               {
                 path: 'notice', // 공지사항 페이지
                 element: <NoticePage />,
-              },
-              {
-                path: 'FAQ', // FAQ 운영 페이지
-                element: <FAQPage />,
               },
             ],
           },
