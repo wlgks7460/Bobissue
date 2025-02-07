@@ -1,10 +1,16 @@
 import React from 'react'
 import {
+  UsersIcon,
+  BuildingStorefrontIcon,
+  CurrencyDollarIcon,
+  ChartBarIcon,
+  FolderIcon,
+  VideoCameraIcon,
+  ArchiveBoxIcon,
+  TicketIcon,
+  ComputerDesktopIcon,
+  ExclamationTriangleIcon,
   ChevronDownIcon,
-  UserCircleIcon,
-  ShoppingBagIcon,
-  PresentationChartBarIcon,
-  Cog6ToothIcon,
   InboxIcon,
 } from '@heroicons/react/24/outline'
 
@@ -52,7 +58,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <UserCircleIcon className='h-5 w-5' />
+              <UsersIcon className='h-5 w-5' />
               <span className='text-gray-700'>회원관리</span>
             </div>
             <ChevronDownIcon
@@ -188,7 +194,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <ShoppingBagIcon className='h-5 w-5' />
+              <BuildingStorefrontIcon className='h-5 w-5' />
               <span className='text-gray-700'>판매자 관리</span>
             </div>
             <ChevronDownIcon
@@ -308,13 +314,13 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/seller/monitor/orders')}
                       className='cursor-pointer p-2 hover:bg-gray-100'
                     >
-                      주문 현황
+                      주문현황
                     </div>
                     <div
                       onClick={() => navigate('/admin/seller/monitor/products')}
                       className='cursor-pointer p-2 hover:bg-gray-100'
                     >
-                      상품 현황
+                      상품현황
                     </div>
                   </div>
                 )}
@@ -332,7 +338,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <Cog6ToothIcon className='h-5 w-5' />
+              <FolderIcon className='h-5 w-5' />
               <span onClick={() => navigate('/admin/category')} className='text-gray-700'>
                 카테고리 관리
               </span>
@@ -349,7 +355,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <PresentationChartBarIcon className='h-5 w-5' />
+              <VideoCameraIcon className='h-5 w-5' />
               <span className='text-gray-700'>라이브커머스 관리</span>
             </div>
             <ChevronDownIcon
@@ -483,7 +489,7 @@ const AdminSideBar = () => {
             }`}
           >
             <div className='flex items-center space-x-2'>
-              <Cog6ToothIcon className='h-5 w-5' />
+              <ArchiveBoxIcon className='h-5 w-5' />
               <span className='text-gray-700'>컨텐츠 관리</span>
             </div>
             <ChevronDownIcon
