@@ -28,13 +28,13 @@ const SellerLoginPage = () => {
     e.preventDefault()
     setError('') // 🔹 이전 에러 초기화
     setLoading(true) // 🔹 로딩 시작
-    const dummy = true
-    if (dummy) {
+    const debug_token = false
+    if (debug_token) {
       const payload = { email, password }
       setItemWithExpiry('userId', payload.email, 600)
       localStorage.setItem('access_token', dummy)
       navigate('/seller')
-    } else if (!dummy) {
+    } else {
       try {
         const payload = { email, password }
         console.log(payload)

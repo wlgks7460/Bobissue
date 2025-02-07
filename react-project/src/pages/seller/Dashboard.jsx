@@ -9,7 +9,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchPendingProduct = async () => {
       try {
-        const response = await fetch('/api/products/pending')
+        const response = await fetch('/products/pending')
         const data = await response.json()
         setHasPendingProduct(data.hasPending)
       } catch (error) {

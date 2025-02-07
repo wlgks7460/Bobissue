@@ -292,6 +292,14 @@ const router = createBrowserRouter([
                 path: 'home',
                 element: <Seller.LiveHome />,
               },
+              {
+                path: 'livestream',
+                element: <Seller.LiveStream />,
+              },
+              {
+                path: 'apply',
+                element: <Seller.LiveApply />,
+              },
             ],
           },
         ],
