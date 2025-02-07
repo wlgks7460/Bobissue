@@ -41,3 +41,4 @@ export { default as Notices } from './Notices/Notices'
 export { default as NoticesView } from './Notices/View'
 //라이브커머스
 export { default as LiveHome } from './Lives/LiveHome'
+export { default as LiveStream } from './Lives/LiveShow/LiveStream'
