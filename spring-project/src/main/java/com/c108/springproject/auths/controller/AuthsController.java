@@ -69,10 +69,10 @@ public class AuthsController {
         }
     }
 
-    @PostMapping("/social/login")
-    public ResponseDto oauth(@RequestParam String provider, @RequestParam String accessToken){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN, new DefaultResponse<>(authsService.findOauthUser(provider, accessToken)));
-    }
+//    @PostMapping("/social/login")
+//    public ResponseDto oauth(@RequestParam String provider, @RequestParam String accessToken){
+//        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_LOGIN, new DefaultResponse<>(authsService.findOauthUser(provider, accessToken)));
+//    }
 
 
 

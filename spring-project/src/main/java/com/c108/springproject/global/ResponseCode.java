@@ -177,6 +177,7 @@ public enum ResponseCode {
     SUCCESS_DELETE_ADDRESS("SUCCESS_DELETE_ADDRESS", "주소 삭제 성공"),
     FAILED_DELETE_ADDRESS("FAILED_DELETE_ADDRESS", "주소 삭제 실패"),
     SUCCESS_DELETE_ITEM("SUCCESS_DELETE_ITEM", "아이템 삭제 성공"),
+    ILLEGAL_REGISTRATION_ID("ILLEGAL_REGISTRATION_ID", "OAuth 종류 없음"),
     ;
 
     private final String code;

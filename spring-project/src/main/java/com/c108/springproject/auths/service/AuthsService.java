@@ -224,30 +224,30 @@ public class AuthsService {
         return null;
     }
 
-
-    @Transactional
-    public Map<String, String> findOauthUser(String provider, String token){
-        User user = userRepository.findByEmail(token).orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
-        try{
-            String accessToken = jwtTokenProvider.createAccessToken(String.format("%s:%s", user.getEmail(), "USER"));
-            String refreshToken = jwtTokenProvider.createRefreshToken("USER", user.getUserNo());
-
-            refreshTokenRepository.findByUserEmail(user.getEmail())
-                    .ifPresentOrElse(
-                            it -> it.updateRefreshToken(refreshToken),
-                            () -> refreshTokenRepository.save(new RefreshToken(user, refreshToken))
-                    );
-
-            Map<String, String> result = new HashMap<>();
-
-            result.put("access_token", accessToken);
-            result.put("refresh_token", refreshToken);
-
-            return result;
-        }catch (BobIssueException e){
-            throw new BobIssueException(ResponseCode.FAILED_LOGIN);
-        }
-    }
+//
+//    @Transactional
+//    public Map<String, String> findOauthUser(String provider, String token){
+//        User user = userRepository.findByEmail(token).orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+//        try{
+//            String accessToken = jwtTokenProvider.createAccessToken(String.format("%s:%s", user.getEmail(), "USER"));
+//            String refreshToken = jwtTokenProvider.createRefreshToken("USER", user.getUserNo());
+//
+//            refreshTokenRepository.findByUserEmail(user.getEmail())
+//                    .ifPresentOrElse(
+//                            it -> it.updateRefreshToken(refreshToken),
+//                            () -> refreshTokenRepository.save(new RefreshToken(user, refreshToken))
+//                    );
+//
+//            Map<String, String> result = new HashMap<>();
+//
+//            result.put("access_token", accessToken);
+//            result.put("refresh_token", refreshToken);
+//
+//            return result;
+//        }catch (BobIssueException e){
+//            throw new BobIssueException(ResponseCode.FAILED_LOGIN);
+//        }
+//    }
 
 
 }
