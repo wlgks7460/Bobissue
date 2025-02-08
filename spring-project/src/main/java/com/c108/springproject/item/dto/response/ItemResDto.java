@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class ItemResDto {
     private int itemNo;
-    private ItemCategoryResDto category;
+    private ItemCategoryListResDto category;
     private List<ImageDto> images;
     private Company companyNo;
     private String name;
@@ -34,11 +34,13 @@ public class ItemResDto {
     public static ItemResDto toDto(Item item) {
         return ItemResDto.builder()
                 .itemNo(item.getItemNo())
-                .category(ItemCategoryResDto.builder()
+                .category(ItemCategoryListResDto.builder()
                         .categoryNo(item.getCategoryNo().getCategoryNo())
                         .name(item.getCategoryNo().getName())
-                        .createdAt(item.getCategoryNo().getCreatedAt())
-                        .updatedAt(item.getCategoryNo().getUpdatedAt())
+                        .parentNo(item.getCategoryNo().getParent() != null ?
+                                item.getCategoryNo().getParent().getCategoryNo() : null)
+                        .parentName(item.getCategoryNo().getParent() != null ?
+                                item.getCategoryNo().getParent().getName() : null)
                         .build())
                 .images(item.getImages().stream()
                         .map(image -> ImageDto.toDto(image))
