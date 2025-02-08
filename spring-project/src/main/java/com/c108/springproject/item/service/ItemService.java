@@ -165,10 +165,14 @@ public class ItemService {
             }
         }
 
+        ItemCategory category = itemCategoryRepository.findById(reqDto.getCategoryNo())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
+
+
         // 3. 상품 정보 업데이트
         Item updatedItem = Item.builder()
                 .itemNo(itemNo)
-//                .categoryNo(itemCategoryService.getCategory(reqDto.getCategoryNo()))
+                .categoryNo(category)
                 .images(updatedImages)
                 .companyNo(company)
                 .name(reqDto.getName())

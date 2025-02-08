@@ -80,12 +80,7 @@ public class ItemCategoryService {
 
         category.setName(dto.getName());
 
-        return ItemCategoryResDto.builder()
-                .categoryNo(category.getCategoryNo())
-                .name(category.getName())
-                .createdAt(category.getCreatedAt())
-                .updatedAt(category.getUpdatedAt())
-                .build();
+        return ItemCategoryResDto.toDto(category);
     }
     
     

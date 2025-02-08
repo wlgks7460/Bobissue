@@ -28,8 +28,9 @@ public class ItemCategory extends BaseEntity {
     @JsonIgnore
     private ItemCategory parent; // 부모 카테고리
 
+    @Builder.Default
     @OneToMany(mappedBy = "categoryNo")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     @OneToMany(mappedBy = "parent")
     @Builder.Default
