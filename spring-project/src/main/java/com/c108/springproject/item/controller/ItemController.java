@@ -95,4 +95,22 @@ public class ItemController {
         itemService.deleteItem(itemNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_ITEM, new DefaultResponse<>(itemNo));
     }
+
+    @PostMapping("/{itemNo}/like")
+    public ResponseDto addLike(@PathVariable int itemNo) {
+        itemService.addLike(itemNo);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_LIKE, new DefaultResponse<>(itemNo));
+    }
+
+    @DeleteMapping("/{itemNo}/like")
+    public ResponseDto removeLike(@PathVariable int itemNo) {
+        itemService.removeLike(itemNo);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_LIKE, new DefaultResponse<>(itemNo));
+    }
+
+    @GetMapping("/like")
+    public ResponseDto getLikedItems() {
+        List<ItemListResDto> items = itemService.getLikedItems();
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_LIKES, new DefaultResponse<>(items));
+    }
 }
