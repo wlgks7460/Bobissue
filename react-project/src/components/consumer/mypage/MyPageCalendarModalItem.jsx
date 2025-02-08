@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 const MyPageCalendarModalItem = ({ meal }) => {
   const [mode, setMode] = useState('read')
+
   return (
     <div>
       {mode === 'read' && (
@@ -39,12 +40,28 @@ const MyPageCalendarModalItem = ({ meal }) => {
               />
             </div>
             <div>
-              <h4 className='font-bold'>{meal.title}</h4>
-              <div>
-                <span className='me-5'>{meal.time}</span>
-                <span className='text-sm text-gray-500'>{meal.calories} kcal</span>
+              <input
+                type='text'
+                defaultValue={meal.title}
+                className='font-bold px-2 py-1 border border-gray-300 rounded mb-2'
+              />
+              <div className='flex gap-3 mb-2'>
+                <input
+                  type='time'
+                  defaultValue={meal.time}
+                  className='px-2 py-1 border border-gray-300 rounded'
+                />
+                <span className='flex px-2 py-1 border border-gray-300 rounded'>
+                  <input
+                    type='number'
+                    defaultValue={meal.calories}
+                    className='text-right w-[80px]'
+                  />
+                  kcal
+                </span>
               </div>
               <div className='flex gap-3'>
+                <input type='file' name='' id='' accept='image/*' />
                 <button className='p-1 text-indigo-600'>수정</button>
                 <button className='p-1 text-red-600' onClick={() => setMode('read')}>
                   취소
@@ -52,7 +69,6 @@ const MyPageCalendarModalItem = ({ meal }) => {
               </div>
             </div>
           </div>
-          <input type='file' name='' id='' accept='image/*' />
         </div>
       )}
     </div>
