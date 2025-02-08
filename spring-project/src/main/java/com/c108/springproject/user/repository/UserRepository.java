@@ -25,6 +25,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
     @Query("UPDATE User u SET u.status = CASE WHEN u.status = 'Y' THEN 'N' ELSE 'Y' END WHERE u.userNo = :userNo")
-    String changeUserStatus(int userNo);
+    void changeUserStatus(int userNo);
+
+    @Query("SELECT s.status FROM User s WHERE s.userNo = :userNo")
+    String findUserStatus(int userNo);
 
 }
