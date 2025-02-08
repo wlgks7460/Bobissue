@@ -34,12 +34,9 @@ const MemberInfoManagement = () => {
     setIsLoading(true)
     try {
       const response = await API.get('/users')
-      console.log('🛠 API 응답:', response.data)
+      console.log('API 응답:', response.data)
 
-      if (response.status === 302) {
-        console.warn('🚨 API에서 강제 리다이렉트 감지!')
-      }
-
+      // 응답 데이터를 그대로 사용 (이미 ACTIVE/DEACTIVE로 변환되어 있음)
       setFilteredUsers(response.data.result.data)
     } catch (error) {
       console.error('회원 조회 중 오류 발생:', error)
@@ -48,12 +45,15 @@ const MemberInfoManagement = () => {
       setIsLoading(false)
     }
   }
-
   const handleSearch = async () => {
     setIsLoading(true)
     try {
       const response = await API.get('/users')
-      setFilteredUsers(response.data.result.data)
+      const processedUsers = response.data.result.data.map((user) => ({
+        ...user,
+        status: user.status || 'ACTIVE',
+      }))
+      setFilteredUsers(processedUsers)
       setCurrentPage(1)
     } catch (error) {
       console.error('회원 조회 중 오류 발생:', error)
@@ -83,32 +83,6 @@ const MemberInfoManagement = () => {
     }
   }
 
-  // handleToggleStatus 함수만 수정된 부분을 보여드립니다
-  const handleToggleStatus = async (userNo, currentStatus) => {
-    try {
-      const response = await API.put(`/admin/${userNo}/user-status`)
-
-      if (response.data.status === 'ACCEPTED') {
-        setFilteredUsers((users) =>
-          users.map((user) =>
-            user.userNo === userNo ? { ...user, status: response.data.result } : user,
-          ),
-        )
-
-        // 성공 메시지 표시
-        alert('사용자 상태가 변경되었습니다.')
-      } else {
-        alert('상태 변경에 실패했습니다.')
-      }
-    } catch (error) {
-      console.error('사용자 상태 변경 중 오류 발생:', error)
-      // API interceptor에서 401, 403, 409 에러를 처리하므로
-      // 여기서는 기타 에러만 처리합니다
-      if (!error.response || ![401, 403, 409].includes(error.response.status)) {
-        alert('상태 변경에 실패했습니다. 다시 시도해주세요.')
-      }
-    }
-  }
   const handleSelectUser = (userNo) => {
     setSelectedUsers((prev) =>
       prev.includes(userNo) ? prev.filter((id) => id !== userNo) : [...prev, userNo],
@@ -142,7 +116,37 @@ const MemberInfoManagement = () => {
       alert('회원 삭제에 실패했습니다.')
     }
   }
+  const handleToggleStatus = async (userNo, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'ACTIVE' ? 'DEACTIVE' : 'ACTIVE'
+      const response = await API.put(`/admin/${userNo}/user-status`, {
+        status: newStatus,
+      })
 
+      console.log('상태 변경 응답:', response.data)
+
+      if (response.data.status === 'ACCEPTED') {
+        setFilteredUsers((users) =>
+          users.map((user) =>
+            user.userNo === userNo ? { ...user, status: response.data.result } : user,
+          ),
+        )
+        // 상태에 따라 다른 alert 메시지 표시
+        const alertMessage =
+          response.data.result === 'ACTIVE'
+            ? '회원이 활성화되었습니다.'
+            : '회원이 비활성화되었습니다.'
+        alert(alertMessage)
+      } else {
+        alert('상태 변경에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('사용자 상태 변경 중 오류 발생:', error)
+      if (!error.response || ![401, 403, 409].includes(error.response.status)) {
+        alert('상태 변경에 실패했습니다. 다시 시도해주세요.')
+      }
+    }
+  }
   // 페이지네이션 관련 로직
   const indexOfLastUser = currentPage * itemsPerPage
   const indexOfFirstUser = indexOfLastUser - itemsPerPage
@@ -161,7 +165,7 @@ const MemberInfoManagement = () => {
             <select
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
-              className='border border-gray-300 rounded-md px-3 py-2'
+              className='border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
             >
               <option value='user-no'>회원번호</option>
               <option value='회원명'>회원명</option>
@@ -171,10 +175,13 @@ const MemberInfoManagement = () => {
               type='text'
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
-              className='w-64 border border-gray-300 rounded-md px-3 py-2'
+              className='w-64 border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
               placeholder='검색어를 입력하세요'
             />
-            <button onClick={handleSearch} className='bg-blue-500 text-white px-4 py-2 rounded-md'>
+            <button
+              onClick={handleSearch}
+              className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+            >
               조회
             </button>
           </div>
@@ -188,7 +195,7 @@ const MemberInfoManagement = () => {
             <h2 className='text-lg font-semibold'>| 조회 결과</h2>
             <button
               onClick={handleDeleteSelected}
-              className='bg-red-500 text-white px-4 py-2 rounded-md'
+              className='bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
             >
               선택 삭제
             </button>
@@ -202,6 +209,7 @@ const MemberInfoManagement = () => {
                     type='checkbox'
                     checked={selectedUsers.length === currentUsers.length}
                     onChange={handleSelectAll}
+                    className='rounded border-gray-300 text-blue-600 focus:ring-blue-500'
                   />
                 </th>
                 <th className='border px-4 py-2'>회원번호</th>
@@ -215,12 +223,13 @@ const MemberInfoManagement = () => {
             </thead>
             <tbody>
               {currentUsers.map((user) => (
-                <tr key={user.userNo}>
+                <tr key={user.userNo} className='hover:bg-gray-50'>
                   <td className='border px-4 py-2 text-center'>
                     <input
                       type='checkbox'
                       checked={selectedUsers.includes(user.userNo)}
                       onChange={() => handleSelectUser(user.userNo)}
+                      className='rounded border-gray-300 text-blue-600 focus:ring-blue-500'
                     />
                   </td>
                   <td className='border px-4 py-2 text-center'>{user.userNo}</td>
@@ -231,19 +240,25 @@ const MemberInfoManagement = () => {
                   <td className='border px-4 py-2 text-center'>
                     <button
                       onClick={() => handleToggleStatus(user.userNo, user.status)}
-                      className={`px-3 py-1 rounded ${
-                        user.status === 'ACTIVE'
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-500 text-white'
-                      }`}
+                      className={`
+                        px-4 py-1.5 rounded-full font-medium text-sm 
+                        transition-all duration-200 ease-in-out
+                        shadow-sm hover:shadow-md
+                        focus:outline-none focus:ring-2 focus:ring-offset-2
+                        ${
+                          user.status === 'ACTIVE'
+                            ? 'bg-green-500 hover:bg-green-600 text-white focus:ring-green-500'
+                            : 'bg-gray-500 hover:bg-gray-600 text-white focus:ring-gray-500'
+                        }
+                      `}
                     >
-                      {user.status || 'ACTIVE'}
+                      {user.status === 'ACTIVE' ? '활성' : '비활성'}
                     </button>
                   </td>
                   <td className='border px-4 py-2 text-center'>
                     <button
                       onClick={() => handleNavigateToDetail(user.userNo)}
-                      className='bg-transparent text-blue-500 hover:text-blue-700 transition-colors p-1'
+                      className='bg-transparent text-blue-500 hover:text-blue-700 transition-colors p-1 rounded-full hover:bg-blue-50'
                     >
                       <Search size={20} strokeWidth={2} />
                     </button>
@@ -253,12 +268,20 @@ const MemberInfoManagement = () => {
             </tbody>
           </table>
 
-          <div className='flex justify-center mt-10'>
+          <div className='flex justify-center mt-10 gap-2'>
             {[...Array(totalPages)].map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentPage(index + 1)}
-                className={`mx-1 px-3 py-1 border ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                className={`
+                  px-4 py-2 rounded-md transition-colors duration-200 ease-in-out
+                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                  ${
+                    currentPage === index + 1
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                  }
+                `}
               >
                 {index + 1}
               </button>
