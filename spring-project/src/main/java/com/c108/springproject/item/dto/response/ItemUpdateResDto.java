@@ -35,6 +35,10 @@ public class ItemUpdateResDto {
                 .category(ItemCategoryResDto.builder()
                         .categoryNo(item.getCategoryNo().getCategoryNo())
                         .name(item.getCategoryNo().getName())
+                        .parentNo(item.getCategoryNo().getParent() != null ?
+                                item.getCategoryNo().getParent().getCategoryNo() : null)
+                        .parentName(item.getCategoryNo().getParent() != null ?
+                                item.getCategoryNo().getParent().getName() : null)
                         .createdAt(item.getCategoryNo().getCreatedAt())
                         .updatedAt(item.getCategoryNo().getUpdatedAt())
                         .build())

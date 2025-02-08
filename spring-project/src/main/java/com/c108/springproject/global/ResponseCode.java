@@ -178,6 +178,10 @@ public enum ResponseCode {
     FAILED_DELETE_ADDRESS("FAILED_DELETE_ADDRESS", "주소 삭제 실패"),
     SUCCESS_DELETE_ITEM("SUCCESS_DELETE_ITEM", "아이템 삭제 성공"),
     ILLEGAL_REGISTRATION_ID("ILLEGAL_REGISTRATION_ID", "OAuth 종류 없음"),
+    ALREADY_LIKED_ITEM("ALREADY_LIKED_ITEM", "이미 찜한 상품"),
+    SUCCESS_CREATE_LIKE("SUCCESS_CREATE_LIKE", "찜 추가 성공"),
+    SUCCESS_DELETE_LIKE("SUCCESS_DELETE_LIKE", "찜 삭제 성공"),
+    SUCCESS_FIND_ALL_LIKES("SUCCESS_FIND_ALL_LIKES", "찜 목록 조회 성공"),
     ;
 
     private final String code;
