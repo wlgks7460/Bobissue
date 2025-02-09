@@ -90,7 +90,4 @@ public class AddressController {
         int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_BASE_ADDRESS, new DefaultResponse<AddressResDto>(addressService.getBaseAddress(userNo)));
     }
-
-
-
 }

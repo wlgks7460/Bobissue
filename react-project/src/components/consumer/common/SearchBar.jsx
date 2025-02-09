@@ -6,6 +6,7 @@ import {
   MagnifyingGlassIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid'
+import API from '../../../utils/API'
 
 const SearchBar = () => {
   const navigate = useNavigate()
@@ -24,11 +25,13 @@ const SearchBar = () => {
   }
 
   useEffect(() => {
-    setCategories([
-      { categoryNo: 0, name: '닭가슴살' },
-      { categoryNo: 1, name: '포케' },
-      { categoryNo: 2, name: '도시락' },
-    ])
+    API.get('/categories')
+      .then((res) => {
+        setCategories(res.data.result.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }, [])
   return (
     <div className='w-full border flex justify-center sticky z-10 top-0 bg-slate-100'>
@@ -41,9 +44,11 @@ const SearchBar = () => {
           <Bars3Icon className='w-6' />
           <span>카테고리</span>
           {showCategory && (
-            <div className='absolute top-[60px] flex flex-col w-[150px] p-3 border bg-slate-100'>
+            <div className='absolute top-[60px] flex flex-col gap-3 w-[150px] p-3 border bg-slate-100 rounded-b'>
               {categories.map((v) => (
-                <Link key={v.categoryNo}>{v.name}</Link>
+                <Link to={`/category/${v.categoryNo}`} key={v.categoryNo}>
+                  {v.name}
+                </Link>
               ))}
             </div>
           )}

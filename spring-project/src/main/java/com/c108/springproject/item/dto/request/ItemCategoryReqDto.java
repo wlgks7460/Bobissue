@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 public class ItemCategoryReqDto {
     private String name;
+    private Integer parentNo; // null 허용 Integer
     private String createdAt;
     private String updatedAt;
 }

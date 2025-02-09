@@ -14,6 +14,7 @@ const SearchItemList = ({ keyword }) => {
         salePrice: 8000,
         stock: 100,
         createAt: '20241231',
+        images: [{ imageUrl: '' }],
       },
       {
         itemNo: 1,
@@ -22,6 +23,7 @@ const SearchItemList = ({ keyword }) => {
         salePrice: 8000,
         stock: 100,
         createAt: '20250107',
+        images: [{ imageUrl: '' }],
       },
       {
         itemNo: 2,
@@ -30,6 +32,7 @@ const SearchItemList = ({ keyword }) => {
         salePrice: 8000,
         stock: 100,
         createAt: '20250127',
+        images: [{ imageUrl: '' }],
       },
       {
         itemNo: 3,
@@ -38,6 +41,7 @@ const SearchItemList = ({ keyword }) => {
         salePrice: 8000,
         stock: 100,
         createAt: '20250201',
+        images: [{ imageUrl: '' }],
       },
       {
         itemNo: 4,
@@ -46,6 +50,7 @@ const SearchItemList = ({ keyword }) => {
         salePrice: 8000,
         stock: 100,
         createAt: '20250203',
+        images: [{ imageUrl: '' }],
       },
     ]
     setSearchItems(res)
@@ -55,7 +60,7 @@ const SearchItemList = ({ keyword }) => {
   return (
     <div>
       {/* 정렬 */}
-      <div className='flex justify-between'>
+      <div className='flex justify-between mb-3'>
         <div>
           <span>총 {searchItems.length}건</span>
         </div>

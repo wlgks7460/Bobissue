@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import SearchBar from '../../components/consumer/common/SearchBar'
-import SearchItemList from '../../components/consumer/search/SearchItemList'
+import SearchItemList from '../../components/consumer/itemList/SearchItemList'
 
 const Search = () => {
   // 쿼리스트링

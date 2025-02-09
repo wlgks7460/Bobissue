@@ -28,18 +28,20 @@ const HomeItem = ({ item }) => {
     setIsOpen(true)
   }
   return (
-    <div>
+    <div className='flex justify-center'>
       <div className='w-[250px] flex flex-col gap-2'>
         {/* 상품 이미지 */}
         <div className='relative' onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-          <Link to={`/item/${item.itemNo}`}>
-            <img
-              // 이미지 경로 수정 필요
-              src={item.images[0].imageUrl}
-              alt=''
-              className='w-full h-[300px] bg-gray-400 rounded'
-            />
-          </Link>
+          <div className='bg-gray-400 rounded'>
+            <Link to={`/item/${item.itemNo}`} className='outline-none'>
+              <img
+                // 이미지 경로 수정 필요
+                src={item.images[0].imageUrl}
+                alt=''
+                className='w-full h-[300px] border-none rounded '
+              />
+            </Link>
+          </div>
           {isHovering ? (
             <button
               className='w-full h-[50px] rounded-b absolute bottom-0 bg-black/40 text-white'

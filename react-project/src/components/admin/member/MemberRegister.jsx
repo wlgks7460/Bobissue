@@ -227,12 +227,12 @@ const MemberRegister = () => {
           </div>
         </div>
 
-        <div className='text-center'>
+        <div className='text-center mt-12'>
           <button
             type='submit'
             className='bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600'
           >
-            회원 등록
+            제출하기
           </button>
         </div>
       </form>

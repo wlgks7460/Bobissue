@@ -53,7 +53,7 @@ API.interceptors.response.use(
             window.location.href = '/seller'
           } else if (loginStatus === 'admin') {
             window.location.href = '/admin'
-          } else {
+          } else if (loginStatus === 'consumer') {
             window.location.href = '/login'
           }
         }
