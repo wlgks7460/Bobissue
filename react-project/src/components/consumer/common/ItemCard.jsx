@@ -36,7 +36,7 @@ const HomeItem = ({ item }) => {
             <Link to={`/item/${item.itemNo}`} className='outline-none'>
               <img
                 // 이미지 경로 수정 필요
-                src={item.images[0].imageUrl}
+                src={item.images[0]?.imageUrl}
                 alt=''
                 className='w-full h-[300px] border-none rounded '
               />

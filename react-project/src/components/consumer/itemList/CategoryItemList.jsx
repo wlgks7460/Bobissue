@@ -7,7 +7,7 @@ const CategoryItemList = ({ items }) => {
       {/* 정렬 */}
       <div className='flex justify-between mb-3'>
         <div>
-          <span>총 {items.length}건</span>
+          <span>총 {items?.length}건</span>
         </div>
         <div className='flex gap-3 text-sm text-gray-600'>
           <button>신상품</button>
