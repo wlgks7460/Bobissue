@@ -34,7 +34,7 @@ const Register = () => {
     }
   }, [navigate])
 
-  // 📸 **이미지 업로드 핸들러 (중복 체크 & 미리보기 추가)**
+  // 📸 이미지 업로드 핸들러 (중복 체크 & 미리보기 추가)
   const handleImageUpload = (event) => {
     const file = event.target.files[0]
     if (file) {
@@ -110,8 +110,8 @@ const Register = () => {
         // ✅ API 응답에 맞게 상태 업데이트
         setProduct({
           name: registeredProduct.name,
-          categoryNo: registeredProduct.category.categoryNo, // ✅ 변경된 구조 반영
-          companyNo: registeredProduct.companyNo.companyNo, // ✅ 변경된 구조 반영
+          categoryNo: registeredProduct.category.categoryNo, // ✅ 구조 반영
+          companyNo: registeredProduct.companyNo.companyNo, // ✅ 구조 반영
           price: registeredProduct.price,
           salePrice: registeredProduct.salePrice,
           stock: registeredProduct.stock,
@@ -127,7 +127,7 @@ const Register = () => {
         alert('✅ 상품이 성공적으로 등록되었습니다!')
         navigate('/seller/products/inquiry')
       } else {
-        alert(`❌ 상품 등록 실패: ${response.data.message || '알 수 없는 오류'}`)
+        alert(`❌ 상품 등록 실패: ${response.data.message.label || '알 수 없는 오류'}`)
       }
     } catch (error) {
       console.error('상품 저장 실패:', error)
