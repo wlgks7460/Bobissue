@@ -49,6 +49,7 @@ import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
+import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
 // (관리자) 라이브커머스관리
 import LiveManagementPage from '../pages/admin/live/LiveManagementPage'
 import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
@@ -438,7 +439,16 @@ const router = createBrowserRouter([
           {
             // 카테고리 관리 섹션
             path: 'category',
-            element: <CategoryManagementPage />, // 카테고리 관리 페이지
+            children: [
+              {
+                path: '',
+                element: <CategoryManagementPage />, // 카테고리 관리 페이지
+              },
+              {
+                path: ':categoryNo',
+                element: <CategoryDetailPage />, // 카테고리 상세 페이지
+              },
+            ],
           },
           {
             // 라이브 커머스 섹션
