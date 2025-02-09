@@ -6,13 +6,18 @@ import com.c108.springproject.global.s3.S3Service;
 import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemCategory;
 import com.c108.springproject.item.domain.ItemImage;
+import com.c108.springproject.item.domain.ItemLike;
 import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
 import com.c108.springproject.item.dto.response.*;
+import com.c108.springproject.item.repository.ItemCategoryRepository;
+import com.c108.springproject.item.repository.ItemLikeRepository;
 import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
+import com.c108.springproject.user.domain.User;
+import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -32,16 +37,22 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemCategoryService itemCategoryService;
+    private final ItemCategoryRepository itemCategoryRepository;
     private final S3Service s3Service;
     private final SellerRepository sellerRepository;
+    private final ItemLikeRepository itemLikeRepository;
+    private final UserRepository userRepository;
 
 
-    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, S3Service s3Service, SellerRepository sellerRepository) {
+    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, ItemCategoryRepository itemCategoryRepository, S3Service s3Service, SellerRepository sellerRepository, ItemLikeRepository itemLikeRepository, UserRepository userRepository) {
 
         this.itemRepository = itemRepository;
         this.itemCategoryService = itemCategoryService;
+        this.itemCategoryRepository = itemCategoryRepository;
         this.s3Service = s3Service;
         this.sellerRepository = sellerRepository;
+        this.itemLikeRepository = itemLikeRepository;
+        this.userRepository = userRepository;
     }
 
     // 상품 생성
@@ -59,7 +70,8 @@ public class ItemService {
 
 
         // 1. 카테고리 존재 확인 및 가져오기
-        ItemCategory category = itemCategoryService.getCategory(reqDto.getCategoryNo());
+        ItemCategory category = itemCategoryRepository.findById(reqDto.getCategoryNo())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
 
         // 2. Item 엔티티 생성
         Item item = Item.builder()
@@ -161,10 +173,14 @@ public class ItemService {
             }
         }
 
+        ItemCategory category = itemCategoryRepository.findById(reqDto.getCategoryNo())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
+
+
         // 3. 상품 정보 업데이트
         Item updatedItem = Item.builder()
                 .itemNo(itemNo)
-                .categoryNo(itemCategoryService.getCategory(reqDto.getCategoryNo()))
+                .categoryNo(category)
                 .images(updatedImages)
                 .companyNo(company)
                 .name(reqDto.getName())
@@ -187,6 +203,7 @@ public class ItemService {
 
     // 상품 삭제
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public void deleteItem(int itemNo) {
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
@@ -205,4 +222,60 @@ public class ItemService {
         item.delete();
         itemRepository.save(item);
     }
+
+
+    // 상품 찜 Create Delete
+    
+    // 찜
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public void addLike(int itemNo) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+
+        Item item = itemRepository.findById(itemNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+
+        if (itemLikeRepository.existsByUserAndItem(user, item)) {
+            throw new BobIssueException(ResponseCode.ALREADY_LIKED_ITEM);
+        }
+
+        ItemLike itemLike = ItemLike.builder()
+                .user(user)
+                .item(item)
+                .createdAt(new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date()))
+                .build();
+
+        itemLikeRepository.save(itemLike);
+    }
+    
+    // 찜 취소
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public void removeLike(int itemNo) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+
+        Item item = itemRepository.findById(itemNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+
+        itemLikeRepository.findByUserAndItem(user, item)
+                .ifPresent(itemLikeRepository::delete);
+    }
+
+    // 찜 목록 조회
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public List<ItemListResDto> getLikedItems() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+
+        return itemLikeRepository.findByUser(user).stream()
+                .map(like -> ItemListResDto.toDto(like.getItem()))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -16,14 +16,14 @@ const Register = () => {
     price: '',
     salePrice: '',
     stock: '',
-    images: [], // API 응답과 동일한 구조 유지
+    images: [],
     description: '',
     expiredAt: '',
   })
 
   const [createdUser, setCreatedUser] = useState(null)
 
-  // 🔍 토큰 확인 및 인증이 없으면 로그인 페이지로 이동
+  // ✅ 로그인 확인 및 인증되지 않으면 로그인 페이지로 이동
   useEffect(() => {
     const token = localStorage.getItem('access_token')
     if (!token) {
@@ -34,23 +34,21 @@ const Register = () => {
     }
   }, [navigate])
 
-  // 📸 이미지 업로드 핸들러 (미리보기 추가)
+  // 📸 **이미지 업로드 핸들러 (중복 체크 & 미리보기 추가)**
   const handleImageUpload = (event) => {
     const file = event.target.files[0]
     if (file) {
-      // 중복 검사 (이미 동일한 파일이 있는지 확인)
       const isDuplicate = product.images.some((img) => img.originalName === file.name)
       if (isDuplicate) {
         alert('이미 업로드된 이미지입니다.')
         return
       }
 
-      // 새로운 이미지 객체 생성
       const newImage = {
-        imageNo: null, // 새 이미지이므로 ID 없음
-        imageUrl: URL.createObjectURL(file), // 미리보기용 URL 생성
+        imageNo: null,
+        imageUrl: URL.createObjectURL(file),
         originalName: file.name,
-        file: file, // 실제 파일 저장
+        file: file,
       }
 
       setProduct((prev) => ({
@@ -60,10 +58,11 @@ const Register = () => {
     }
   }
 
-  // ✅ 상품 등록 핸들러
+  // ✅ 상품 등록 요청 함수
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    // 필수 항목 체크
     if (
       !product.name ||
       !product.categoryNo ||
@@ -73,13 +72,13 @@ const Register = () => {
       !product.stock ||
       !product.expiredAt ||
       !product.description ||
-      product.images.length === 0 // 최소 한 개의 이미지 필요
+      product.images.length === 0
     ) {
       alert('모든 항목을 입력해주세요.')
       return
     }
 
-    setLoading(true) // 로딩 상태 활성화
+    setLoading(true) // 로딩 시작
 
     try {
       const formData = new FormData()
@@ -93,13 +92,14 @@ const Register = () => {
       formData.append('description', product.description)
       formData.append('createdUser', createdUser)
 
-      // 이미지 파일 추가
+      // ✅ 이미지 파일 추가
       product.images.forEach((img) => {
         if (img.file) {
-          formData.append('productImages', img.file) // 파일 업로드
+          formData.append('productImages', img.file)
         }
       })
 
+      // ✅ 상품 등록 API 요청
       const response = await API.post('api/items', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
@@ -107,14 +107,19 @@ const Register = () => {
       if (response.data.status === 'CREATED') {
         const registeredProduct = response.data.result.data
 
+        // ✅ API 응답에 맞게 상태 업데이트
         setProduct({
           name: registeredProduct.name,
-          categoryNo: registeredProduct.category.categoryNo,
-          companyNo: registeredProduct.companyNo,
+          categoryNo: registeredProduct.category.categoryNo, // ✅ 변경된 구조 반영
+          companyNo: registeredProduct.companyNo.companyNo, // ✅ 변경된 구조 반영
           price: registeredProduct.price,
           salePrice: registeredProduct.salePrice,
           stock: registeredProduct.stock,
-          images: registeredProduct.images, // API 응답 이미지 그대로 저장
+          images: registeredProduct.images.map((img) => ({
+            imageNo: img.imageNo,
+            imageUrl: img.imageUrl,
+            originalName: img.originalName,
+          })),
           description: registeredProduct.description,
           expiredAt: registeredProduct.expiredAt,
         })
@@ -140,6 +145,7 @@ const Register = () => {
         <ProductInfo product={product} setProduct={setProduct} />
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
+
         <button
           type='submit'
           className={`mt-5 p-3 text-white border-black ${

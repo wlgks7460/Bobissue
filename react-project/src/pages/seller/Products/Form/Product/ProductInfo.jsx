@@ -2,57 +2,72 @@ import React, { useEffect, useState } from 'react'
 import API from '@/utils/API'
 
 const ProductInfo = ({ product, setProduct }) => {
-  const [categories, setCategories] = useState([]) // API에서 불러올 카테고리 목록
+  const [categories, setCategories] = useState([]) // 전체 카테고리 목록
+  const [selectedCategory, setSelectedCategory] = useState(null) // 선택된 최종 카테고리
 
-  // 카테고리 목록 불러오기
+  // ✅ 카테고리 API 호출
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await API.get('api/categories') // 카테고리 목록 API 호출
-        setCategories(response.data.result) // API 응답 데이터 설정
+        const response = await API.get('categories') // 카테고리 API 호출
+        console.log(response);
+        setCategories(response.data.result.data) // 카테고리 데이터 저장
       } catch (error) {
         console.error('카테고리 목록 불러오기 실패:', error)
       }
     }
-
     fetchCategories()
   }, [])
 
+  // ✅ 하위 카테고리 가져오기
+  const getChildCategories = (parentCategory) => {
+    return parentCategory?.children || []
+  }
+
+  // ✅ 최종 선택된 카테고리 처리
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category) // 선택된 카테고리 저장
+    setProduct((prev) => ({ ...prev, categoryNo: category.categoryNo })) // API 요청용 데이터 업데이트
+  }
+
   return (
-    <div className='w-[700px] border-black border p-2'>
-      <h2 className='text-[16px] font-bold'>상품 기본 정보</h2>
-
-      {/* 상품명 입력 */}
-      <input
-        className='w-[500px] mt-2 p-2 border-b-2 border-black'
-        type='text'
-        value={product.name}
-        onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
-        placeholder='상품명을 입력해주세요'
-      />
-
-      {/* 카테고리 선택 */}
-      <div className='mt-3'>
-        <label className='block text-[16px] font-bold mb-2'>카테고리</label>
-        <select
-          className='w-[400px] p-2 border-b-2 border-black'
-          value={product.categoryNo}
-          onChange={(e) => setProduct((prev) => ({ ...prev, categoryNo: e.target.value }))}
-        >
-          <option value=''>카테고리 선택</option>
+    <div className='w-full  gap-4'>
+      {/* ✅ 대분류 카테고리 */}
+      <div className='relative'>
+        <h3 className='text-lg font-bold mb-2'>📂 대분류 카테고리</h3>
+        <ul className='border p-2'>
           {categories.map((category) => (
-            <option key={category.categoryNo} value={category.categoryNo}>
+            <li
+              key={category.categoryNo}
+              className='p-2 cursor-pointer hover:bg-gray-100 relative'
+              onMouseEnter={() => setSelectedCategory(category)} // 마우스 호버 시 중분류 표시
+            >
               {category.name}
-            </option>
+
+              {/* ✅ 중분류 카테고리 */}
+              {selectedCategory?.categoryNo === category.categoryNo && (
+                <ul className='absolute top-0 left-[200px] border p-2 bg-white'>
+                  {getChildCategories(category).map((child) => (
+                    <li
+                      key={child.categoryNo}
+                      className='p-2 cursor-pointer hover:bg-gray-100'
+                      onClick={() => handleCategorySelect(child)} // 중분류 선택
+                    >
+                      {child.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
           ))}
-        </select>
+        </ul>
       </div>
 
-      {/* 회사명 입력 */}
-      <div className='mt-3'>
-        <label className='block text-[16px] font-bold mb-2'>회사명</label>
+      {/* ✅ 회사명 입력 */}
+      <div className='mt-4'>
+        <label className='block text-lg font-bold mb-2'>🏢 회사명</label>
         <input
-          className='w-[400px] p-2 border-b-2 border-black'
+          className='w-[400px] p-2 border rounded'
           type='text'
           placeholder='회사명을 입력하세요'
           value={product.companyNo}

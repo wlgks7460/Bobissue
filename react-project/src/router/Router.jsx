@@ -19,6 +19,7 @@ import ConsumerMypage from '../pages/consumer/mypage/MyPage'
 import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
 import ConsumerMyPageAddress from '../pages/consumer/mypage/MyPageAddress'
 import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
+import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
 
 // 관리자 section
 
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
               {
                 path: 'address',
                 element: <ConsumerMyPageAddress />,
+              },
+              {
+                path: 'calender',
+                element: <ConsumerMyPageCalendar />,
               },
             ],
           },

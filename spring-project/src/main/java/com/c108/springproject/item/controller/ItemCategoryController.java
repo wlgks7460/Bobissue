@@ -5,6 +5,7 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.item.dto.request.ItemCategoryReqDto;
 import com.c108.springproject.item.domain.ItemCategory;
+import com.c108.springproject.item.dto.response.ItemCategoryListResDto;
 import com.c108.springproject.item.dto.response.ItemCategoryResDto;
 import com.c108.springproject.item.service.ItemCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +34,19 @@ public class ItemCategoryController {
     public ResponseDto createCategory(@RequestBody ItemCategoryReqDto itemCategoryReqDto) {
         ItemCategory itemCategory = itemCategoryService.createCategory(itemCategoryReqDto);
         // Object로 일단 모든 정보 담아왔어요
-        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_CATEGORY, new DefaultResponse<ItemCategory>(itemCategoryService.getCategory(itemCategory.getCategoryNo())));
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_CATEGORY, new DefaultResponse<ItemCategoryResDto>(itemCategoryService.getCategory(itemCategory.getCategoryNo())));
     }
 
     // 카테고리 조회
     @GetMapping("/{categoryNo}")
     public ResponseDto getCategory(@PathVariable int categoryNo) {
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CATEGORY, new DefaultResponse<ItemCategory>(itemCategoryService.getCategory(categoryNo)));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CATEGORY, new DefaultResponse<ItemCategoryResDto>(itemCategoryService.getCategory(categoryNo)));
     }
 
     // 전체 조회
     @GetMapping("")
     public ResponseDto getAllCategories() {
-        List<ItemCategoryResDto> categories = itemCategoryService.getAllCategories();
+        List<ItemCategoryListResDto> categories = itemCategoryService.getAllCategories();
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_CATEGORY, new DefaultResponse<>(categories));
     }
 
