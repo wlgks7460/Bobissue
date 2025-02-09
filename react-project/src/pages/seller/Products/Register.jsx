@@ -104,7 +104,7 @@ const Register = () => {
       })
 
       // ✅ 상품 등록 API 요청
-      const response = await API.post('items', formData, {
+      const response = await API.post('/item', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
 
