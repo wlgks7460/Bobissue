@@ -14,7 +14,7 @@ const SellerLoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
-
+   const debug_token = false
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
     const redirectPath = queryParams.get('path') || '/seller'
@@ -28,7 +28,7 @@ const SellerLoginPage = () => {
     e.preventDefault()
     setError('') // 🔹 이전 에러 초기화
     setLoading(true) // 🔹 로딩 시작
-    const debug_token = false
+    
     if (debug_token) {
       const payload = { email, password }
       setItemWithExpiry('userId', payload.email, 600)
