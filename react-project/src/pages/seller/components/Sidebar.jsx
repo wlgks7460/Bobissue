@@ -36,10 +36,9 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             icon: <FaShippingFast className='inline-block mr-2' />,
             links: [
               { to: 'delivery/orders', text: '주문 정보 조회' },
-              { to: 'delivery/shipping', text: '출고 중지 요청' },
               { to: 'delivery/delivers', text: '배송 관리' },
-              { to: 'delivery/returns', text: '반품 관리' },
-              { to: 'delivery/exchanges', text: '교환 관리' },
+              { to: 'delivery/returns', text: '환불 관리' },
+            
             ],
           },
           {
@@ -49,7 +48,6 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             links: [
               { to: 'settlement/overview', text: '정산 조회' },
               { to: 'settlement/details', text: '정산 상세' },
-              { to: 'settlement/accounts', text: '정산 계좌 관리' },
             ],
           },
           {
@@ -67,7 +65,6 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             icon: <FaUserCog className='inline-block mr-2' />,
             links: [
               { to: 'account/verification', text: '판매자 정보 조회' },
-
               { to: 'account/update-password', text: '판매자 비밀번호 수정' },
             ],
           },
