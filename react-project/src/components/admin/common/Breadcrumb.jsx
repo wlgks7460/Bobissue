@@ -4,7 +4,7 @@
 
 import React from 'react'
 
-const Breadcrumb = ({ paths }) => {
+const Breadcrumb = ({ paths = [] }) => {
   return (
     <nav className='mb-4'>
       <ul className='flex space-x-1 text-sm text-gray-600'>
