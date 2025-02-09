@@ -3,11 +3,11 @@ import API from '@/utils/API'
 
 const ProductInfo = ({ product, setProduct }) => {
   const [categories, setCategories] = useState([]) // 전체 카테고리 목록
-  const [selectedCategory, setSelectedCategory] = useState(null) // 선택된 하위 카테고리
+  const [selectedCategory, setSelectedCategory] = useState(null) // 선택된 카테고리 (세부 카테고리 포함)
   const [hoveredCategory, setHoveredCategory] = useState(null) // 현재 마우스가 올라간 대분류 카테고리
-  const [isOpenCategory, setIsOpenCategory] = useState(false) // 대분류 드롭다운 표시 여부
+  const [isOpenCategory, setIsOpenCategory] = useState(false) // 드롭다운 표시 여부
   const [company, setCompany] = useState(null) // 회사 정보
-  const categoryRef = useRef(null) // 드롭다운 외부 클릭 감지를 위한 ref
+  const categoryRef = useRef(null) // 드롭다운 외부 클릭 감지
 
   // ✅ 카테고리 API 호출
   useEffect(() => {
@@ -44,24 +44,28 @@ const ProductInfo = ({ product, setProduct }) => {
   }, [setProduct])
 
   // ✅ 드롭다운 외부 클릭 감지하여 닫기
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
-        setIsOpenCategory(false)
-        setHoveredCategory(null)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+ 
 
-  // ✅ 하위 카테고리 선택 핸들러
+  // ✅ 대분류 카테고리 선택 핸들러
+  const handleCategorySelect = (category) => {
+    if (category.children?.length > 0) {
+      // 하위 카테고리가 있으면 hover 상태로 설정
+      setHoveredCategory(category.categoryNo)
+    } else {
+      // 하위 카테고리가 없으면 바로 선택
+      setSelectedCategory(category)
+      setProduct((prev) => ({ ...prev, categoryNo: category.categoryNo }))
+      setIsOpenCategory(false) // ✅ 선택 후 드롭다운 닫기
+      setHoveredCategory(null) // ✅ 하위 카테고리 hover 상태 초기화
+    }
+  }
+
+  // ✅ 서브 카테고리 선택 핸들러 (선택 후 드롭다운 닫기)
   const handleSubCategorySelect = (subCategory) => {
-    setSelectedCategory(subCategory)
-    setProduct((prev) => ({ ...prev, categoryNo: subCategory.categoryNo })) // API 요청용 데이터 업데이트
-    setIsOpenCategory(false) // 선택 후 드롭다운 닫기
+    setSelectedCategory(subCategory) // 선택된 카테고리 업데이트
+    setProduct((prev) => ({ ...prev, categoryNo: subCategory.categoryNo })) // 선택된 값 적용
+    setIsOpenCategory(false) // ✅ 선택 후 드롭다운 닫기
+    setHoveredCategory(null) // ✅ 하위 카테고리 hover 상태 초기화
   }
 
   return (
@@ -86,7 +90,7 @@ const ProductInfo = ({ product, setProduct }) => {
               <div
                 key={category.categoryNo}
                 className="p-2 cursor-pointer hover:bg-gray-200 flex justify-between"
-                onMouseEnter={() => setHoveredCategory(category.categoryNo)}
+                onClick={() => handleCategorySelect(category)}
               >
                 {category.name}
                 {category.children?.length > 0 && <span>▶</span>}
@@ -96,11 +100,10 @@ const ProductInfo = ({ product, setProduct }) => {
         )}
       </div>
 
-      {/* ✅ 하위 카테고리 (hover 시 표시) */}
+      {/* ✅ 서브 카테고리 (클릭해서 선택 가능) */}
       {hoveredCategory && (
         <div
           className="absolute left-[210px] top-[70px] bg-white border border-gray-300 rounded-md shadow-md p-2 w-[200px] z-20"
-          onMouseLeave={() => setHoveredCategory(null)}
         >
           {categories
             .find((cat) => cat.categoryNo === hoveredCategory)

@@ -139,7 +139,7 @@ const Register = () => {
 
   return (
     <div className='p-6'>
-      <h1 className='font-bold text-[32px] mb-10'>🛍️ 상품 등록</h1>
+      <h1 className='font-bold text-[32px] mb-10'>상품 등록</h1>
       <form onSubmit={handleSubmit}>
         <ProductImage product={product} setProduct={setProduct} />
         <ProductInfo product={product} setProduct={setProduct} />
