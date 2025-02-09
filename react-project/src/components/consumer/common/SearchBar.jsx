@@ -7,9 +7,14 @@ import {
   XCircleIcon,
 } from '@heroicons/react/24/solid'
 import API from '../../../utils/API'
+import SearchBarCategory from './SearchBarCategory'
+import { useDispatch } from 'react-redux'
+import { categoryReducerActions } from '../../../redux/reducers/categorySlice'
 
 const SearchBar = () => {
   const navigate = useNavigate()
+
+  const dispatch = useDispatch()
 
   const [categories, setCategories] = useState([]) // 카테고리 리스트
 
@@ -28,6 +33,7 @@ const SearchBar = () => {
     API.get('/categories')
       .then((res) => {
         setCategories(res.data.result.data)
+        dispatch(categoryReducerActions.setCategory({ categories: res.data.result.data }))
       })
       .catch((err) => {
         console.error(err)
@@ -44,11 +50,9 @@ const SearchBar = () => {
           <Bars3Icon className='w-6' />
           <span>카테고리</span>
           {showCategory && (
-            <div className='absolute top-[60px] flex flex-col gap-3 w-[150px] p-3 border bg-slate-100 rounded-b'>
+            <div className='absolute top-[60px] flex flex-col w-[200px] min-h-[300px] border bg-slate-100 rounded-b'>
               {categories.map((v) => (
-                <Link to={`/category/${v.categoryNo}`} key={v.categoryNo}>
-                  {v.name}
-                </Link>
+                <SearchBarCategory key={v.categoryNo} category={v} />
               ))}
             </div>
           )}

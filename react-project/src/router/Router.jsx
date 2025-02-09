@@ -134,6 +134,10 @@ const router = createBrowserRouter([
             element: <ConsumerCategory />,
           },
           {
+            path: 'category/:categoryNo/:child',
+            element: <ConsumerCategory />,
+          },
+          {
             path: 'item/:itemNo',
             element: <ConsumerItemDetail />,
           },

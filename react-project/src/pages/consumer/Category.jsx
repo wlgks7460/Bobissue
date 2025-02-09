@@ -3,32 +3,44 @@ import SearchBar from '../../components/consumer/common/SearchBar'
 import { Link, useParams } from 'react-router-dom'
 import API from '../../utils/API'
 import CategoryItemList from '../../components/consumer/itemList/CategoryItemList'
+import { useSelector } from 'react-redux'
 
 const Category = () => {
   const params = useParams()
+  const categoryState = useSelector((state) => state.category)
   const [category, setCategory] = useState() // 카테고리 정보
-  const [semiCategory, setSemiCategory] = useState([])
+  const [children, setChildren] = useState([])
+
   useEffect(() => {
-    const categoryNo = params.categoryNo
-    API.get(`/categories/${categoryNo}`)
-      .then((res) => {
-        console.log(res)
-        setCategory(res.data.result.data)
-        setSemiCategory([
-          { no: 0, name: '세부1' },
-          { no: 1, name: '세부2' },
-          { no: 2, name: '세부3' },
-          { no: 3, name: '세부4' },
-          { no: 4, name: '세부5' },
-          { no: 5, name: '세부6' },
-          { no: 6, name: '세부7' },
-          { no: 7, name: '세부8' },
-        ])
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [])
+    const categoryNo = Number(params.categoryNo)
+
+    if (categoryState.categories?.length || [] > 0) {
+      // categoryNo와 일치하는 카테고리를 찾음
+      const selectedCategory = categoryState.categories.find((v) => v.categoryNo === categoryNo)
+
+      if (selectedCategory) {
+        setChildren(selectedCategory.children || [])
+      }
+    }
+
+    if (!params.child) {
+      API.get(`/categories/${categoryNo}`)
+        .then((res) => {
+          setCategory(res.data.result.data)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    } else {
+      API.get(`categories/${params.child}`)
+        .then((res) => {
+          setCategory(res.data.result.data)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+  }, [categoryState, params.categoryNo, params.child])
   return (
     <div>
       <SearchBar />
@@ -37,9 +49,18 @@ const Category = () => {
           <h2 className='text-2xl text-center my-10'>{category?.name}</h2>
           <div className='w-full border border-gray-400 rounded px-5 mb-10'>
             <div className='flex flex-wrap'>
-              <Link className='w-[150px] text-center m-3'>전체 보기</Link>
-              {semiCategory.map((v) => (
-                <Link key={v.no} className='w-[150px] text-center m-3'>
+              <Link
+                to={`/category/${params.categoryNo}`}
+                className={`w-[150px] text-center m-3 ${!params.child && 'text-indigo-600'}`}
+              >
+                전체 보기
+              </Link>
+              {children?.map((v) => (
+                <Link
+                  to={`/category/${params.categoryNo}/${v.categoryNo}`}
+                  key={v.categoryNo}
+                  className={`w-[150px] text-center m-3 ${v.categoryNo === Number(params.child) && 'text-indigo-600'}`}
+                >
                   {v.name}
                 </Link>
               ))}
