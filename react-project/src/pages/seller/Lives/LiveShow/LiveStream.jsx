@@ -78,7 +78,7 @@ const LiveStreamSetup = () => {
 
   return (
     <div className='p-6'>
-      <h1 className='font-bold text-[32px] mb-4'>🎥 라이브 방송 환경 설정</h1>
+      <h1 className='font-bold text-[32px] mb-4'> 라이브 방송 환경 설정</h1>
 
       {/* 📌 라이브 가능 여부 메시지 */}
       {!isLiveAvailable && (

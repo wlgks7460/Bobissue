@@ -13,6 +13,7 @@ public class AddressResDto {
     private String postalCode;
     private String address;
     private String addressDetail;
+    private String name;
 
     public static AddressResDto toDto(Address address) {
         AddressResDto addressResDto = AddressResDto.builder()
@@ -21,6 +22,7 @@ public class AddressResDto {
                 .postalCode(address.getPostalCode())
                 .address(address.getAddress())
                 .addressDetail(address.getAddressDetail())
+                .name(address.getName())
                 .build();
 
         return addressResDto;

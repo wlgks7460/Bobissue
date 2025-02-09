@@ -2,19 +2,18 @@ import React, { useEffect, useState, useRef } from 'react'
 import API from '@/utils/API'
 
 const ProductInfo = ({ product, setProduct }) => {
-  const [categories, setCategories] = useState([]) // 전체 카테고리 목록
-  const [selectedCategory, setSelectedCategory] = useState(null) // 선택된 카테고리 (세부 카테고리 포함)
-  const [hoveredCategory, setHoveredCategory] = useState(null) // 현재 마우스가 올라간 대분류 카테고리
-  const [isOpenCategory, setIsOpenCategory] = useState(false) // 드롭다운 표시 여부
-  const [company, setCompany] = useState(null) // 회사 정보
-  const categoryRef = useRef(null) // 드롭다운 외부 클릭 감지
+  const [categories, setCategories] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [hoveredCategory, setHoveredCategory] = useState(null)
+  const [isOpenCategory, setIsOpenCategory] = useState(false)
+  const categoryRef = useRef(null)
 
-  // ✅ 카테고리 API 호출
+  // ✅ 카테고리 데이터 가져오기
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await API.get('categories') // 카테고리 API 호출
-        setCategories(response.data.result.data || []) // 카테고리 데이터 저장
+        const response = await API.get('categories')
+        setCategories(response.data.result.data || [])
       } catch (error) {
         console.error('카테고리 목록 불러오기 실패:', error)
       }
@@ -22,59 +21,42 @@ const ProductInfo = ({ product, setProduct }) => {
     fetchCategories()
   }, [])
 
-  // ✅ 회사 정보 API 호출
-  useEffect(() => {
-    const fetchCompany = async () => {
-      try {
-        const response = await API.get('/sellers/profile') // 회사 정보 API 호출
-        const companyData = response.data.result.data
-        if (companyData) {
-          setCompany(companyData)
-          setProduct((prev) => ({
-            ...prev,
-            companyNo: companyData.companyNo,
-            companyName: companyData.name,
-          }))
-        }
-      } catch (error) {
-        console.error('회사 정보 불러오기 실패:', error)
-      }
-    }
-    fetchCompany()
-  }, [setProduct])
-
-  // ✅ 드롭다운 외부 클릭 감지하여 닫기
- 
-
   // ✅ 대분류 카테고리 선택 핸들러
   const handleCategorySelect = (category) => {
     if (category.children?.length > 0) {
-      // 하위 카테고리가 있으면 hover 상태로 설정
       setHoveredCategory(category.categoryNo)
     } else {
-      // 하위 카테고리가 없으면 바로 선택
       setSelectedCategory(category)
       setProduct((prev) => ({ ...prev, categoryNo: category.categoryNo }))
       setIsOpenCategory(false) // ✅ 선택 후 드롭다운 닫기
-      setHoveredCategory(null) // ✅ 하위 카테고리 hover 상태 초기화
+      setHoveredCategory(null)
     }
   }
 
-  // ✅ 서브 카테고리 선택 핸들러 (선택 후 드롭다운 닫기)
+  // ✅ 서브 카테고리 선택 핸들러
   const handleSubCategorySelect = (subCategory) => {
-    setSelectedCategory(subCategory) // 선택된 카테고리 업데이트
-    setProduct((prev) => ({ ...prev, categoryNo: subCategory.categoryNo })) // 선택된 값 적용
+    setSelectedCategory(subCategory)
+    setProduct((prev) => ({ ...prev, categoryNo: subCategory.categoryNo }))
     setIsOpenCategory(false) // ✅ 선택 후 드롭다운 닫기
-    setHoveredCategory(null) // ✅ 하위 카테고리 hover 상태 초기화
+    setHoveredCategory(null)
   }
 
   return (
     <div className="gap-4 relative">
-      {/* ✅ 대분류 카테고리 선택 */}
+      <div className='text-lg font-bold mb-2'>상품명</div>
+      <input
+        type="text"
+        placeholder="상품명을 입력하세요"
+        className='w-full p-2 border rounded mb-4'
+        value={product.name}
+        onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
+      />
+
+      {/* ✅ 카테고리 선택 */}
       <div className="relative" ref={categoryRef}>
-        <h3 className="text-lg font-bold">카테고리 선택</h3>
+        <h3 className="text-lg font-bold mb-2">카테고리 선택</h3>
         <div
-          className="relative border-2 rounded-[4px] border-black w-[200px] p-2 cursor-pointer"
+          className="relative border-2 rounded-[4px] border-black w-[250px] p-2 cursor-pointer"
           onClick={() => setIsOpenCategory((prev) => !prev)}
         >
           <div className="flex justify-between items-center">
@@ -85,7 +67,7 @@ const ProductInfo = ({ product, setProduct }) => {
 
         {/* ✅ 대분류 카테고리 드롭다운 */}
         {isOpenCategory && (
-          <div className="absolute left-0 top-full w-[200px] bg-white border border-gray-300 rounded-md shadow-md z-10">
+          <div className="absolute left-0 top-full w-[250px] bg-white border border-gray-300 rounded-md shadow-md z-10">
             {categories.map((category) => (
               <div
                 key={category.categoryNo}
@@ -103,7 +85,7 @@ const ProductInfo = ({ product, setProduct }) => {
       {/* ✅ 서브 카테고리 (클릭해서 선택 가능) */}
       {hoveredCategory && (
         <div
-          className="absolute left-[210px] top-[70px] bg-white border border-gray-300 rounded-md shadow-md p-2 w-[200px] z-20"
+          className="absolute left-[260px] top-[70px] bg-white border border-gray-300 rounded-md shadow-md p-2 w-[250px] z-20"
         >
           {categories
             .find((cat) => cat.categoryNo === hoveredCategory)
@@ -118,14 +100,6 @@ const ProductInfo = ({ product, setProduct }) => {
             ))}
         </div>
       )}
-
-      {/* ✅ 회사명 표시 (API에서 자동 설정) */}
-      <div className="mt-4">
-        <label className="block text-lg font-bold mb-2">회사명</label>
-        <div className="w-[400px] p-2 border rounded bg-gray-100">
-          {company ? company.name : '불러오는 중...'}
-        </div>
-      </div>
     </div>
   )
 }

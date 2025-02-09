@@ -12,7 +12,6 @@ const Register = () => {
   const [product, setProduct] = useState({
     name: '',
     categoryNo: '',
-    companyNo: '',
     price: '',
     salePrice: '',
     stock: '',
@@ -66,7 +65,6 @@ const Register = () => {
     if (
       !product.name ||
       !product.categoryNo ||
-      !product.companyNo ||
       !product.price ||
       !product.salePrice ||
       !product.stock ||
@@ -74,6 +72,7 @@ const Register = () => {
       !product.description ||
       product.images.length === 0
     ) {
+      console.log(product)
       alert('모든 항목을 입력해주세요.')
       return
     }
@@ -82,15 +81,20 @@ const Register = () => {
 
     try {
       const formData = new FormData()
-      formData.append('name', product.name)
-      formData.append('categoryNo', product.categoryNo)
-      formData.append('companyNo', product.companyNo)
-      formData.append('price', parseFloat(product.price))
-      formData.append('salePrice', parseFloat(product.salePrice))
-      formData.append('stock', parseInt(product.stock, 10))
-      formData.append('expiredAt', product.expiredAt)
-      formData.append('description', product.description)
-      formData.append('createdUser', createdUser)
+
+      // ✅ 상품 정보를 JSON으로 변환 후 Blob 형태로 추가
+      const metadata = {
+        name: product.name,
+        categoryNo: product.categoryNo,
+        price: parseFloat(product.price),
+        salePrice: parseFloat(product.salePrice),
+        stock: parseInt(product.stock, 10),
+        expiredAt: product.expiredAt,
+        description: product.description,
+        createdUser: createdUser,
+      }
+
+      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }))
 
       // ✅ 이미지 파일 추가
       product.images.forEach((img) => {
@@ -100,7 +104,7 @@ const Register = () => {
       })
 
       // ✅ 상품 등록 API 요청
-      const response = await API.post('api/items', formData, {
+      const response = await API.post('items', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
 
@@ -111,7 +115,6 @@ const Register = () => {
         setProduct({
           name: registeredProduct.name,
           categoryNo: registeredProduct.category.categoryNo, // ✅ 구조 반영
-          companyNo: registeredProduct.companyNo.companyNo, // ✅ 구조 반영
           price: registeredProduct.price,
           salePrice: registeredProduct.salePrice,
           stock: registeredProduct.stock,
