@@ -145,8 +145,9 @@ const MemberInfoManagement = () => {
       <h1 className='text-2xl font-bold mb-6'>회원정보관리</h1>
       <section className='mb-6'>
         <h2 className='text-lg font-semibold mb-4'>
-          총 회원수: <span className='text-blue-500'>{allUsers.length}명</span>
+          🏆 총 회원수: <span className='text-blue-500 font-bold'>{allUsers.length}명 </span>
         </h2>
+
         <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
         <div className='flex items-center space-x-4'>
           <div className='flex items-center space-x-2 w-full'>
