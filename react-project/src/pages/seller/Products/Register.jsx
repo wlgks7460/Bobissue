@@ -20,7 +20,6 @@ const Register = () => {
     expiredAt: '',
   })
 
-  const [createdUser, setCreatedUser] = useState(null)
 
   // ✅ 로그인 확인 및 인증되지 않으면 로그인 페이지로 이동
   useEffect(() => {
@@ -29,7 +28,7 @@ const Register = () => {
       alert('상품 등록을 위해 로그인해주세요.')
       navigate('/login')
     } else {
-      setCreatedUser(token)
+     
     }
   }, [navigate])
 
@@ -83,7 +82,7 @@ const Register = () => {
       const formData = new FormData()
 
       // ✅ 상품 정보를 JSON으로 변환 후 Blob 형태로 추가
-      const metadata = {
+      const item = {
         name: product.name,
         categoryNo: product.categoryNo,
         price: parseFloat(product.price),
@@ -91,10 +90,10 @@ const Register = () => {
         stock: parseInt(product.stock, 10),
         expiredAt: product.expiredAt,
         description: product.description,
-        createdUser: createdUser,
+      
       }
 
-      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }))
+      formData.append('item', new Blob([JSON.stringify(item)], { type: 'application/json' }))
 
       // ✅ 이미지 파일 추가
       product.images.forEach((img) => {
@@ -128,7 +127,7 @@ const Register = () => {
         })
 
         alert('✅ 상품이 성공적으로 등록되었습니다!')
-        navigate('/seller/products/inquiry')
+        navigate('/seller/products/search')
       } else {
         alert(`❌ 상품 등록 실패: ${response.data.message.label || '알 수 없는 오류'}`)
       }

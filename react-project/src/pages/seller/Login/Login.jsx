@@ -14,7 +14,7 @@ const SellerLoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
-   const debug_token = false
+  const debug_token = false
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
     const redirectPath = queryParams.get('path') || '/seller'
