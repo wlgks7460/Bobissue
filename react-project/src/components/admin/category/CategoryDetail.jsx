@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { ChevronDown, ChevronUp, Search } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
@@ -12,9 +13,13 @@ const CategoryDetail = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // 수정 모드 관련 상태 (설명 입력란 제거, 카테고리명만 수정)
+  // 수정 모드 관련 상태 (부모 카테고리 수정: 카테고리명만)
   const [editMode, setEditMode] = useState(false)
   const [editData, setEditData] = useState({})
+
+  // 자식 카테고리 수정 모드 상태
+  const [editingChild, setEditingChild] = useState(null)
+  const [editingChildName, setEditingChildName] = useState('')
 
   // 날짜 형식 변환 함수: "20250205 115529" → "2025-02-05 11:55:29"
   const formatDate = (dateString) => {
@@ -74,12 +79,42 @@ const CategoryDetail = () => {
     }
   }
 
+  // 자식 카테고리 수정 토글 핸들러
+  const handleChildEditToggle = (child) => {
+    setEditingChild(child.categoryNo)
+    setEditingChildName(child.name)
+  }
+
+  // 자식 카테고리 수정 저장 핸들러
+  const handleChildEditSave = async (childCategoryNo) => {
+    try {
+      // 부모 번호는 수정하지 않으므로, 현재 상세 페이지의 카테고리 번호 사용
+      await API.put(`/categories/${childCategoryNo}`, {
+        name: editingChildName,
+        parentNo: categoryDetail.categoryNo,
+      })
+      alert('자식 카테고리가 수정되었습니다.')
+      await fetchChildCategories()
+      setEditingChild(null)
+      setEditingChildName('')
+    } catch (err) {
+      console.error('자식 카테고리 수정 중 오류 발생:', err)
+      alert('자식 카테고리 수정에 실패했습니다.')
+    }
+  }
+
+  // 자식 카테고리 수정 취소 핸들러
+  const handleChildEditCancel = () => {
+    setEditingChild(null)
+    setEditingChildName('')
+  }
+
   useEffect(() => {
     fetchDetail()
     fetchChildCategories()
   }, [categoryNo])
 
-  // 수정 버튼 클릭 시 수정 모드로 전환 (카테고리명만)
+  // 부모 카테고리 수정 모드 토글 핸들러 (카테고리명만)
   const handleEditToggle = () => {
     setEditData({
       name: categoryDetail.name || '',
@@ -87,13 +122,13 @@ const CategoryDetail = () => {
     setEditMode(true)
   }
 
-  // 수정폼 변경 핸들러
+  // 부모 카테고리 수정폼 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target
     setEditData((prev) => ({ ...prev, [name]: value }))
   }
 
-  // 수정 저장: 성공하면 최신 상세 정보와 자식 카테고리 목록 재조회
+  // 부모 카테고리 수정 저장: 성공하면 최신 상세 정보와 자식 카테고리 목록 재조회
   const handleSave = async () => {
     try {
       await API.put(`/categories/${categoryNo}`, editData)
@@ -107,7 +142,7 @@ const CategoryDetail = () => {
     }
   }
 
-  // 수정 취소
+  // 부모 카테고리 수정 취소
   const handleCancel = () => {
     setEditMode(false)
   }
@@ -240,6 +275,7 @@ const CategoryDetail = () => {
                 <th className='px-4 py-2 border'>번호</th>
                 <th className='px-4 py-2 border'>카테고리명</th>
                 <th className='px-4 py-2 border'>생성일</th>
+                <th className='px-4 py-2 border'>수정</th>
                 <th className='px-4 py-2 border'>삭제</th>
               </tr>
             </thead>
@@ -247,8 +283,44 @@ const CategoryDetail = () => {
               {childCategories.map((child, index) => (
                 <tr key={child.categoryNo} className='hover:bg-gray-50'>
                   <td className='px-4 py-2 border text-center'>{index + 1}</td>
-                  <td className='px-4 py-2 border text-center'>{child.name}</td>
+                  <td className='px-4 py-2 border text-center'>
+                    {editingChild === child.categoryNo ? (
+                      <input
+                        type='text'
+                        value={editingChildName}
+                        onChange={(e) => setEditingChildName(e.target.value)}
+                        className='border border-gray-300 rounded-md px-2 py-1'
+                      />
+                    ) : (
+                      child.name
+                    )}
+                  </td>
                   <td className='px-4 py-2 border text-center'>{formatDate(child.createdAt)}</td>
+                  <td className='px-4 py-2 border text-center'>
+                    {editingChild === child.categoryNo ? (
+                      <>
+                        <button
+                          onClick={() => handleChildEditSave(child.categoryNo)}
+                          className='bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded mr-2'
+                        >
+                          저장
+                        </button>
+                        <button
+                          onClick={handleChildEditCancel}
+                          className='bg-gray-500 hover:bg-gray-600 text-white py-1 px-2 rounded'
+                        >
+                          취소
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => handleChildEditToggle(child)}
+                        className='bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded'
+                      >
+                        수정
+                      </button>
+                    )}
+                  </td>
                   <td className='px-4 py-2 border text-center'>
                     <button
                       onClick={() => handleChildDelete(child.categoryNo)}
