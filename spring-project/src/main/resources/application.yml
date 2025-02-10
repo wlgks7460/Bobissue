@@ -38,7 +38,7 @@ spring:
             client-name: Kakao
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            redirect-uri: http://bobissue.duckdns.org:8082/login/oauth2/code/kakao
             scope: profile_nickname, account_email
 
 #            naver:
@@ -64,6 +64,17 @@ spring:
 
 #  config:
 #    import: optional:classpath:jwt-config.yml
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ssaminute@gmail.com
+    password: caqq iywv mhqo yymc
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 jwt:
   secretKey: MzY4IHN1cGVyIHNlY3JldCBrZXkgdGhhdCBpcyBhd2Vzb21l...

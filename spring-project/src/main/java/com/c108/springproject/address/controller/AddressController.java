@@ -36,7 +36,7 @@ public class AddressController {
         String email = authentication.getName();
 
         try{
-            int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
+            int userNo = userService.findByEmail(email).getUserNo();
             addressReqDto.setUserNo(userNo);
         }catch(BobIssueException e){
             throw new BobIssueException(ResponseCode.NOT_FOUND_USER);
@@ -50,7 +50,7 @@ public class AddressController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
+        int userNo = userService.findByEmail(email).getUserNo();
 
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ADDRESS, new DefaultResponse<List<Address>>(addressService.findAllAddress(userNo)));
     }
@@ -64,7 +64,7 @@ public class AddressController {
     public ResponseDto updateAddress(@PathVariable int address_no, @RequestBody AddressReqDto addressReqDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
+        int userNo = userService.findByEmail(email).getUserNo();
         addressReqDto.setUserNo(userNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_ADDRESS, new DefaultResponse<AddressResDto>(addressService.updateAddress(address_no,addressReqDto)));
     }
@@ -79,7 +79,7 @@ public class AddressController {
     public ResponseDto setBaseAddress(@RequestBody int addressNo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
+        int userNo = userService.findByEmail(email).getUserNo();
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SET_BASE_ADDRESS, new DefaultResponse<AddressResDto>(addressService.setBaseAddress(userNo, addressNo)));
     }
 
@@ -87,7 +87,10 @@ public class AddressController {
     public ResponseDto getBaseAddress() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        int userNo = userService.findByEmail(email).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND)).getUserNo();
+        int userNo = userService.findByEmail(email).getUserNo();
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_BASE_ADDRESS, new DefaultResponse<AddressResDto>(addressService.getBaseAddress(userNo)));
     }
+
+
+
 }

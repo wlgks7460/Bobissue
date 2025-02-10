@@ -18,7 +18,7 @@ const InquiryList = () => {
       setInquiries(dummyData)
       setFilteredInquiries(dummyData)
     } else {
-      API.get(`/questions/`)
+      API.get(`/questions`)
         .then((response) => {
           setInquiries(response.data)
           setFilteredInquiries(response.data)
@@ -55,20 +55,20 @@ const InquiryList = () => {
   }
 
   return (
-    <div className='w-[1000px] mx-auto mt-10 p-4 bg-white border border-gray-300 rounded-lg'>
-      <h1 className='text-xl font-semibold text-gray-800 border-b pb-3'>📌 상품 문의</h1>
+    <div className='max-w-4xl mx-auto mt-10 p-6 bg-white border border-gray-300 rounded-lg shadow-md'>
+      <h1 className='text-2xl font-bold text-gray-800 border-b pb-3 text-center'>상품 문의</h1>
 
       {/* ✅ 클릭 가능한 카테고리 버튼 */}
-      <div className='flex space-x-4 justify-center text-[18px] my-4'>
+      <div className='flex space-x-6 justify-center text-[16px] font-medium my-6'>
         {['제품', '배송', '결제', '반품', '기타'].map((category) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
-            className={`border-b-2 pb-1 px-3 ${
+            className={`border-b-2 pb-1 px-3 transition ${
               typeFilter === category
-                ? 'border-blue-500 text-blue-600 font-semibold'
-                : 'border-transparent'
-            } hover:border-blue-500`}
+                ? 'border-indigo-500 text-indigo-600 font-semibold'
+                : 'border-transparent text-gray-600 hover:text-indigo-500 hover:border-indigo-500'
+            }`}
           >
             {category}
           </button>
@@ -76,7 +76,7 @@ const InquiryList = () => {
       </div>
 
       {/* ✅ 필터 선택 옵션 */}
-      <div className='flex gap-4 mb-4'>
+      <div className='flex gap-6 mb-6 items-center'>
         {/* 답변 여부 필터 */}
         <div className='flex items-center gap-2'>
           <label htmlFor='answerFilter' className='text-sm font-medium text-gray-700'>
@@ -86,7 +86,7 @@ const InquiryList = () => {
             id='answerFilter'
             value={answerFilter}
             onChange={(e) => setAnswerFilter(e.target.value)}
-            className='w-[100px] border-b border-black p-1 text-sm focus:ring-blue-500 focus:border-blue-500'
+            className='w-[110px] border border-gray-300 rounded-md p-2 text-sm focus:ring-indigo-500 focus:border-indigo-500'
           >
             <option value='all'>전체</option>
             <option value='unanswered'>미답변</option>
@@ -96,44 +96,46 @@ const InquiryList = () => {
       </div>
 
       {/* ✅ 문의 리스트 테이블 */}
-      <table className='w-full text-left border-collapse mt-4 text-sm'>
-        <thead>
-          <tr className='border-b bg-gray-100'>
-            <th className='p-2 w-20 text-center'>문의 번호</th>
-            <th className='p-2 w-32 text-center'>문의 유형</th>
-            <th className='p-2 text-center'>제목</th>
-            <th className='p-2 w-32 text-center'>답변 등록 여부</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredInquiries.length > 0 ? (
-            filteredInquiries.map((inquiry) => (
-              <tr
-                key={inquiry.id}
-                onClick={() => handleInquiryClick(inquiry.id)}
-                className='border-b hover:bg-gray-200 cursor-pointer'
-              >
-                <td className='p-2 text-center'>{inquiry.id}</td>
-                <td className='p-2 text-center'>{inquiry.type}</td>
-                <td className='p-2 text-center'>{inquiry.title}</td>
-                <td
-                  className={`p-2 text-center font-medium ${
-                    inquiry.isAnswered ? 'text-green-600' : 'text-red-600'
-                  }`}
+      <div className='overflow-x-auto'>
+        <table className='w-full text-left border-collapse mt-4 text-sm'>
+          <thead>
+            <tr className='border-b bg-gray-100 text-gray-700'>
+              <th className='p-3 w-20 text-center'>번호</th>
+              <th className='p-3 w-28 text-center'>문의 유형</th>
+              <th className='p-3 text-center'>제목</th>
+              <th className='p-3 w-40 text-center'>답변 상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredInquiries.length > 0 ? (
+              filteredInquiries.map((inquiry) => (
+                <tr
+                  key={inquiry.id}
+                  onClick={() => handleInquiryClick(inquiry.id)}
+                  className='border-b hover:bg-gray-100 cursor-pointer transition'
                 >
-                  {inquiry.isAnswered ? '답변 완료' : '미답변'}
+                  <td className='p-3 text-center'>{inquiry.id}</td>
+                  <td className='p-3 text-center'>{inquiry.type}</td>
+                  <td className='p-3 text-center'>{inquiry.title}</td>
+                  <td
+                    className={`p-3 text-center font-semibold ${
+                      inquiry.isAnswered ? 'text-green-500' : 'text-red-500'
+                    }`}
+                  >
+                    {inquiry.isAnswered ? '답변 완료' : '미답변'}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan='4' className='p-6 text-center text-gray-500'>
+                  해당하는 문의가 없습니다.
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan='4' className='p-4 text-center text-gray-500'>
-                해당하는 문의가 없습니다.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
