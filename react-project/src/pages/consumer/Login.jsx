@@ -47,9 +47,7 @@ const Login = () => {
   // 카카오 로그인 함수
   const kakaoLogin = (e) => {
     e.preventDefault()
-    const kakaoClientId = import.meta.env.VITE_KAKAO_LOGIN_CLIENT_ID
-    const kakaoRedirectURL = import.meta.env.VITE_KAKAO_LOGIN_REDIRECT_URL
-    window.location.href = `${import.meta.env.VITE_BOBISUUE_BASE_URL}/`
+    window.location.href = `http://localhost:8080/oauth2/authorization/kakao`
   }
   return (
     <div className='min-h-[70vh] flex justify-center pt-16'>

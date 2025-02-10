@@ -26,6 +26,7 @@ const KakaoLogin = () => {
     } else {
       const accessToken = searchParams.get('accessToken')
       const refreshToken = searchParams.get('refreshToken')
+      console.log(accessToken + ' ' + refreshToken)
       const payload = {
         accessToken,
         refreshToken,
