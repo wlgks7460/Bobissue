@@ -5,18 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CastReqDto {
+public class CastItemReqDto {
 
-    private String title;
-    private String content;
-    private String startAt;
-    private int castTime;
-    private List<CastItemReqDto> items;
-
+    private int itemNo;
 }

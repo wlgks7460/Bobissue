@@ -1,11 +1,16 @@
 package com.c108.springproject.cast.service;
 
 import com.c108.springproject.cast.domain.Cast;
+import com.c108.springproject.cast.domain.CastItem;
+import com.c108.springproject.cast.dto.requset.CastItemReqDto;
 import com.c108.springproject.cast.dto.requset.CastReqDto;
 import com.c108.springproject.cast.dto.response.CastResDto;
+import com.c108.springproject.cast.repository.CastItemRepository;
 import com.c108.springproject.cast.repository.CastRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.item.domain.Item;
+import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
 import jakarta.transaction.Transactional;
@@ -22,11 +27,17 @@ public class CastService {
 
     private final CastRepository castRepository;
     private final SellerRepository sellerRepository;
+    private final ItemRepository itemRepository;
+    private final CastItemRepository castItemRepository;
 
     public CastService(CastRepository castRepository,
-                       SellerRepository sellerRepository){
+                       SellerRepository sellerRepository,
+                       ItemRepository itemRepository,
+                       CastItemRepository castItemRepository){
         this.castRepository = castRepository;
         this.sellerRepository =sellerRepository;
+        this.itemRepository = itemRepository;
+        this.castItemRepository = castItemRepository;
     }
 
     @Transactional
@@ -43,7 +54,24 @@ public class CastService {
                     .startAt(castReqDto.getStartAt())
                     .castTime(castReqDto.getCastTime())
                     .build();
-            return castRepository.save(new_cast);
+            castRepository.save(new_cast);
+
+            List<CastItemReqDto> castItemReqDtos = castReqDto.getItems();
+
+            for(CastItemReqDto castItemReqDto : castItemReqDtos){
+                Item item = itemRepository.findById(castItemReqDto.getItemNo()).orElseThrow(()-> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+                if(seller.getCompany().getCompanyNo() != item.getCompanyNo().getCompanyNo()){
+                    throw new BobIssueException(ResponseCode.UNAUTHORIZED_ITEM);
+                }
+
+                CastItem castItem = CastItem.builder()
+                        .cast(new_cast)
+                        .item(item)
+                        .build();
+                castItemRepository.save(castItem);
+            }
+
+            return castRepository.findByCastNo(new_cast.getCastNo()).orElseThrow(() -> new BobIssueException(ResponseCode.CAST_NOT_FOUND));
         }catch (BobIssueException e){
             throw new BobIssueException(ResponseCode.FAILED_CREATE_CAST);
         }

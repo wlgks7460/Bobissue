@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,7 +24,7 @@ public class Cast extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int castNo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_no", nullable = false)
     private Seller sellerNo;
 
@@ -37,6 +39,9 @@ public class Cast extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private int castTime;
+
+    @OneToMany(mappedBy = "cast", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CastItem> castItems;
 
     public void updateCast(CastReqDto castReqDto){
         this.title = castReqDto.getTitle();

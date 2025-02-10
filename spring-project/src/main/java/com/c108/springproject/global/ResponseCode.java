@@ -195,6 +195,7 @@ public enum ResponseCode {
     SUCCESS_FIND_ALL_COMPANY("SUCCESS_FIND_ALL_COMPANY", "회사 전체 조회 성공"),
     SUCCESS_DELETE_COMPANY("SUCCESS_DELETE_COMPANY", "회사 삭제 성공"),
     SUCCESS_UPDATE_COMPANY("SUCCESS_UPDATE_COMPANY", "회사 수정 성공"),
+    UNAUTHORIZED_ITEM("UNAUTHORIZED_ITEM", "권한 없는 상품 입니다."),
     ;
 
 
