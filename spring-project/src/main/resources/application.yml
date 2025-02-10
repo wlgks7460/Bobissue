@@ -64,6 +64,17 @@ spring:
 
 #  config:
 #    import: optional:classpath:jwt-config.yml
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ruddms1522@gmail.com
+    password: jvme zcbs ijch vbhf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 jwt:
   secretKey: MzY4IHN1cGVyIHNlY3JldCBrZXkgdGhhdCBpcyBhd2Vzb21l...
