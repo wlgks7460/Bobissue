@@ -17,26 +17,23 @@ const KakaoLogin = () => {
   useEffect(() => {
     const email = searchParams.get('email')
     const nickname = searchParams.get('nickname')
-    console.log(email + " " + nickname)
     if (email) {
       setShowJoinForm(true)
       setData({
         email: email,
         nickname: nickname,
-        amout : 0
       })
     } else {
       const accessToken = searchParams.get('accessToken')
       const refreshToken = searchParams.get('refreshToken')
-      alert(accessToken)
-      console.log(accessToken + " " + refreshToken)
+      console.log(accessToken + ' ' + refreshToken)
       const payload = {
         accessToken,
         refreshToken,
         status: 'consumer',
       }
       dispatch(userReducerActions.login(payload))
-      // navigate('/')
+      navigate('/')
     }
   }, [])
   return (

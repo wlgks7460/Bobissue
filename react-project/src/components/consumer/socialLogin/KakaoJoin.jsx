@@ -31,7 +31,7 @@ const KakaoJoin = ({ data }) => {
       alert('전화번호를 확인해주세요.')
     } else {
       console.log(payload)
-      API.post('http://localhost:8080/api/users/sign-up', payload)
+      API.post('/users/sign-up', payload)
         .then((res) => {
           console.log(res)
         })
