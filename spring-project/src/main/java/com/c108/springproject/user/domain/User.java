@@ -56,6 +56,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private int amount; // 한달 사용 금액
 
+    @Column(nullable = false)
+    private int amount; // 한달 사용 금액
+
     @Column
     @Setter
     private int baseAddress;

@@ -20,6 +20,11 @@ import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
 import ConsumerMyPageAddress from '../pages/consumer/mypage/MyPageAddress'
 import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
 import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
+// 이용자 고객센터
+import ConsumerBoard from '../pages/consumer/board/Board'
+import ConsumerBoardFAQ from '../pages/consumer/board/BoardFAQ'
+import ConsumerBoardNotice from '../pages/consumer/board/BoardNotice'
+import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
 
 // 관리자 section
 
@@ -49,6 +54,7 @@ import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
+import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
 // (관리자) 라이브커머스관리
 import LiveManagementPage from '../pages/admin/live/LiveManagementPage'
 import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
@@ -133,6 +139,10 @@ const router = createBrowserRouter([
             element: <ConsumerCategory />,
           },
           {
+            path: 'category/:categoryNo/:child',
+            element: <ConsumerCategory />,
+          },
+          {
             path: 'item/:itemNo',
             element: <ConsumerItemDetail />,
           },
@@ -143,6 +153,24 @@ const router = createBrowserRouter([
           {
             path: 'payment',
             element: <ConsumerPayment />,
+          },
+          {
+            path: 'board',
+            element: <ConsumerBoard />,
+            children: [
+              {
+                path: 'faq',
+                element: <ConsumerBoardFAQ />,
+              },
+              {
+                path: 'notice',
+                element: <ConsumerBoardNotice />,
+              },
+              {
+                path: 'question',
+                element: <ConsumerBoardQuestion />,
+              },
+            ],
           },
         ],
       },
@@ -434,7 +462,16 @@ const router = createBrowserRouter([
           {
             // 카테고리 관리 섹션
             path: 'category',
-            element: <CategoryManagementPage />, // 카테고리 관리 페이지
+            children: [
+              {
+                path: '',
+                element: <CategoryManagementPage />, // 카테고리 관리 페이지
+              },
+              {
+                path: ':categoryNo',
+                element: <CategoryDetailPage />, // 카테고리 상세 페이지
+              },
+            ],
           },
           {
             // 라이브 커머스 섹션

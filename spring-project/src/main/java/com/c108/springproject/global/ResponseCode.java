@@ -189,7 +189,7 @@ public enum ResponseCode {
     SUCCESS_SEND_EMAIL("SUCCESS_SEND_EMAIL", "이메일 전송 성공"),
     FAILED_SEND_EMAIL("FAILED_SEND_EMAIL", "메일 전송 실패"),
     FAILED_FIND_EMAIL("FAILED_FIND_EMAIL", "해당 메일 조회 실패"),
-
+    ALREADY_LIKED_RECIPE("ALREADY_LIKED_RECIPE", "이미 찜한 레시피"),
     ;
 
 
