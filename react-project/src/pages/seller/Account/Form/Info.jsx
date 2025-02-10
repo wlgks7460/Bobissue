@@ -13,10 +13,6 @@ const Info = ({ userInfo }) => {
       <h2 className='text-[28px] font-bold mb-6'>판매자 정보</h2>
       <div className='space-y-3 border border-gray-200 p-4 rounded-md'>
         <div className='flex justify-between'>
-          <span className='font-medium text-gray-700 py-2'>아이디</span>
-          <span className='text-gray-900 py-2'>{userInfo?.sellerNo}</span>
-        </div>
-        <div className='flex justify-between'>
           <span className='font-medium text-gray-700 py-2'>비밀번호 </span>
           <button
             className='py-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100'
