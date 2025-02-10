@@ -1,5 +1,6 @@
 package com.c108.springproject.user.controller;
 
+import com.c108.springproject.auths.service.AuthsService;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
@@ -19,10 +20,13 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AuthsService authsService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          AuthsService authsService) {
         this.userService = userService;
+        this.authsService = authsService;
     }
 
     @PostMapping("/sign-up")
@@ -30,6 +34,12 @@ public class UserController {
         userService.signUp(signUpDto);
 
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_USER, null);
+    }
+
+    @PostMapping("/kakao/sign-up")
+    public ResponseDto kakaoSignUp(@RequestBody SignUpReqDto signUpDto) {
+        userService.signUp(signUpDto);
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_USER, new DefaultResponse<>(authsService.userLogin(LoginReqDto.kakaoLogin(signUpDto.getEmail()))));
     }
 
     @GetMapping
