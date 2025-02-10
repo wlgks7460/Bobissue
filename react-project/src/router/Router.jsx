@@ -52,6 +52,7 @@ import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
 import SellerTreePage from '../pages/admin/seller/SellerTreePage'
 import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
+import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -439,7 +440,16 @@ const router = createBrowserRouter([
                   },
                   {
                     path: 'products',
-                    element: <MonitorProducts />,
+                    children: [
+                      {
+                        path: '',
+                        element: <MonitorProducts />,
+                      },
+                      {
+                        path: ':itemNo',
+                        element: <ItemDetailPage />,
+                      },
+                    ],
                   },
                 ],
               },
