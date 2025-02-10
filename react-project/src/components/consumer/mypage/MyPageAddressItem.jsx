@@ -26,14 +26,14 @@ const MyPageAddressItem = ({ addressItem }) => {
     <div>
       {addressItem.status === 'default' && <p className='text-gray-400 text-sm'>기본 배송지</p>}
       <div>
-        <p>{`${addressItem.address} ${addressItem.addressDetail}`}</p>
+        <p>{`[${addressItem.name}] ${addressItem.address} ${addressItem.addressDetail}`}</p>
         <div className='flex gap-3'>
-          <button className='text-sm' onClick={() => setShowUpdateForm(!showUpdateForm)}>
-            수정
-          </button>
           {addressItem.status !== 'default' && (
             <button className='text-sm text-indigo-600'>기본 배송지로 변경</button>
           )}
+          <button className='text-sm' onClick={() => setShowUpdateForm(!showUpdateForm)}>
+            수정
+          </button>
           <button className='text-sm text-red-600'>삭제</button>
         </div>
       </div>

@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react'
+import API from '../../../utils/API'
 
-const MyPageAddressForm = () => {
-  const [postCode, setPostCode] = useState('') // 우편번호
-  const [address, setAddress] = useState('') // 주소
+const MyPageAddressForm = ({ addresses, setAddresses }) => {
+  const [postCode, setPostCode] = useState() // 우편번호
+  const [address, setAddress] = useState() // 주소
   const addressDetailRef = useRef() // 상세 주소
+  const nameRef = useRef() // 이름
   // 주소 찾기 함수
   const searchAddress = () => {
     new daum.Postcode({
@@ -17,6 +19,29 @@ const MyPageAddressForm = () => {
   }
   const createAddress = (e) => {
     e.preventDefault()
+    const payload = {
+      postalCode: postCode,
+      address: address,
+      addressDetail: addressDetailRef.current.value,
+      name: nameRef.current.value,
+    }
+    if (!payload.postalCode || !payload.address || !payload.addressDetail || !payload.name) {
+      alert('배송지를 작성해주세요.')
+    } else {
+      API.post('/address', payload)
+        .then((res) => {
+          console.log(res)
+          const temp = [...addresses]
+          temp.push({
+            ...payload,
+            addressNo: res.data.result.data,
+          })
+          setAddresses(temp)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
   }
   return (
     <form className='my-5' onSubmit={createAddress}>
@@ -43,13 +68,21 @@ const MyPageAddressForm = () => {
               readOnly
             />
           </div>
-          <input
-            type='text'
-            id='addressDetail'
-            className='w-[600px] h-[50px] border border-gray-400 rounded px-3'
-            placeholder='상세 주소'
-            ref={addressDetailRef}
-          />
+          <div className='flex justify-between mb-2'>
+            <input
+              type='text'
+              className='w-[200px] h-[50px] border border-gray-400 rounded px-3'
+              placeholder='별칭'
+              ref={nameRef}
+            />
+            <input
+              type='text'
+              id='addressDetail'
+              className='w-[390px] h-[50px] border border-gray-400 rounded px-3'
+              placeholder='상세 주소'
+              ref={addressDetailRef}
+            />
+          </div>
         </div>
         <input
           type='submit'
