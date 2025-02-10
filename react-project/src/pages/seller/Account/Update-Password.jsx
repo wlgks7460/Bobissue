@@ -37,7 +37,7 @@ const UpdatePassword = () => {
         setMessage('')
         setNewPassword('')
         setConfirmPassword('')
-        navigate('/seller/account/info') // 성공 시 페이지 이동
+        navigate('/seller/account/vender/info') // 성공 시 페이지 이동
       } else {
         alert('❌ 비밀번호 업데이트에 실패했습니다.')
       }

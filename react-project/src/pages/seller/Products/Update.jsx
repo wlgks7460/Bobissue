@@ -22,12 +22,14 @@ const EditProduct = () => {
   const [createdUser] = useState(localStorage.getItem('access_token'))
   const [updatedUser] = useState(localStorage.getItem('access_token'))
   const navigate = useNavigate()
+  const { itemNo } = useParams()
+  console.log(itemNo)
 
   // 기존 상품 데이터 불러오기
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await API.get(`api/items/${id}`)
+        const response = await API.get(`api/items/${itemNo}`)
         const itemData = response.data.result.data // 응답 데이터 구조 반영
 
         setProduct({
