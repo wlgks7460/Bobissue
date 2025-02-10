@@ -34,6 +34,7 @@ public class SellerService {
                 .callNumber(signUpDto.getCallNumber())
                 .name(signUpDto.getName())
                 .status("Y")
+                .approvalStatus("N") // 판매 가능 기본값 No
                 .build();
 
         sellerRepository.save(new_seller);

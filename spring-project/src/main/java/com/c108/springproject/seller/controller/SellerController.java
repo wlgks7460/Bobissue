@@ -7,6 +7,11 @@ import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
+import com.c108.springproject.seller.dto.request.CompanyReqDto;
+import com.c108.springproject.seller.dto.request.CompanyUpdateReqDto;
+import com.c108.springproject.seller.dto.response.CompanyListResDto;
+import com.c108.springproject.seller.dto.response.CompanyResDto;
+import com.c108.springproject.seller.service.CompanyService;
 import com.c108.springproject.seller.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +24,12 @@ import java.util.List;
 public class SellerController {
 
     private final SellerService sellerService;
+    private final CompanyService companyService;
 
     @Autowired
-    public SellerController(SellerService sellerService) {
+    public SellerController(SellerService sellerService, CompanyService companyService) {
         this.sellerService = sellerService;
+        this.companyService = companyService;
     }
 
     @PostMapping("sign-up")
@@ -60,4 +67,33 @@ public class SellerController {
     public ResponseDto sellerProfile() {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER, new DefaultResponse<SellerProfiltResDto>(sellerService.sellerProfile()));
     }
+
+    // 회사 CRUD
+
+    
+    // 회사 생성
+    @PostMapping("/company")
+    public ResponseDto createCompany(@RequestBody CompanyReqDto companyReqDto) {
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_COMPANY, new DefaultResponse<>(companyService.createCompany(companyReqDto)));
+    }
+
+    // 회사 정보 수정(판매자)
+    @PutMapping("/company/{companyNo}")
+    public ResponseDto updateCompany(
+            @PathVariable int companyNo,
+            @RequestBody CompanyUpdateReqDto companyUpdateReqDto) {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_COMPANY, new DefaultResponse<>(companyService.updateCompany(companyNo, companyUpdateReqDto)));
+    }
+
+    // 회사 상세 조회
+    @GetMapping("/company/{companyNo}")
+    public ResponseDto getCompany(
+            @PathVariable int companyNo
+    ) {
+        CompanyResDto company = companyService.getCompany(companyNo);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_COMPANY, new DefaultResponse<>(company));
+    }
+
+
+
 }
