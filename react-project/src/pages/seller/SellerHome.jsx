@@ -15,6 +15,7 @@ const SellerMainPage = () => {
     inquiry: false,
     liveCommerce: false,
     salesStats: false,
+    company: false,
     notices: false,
   })
 

@@ -15,6 +15,7 @@ const SellerLoginPage = () => {
   const location = useLocation()
   const dispatch = useDispatch()
   const debug_token = false
+  const isAuth = false
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
     const redirectPath = queryParams.get('path') || '/seller'
@@ -28,7 +29,7 @@ const SellerLoginPage = () => {
     e.preventDefault()
     setError('') // 🔹 이전 에러 초기화
     setLoading(true) // 🔹 로딩 시작
-    
+
     if (debug_token) {
       const payload = { email, password }
       setItemWithExpiry('userId', payload.email, 600)
@@ -36,7 +37,7 @@ const SellerLoginPage = () => {
       navigate('/seller')
     } else {
       try {
-        const payload = { email, password }
+        const payload = { email, password, isAuth }
         console.log(payload)
         const response = await API.post('/auths/seller-login', payload)
 
