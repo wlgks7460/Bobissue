@@ -186,6 +186,7 @@ public enum ResponseCode {
     SUCCESS_CREATE_LIKE("SUCCESS_CREATE_LIKE", "찜 추가 성공"),
     SUCCESS_DELETE_LIKE("SUCCESS_DELETE_LIKE", "찜 삭제 성공"),
     SUCCESS_FIND_ALL_LIKES("SUCCESS_FIND_ALL_LIKES", "찜 목록 조회 성공"),
+    ALREADY_LIKED_RECIPE("ALREADY_LIKED_RECIPE", "이미 찜한 레시피"),
     ;
 
     private final String code;

@@ -100,5 +100,21 @@ public class RecipeController {
         );
     }
 
+    @PostMapping("{recipeNo}/like")
+    public ResponseDto likeRecipe(@PathVariable int recipeNo) {
+        recipeService.addLike(recipeNo);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_LIKE, new DefaultResponse<>(recipeNo));
+    }
+    @DeleteMapping("{recipeNo}/like")
+    public ResponseDto removeLike(@PathVariable int recipeNo) {
+        recipeService.removeLike(recipeNo);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_LIKE, new DefaultResponse<>(recipeNo));
+    }
+    @GetMapping("/like")
+    public ResponseDto getLikedRecipe() {
+        List<RecipeListResDto> recipes = recipeService.getLikedRecipe();
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_LIKES, new DefaultResponse<>(recipes));
+    }
+
 
 }
