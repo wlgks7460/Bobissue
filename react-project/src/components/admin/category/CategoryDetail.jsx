@@ -9,15 +9,16 @@ const CategoryDetail = () => {
   const { categoryNo } = useParams()
   const navigate = useNavigate()
   const [categoryDetail, setCategoryDetail] = useState(null)
-  const [childCategories, setChildCategories] = useState([]) // 자식 카테고리 목록 상태
+  const [childCategories, setChildCategories] = useState([]) // 하위 카테고리 목록 상태
+  const [itemDetails, setItemDetails] = useState([]) // 각 상품 상세 정보 배열
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // 수정 모드 관련 상태 (부모 카테고리 수정: 카테고리명만)
+  // 수정 모드 관련 상태 (중위 카테고리 수정: 카테고리명만)
   const [editMode, setEditMode] = useState(false)
   const [editData, setEditData] = useState({})
 
-  // 자식 카테고리 수정 모드 상태
+  // 하위 카테고리 수정 모드 상태
   const [editingChild, setEditingChild] = useState(null)
   const [editingChildName, setEditingChildName] = useState('')
 
@@ -33,12 +34,27 @@ const CategoryDetail = () => {
     return dateString
   }
 
-  // 부모(중위) 카테고리 상세 정보를 불러오는 함수
+  // 중위(부모) 카테고리 상세 정보를 불러오고, 각 상품 상세 정보도 가져오는 함수
   const fetchDetail = async () => {
     setLoading(true)
     try {
       const response = await API.get(`/categories/${categoryNo}`)
-      setCategoryDetail(response.data.result.data)
+      const catData = response.data.result.data
+      setCategoryDetail(catData)
+      console.log('Category Detail:', catData)
+
+      // 만약 카테고리에 등록된 상품이 있다면, 각 상품의 상세 정보를 가져옴
+      if (catData.items && catData.items.length > 0) {
+        console.log('Fetching item details for each item in category...')
+        const promises = catData.items.map((item) => {
+          console.log(`Fetching details for itemNo: ${item.itemNo}`)
+          return API.get(`/item/${item.itemNo}`)
+        })
+        const responses = await Promise.all(promises)
+        const details = responses.map((resp) => resp.data.result.data)
+        console.log('Fetched item details:', details)
+        setItemDetails(details)
+      }
     } catch (err) {
       console.error('카테고리 상세 정보를 불러오는 중 오류 발생:', err)
       setError('카테고리 정보를 불러오는 데 실패했습니다.')
@@ -47,7 +63,7 @@ const CategoryDetail = () => {
     }
   }
 
-  // 전체 카테고리를 조회한 후, 현재 상세 페이지의 categoryNo와 일치하는 부모 카테고리를 찾아 그 children을 자식 카테고리 목록으로 설정
+  // 전체 카테고리를 조회한 후, 현재 상세 페이지의 categoryNo와 일치하는 중위 카테고리를 찾아 그 하위 카테고리 목록으로 설정
   const fetchChildCategories = async () => {
     try {
       const response = await API.get('/categories')
@@ -65,45 +81,45 @@ const CategoryDetail = () => {
     }
   }
 
-  // 자식 카테고리 삭제 핸들러
+  // 하위 카테고리 삭제 핸들러
   const handleChildDelete = async (childCategoryNo) => {
-    if (window.confirm('해당 자식 카테고리를 삭제하시겠습니까?')) {
+    if (window.confirm('해당 하위 카테고리를 삭제하시겠습니까?')) {
       try {
         await API.delete(`/categories/${childCategoryNo}`)
-        alert('자식 카테고리가 삭제되었습니다.')
+        alert('하위 카테고리가 삭제되었습니다.')
         await fetchChildCategories()
       } catch (err) {
-        console.error('자식 카테고리 삭제 중 오류 발생:', err)
-        alert('자식 카테고리 삭제에 실패했습니다.')
+        console.error('하위 카테고리 삭제 중 오류 발생:', err)
+        alert('하위 카테고리 삭제에 실패했습니다.')
       }
     }
   }
 
-  // 자식 카테고리 수정 토글 핸들러
+  // 하위 카테고리 수정 토글 핸들러
   const handleChildEditToggle = (child) => {
     setEditingChild(child.categoryNo)
     setEditingChildName(child.name)
   }
 
-  // 자식 카테고리 수정 저장 핸들러
+  // 하위 카테고리 수정 저장 핸들러
   const handleChildEditSave = async (childCategoryNo) => {
     try {
-      // 부모 번호는 수정하지 않으므로, 현재 상세 페이지의 카테고리 번호 사용
+      // 부모 번호는 수정하지 않으므로, 현재 상세 페이지의 중위 카테고리 번호 사용
       await API.put(`/categories/${childCategoryNo}`, {
         name: editingChildName,
         parentNo: categoryDetail.categoryNo,
       })
-      alert('자식 카테고리가 수정되었습니다.')
+      alert('하위 카테고리가 수정되었습니다.')
       await fetchChildCategories()
       setEditingChild(null)
       setEditingChildName('')
     } catch (err) {
-      console.error('자식 카테고리 수정 중 오류 발생:', err)
-      alert('자식 카테고리 수정에 실패했습니다.')
+      console.error('하위 카테고리 수정 중 오류 발생:', err)
+      alert('하위 카테고리 수정에 실패했습니다.')
     }
   }
 
-  // 자식 카테고리 수정 취소 핸들러
+  // 하위 카테고리 수정 취소 핸들러
   const handleChildEditCancel = () => {
     setEditingChild(null)
     setEditingChildName('')
@@ -114,7 +130,7 @@ const CategoryDetail = () => {
     fetchChildCategories()
   }, [categoryNo])
 
-  // 부모 카테고리 수정 모드 토글 핸들러 (카테고리명만)
+  // 중위 카테고리 수정 모드 토글 핸들러 (카테고리명만)
   const handleEditToggle = () => {
     setEditData({
       name: categoryDetail.name || '',
@@ -122,13 +138,13 @@ const CategoryDetail = () => {
     setEditMode(true)
   }
 
-  // 부모 카테고리 수정폼 변경 핸들러
+  // 중위 카테고리 수정폼 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target
     setEditData((prev) => ({ ...prev, [name]: value }))
   }
 
-  // 부모 카테고리 수정 저장: 성공하면 최신 상세 정보와 자식 카테고리 목록 재조회
+  // 중위 카테고리 수정 저장: 성공하면 최신 상세 정보와 하위 카테고리 목록 재조회
   const handleSave = async () => {
     try {
       await API.put(`/categories/${categoryNo}`, editData)
@@ -142,7 +158,7 @@ const CategoryDetail = () => {
     }
   }
 
-  // 부모 카테고리 수정 취소
+  // 중위 카테고리 수정 취소
   const handleCancel = () => {
     setEditMode(false)
   }
@@ -177,9 +193,8 @@ const CategoryDetail = () => {
       <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>카테고리 상세페이지</h1>
 
-      {/* 부모(중위) 카테고리 상세 정보 */}
+      {/* 중위 카테고리 상세 정보 */}
       <div className='border p-4 rounded-lg mb-6'>
-        {/* 헤더 텍스트를 상세 페이지의 카테고리 이름으로 변경 */}
         <h2 className='text-xl font-semibold mb-4'>{categoryDetail.name} 카테고리</h2>
         <p>
           <strong>카테고리 번호:</strong> {categoryDetail.categoryNo}
@@ -239,34 +254,43 @@ const CategoryDetail = () => {
         )}
       </div>
 
-      {/* 기존 상품(아이템) 목록 렌더링 (있다면) */}
-      {categoryDetail.items && categoryDetail.items.length > 0 && (
+      {/* 상품(아이템) 목록 렌더링 (item 상세 조회 결과 사용, delYn === 'N'인 상품만) */}
+      {itemDetails && itemDetails.filter((item) => item.delYn === 'N').length > 0 && (
         <div>
           <h2 className='text-lg font-semibold mb-4'>| 상품 목록</h2>
           <table className='w-full border border-gray-200 table-fixed'>
             <thead className='bg-gray-100'>
               <tr>
-                <th className='px-4 py-2 border'>번호</th>
-                <th className='px-4 py-2 border'>카테고리명</th>
+                {/* 상품 번호로 표시 */}
+                <th className='px-4 py-2 border'>상품 번호</th>
+                <th className='px-4 py-2 border'>중위 카테고리</th>
+                <th className='px-4 py-2 border'>하위 카테고리</th>
                 <th className='px-4 py-2 border'>상품명</th>
                 <th className='px-4 py-2 border'>가격</th>
               </tr>
             </thead>
             <tbody>
-              {categoryDetail.items.map((item, index) => (
-                <tr key={item.itemNo} className='hover:bg-gray-50'>
-                  <td className='px-4 py-2 border text-center'>{index + 1}</td>
-                  <td className='px-4 py-2 border text-center'>{categoryDetail.name}</td>
-                  <td className='px-4 py-2 border text-center'>{item.name}</td>
-                  <td className='px-4 py-2 border text-center'>{item.price}</td>
-                </tr>
-              ))}
+              {itemDetails
+                .filter((item) => item.delYn === 'N')
+                .map((item) => (
+                  <tr key={item.itemNo} className='hover:bg-gray-50'>
+                    <td className='px-4 py-2 border text-center'>{item.itemNo}</td>
+                    <td className='px-4 py-2 border text-center'>
+                      {item.category ? item.category.parentName : categoryDetail.name}
+                    </td>
+                    <td className='px-4 py-2 border text-center'>
+                      {item.category && item.category.parentName ? item.category.name : '-'}
+                    </td>
+                    <td className='px-4 py-2 border text-center'>{item.name}</td>
+                    <td className='px-4 py-2 border text-center'>{item.price}원</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
       )}
 
-      {/* 자식 카테고리 목록 렌더링 */}
+      {/* 하위 카테고리 목록 렌더링 */}
       {childCategories && childCategories.length > 0 && (
         <div className='mt-8'>
           <h2 className='text-lg font-semibold mb-4'>| 하위 카테고리 목록</h2>
