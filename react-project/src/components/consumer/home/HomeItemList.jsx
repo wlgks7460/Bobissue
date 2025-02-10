@@ -12,7 +12,7 @@ const HomeItemList = ({ category }) => {
     API.get(`/categories/${category.categoryNo}`)
       .then((res) => {
         console.log(res)
-        const result = res.data.result?.data.items
+        const result = res.data.result?.data.items.slice(0, 4)
         if (result) {
           setItems(result)
           setHasFetched(true)

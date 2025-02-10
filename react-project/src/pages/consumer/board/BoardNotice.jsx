@@ -6,7 +6,7 @@ const BoardNotice = () => {
 
   // 공지사항 불러오기
   const getNotice = () => {
-    API.get('/notification/user-only')
+    API.get('/notification')
       .then((res) => {
         console.log(res)
       })
@@ -23,7 +23,9 @@ const BoardNotice = () => {
   return (
     <div className='p-5'>
       <h2 className='text-2xl text-center mb-10'>공지사항</h2>
-      <div></div>
+      <div>
+        <table></table>
+      </div>
     </div>
   )
 }

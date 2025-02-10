@@ -4,7 +4,7 @@ import { userReducerActions } from '../redux/reducers/userSlice'
 
 const API = axios.create({
   // baseURL: '/api',
-  baseURL: import.meta.env.VITE_BOBISUUE_BASE_URL,
+  baseURL: `${import.meta.env.VITE_BOBISUUE_BASE_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
