@@ -13,13 +13,13 @@ const AdminLoginForm = () => {
   const [error, setError] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const isOauth = false
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
     try {
-      const response = await API.post('/auths/admin-login', { email, password })
+      const response = await API.post('/auths/admin-login', { email, password, isOauth })
       console.log(response)
 
       const { access_token, refresh_token } = response.data.result.data
