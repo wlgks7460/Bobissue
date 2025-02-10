@@ -106,7 +106,7 @@ public class SellerController {
     public ResponseDto getCompany(
     ) {
         CompanyResDto company = companyService.getCompany();
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_COMPANY, new DefaultResponse<>(company));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_COMPANY, new DefaultResponse<>(company));
     }
 
     // SellerController에 추가

@@ -2,11 +2,11 @@ package com.c108.springproject.admin.controller;
 
 import com.c108.springproject.admin.dto.AdminResDto;
 import com.c108.springproject.admin.dto.CompanyUpdateAdminReqDto;
+import com.c108.springproject.admin.dto.SellerApprovalListDto;
 import com.c108.springproject.admin.service.AdminService;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
-import com.c108.springproject.seller.dto.request.CompanyUpdateReqDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,7 @@ public class AdminController {
             @PathVariable int companyNo
     ) {
         CompanyResDto company = adminService.getCompany(companyNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_COMPANY, new DefaultResponse<>(company));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_COMPANY, new DefaultResponse<>(company));
     }
 
     // 회사 정보 수정(관리자)
@@ -87,6 +87,18 @@ public class AdminController {
     ) {
         adminService.deleteCompany(companyNo);
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_COMPANY, new DefaultResponse<>(companyNo));
+    }
+
+    @PutMapping("/{sellerNo}/approve")
+    public ResponseDto changeSellerApprovalStatus(@PathVariable int sellerNo) {
+        String approvalStatus = adminService.changeSellerApprovalStatus(sellerNo);
+        return new ResponseDto(HttpStatus.ACCEPTED, ResponseCode.SUCCESS_CHANGE_SELLER_APPROVAL_STATUS, new DefaultResponse<>(approvalStatus));
+    }
+
+    @GetMapping("/seller-approvals")
+    public ResponseDto getSellerApprovalsByCompany() {
+        List<SellerApprovalListDto> approvals = adminService.getSellerApprovalsByCompany();
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER_APPROVALS, new DefaultResponse<>(approvals));
     }
 
 
