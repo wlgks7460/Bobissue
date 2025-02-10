@@ -90,8 +90,13 @@ const Signup = () => {
       }
       API.post('/users/sign-up', payload)
         .then((res) => {
-          alert('회원가입이 완료되었습니다.')
-          navigate('/login')
+          console.log(res)
+          if (res.status === 200) {
+            alert('회원가입이 완료되었습니다.')
+            navigate('/login')
+          } else {
+            console.log(res)
+          }
         })
         .catch((err) => {
           console.error(err)
