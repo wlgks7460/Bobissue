@@ -9,6 +9,7 @@ const Category = () => {
   const params = useParams()
   const categoryState = useSelector((state) => state.category)
   const [category, setCategory] = useState() // 카테고리 정보
+  const [parent, setParent] = useState()
   const [children, setChildren] = useState([])
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const Category = () => {
       const selectedCategory = categoryState.categories.find((v) => v.categoryNo === categoryNo)
 
       if (selectedCategory) {
+        setParent(selectedCategory.name)
         setChildren(selectedCategory.children || [])
       }
     }
@@ -46,7 +48,7 @@ const Category = () => {
       <SearchBar />
       <div className='flex justify-center'>
         <div className='w-[70rem] min-h-[70vh]'>
-          <h2 className='text-2xl text-center my-10'>{category?.name}</h2>
+          <h2 className='text-2xl text-center my-10'>{parent}</h2>
           <div className='w-full border border-gray-400 rounded px-5 mb-10'>
             <div className='flex flex-wrap'>
               <Link

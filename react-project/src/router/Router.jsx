@@ -24,6 +24,7 @@ import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
 import ConsumerBoard from '../pages/consumer/board/Board'
 import ConsumerBoardFAQ from '../pages/consumer/board/BoardFAQ'
 import ConsumerBoardNotice from '../pages/consumer/board/BoardNotice'
+import ConsumerBoardNoticeDetail from '../pages/consumer/board/BoardNoticeDetail'
 import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
 
 // 관리자 section
@@ -166,6 +167,10 @@ const router = createBrowserRouter([
               {
                 path: 'notice',
                 element: <ConsumerBoardNotice />,
+              },
+              {
+                path: 'notice/:noticeNo',
+                element: <ConsumerBoardNoticeDetail />,
               },
               {
                 path: 'question',
