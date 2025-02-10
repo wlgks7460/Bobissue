@@ -20,6 +20,11 @@ import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
 import ConsumerMyPageAddress from '../pages/consumer/mypage/MyPageAddress'
 import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
 import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
+// 이용자 고객센터
+import ConsumerBoard from '../pages/consumer/board/Board'
+import ConsumerBoardFAQ from '../pages/consumer/board/BoardFAQ'
+import ConsumerBoardNotice from '../pages/consumer/board/BoardNotice'
+import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
 
 // 관리자 section
 
@@ -148,6 +153,24 @@ const router = createBrowserRouter([
           {
             path: 'payment',
             element: <ConsumerPayment />,
+          },
+          {
+            path: 'board',
+            element: <ConsumerBoard />,
+            children: [
+              {
+                path: 'faq',
+                element: <ConsumerBoardFAQ />,
+              },
+              {
+                path: 'notice',
+                element: <ConsumerBoardNotice />,
+              },
+              {
+                path: 'question',
+                element: <ConsumerBoardQuestion />,
+              },
+            ],
           },
         ],
       },
