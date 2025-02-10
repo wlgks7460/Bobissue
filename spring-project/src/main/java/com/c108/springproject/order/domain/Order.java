@@ -29,7 +29,7 @@ public class Order extends BaseEntity {
     private Long userCouponNo;
 
     @Column(nullable = false)
-    private int orderCategoryNo;
+    private int orderCategoryNo; //
 
     @Column(nullable = false)
     private int delCategoryNo;

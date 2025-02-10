@@ -8,5 +8,15 @@ public enum UserGrade {
     SILVER,
     GOLD;
 
+    public static UserGrade getGradeByAmount(int amount) {
+        if (amount >= 300000) {
+            return GOLD;
+        } else if (amount >= 100000) {
+            return SILVER;
+        } else {
+            return BRONZE;
+        }
+
+    }
 
 }

@@ -3,6 +3,7 @@ package com.c108.springproject.user.dto;
 import com.c108.springproject.notification.domain.Notification;
 import com.c108.springproject.notification.dto.response.NotificationResDto;
 import com.c108.springproject.user.domain.User;
+import com.c108.springproject.user.domain.UserGrade;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class UserResDto {
     private String phoneNumber;
     private String createAt;
     private String updateAt;
-    private int gradeNo;
+    private UserGrade grade;
 
     public UserResDto(User user) {
         this.userNo = user.getUserNo();
@@ -37,7 +38,7 @@ public class UserResDto {
         this.phoneNumber = user.getPhoneNumber();
         this.createAt = user.getCreatedAt();
         this.updateAt = user.getUpdatedAt();
-        this.gradeNo = user.getGradeNo();
+        this.grade = user.getGrade();
     }
 
 
@@ -53,7 +54,7 @@ public class UserResDto {
                 .phoneNumber(user.getPhoneNumber())
                 .createAt(user.getCreatedAt())
                 .updateAt(user.getUpdatedAt())
-                .gradeNo(user.getGradeNo())
+                .grade(user.getGrade())
                 .build();
     }
 

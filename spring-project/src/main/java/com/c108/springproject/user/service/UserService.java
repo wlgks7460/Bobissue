@@ -6,21 +6,27 @@ import com.c108.springproject.global.jwt.JwtTokenProvider;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshToken;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository;
 import com.c108.springproject.global.redis.RedisService;
+import com.c108.springproject.order.repository.OrderRepository;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.auths.dto.request.LoginReqDto;
+import com.c108.springproject.user.domain.UserGrade;
 import com.c108.springproject.user.dto.SignUpReqDto;
 import com.c108.springproject.user.dto.UserDto;
 import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.repository.UserRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 @Service
 public class UserService {
@@ -29,17 +35,20 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
+    private final OrderRepository orderRepository;
 
 
     public UserService(UserRepository userRepository,
                        RefreshTokenRepository refreshTokenRepository,
                        JwtTokenProvider jwtTokenProvider,
-                       RedisService redisService
+                       RedisService redisService,
+                       OrderRepository orderRepository
                        ) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.redisService = redisService;
+        this.orderRepository = orderRepository;
     }
 
     @Transactional
@@ -54,6 +63,7 @@ public class UserService {
                 .weight(signUpDto.getWeight())
                 .phoneNumber(signUpDto.getPhoneNumber())
                 .status("Y")
+                .grade(UserGrade.BRONZE)
                 .build();
 
         return userRepository.save(new_user);
@@ -108,5 +118,24 @@ public class UserService {
         return userRepository.findByEmailAndDelYnAndStatus(email,"N", "Y");
     }
 
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public void updateUserGrades() {
+        YearMonth lastMonth = YearMonth.now().minusMonths(1);
+        LocalDateTime startDate = lastMonth.atDay(1).atStartOfDay();              // 지난달 1일 00:00:00
+        LocalDateTime endDate = lastMonth.atEndOfMonth().atTime(23, 59, 59);     // 지난달 마지막 날 23:59:59
+
+        // 모든 사용자 가져오기
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            // 해당 사용자의 지난달 확정 주문 금액 가져오기
+            Integer totalPrice = orderRepository.getTotalPriceByUserForMonth(user.getUserNo(), startDate, endDate);
+            int amount = totalPrice != null ? totalPrice : 0;
+
+            // 사용자 등급 업데이트
+            user.updateGrade(amount);
+            userRepository.save(user);
+        }
+    }
 
 }
