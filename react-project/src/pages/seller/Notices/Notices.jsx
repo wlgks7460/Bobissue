@@ -17,13 +17,13 @@ const notices = [
   { id: 7, category: '경고', title: '비정상적 활동 경고', author: '관리자', date: '2025-01-10' },
 ]
 
-const categories = ['전체', '필독', '일반', '정책', '기술', '홍보', '안전', '경고']
+const categories = ['필독', '일반', '정책', '기술', '홍보']
 
 const Notices = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체')
   const navigate = useNavigate()
 
-  const HandleClicknavigate = (id) => {
+  const handleClickNavigate = (id) => {
     const queryString = new URLSearchParams({ id }).toString()
     navigate(`/seller/notices/view?${queryString}`)
   }
@@ -34,45 +34,49 @@ const Notices = () => {
       : notices.filter((notice) => notice.category === selectedCategory)
 
   return (
-    <div className='w-[1100px]'>
-      <div className='mb-6'>
-        <h1 className='text-[28px] font-bold text-gray-800'>공지사항</h1>
+    <div className='w-full max-w-[1100px] mx-auto'>
+      {/* 제목 */}
+      <div className='mb-6 text-center'>
+        <h1 className='text-2xl font-bold text-gray-900'>공지사항</h1>
         <p className='text-sm text-gray-600'>중요한 공지사항을 확인하세요.</p>
       </div>
 
-      <div className='mb-6 ml-[24px]'>
-        {categories.map((category) => (
-          <button
+      {/* 카테고리 버튼 (1 | 2 | 3 | 4 | 5) */}
+      <div className='mb-6 flex justify-center items-center space-x-4 text-lg font-semibold text-gray-700'>
+        {categories.map((category, index) => (
+          <span
             key={category}
-            className={`px-6 py-2 w-[120px] text-sm font-medium transition ${
-              selectedCategory === category
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-blue-100'
+            className={`cursor-pointer transition-colors ${
+              selectedCategory === category ? 'text-indigo-600 font-bold' : 'hover:text-indigo-500'
             }`}
             onClick={() => setSelectedCategory(category)}
           >
-            {category}
-          </button>
+            <h1>{category}</h1>
+          </span>
         ))}
       </div>
 
-      <div className=' bg-white rounded-md p-6 w-[1010px]'>
-        <table className='table-fixed w-full text-sm'>
-          <thead>
-            <tr className='bg-gray-200 text-gray-700'>
-              <th className='px-4 py-2 w-16'>번호</th>
-              <th className='px-4 py-2 w-32'>분류</th>
-              <th className='px-4 py-2'>제목</th>
-              <th className='px-4 py-2 w-24'>작성자</th>
-              <th className='px-4 py-2 w-32'>작성일</th>
+      {/* 공지사항 리스트 */}
+      <div className='bg-white shadow-md rounded-lg overflow-hidden'>
+        <table className='w-full text-sm text-gray-700'>
+          <thead className='bg-gray-100'>
+            <tr className='text-left'>
+              <th className='px-4 py-3 w-12 text-center'>번호</th>
+              <th className='px-4 py-3 w-24 text-center'>분류</th>
+              <th className='px-4 py-3'>제목</th>
+              <th className='px-4 py-3 w-20 text-center'>작성자</th>
+              <th className='px-4 py-3 w-28 text-center'>작성일</th>
             </tr>
           </thead>
           <tbody>
-            {filteredNotices.map((notice) => (
-              <tr key={notice.id} className='border-b hover:bg-gray-50'>
-                <td className='px-4 py-2 text-center'>{notice.id}</td>
+            {filteredNotices.map((notice, index) => (
+              <tr
+                key={notice.id}
+                className={`border-b transition hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+              >
+                <td className='px-4 py-3 text-center'>{notice.id}</td>
                 <td
-                  className={`px-4 py-2 text-center font-semibold ${
+                  className={`px-4 py-3 text-center font-semibold ${
                     notice.category === '필독'
                       ? 'text-red-500'
                       : notice.category === '경고'
@@ -85,18 +89,18 @@ const Notices = () => {
                   {notice.category}
                 </td>
                 <td
-                  onClick={() => HandleClicknavigate(notice.id)}
-                  className='px-4 py-2 cursor-pointer'
+                  onClick={() => handleClickNavigate(notice.id)}
+                  className='px-4 py-3 cursor-pointer hover:underline'
                 >
                   {notice.title}
                 </td>
-                <td className='px-4 py-2 text-center'>{notice.author}</td>
-                <td className='px-4 py-2 text-center'>{notice.date}</td>
+                <td className='px-4 py-3 text-center'>{notice.author}</td>
+                <td className='px-4 py-3 text-center'>{notice.date}</td>
               </tr>
             ))}
             {filteredNotices.length === 0 && (
               <tr>
-                <td colSpan='5' className='text-center py-4 text-gray-500'>
+                <td colSpan='5' className='text-center py-6 text-gray-500'>
                   해당 분류의 공지사항이 없습니다.
                 </td>
               </tr>

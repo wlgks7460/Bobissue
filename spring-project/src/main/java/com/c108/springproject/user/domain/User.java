@@ -2,12 +2,8 @@ package com.c108.springproject.user.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.user.dto.UserDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.*;
-import jakarta.persistence.Id;
 
 @Entity
 @Getter
@@ -53,8 +49,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private int gradeNo;
+    private UserGrade grade;
 
     @Column(nullable = false)
     private int amount; // 한달 사용 금액
@@ -69,6 +66,10 @@ public class User extends BaseEntity {
         this.height = userDto.getHeight();
         this.weight = userDto.getWeight();
         this.phoneNumber = userDto.getPhoneNumber();
+    }
+
+    public void updateGrade(int amount) {
+        this.grade = UserGrade.getGradeByAmount(this.amount);
     }
 
 

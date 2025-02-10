@@ -65,7 +65,7 @@ public class ItemService {
         Company company;
         Seller seller = sellerRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
-        company = seller.getCompanyNo();
+        company = seller.getCompany();
 
 
 
@@ -134,7 +134,7 @@ public class ItemService {
         Company company;
         Seller seller = sellerRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
-        company = seller.getCompanyNo();
+        company = seller.getCompany();
 
         // 1. 기존 상품 조회
         Item item = itemRepository.findById(itemNo)

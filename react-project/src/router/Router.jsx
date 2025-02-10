@@ -53,6 +53,7 @@ import SellerFeeRuquestPage from '../pages/admin/seller/SellerFeeRequestPage'
 import SellerTreePage from '../pages/admin/seller/SellerTreePage'
 import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
+import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -189,25 +190,40 @@ const router = createBrowserRouter([
         element: <Seller.Signup />,
       },
       {
+        path: '/seller/company/register',
+        element: <Seller.RegisterCompany />, // ✅ Seller. 접두사 추가
+      },
+
+      {
         // seller section
         path: 'seller',
         element: <Seller.SellerHome />,
         children: [
+          //회사등록관련
+
+          {
+            path: 'company/append',
+            element: <Seller.AppendAccount />, // ✅ Seller. 접두사 추가
+          },
+          {
+            path: 'company/search',
+            element: <Seller.SearchAccount />, // ✅ Seller. 접두사 추가
+          },
           //상품 관리 관련
           {
             path: '',
             element: <Seller.Dashboard />,
           },
           {
-            path: 'products/view/:productId',
+            path: 'products/view/:itemNo',
             element: <Seller.PrView />,
           },
           {
-            path: 'products/view/:productId/update',
+            path: 'products/view/:itemNo/update',
             element: <Seller.PrUpdate />,
           },
           {
-            path: 'products/view/:productId/delete',
+            path: 'products/view/:itemNo/delete',
             element: <Seller.PrDelete />,
           },
           {
@@ -444,7 +460,16 @@ const router = createBrowserRouter([
                   },
                   {
                     path: 'products',
-                    element: <MonitorProducts />,
+                    children: [
+                      {
+                        path: '',
+                        element: <MonitorProducts />,
+                      },
+                      {
+                        path: ':itemNo',
+                        element: <ItemDetailPage />,
+                      },
+                    ],
                   },
                 ],
               },

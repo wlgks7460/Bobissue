@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import API from '../../../utils/API'
+import API from '@/utils/API'
 
 const View = () => {
   const navigate = useNavigate()
-  const { itemNo } = useParams() // URL에서 itemNo 가져오기
+  const { itemNo } = useParams()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -26,9 +26,9 @@ const View = () => {
             price: item.price,
             salePrice: item.salePrice,
             stock: item.stock,
-            createdAt: item.createdAt.split(' ')[0], // "YYYY-MM-DD HH:mm:ss"에서 날짜만 추출
             expiredAt: item.expiredAt,
             description: item.description,
+            createdAt: new Date(item.createdAt).toLocaleDateString(),
           })
         } else {
           console.error('상품 데이터 조회 실패:', response.data.message?.label || '알 수 없는 오류')
@@ -48,7 +48,7 @@ const View = () => {
   }
 
   const handleDeleteClick = async () => {
-    const isConfirmed = window.confirm(`'${product.name}' 상품 삭제 요청을 보내시겠습니까?`)
+    const isConfirmed = window.confirm(`'${product.name}' 상품을 삭제하시겠습니까?`)
     if (isConfirmed) {
       try {
         const response = await API.post('/api/delete-request', {
@@ -58,7 +58,7 @@ const View = () => {
 
         if (response.status === 200) {
           alert('삭제 요청이 관리자에게 전송되었습니다.')
-          navigate('/seller/products') // 상품 목록 페이지로 이동
+          navigate('/seller/products')
         } else {
           alert('삭제 요청을 처리하는 데 실패했습니다. 다시 시도해주세요.')
         }
@@ -70,64 +70,75 @@ const View = () => {
   }
 
   if (loading) {
-    return <p className="text-center text-gray-600 mt-10">상품 정보를 불러오는 중...</p>
+    return <p className='text-center text-gray-600 mt-10'>상품 정보를 불러오는 중...</p>
   }
 
   return (
-    <div></div>
-    // <div className="p-6 bg-white rounded-lg max-w-4xl mx-auto">
-    //   <h1 className="text-3xl font-bold mb-6 text-center border-b pb-4">상품 상세정보</h1>
-    //   <div className="grid grid-cols-2 gap-6">
-    //     <div>
-    //       {product.productImage ? (
-    //         <img
-    //           src={product.productImage}
-    //           alt={product.name}
-    //           className="w-full h-64 object-cover rounded-md border"
-    //         />
-    //       ) : (
-    //         <p className="text-center text-gray-500">이미지가 없습니다.</p>
-    //       )}
-    //     </div>
-    //     <div className="space-y-3">
-    //       <h2 className="text-xl font-semibold">{product.name}</h2>
-    //       <p className="text-gray-600">
-    //         <strong>카테고리:</strong> {product.category}
-    //       </p>
-    //       <p className="text-gray-600">
-    //         <strong>회사:</strong> {product.company}
-    //       </p>
-    //       <p className="text-red-600 text-xl font-bold">
-    //         <del className="text-gray-500 mr-2">{product.price.toLocaleString()}원</del>
-    //         {product.salePrice.toLocaleString()}원
-    //       </p>
-    //       <p>
-    //         <strong>재고:</strong> {product.stock}개
-    //       </p>
-    //       <p>
-    //         <strong>등록일:</strong> {product.createdAt}
-    //       </p>
-    //       <p>
-    //         <strong>판매 종료일:</strong> {product.expiredAt}
-    //       </p>
-    //       <p className="text-gray-700">{product.description || '설명 없음'}</p>
-    //       <div className="flex space-x-4 mt-4">
-    //         <button
-    //           onClick={handleUpdateClick}
-    //           className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 focus:ring focus:ring-blue-300"
-    //         >
-    //           수정하기
-    //         </button>
-    //         <button
-    //           onClick={handleDeleteClick}
-    //           className="bg-red-500 text-white px-6 py-3 rounded-md hover:bg-red-600 focus:ring focus:ring-red-300"
-    //         >
-    //           삭제 요청 보내기
-    //         </button>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
+    <div className='p-8 bg-white rounded-xl shadow-lg max-w-4xl mx-auto'>
+      <h1 className='text-3xl font-bold mb-6 text-center border-b pb-4'>상품 상세정보</h1>
+
+      <div className='grid grid-cols-2 gap-8'>
+        {/* ✅ 상품 이미지 */}
+        <div className='flex justify-center'>
+          {product.productImage ? (
+            <img
+              src={product.productImage}
+              alt={product.name}
+              className='w-full h-64 object-cover rounded-lg border shadow-md'
+            />
+          ) : (
+            <p className='text-center text-gray-500'>이미지가 없습니다.</p>
+          )}
+        </div>
+
+        {/* ✅ 상품 상세 정보 */}
+        <div className='space-y-3'>
+          <h2 className='text-2xl font-semibold'>{product.name}</h2>
+          <p className='text-gray-600'>
+            <span className='font-medium'>카테고리:</span> {product.category}
+          </p>
+          <p className='text-gray-600'>
+            <span className='font-medium'>회사:</span> {product.company}
+          </p>
+          <p className='text-xl font-bold'>
+            <span className='font-medium'>가격: </span>
+            {product.salePrice.toLocaleString()}원{' '}
+            <del className='text-gray-500 text-lg ml-2'>{product.price.toLocaleString()}원</del>
+          </p>
+          <p className='text-gray-600'>
+            <span className='font-medium'>재고:</span>{' '}
+            <span
+              className={`font-semibold ${product.stock <= 5 ? 'text-red-500' : 'text-green-500'}`}
+            >
+              {product.stock}개 {product.stock <= 5 && '(재고 부족)'}
+            </span>
+          </p>
+          <p className='text-gray-600'>
+            <span className='font-medium'>등록일:</span> {product.createdAt}
+          </p>
+          <p className='text-gray-600'>
+            <span className='font-medium'>판매 종료일:</span> {product.expiredAt}
+          </p>
+          <p className='text-gray-700'>{product.description || '상품 설명이 없습니다.'}</p>
+
+          {/* ✅ 액션 버튼 */}
+          <div className='flex space-x-4 mt-6'>
+            <button
+              onClick={handleUpdateClick}
+              className='bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 focus:ring focus:ring-blue-300 transition-all hover:scale-105'
+            >
+              수정하기
+            </button>
+            <button
+              onClick={handleDeleteClick}
+              className='bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 focus:ring focus:ring-red-300 transition-all hover:scale-105'
+            >
+              삭제 요청
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
