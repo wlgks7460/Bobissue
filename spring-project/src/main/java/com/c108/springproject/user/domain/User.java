@@ -66,6 +66,7 @@ public class User extends BaseEntity {
         this.height = userDto.getHeight();
         this.weight = userDto.getWeight();
         this.phoneNumber = userDto.getPhoneNumber();
+        this.birthday = userDto.getBirthday();
     }
 
     public void updateGrade(int amount) {
