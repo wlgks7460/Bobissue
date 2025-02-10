@@ -191,18 +191,20 @@ const CategoryDetail = () => {
   return (
     <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
-      <h1 className='text-2xl font-bold mb-6'>카테고리 상세페이지</h1>
+      <h1 className='text-2xl font-bold mb-6'>카테고리 상세</h1>
 
       {/* 중위 카테고리 상세 정보 */}
-      <div className='border p-4 rounded-lg mb-6'>
-        <h2 className='text-xl font-semibold mb-4'>{categoryDetail.name} 카테고리</h2>
+      <div className='border p-4 rounded-lg mb-6 max-w-md'>
+        <h2 className='text-xl font-semibold mb-4'>📁 {categoryDetail.name}</h2>
         <p>
-          <strong>카테고리 번호:</strong> {categoryDetail.categoryNo}
+          카테고리 번호: {categoryDetail.categoryNo}
+          <br />
+          카테고리 구분: 중위
         </p>
         {editMode ? (
           <>
             <div className='mt-2'>
-              <label className='block font-medium'>카테고리명:</label>
+              <label className='block font-normal'>카테고리명:</label>
               <input
                 type='text'
                 name='name'
@@ -228,14 +230,8 @@ const CategoryDetail = () => {
           </>
         ) : (
           <>
-            <p>
-              <strong>카테고리명:</strong> {categoryDetail.name}
-            </p>
-            {categoryDetail.createdAt && (
-              <p>
-                <strong>생성일:</strong> {formatDate(categoryDetail.createdAt)}
-              </p>
-            )}
+            <p>카테고리명: {categoryDetail.name}</p>
+            {categoryDetail.createdAt && <p>생성일: {formatDate(categoryDetail.createdAt)}</p>}
             <div className='mt-4 flex gap-4'>
               <button
                 onClick={handleEditToggle}
@@ -261,7 +257,6 @@ const CategoryDetail = () => {
           <table className='w-full border border-gray-200 table-fixed'>
             <thead className='bg-gray-100'>
               <tr>
-                {/* 상품 번호로 표시 */}
                 <th className='px-4 py-2 border'>상품 번호</th>
                 <th className='px-4 py-2 border'>중위 카테고리</th>
                 <th className='px-4 py-2 border'>하위 카테고리</th>
