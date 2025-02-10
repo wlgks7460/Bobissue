@@ -12,13 +12,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -32,29 +36,53 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Map<String, Object> attributes = principalDetails.getAttributes();
-        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        System.out.println("일단 여기 까지 도착");
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+        String nickname = oAuth2User.getAttribute("nickname");
+        String profileImage = oAuth2User.getAttribute("profile_image");
 
-        String email = (String) kakaoAccount.get("email");
-        System.out.println("OAuth 로그인 성공: " + email);
+        System.out.println("OAuth 로그인 성공: email=" + email + ", nickname=" + nickname);
 
-        if(userRepository.findByEmail(email).isPresent()){
-            // ✅ 일반 로그인 로직 재사용 (비밀번호 검증 없이 토큰만 발급)
-            LoginReqDto loginReqDto = new LoginReqDto(email, "11111"); // 비밀번호 필요 X
-            Map<String, String> tokens = authsService.userLogin(loginReqDto);
+        // 회원 여부 확인
+        Optional<User> user = userRepository.findByEmail(email);
 
-            // ✅ JSON 응답
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+        String redirectUrl;
 
-            String jsonResponse = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(tokens);
-            response.getWriter().write(jsonResponse);
+        if (user.isPresent()) {
 
-            response.sendRedirect("http://localhost:5173/");
-        }else{
-            response.sendRedirect("http://localhost:5173/kakao-login");
+            Map<String, String> tokens = authsService.userLogin(LoginReqDto.kakaoLogin(email));
+            String encodedAccessToken = URLEncoder.encode(tokens.get("access_token"), StandardCharsets.UTF_8);
+            String encodedRefreshToken = URLEncoder.encode(tokens.get("access_token"), StandardCharsets.UTF_8);
+
+            redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/")
+                    .queryParam("access_token", encodedAccessToken)
+                    .queryParam("refresh_token", encodedRefreshToken)
+                    .build()
+                    .toUriString();
+
+//            redirectUrl = "http://localhost:5173/";
+
+        } else {
+
+            String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8);
+            String encodedNickname = URLEncoder.encode(nickname, StandardCharsets.UTF_8);
+
+            redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/kakao-login")
+                    .queryParam("email", encodedEmail)
+                    .queryParam("nickname", encodedNickname)
+                    .build()
+                    .toUriString();
         }
 
+
+        System.out.println("✅ 리다이렉트 URL: " + redirectUrl);
+
+        if (!response.isCommitted()) { // ✅ 응답이 이미 전송되었는지 체크
+            response.sendRedirect(redirectUrl);
+            System.out.println("✅ response.sendRedirect() 호출 완료");
+        } else {
+            System.out.println("❌ 응답이 이미 커밋되어 sendRedirect() 실행 불가!");
+        }
     }
 }

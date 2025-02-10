@@ -25,26 +25,12 @@ public record OAuth2UserInfo(
         Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
 
-        System.out.println((String) profile.get("nickname"));
+        System.out.println("카카오 닉네임 : " + (String) profile.get("nickname"));
 
         return OAuth2UserInfo.builder()
                 .name((String) profile.get("nickname"))
                 .email((String) account.get("email"))
                 .profile((String) profile.get("profile_image_url"))
-                .build();
-    }
-
-    public User toEntity(){
-        return User.builder()
-                .name(name)
-                .birthday("20110206")
-                .email(email)
-                .password("11111")
-                .gender("M")
-                .status("Y")
-                .point(0)
-                .phoneNumber("010-1111-1111")
-                .gradeNo(0)
                 .build();
     }
 }

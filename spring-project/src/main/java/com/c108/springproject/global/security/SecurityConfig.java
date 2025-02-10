@@ -42,7 +42,7 @@ public class SecurityConfig {
                     corsConfiguration.setAllowedOriginPatterns(List.of(
                             "http://localhost:5173",
                             "http://bobissue.duckdns.org",
-                            "https://bobissue.duckdns.org:",
+                            "https://bobissue.duckdns.org",
                             "ws://**",
                             "wss://**"
                     ));
@@ -57,6 +57,7 @@ public class SecurityConfig {
 //                .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers( "/oauth2/**").permitAll() // OAuth2 관련 URL 허용
                         .requestMatchers(
                                 "/api/users/sign-up",
                                 "/api/auths/**",

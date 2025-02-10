@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import API from '../../../utils/API'
 
-const KakaoJoin = ({ kakaoToken }) => {
-  const nameRef = useRef() // 이름
+const KakaoJoin = ({ data }) => {
   const birthRef = useRef() // 생년월일
   const [maxday, setMaxday] = useState() // 현재 날짜
   const phoneRef = useRef() // 전화번호
@@ -19,20 +18,20 @@ const KakaoJoin = ({ kakaoToken }) => {
   const kakaoJoin = (e) => {
     e.preventDefault()
     const payload = {
-      name: nameRef.current.value,
+      email: data.email,
+      name: data.nickname,
+      password: 'kakaoLogin',
       birthday: birthRef.current.value.split('-').join(''),
       phoneNumber: phoneRef.current.value,
       gender: gender,
       height: heightRef.current.value || 0.0,
       weight: weightRef.current.value || 0.0,
     }
-    if (!payload.name.trim()) {
-      alert('이름을 확인해주세요.')
-    } else if (!payload.phoneNumber.trim()) {
+    if (!payload.phoneNumber.trim()) {
       alert('전화번호를 확인해주세요.')
     } else {
       console.log(payload)
-      API.post('/auths/social/signup/kakao', payload, { headers: { accessToken: kakaoToken } })
+      API.post('http://localhost:8080/api/users/sign-up', payload)
         .then((res) => {
           console.log(res)
         })
@@ -59,19 +58,6 @@ const KakaoJoin = ({ kakaoToken }) => {
         <p className='text-sm text-right mb-2'>
           <span className='text-red-600'>*</span>필수 입력사항
         </p>
-        {/* 이름 */}
-        <div className='flex items-center'>
-          <label htmlFor='name' className='inline-block w-[150px] me-5'>
-            이름<span className='text-red-600'>*</span>
-          </label>
-          <input
-            type='text'
-            id='name'
-            className='w-[400px] h-[50px] border border-gray-400 rounded px-3'
-            placeholder='이름을 입력해주세요.'
-            ref={nameRef}
-          />
-        </div>
         {/* 생년월일 */}
         <div className='flex items-center'>
           <p className='inline-block w-[150px] me-5'>

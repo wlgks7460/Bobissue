@@ -13,4 +13,15 @@ public class LoginReqDto {
 
     private String email;
     private String password;
+    private boolean isOAuth;
+
+    //kakao 로그인용
+    public static LoginReqDto kakaoLogin(String email){
+        return LoginReqDto.builder()
+                .email(email)
+                .password("kakao")
+                .isOAuth(true)
+                .build();
+    }
+
 }
