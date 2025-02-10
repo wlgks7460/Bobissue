@@ -9,8 +9,10 @@ import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
 import com.c108.springproject.seller.dto.request.CompanyReqDto;
 import com.c108.springproject.seller.dto.request.CompanyUpdateReqDto;
+import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
+import com.c108.springproject.seller.dto.response.ExtraAccountResDto;
 import com.c108.springproject.seller.service.CompanyService;
 import com.c108.springproject.seller.service.MailService;
 import com.c108.springproject.seller.service.SellerService;
@@ -99,15 +101,18 @@ public class SellerController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_COMPANY, new DefaultResponse<>(companyService.updateCompany(companyNo, companyUpdateReqDto)));
     }
 
-    // 회사 상세 조회
-    @GetMapping("/company/{companyNo}")
+    // 회사 상세 조회 토큰 이용해서 회사 자동으로 조회
+    @GetMapping("/company")
     public ResponseDto getCompany(
-            @PathVariable int companyNo
     ) {
-        CompanyResDto company = companyService.getCompany(companyNo);
+        CompanyResDto company = companyService.getCompany();
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_COMPANY, new DefaultResponse<>(company));
     }
 
-
-
+    // SellerController에 추가
+    @PostMapping("/extra-accounts")
+    public ResponseDto createExtraAccounts(@RequestBody List<ExtraAccountReqDto> extraAccountReqDtos) {
+        List<ExtraAccountResDto> results = sellerService.createExtraAccounts(extraAccountReqDtos);
+        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_EXTRA_ACCOUNTS, new DefaultResponse<>(results));
+    }
 }
