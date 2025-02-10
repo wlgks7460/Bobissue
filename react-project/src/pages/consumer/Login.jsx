@@ -23,6 +23,7 @@ const Login = () => {
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
+      isOauth: false,
     }
     API.post('/auths/user-login', payload)
       .then((res) => {
@@ -48,7 +49,7 @@ const Login = () => {
     e.preventDefault()
     const kakaoClientId = import.meta.env.VITE_KAKAO_LOGIN_CLIENT_ID
     const kakaoRedirectURL = import.meta.env.VITE_KAKAO_LOGIN_REDIRECT_URL
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectURL}&response_type=code&prompt=login`
+    window.location.href = `${import.meta.env.VITE_BOBISUUE_BASE_URL}/`
   }
   return (
     <div className='min-h-[70vh] flex justify-center pt-16'>
