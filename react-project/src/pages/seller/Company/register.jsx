@@ -1,31 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect} from 'react'
 import API from '@/utils/API'
 import { CheckCircle, AlertCircle } from 'lucide-react' // 아이콘 추가
+import { useNavigate } from 'react-router-dom'
 
 const banks = [
-  { code: '004', name: '국민은행', logo: '/images/banks/kb.png' },
-  { code: '088', name: '신한은행', logo: '/images/banks/shinhan.png' },
-  { code: '020', name: '우리은행', logo: '/images/banks/woori.png' },
-  { code: '081', name: '하나은행', logo: '/images/banks/hana.png' },
-  { code: '011', name: '농협은행', logo: '/images/banks/nh.png' },
-  { code: '023', name: 'SC제일은행', logo: '/images/banks/sc.png' },
-  { code: '027', name: '씨티은행', logo: '/images/banks/citi.png' },
-  { code: '039', name: '경남은행', logo: '/images/banks/kn.png' },
-  { code: '034', name: '광주은행', logo: '/images/banks/gj.png' },
-  { code: '031', name: '대구은행', logo: '/images/banks/daegu.png' },
+  { name: '국민은행', logo: '/images/banks/kb.png' },
+  { name: '신한은행', logo: '/images/banks/shinhan.png' },
+  { name: '우리은행', logo: '/images/banks/woori.png' },
+  { name: '하나은행', logo: '/images/banks/hana.png' },
+  { name: '농협은행', logo: '/images/banks/nh.png' },
+  { name: 'SC제일은행', logo: '/images/banks/sc.png' },
+  { name: '씨티은행', logo: '/images/banks/citi.png' },
+  { name: '경남은행', logo: '/images/banks/kn.png' },
+  { name: '광주은행', logo: '/images/banks/gj.png' },
+  { name: '대구은행', logo: '/images/banks/daegu.png' },
 ]
 
 const CompanyRegister = () => {
+  const navigate = useNavigate()
+  useEffect(()=>{
+    const token = localStorage.getItem('access_token')
+    if(!token){
+      navigate('/seller/login')
+    }
+  })
+
   const [form, setForm] = useState({
     companyName: '',
     companyLicense: '',
-    bankCode: '',
     bankName: '은행 선택',
     bankAccount: '',
   })
 
   const [message, setMessage] = useState({ text: '', type: '' })
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   // 📌 입력 필드 핸들러
   const handleChange = (e) => {
@@ -40,14 +48,14 @@ const CompanyRegister = () => {
 
   // 📌 은행 선택 핸들러
   const handleBankSelect = (bank) => {
-    setForm({ ...form, bankCode: bank.code, bankName: bank.name })
+    setForm({ ...form, bankName: bank.name })
   }
 
   // 📌 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!form.companyName || !form.companyLicense || !form.bankCode || !form.bankAccount) {
+    if (!form.companyName || !form.companyLicense || form.bankName === '은행 선택' || !form.bankAccount) {
       setMessage({ text: '❌ 모든 필수 정보를 입력하세요.', type: 'error' })
       return
     }
@@ -56,10 +64,11 @@ const CompanyRegister = () => {
     setMessage({ text: '', type: '' })
 
     try {
-      const response = await API.post('/company/register', {
+      const response = await API.post('/sellers/company', {
         companyName: form.companyName,
         companyLicense: form.companyLicense,
-        bankCode: form.bankCode,
+        bankName: form.bankName, // ✅ bankCode 대신 bankName 전송
+        status:'Y',
         bankAccount: form.bankAccount,
       })
 
@@ -68,7 +77,6 @@ const CompanyRegister = () => {
         setForm({
           companyName: '',
           companyLicense: '',
-          bankCode: '',
           bankName: '은행 선택',
           bankAccount: '',
         })
@@ -76,7 +84,7 @@ const CompanyRegister = () => {
     } catch (error) {
       setMessage({ text: '❌ 등록 중 오류가 발생했습니다.', type: 'error' })
     } finally {
-      setLoading(false)
+      setLoading(false) // ✅ 로딩 해제
     }
   }
 
@@ -133,11 +141,11 @@ const CompanyRegister = () => {
           <div className='grid grid-cols-3 gap-2 mt-2'>
             {banks.map((bank) => (
               <button
-                key={bank.code}
+                key={bank.name}
                 type='button'
                 onClick={() => handleBankSelect(bank)}
                 className={`p-3 border rounded-lg flex flex-col items-center transition-all ${
-                  form.bankCode === bank.code
+                  form.bankName === bank.name
                     ? 'bg-blue-500 text-white border-blue-600'
                     : 'bg-gray-100 hover:bg-gray-200'
                 }`}

@@ -37,9 +37,10 @@ const SellerLoginPage = () => {
       navigate('/seller')
     } else {
       try {
-        const payload = { email, password, isAuth }
+        const payload = { email, password}
         console.log(payload)
         const response = await API.post('/auths/seller-login', payload)
+        console.log(response);
 
         if (response.status === 200 && response.data.status === 'OK') {
           const sellerData = { ...response.data.result.data, status: 'seller' }
