@@ -88,8 +88,9 @@ const Signup = () => {
         height: Number(heightRef.current.value) || 0.0,
         weight: Number(weightRef.current.value) || 0.0,
       }
-      API.post('http://localhost:8080/api/users/sign-up', payload)
+      API.post('/users/sign-up', payload)
         .then((res) => {
+          console.log(res)
           if (res.status === 200) {
             alert('회원가입이 완료되었습니다.')
             navigate('/login')

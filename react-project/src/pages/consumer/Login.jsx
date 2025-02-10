@@ -47,7 +47,7 @@ const Login = () => {
   // 카카오 로그인 함수
   const kakaoLogin = (e) => {
     e.preventDefault()
-    window.location.href = `http://localhost:8080/oauth2/authorization/kakao`
+    window.location.href = `${import.meta.env.VITE_BOBISUUE_BASE_URL}/oauth2/authorization/kakao`
   }
   return (
     <div className='min-h-[70vh] flex justify-center pt-16'>
