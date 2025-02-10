@@ -184,20 +184,45 @@ const MemberExcelUpload = () => {
               ))}
             </tbody>
           </table>
-
-          {/* 페이지네이션 버튼 */}
+          {/* 페이지네이션 버튼 (최대 5개만 표시) */}
           <div className='flex justify-center mt-4 space-x-2'>
-            {[...Array(totalPages)].map((_, index) => (
+            {/* 이전 페이지 버튼 */}
+            {currentPage > 1 && (
               <button
-                key={index}
-                onClick={() => setCurrentPage(index + 1)}
-                className={`px-3 py-1 border rounded-md ${
-                  currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                }`}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className='px-3 py-1 border rounded-md bg-gray-200 hover:bg-gray-300'
               >
-                {index + 1}
+                ◀
               </button>
-            ))}
+            )}
+
+            {/* 5개만 보여주는 페이지 버튼 */}
+            {Array.from(
+              { length: Math.min(5, totalPages) },
+              (_, i) => i + Math.max(1, currentPage - 2),
+            )
+              .filter((page) => page <= totalPages)
+              .map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1 border rounded-md ${
+                    currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+            {/* 다음 페이지 버튼 */}
+            {currentPage < totalPages && (
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className='px-3 py-1 border rounded-md bg-gray-200 hover:bg-gray-300'
+              >
+                ▶
+              </button>
+            )}
           </div>
         </div>
       )}

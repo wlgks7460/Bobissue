@@ -19,6 +19,7 @@ import ConsumerMypage from '../pages/consumer/mypage/MyPage'
 import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
 import ConsumerMyPageAddress from '../pages/consumer/mypage/MyPageAddress'
 import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
+import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
 
 // 관리자 section
 
@@ -48,6 +49,7 @@ import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
+import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
 // (관리자) 라이브커머스관리
 import LiveManagementPage from '../pages/admin/live/LiveManagementPage'
 import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
@@ -117,6 +119,10 @@ const router = createBrowserRouter([
                 path: 'address',
                 element: <ConsumerMyPageAddress />,
               },
+              {
+                path: 'calender',
+                element: <ConsumerMyPageCalendar />,
+              },
             ],
           },
           {
@@ -125,6 +131,10 @@ const router = createBrowserRouter([
           },
           {
             path: 'category/:categoryNo',
+            element: <ConsumerCategory />,
+          },
+          {
+            path: 'category/:categoryNo/:child',
             element: <ConsumerCategory />,
           },
           {
@@ -429,7 +439,16 @@ const router = createBrowserRouter([
           {
             // 카테고리 관리 섹션
             path: 'category',
-            element: <CategoryManagementPage />, // 카테고리 관리 페이지
+            children: [
+              {
+                path: '',
+                element: <CategoryManagementPage />, // 카테고리 관리 페이지
+              },
+              {
+                path: ':categoryNo',
+                element: <CategoryDetailPage />, // 카테고리 상세 페이지
+              },
+            ],
           },
           {
             // 라이브 커머스 섹션

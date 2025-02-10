@@ -15,10 +15,13 @@ const Search = () => {
         console.log('📌 API 응답 데이터:', response.data)
 
         if (response.data.status === 'OK' && Array.isArray(response.data.result?.data)) {
-          // 중복 방지를 위해 `itemNo + index`로 고유한 key 생성
+          // 상품 데이터 가공 (유니크 ID 추가)
           const cleanData = response.data.result.data.map((item, index) => ({
             ...item,
             uniqueId: `${item.itemNo}-${index}`,
+            imageUrl: item.images?.[0]?.imageUrl || '', // 첫 번째 이미지 가져오기
+            categoryName: item.category?.name || '카테고리 없음',
+            parentCategory: item.category?.parentName || '상위 카테고리 없음',
           }))
 
           setAllProducts(cleanData)
@@ -34,6 +37,7 @@ const Search = () => {
     fetchAllProducts()
   }, [])
 
+  // 필터 적용 함수
   const applyFilters = (filters) => {
     let filtered = allProducts
 
@@ -42,12 +46,15 @@ const Search = () => {
     }
 
     if (filters.companyNo) {
-      filtered = filtered.filter((product) => product.companyNo === Number(filters.companyNo))
+      filtered = filtered.filter(
+        (product) => product.companyNo?.companyNo === Number(filters.companyNo)
+      )
     }
 
     setFilteredProducts(filtered)
   }
 
+  // 상세 페이지 이동
   const handleClickNavigate = (productId) => {
     navigate(`/seller/products/view/${productId}`)
   }
@@ -60,14 +67,16 @@ const Search = () => {
         {filteredProducts.length === 0 ? (
           <p className='text-gray-600 text-center'>검색된 상품이 없습니다.</p>
         ) : (
-          <table className='w-[1000px] border-collapse'>
+          <table className='w-full border-collapse'>
             <thead>
               <tr className='bg-gray-200 text-left'>
-                <th className='border px-4 py-2 w-[100px]'>번호</th>
-                <th className='border px-4 py-2 w-[300px]'>상품명</th>
-                <th className='border px-4 py-2 w-[200px]'>회사 번호</th>
+                <th className='border px-4 py-2 w-[80px]'>번호</th>
+                <th className='border px-4 py-2 w-[150px]'>이미지</th>
+                <th className='border px-4 py-2 w-[250px]'>상품명</th>
+                <th className='border px-4 py-2 w-[200px]'>회사명</th>
                 <th className='border px-4 py-2 w-[150px]'>가격</th>
-                <th className='border px-4 py-2 w-[200px]'>할인 가격</th>
+                <th className='border px-4 py-2 w-[150px]'>할인 가격</th>
+                <th className='border px-4 py-2 w-[200px]'>카테고리</th>
                 <th className='border px-4 py-2 w-[300px]'>설명</th>
               </tr>
             </thead>
@@ -79,11 +88,27 @@ const Search = () => {
                   onClick={() => handleClickNavigate(product.itemNo)}
                 >
                   <td className='border px-4 py-2 text-center'>{index + 1}</td>
+                  <td className='border px-4 py-2 text-center'>
+                    {product.imageUrl ? (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className='w-16 h-16 object-cover rounded-md'
+                      />
+                    ) : (
+                      '이미지 없음'
+                    )}
+                  </td>
                   <td className='border px-4 py-2 text-blue-500'>{product.name}</td>
-                  <td className='border px-4 py-2'>{product.companyNo?.companyNo}</td>
-                  <td className='border px-4 py-2'>{product.price?.toLocaleString() || '0'} 원</td>
+                  <td className='border px-4 py-2'>{product.companyNo?.name || '회사 없음'}</td>
+                  <td className='border px-4 py-2'>
+                    {product.price?.toLocaleString() || '0'} 원
+                  </td>
                   <td className='border px-4 py-2'>
                     {product.salePrice?.toLocaleString() || '0'} 원
+                  </td>
+                  <td className='border px-4 py-2'>
+                    {product.parentCategory} &gt; {product.categoryName}
                   </td>
                   <td className='border px-4 py-2'>{product.description || '설명 없음'}</td>
                 </tr>

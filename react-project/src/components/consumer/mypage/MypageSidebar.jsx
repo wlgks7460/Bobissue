@@ -6,7 +6,7 @@ const MypageSidebar = ({ userInfo }) => {
   const userGrade = ['일반 회원', '우수 회원', 'VIP', 'VVIP']
   const [showUserGradeTooltip, setShowUserGradeTooltip] = useState(false)
   return (
-    <div className='flex-none w-[300px] sticky top-12'>
+    <div className='flex-none w-[300px]'>
       {/* 회원등급, 쿠폰 / 포인트 */}
       <div className='w-full p-5 border border-gray-300 rounded mb-5'>
         <div className='flex gap-2  items-center'>
@@ -56,7 +56,10 @@ const MypageSidebar = ({ userInfo }) => {
         <div className='flex flex-col gap-3'>
           {/* 식단 관련 */}
           <h3 className='text-sm text-gray-400'>식단</h3>
-          <Link className='text-left'>식단 관리</Link>
+          <Link to={'/mypage/calender'} className='text-left'>
+            식단 관리
+          </Link>
+          <Link>내 레시피</Link>
         </div>
         <hr className='border-gray-300' />
         <div className='flex flex-col gap-3'>
@@ -66,7 +69,7 @@ const MypageSidebar = ({ userInfo }) => {
             주문 내역
           </Link>
           <Link className='text-left'>상품 후기</Link>
-          <Link className='text-left'>취소 / 반품 / 교환</Link>
+          <Link className='text-left'>취소 / 환불</Link>
           <Link className='text-left'>상품 문의</Link>
         </div>
       </div>

@@ -1,5 +1,7 @@
 package com.c108.springproject.address.domain;
 
+import com.c108.springproject.address.dto.AddressReqDto;
+import com.c108.springproject.address.dto.AddressResDto;
 import com.c108.springproject.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,9 @@ public class Address extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int addressNo;
 
+    @Column(nullable = false)
+    private String name;
+
     //ManyToOne
     @Column(nullable = false)
     private int userNo;
@@ -31,8 +36,16 @@ public class Address extends BaseEntity {
     @Column(nullable = false)
     private String addressDetail;
 
-    @Column(nullable = false)
-    private String status;
+
+    public void changeAddressDetail(AddressReqDto addressReqDto){
+        this.name=addressReqDto.getName();
+        this.postalCode=addressReqDto.getPostalCode();
+        this.address=addressReqDto.getAddress();
+        this.addressDetail=addressReqDto.getAddressDetail();
+    }
+
+
+
 
 
 }

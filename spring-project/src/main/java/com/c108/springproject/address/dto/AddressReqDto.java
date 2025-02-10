@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddressReqDto {
     private int userNo;
+    private String name;
     private String postalCode;
     private String address;
     private String addressDetail;
