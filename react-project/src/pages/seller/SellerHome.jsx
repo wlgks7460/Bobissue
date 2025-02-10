@@ -29,7 +29,7 @@ const SellerMainPage = () => {
     const fetchCompanyData = async () => {
       if (debug_mode) {
         setTimeout(() => {
-          setRegistration(false) // 🔹 필요에 따라 true 또는 false 변경
+          setRegistration(true) // 🔹 필요에 따라 true 또는 false 변경
         }, 500)
       } else {
         try {
