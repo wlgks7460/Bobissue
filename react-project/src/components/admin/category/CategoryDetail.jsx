@@ -179,7 +179,8 @@ const CategoryDetail = () => {
 
       {/* 부모(중위) 카테고리 상세 정보 */}
       <div className='border p-4 rounded-lg mb-6'>
-        <h2 className='text-xl font-semibold mb-4'>중위 카테고리 정보</h2>
+        {/* 헤더 텍스트를 상세 페이지의 카테고리 이름으로 변경 */}
+        <h2 className='text-xl font-semibold mb-4'>{categoryDetail.name} 카테고리</h2>
         <p>
           <strong>카테고리 번호:</strong> {categoryDetail.categoryNo}
         </p>
@@ -241,7 +242,7 @@ const CategoryDetail = () => {
       {/* 기존 상품(아이템) 목록 렌더링 (있다면) */}
       {categoryDetail.items && categoryDetail.items.length > 0 && (
         <div>
-          <h2 className='text-xl font-semibold mb-4'>상품 목록</h2>
+          <h2 className='text-lg font-semibold mb-4'>| 상품 목록</h2>
           <table className='w-full border border-gray-200 table-fixed'>
             <thead className='bg-gray-100'>
               <tr>
@@ -265,10 +266,10 @@ const CategoryDetail = () => {
         </div>
       )}
 
-      {/* 자식 카테고리 목록 렌더링: 전체 조회한 데이터에서 현재 카테고리 번호와 일치하는 항목의 children */}
+      {/* 자식 카테고리 목록 렌더링 */}
       {childCategories && childCategories.length > 0 && (
         <div className='mt-8'>
-          <h2 className='text-xl font-semibold mb-4'>자식 카테고리 목록</h2>
+          <h2 className='text-lg font-semibold mb-4'>| 하위 카테고리 목록</h2>
           <table className='w-full border border-gray-200 table-fixed'>
             <thead className='bg-gray-100'>
               <tr>

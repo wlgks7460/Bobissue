@@ -187,7 +187,7 @@ const CategoryManagementForm = () => {
           </div>
           {/* 세부 카테고리 등록 */}
           <div className='bg-white border border-gray-300 shadow-sm p-6 rounded-lg max-w-md'>
-            <h2 className='text-lg font-semibold mb-4'>세부 카테고리 등록</h2>
+            <h2 className='text-lg font-semibold mb-4'>하위 카테고리 등록</h2>
             <select
               name='parent'
               value={childFormData.parent || ''}
