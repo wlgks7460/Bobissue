@@ -20,7 +20,7 @@ public class SellerDto {
     public SellerDto(Seller seller) {
         this.email = seller.getEmail();
         this.status = seller.getStatus();
-        this.companyNo = (seller.getCompanyNo() != null) ? seller.getCompanyNo().getCompanyNo() : 0; // 기본값 0
+        this.companyNo = (seller.getCompany() != null) ? seller.getCompany().getCompanyNo() : 0; // 기본값 0
         this.name = seller.getName();
         this.callNumber = seller.getCallNumber();
     }

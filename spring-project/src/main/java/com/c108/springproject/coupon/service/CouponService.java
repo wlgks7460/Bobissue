@@ -50,7 +50,7 @@ public class CouponService {
             // SELLER라면 회사 정보 가져오기 (예: UserService에서 조회)
             Seller seller = sellerRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
-            company = seller.getCompanyNo();
+            company = seller.getCompany();
         }
 
         try{

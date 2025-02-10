@@ -28,9 +28,9 @@ public class Seller extends BaseEntity {
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "company_no")
-    private Company companyNo;
+    private Company company;
 
     @Column(nullable = false, length = 15)
     private String callNumber;
@@ -38,9 +38,17 @@ public class Seller extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
+    // 판매 승인 상태
+    @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
+    private String approvalStatus;
+
     public void updateSeller(SellerUpdateReq sellerUpdateReq) {
         this.name = sellerUpdateReq.getName();
         this.callNumber = sellerUpdateReq.getCallNumber();
+    }
+
+    public void updateCompany(Company company) {
+        this.company = company;
     }
 
 }
