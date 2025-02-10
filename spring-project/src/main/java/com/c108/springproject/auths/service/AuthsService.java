@@ -58,6 +58,7 @@ public class AuthsService {
         try{
             User user = userRepository.findByEmailAndDelYnAndStatus(loginReqDto.getEmail(),"N", "Y").orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
 
+
             if(!loginReqDto.getPassword().equals(user.getPassword())){
                 throw new BobIssueException(ResponseCode.FAIL_PASSWORD_CHECK);
             }
