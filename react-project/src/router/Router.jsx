@@ -184,25 +184,40 @@ const router = createBrowserRouter([
         element: <Seller.Signup />,
       },
       {
+        path: '/seller/company/register',
+        element: <Seller.RegisterCompany />, // ✅ Seller. 접두사 추가
+      },
+
+      {
         // seller section
         path: 'seller',
         element: <Seller.SellerHome />,
         children: [
+          //회사등록관련
+
+          {
+            path: 'company/append',
+            element: <Seller.AppendAccount />, // ✅ Seller. 접두사 추가
+          },
+          {
+            path: 'company/search',
+            element: <Seller.SearchAccount />, // ✅ Seller. 접두사 추가
+          },
           //상품 관리 관련
           {
             path: '',
             element: <Seller.Dashboard />,
           },
           {
-            path: 'products/view/:productId',
+            path: 'products/view/:itemNo',
             element: <Seller.PrView />,
           },
           {
-            path: 'products/view/:productId/update',
+            path: 'products/view/:itemNo/update',
             element: <Seller.PrUpdate />,
           },
           {
-            path: 'products/view/:productId/delete',
+            path: 'products/view/:itemNo/delete',
             element: <Seller.PrDelete />,
           },
           {

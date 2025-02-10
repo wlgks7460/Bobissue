@@ -3,16 +3,14 @@ import OrderPopup from './Popup/OrderPopup'
 import API from '../../../utils/API'
 
 const Orders = () => {
-  const debugMode = true // 🔹 디버그 모드 설정
+  const debugMode = true
 
   const [selectedOrders, setSelectedOrders] = useState([])
-  const [popupData, setPopupData] = useState(null) // 🔹 팝업 데이터 상태 추가
-  const [orderDetails, setOrderDetails] = useState({})
-  const [orderList, setOrderList] = useState([]) // 🔹 주문 목록
+  const [popupData, setPopupData] = useState(null)
+  const [orderList, setOrderList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
-  // 🔹 더미 데이터
   const dummyOrders = [
     {
       orderId: '10001',
@@ -51,7 +49,6 @@ const Orders = () => {
     },
   ]
 
-  // 🔹 API 또는 더미 데이터 가져오기
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true)
@@ -65,9 +62,8 @@ const Orders = () => {
 
       try {
         const response = await API.get('/orders')
-
         if (response.data.status === 'OK') {
-          setOrderList(response.data.result.data) // 🔹 실제 API 데이터
+          setOrderList(response.data.result.data)
         } else {
           throw new Error(response.data.message.label)
         }
@@ -82,16 +78,12 @@ const Orders = () => {
     fetchOrders()
   }, [])
 
-  // 주문 선택 처리
   const handleSelectOrder = (orderId) => {
-    setSelectedOrders((prevSelected) =>
-      prevSelected.includes(orderId)
-        ? prevSelected.filter((id) => id !== orderId)
-        : [...prevSelected, orderId],
+    setSelectedOrders((prev) =>
+      prev.includes(orderId) ? prev.filter((id) => id !== orderId) : [...prev, orderId],
     )
   }
 
-  // 🔹 팝업 열기 (결제완료 상태일 때만)
   const handleOpenPopup = (order) => {
     if (order.status === '결제완료') {
       setPopupData(order)
@@ -103,65 +95,74 @@ const Orders = () => {
   }
 
   return (
-    <div className='p-4 w-[1100px]'>
-      <h1 className='text-[32px] font-bold mb-4'>주문 관리</h1>
+    <div className='p-6 w-full bg-gray-50 min-h-screen'>
+      <h1 className='text-3xl font-bold text-gray-800 mb-6'>주문 관리</h1>
 
-      {/* 🔹 로딩 중 UI */}
       {isLoading ? (
-        <p>로딩 중...</p>
+        <p className='text-gray-500 text-lg'>로딩 중...</p>
       ) : error ? (
-        <p className='text-red-500'>{error}</p>
+        <p className='text-red-500 text-lg'>{error}</p>
       ) : (
-        <table
-          className='border border-gray-200 text-left bg-white'
-          style={{ width: '1000px', tableLayout: 'fixed' }}
-        >
-          <thead>
-            <tr>
-              <th className='p-3 w-[100px] border-b'>선택</th>
-              <th className='p-3 w-[150px] border-b'>주문 번호</th>
-              <th className='p-3 w-[150px] border-b'>상품명</th>
-              <th className='p-3 w-[150px] border-b'>옵션/수량</th>
-              <th className='p-3 w-[100px] border-b'>주문 상태</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderList.map((order) => (
-              <tr key={order.orderId} className='border-b hover:bg-gray-100'>
-                <td className='p-3'>
-                  <input
-                    type='checkbox'
-                    checked={selectedOrders.includes(order.orderId)}
-                    onChange={() => handleSelectOrder(order.orderId)}
-                    disabled={order.status !== '결제완료'}
-                    className='cursor-pointer'
-                  />
-                </td>
-                <td className='p-3'>
-                  {/* 🔹 주문 번호 클릭 시 팝업 오픈 */}
-                  {order.status === '결제완료' ? (
-                    <span
-                      onClick={() => handleOpenPopup(order)}
-                      className='text-blue-500 cursor-pointer underline'
-                    >
-                      {order.orderId}
-                    </span>
-                  ) : (
-                    order.orderId
-                  )}
-                </td>
-                <td className='p-3'>{order.productName}</td>
-                <td className='p-3'>
-                  {order.option} / {order.quantity}
-                </td>
-                <td className='p-3'>{order.status}</td>
+        <div className='overflow-x-auto shadow-lg rounded-lg bg-white'>
+          <table className='w-full text-left border-collapse'>
+            <thead className='bg-gray-200 text-gray-700'>
+              <tr>
+                <th className='p-4 border-b'>선택</th>
+                <th className='p-4 border-b'>주문 번호</th>
+                <th className='p-4 border-b'>상품명</th>
+                <th className='p-4 border-b'>옵션/수량</th>
+                <th className='p-4 border-b'>주문 상태</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {orderList.map((order) => (
+                <tr key={order.orderId} className='border-b hover:bg-gray-100'>
+                  <td className='p-4'>
+                    <input
+                      type='checkbox'
+                      checked={selectedOrders.includes(order.orderId)}
+                      onChange={() => handleSelectOrder(order.orderId)}
+                      disabled={order.status !== '결제완료'}
+                      className='cursor-pointer accent-blue-500'
+                    />
+                  </td>
+                  <td className='p-4'>
+                    {order.status === '결제완료' ? (
+                      <button
+                        onClick={() => handleOpenPopup(order)}
+                        className='text-blue-600 hover:text-blue-800 font-medium'
+                      >
+                        {order.orderId}
+                      </button>
+                    ) : (
+                      <span className='text-gray-600'>{order.orderId}</span>
+                    )}
+                  </td>
+                  <td className='p-4 text-gray-800'>{order.productName}</td>
+                  <td className='p-4 text-gray-700'>
+                    {order.option} / {order.quantity}
+                  </td>
+                  <td className='p-4'>
+                    <span
+                      className={`px-3 py-1 text-sm font-semibold rounded-full 
+                      ${
+                        order.status === '결제완료'
+                          ? 'bg-green-100 text-green-700'
+                          : order.status === '배송중'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-gray-200 text-gray-700'
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
-      {/* 🔹 주문 팝업 */}
       {popupData && <OrderPopup order={popupData} onClose={handleClosePopup} />}
     </div>
   )
