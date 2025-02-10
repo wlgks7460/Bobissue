@@ -9,6 +9,7 @@ import {
   FaVideo,
   FaBullhorn,
   FaChartLine,
+  FaBuilding,
 } from 'react-icons/fa'
 
 const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
@@ -18,7 +19,6 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      {/* <header className='font-bold text-lg text-gray-800 px-6 py-4 border-b bg-gray-100'>판매자 메뉴</header> */}
       <ul className='space-y-2 p-4'>
         {[
           {
@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             icon: <FaBox className='inline-block mr-2' />,
             links: [
               { to: 'products/register', text: '상품 등록하기' },
-              { to: 'products/Search', text: '상품 조회하기' },
+              { to: 'products/search', text: '상품 조회하기' },
             ],
           },
           {
@@ -38,7 +38,6 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
               { to: 'delivery/orders', text: '주문 정보 조회' },
               { to: 'delivery/delivers', text: '배송 관리' },
               { to: 'delivery/returns', text: '환불 관리' },
-            
             ],
           },
           {
@@ -87,6 +86,15 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             ],
           },
           {
+            key: 'company',
+            label: '내 회사 관리',
+            icon: <FaBuilding className='inline-block mr-2' />, // 일관성 유지
+            links: [
+              { to: 'company/append', text: '계정 추가하기' },
+              { to: 'company/search', text: '계정 관리하기' },
+            ],
+          },
+          {
             key: 'notices',
             label: '공지사항',
             icon: <FaBullhorn className='inline-block mr-2' />,
@@ -106,9 +114,11 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             {menuState[key] && (
               <ul className='pl-6 text-sm text-blue-600 space-y-1'>
                 {links.map(({ to, text }) => (
-                  <Link key={to} to={to}>
-                    <li className='py-1 hover:underline'>{text}</li>
-                  </Link>
+                  <li key={to}>
+                    <Link to={to} className='block py-1 hover:underline'>
+                      {text}
+                    </Link>
+                  </li>
                 ))}
               </ul>
             )}

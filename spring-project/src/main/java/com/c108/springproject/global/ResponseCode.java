@@ -186,6 +186,9 @@ public enum ResponseCode {
     SUCCESS_CREATE_LIKE("SUCCESS_CREATE_LIKE", "찜 추가 성공"),
     SUCCESS_DELETE_LIKE("SUCCESS_DELETE_LIKE", "찜 삭제 성공"),
     SUCCESS_FIND_ALL_LIKES("SUCCESS_FIND_ALL_LIKES", "찜 목록 조회 성공"),
+    SUCCESS_SEND_EMAIL("SUCCESS_SEND_EMAIL", "이메일 전송 성공"),
+    FAILED_SEND_EMAIL("FAILED_SEND_EMAIL", "메일 전송 실패"),
+    FAILED_FIND_EMAIL("FAILED_FIND_EMAIL", "해당 메일 조회 실패"),
     ALREADY_LIKED_RECIPE("ALREADY_LIKED_RECIPE", "이미 찜한 레시피"),
     SUCCESS_CREATE_COMPANY("SUCCESS_CREATE_COMPANY", "회사 생성 성공"),
     FAILED_CREATE_COMPANY("FAILED_CREATE_COMPANY", "회사 생성 실패"),
@@ -193,6 +196,7 @@ public enum ResponseCode {
     SUCCESS_DELETE_COMPANY("SUCCESS_DELETE_COMPANY", "회사 삭제 성공"),
     SUCCESS_UPDATE_COMPANY("SUCCESS_UPDATE_COMPANY", "회사 수정 성공"),
     ;
+
 
     private final String code;
     private final String label;

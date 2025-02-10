@@ -17,6 +17,7 @@ public class SellerProfiltResDto {
     private String email;
     private Company company;
     private String callNumber;
+    private String status;
 
     public static SellerProfiltResDto toDto(Seller seller) {
         return SellerProfiltResDto.builder()
@@ -25,6 +26,7 @@ public class SellerProfiltResDto {
                 .email(seller.getEmail())
                 .callNumber(seller.getCallNumber())
                 .company(seller.getCompany())
+                .status(seller.getStatus())
                 .build();
     }
 }

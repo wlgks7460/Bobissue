@@ -2,17 +2,39 @@ import React, { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
-import { FaCalendarAlt, FaClock, FaVideo, FaInfoCircle } from 'react-icons/fa'
+import { FaCalendarAlt, FaClock, FaVideo } from 'react-icons/fa'
+import Guide from './Form/LiveGuide' // ✅ 가이드 컴포넌트 추가
 
 const LiveApply = () => {
   const [selectedDate, setSelectedDate] = useState(null)
-  const [selectedTime, setSelectedTime] = useState([])
+  const [selectedTimes, setSelectedTimes] = useState([]) // ✅ 최대 2개까지 선택 가능
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('패션')
 
   const availableTimes = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00']
   const categories = ['패션', '전자제품', '뷰티', '식품', '헬스', '교육', '기타']
+
+  // ✅ 연속된 시간인지 확인하는 함수
+  const isConsecutive = (times) => {
+    if (times.length < 2) return true
+    const indexes = times.map((t) => availableTimes.indexOf(t)).sort((a, b) => a - b)
+    return indexes.length === 1 || indexes[1] - indexes[0] === 1
+  }
+
+  // ✅ 방송 시간 선택 핸들러
+  const handleTimeSelection = (time) => {
+    if (selectedTimes.includes(time)) {
+      // ✅ 이미 선택된 시간 클릭 시 제거
+      setSelectedTimes((prev) => prev.filter((t) => t !== time))
+    } else {
+      // ✅ 새 시간 선택 (최대 2개 & 연속된 시간대만 선택 가능)
+      const newTimes = [...selectedTimes, time]
+      if (newTimes.length <= 2 && isConsecutive(newTimes)) {
+        setSelectedTimes(newTimes)
+      }
+    }
+  }
 
   return (
     <div className='p-6 min-h-screen flex flex-row' style={{ backgroundColor: '#EDFFE6' }}>
@@ -70,14 +92,18 @@ const LiveApply = () => {
 
         {/* 📌 시간 선택 */}
         <label className='block text-lg font-semibold mt-4 flex items-center'>
-          <FaClock className='mr-2 text-green-500' /> 방송 시간 선택
+          <FaClock className='mr-2 text-green-500' /> 방송 시간 선택 (최대 2시간)
         </label>
-        <div className='grid grid-cols-3 gap-2'>
+        <div className='grid grid-cols-4 gap-2'>
           {availableTimes.map((time) => (
             <button
               key={time}
-              onClick={() => setSelectedTime([time])}
-              className={`px-4 py-2 rounded text-sm ${selectedTime.includes(time) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+              onClick={() => handleTimeSelection(time)}
+              className={`px-4 py-2 rounded text-sm ${
+                selectedTimes.includes(time)
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
             >
               {time}
             </button>
@@ -87,11 +113,11 @@ const LiveApply = () => {
         {/* 📌 라이브 신청 버튼 */}
         <button
           className={`mt-6 w-full py-2 text-white font-semibold rounded flex items-center justify-center ${
-            selectedDate && selectedTime.length > 0
+            selectedDate && selectedTimes.length > 0
               ? 'bg-green-500 hover:bg-green-600'
               : 'bg-gray-400 cursor-not-allowed'
           }`}
-          disabled={!selectedDate || selectedTime.length === 0}
+          disabled={!selectedDate || selectedTimes.length === 0}
         >
           <FaVideo className='mr-2' />
           라이브 신청하기
@@ -100,43 +126,7 @@ const LiveApply = () => {
 
       {/* 오른쪽: 라이브 신청 가이드 */}
       <div className='w-1/2 p-6 bg-white border border-black rounded-md shadow-md ml-6'>
-        <h2 className='text-xl font-bold mb-4 flex items-center'>
-          <FaInfoCircle className='mr-2 text-blue-500' /> 라이브 신청 가이드
-        </h2>
-
-        {/* 📌 신청 가능 기간 */}
-        <div className='mb-4'>
-          <h3 className='text-lg font-semibold text-red-500'>📌 신청 가능 기간</h3>
-          <p className='text-gray-600'>
-            ✔ 라이브 방송 신청은 매월 <strong>1일~14일</strong>까지만 가능합니다.
-          </p>
-          <p className='text-gray-600'>
-            ✔ 방송 날짜는 <strong>다음 달부터</strong> 선택할 수 있습니다.
-          </p>
-        </div>
-
-        {/* 📌 신청 절차 */}
-        <div className='mb-4'>
-          <h3 className='text-lg font-semibold text-green-500'>📌 라이브 신청 절차</h3>
-          <ul className='list-disc pl-5 text-gray-600'>
-            <li>📍 방송 제목 & 설명 입력</li>
-            <li>📍 적절한 카테고리 선택</li>
-            <li>📍 원하는 날짜와 시간 선택</li>
-            <li>📍 라이브 신청 버튼 클릭</li>
-          </ul>
-        </div>
-
-        {/* 📌 방송 유의사항 */}
-        <div>
-          <h3 className='text-lg font-semibold text-yellow-500'>📌 라이브 방송 유의사항</h3>
-          <ul className='list-disc pl-5 text-gray-600'>
-            <li>
-              ✔ 라이브 방송은 승인 후 최대 <strong>2시간</strong> 가능
-            </li>
-            <li>✔ 상품 소개 시 사전 준비 필요</li>
-            <li>✔ 원활한 인터넷 환경에서 방송 진행</li>
-          </ul>
-        </div>
+        <Guide /> {/* ✅ 외부 가이드 컴포넌트 삽입 */}
       </div>
     </div>
   )

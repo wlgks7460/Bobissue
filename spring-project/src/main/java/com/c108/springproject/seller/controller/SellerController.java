@@ -12,9 +12,13 @@ import com.c108.springproject.seller.dto.request.CompanyUpdateReqDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
 import com.c108.springproject.seller.service.CompanyService;
+import com.c108.springproject.seller.service.MailService;
 import com.c108.springproject.seller.service.SellerService;
+import com.c108.springproject.seller.dto.EmailReqDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +29,13 @@ public class SellerController {
 
     private final SellerService sellerService;
     private final CompanyService companyService;
+    private final MailService mailService;
 
     @Autowired
-    public SellerController(SellerService sellerService, CompanyService companyService) {
+    public SellerController(SellerService sellerService, MailService mailService, CompanyService companyService) {
         this.sellerService = sellerService;
         this.companyService = companyService;
+        this.mailService = mailService;
     }
 
     @PostMapping("sign-up")
@@ -68,9 +74,17 @@ public class SellerController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER, new DefaultResponse<SellerProfiltResDto>(sellerService.sellerProfile()));
     }
 
+    @PostMapping("/mail")
+    public ResponseDto sendEmail(@RequestBody EmailReqDto emailReqDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        mailService.sendMail(email, emailReqDto);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEND_EMAIL, new DefaultResponse<String>(emailReqDto.getRecipient()));
+    }
+
     // 회사 CRUD
 
-    
+
     // 회사 생성
     @PostMapping("/company")
     public ResponseDto createCompany(@RequestBody CompanyReqDto companyReqDto) {
