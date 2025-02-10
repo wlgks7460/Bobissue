@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import API from '../../../utils/API'
+import { useDispatch } from 'react-redux'
+import { userReducerActions } from '../../../redux/reducers/userSlice'
 
 const MyPageInfoForm = ({ userNo }) => {
+  const dispatch = useDispatch()
+
   const [userInfo, setUserInfo] = useState({})
 
   const nameRef = useRef() // 이름
@@ -35,9 +39,10 @@ const MyPageInfoForm = ({ userNo }) => {
       alert('전화번호를 확인해주세요.')
     } else {
       console.log(payload)
-      API.post(`/users/${userInfo.userNo}`, payload)
+      API.put(`/users/${userInfo.userNo}`, payload)
         .then((res) => {
           console.log(res)
+          dispatch(userReducerActions.setUserInfo(res.data.result.data))
         })
         .catch((err) => {
           console.error(err)
@@ -158,6 +163,7 @@ const MyPageInfoForm = ({ userNo }) => {
             placeholder='키(cm)를 입력해주세요.'
             pattern='^\d+(\.\d{1,2})?$'
             ref={heightRef}
+            defaultValue={userInfo.height}
           />
         </div>
         {/* 몸무게 */}
@@ -172,6 +178,7 @@ const MyPageInfoForm = ({ userNo }) => {
             placeholder='몸무게(kg)를 입력해주세요.'
             pattern='^\d+(\.\d{1,2})?$'
             ref={weightRef}
+            defaultValue={userInfo.weight}
           />
         </div>
         <input
