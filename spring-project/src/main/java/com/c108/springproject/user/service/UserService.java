@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -32,9 +29,6 @@ import java.time.YearMonth;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final RedisService redisService;
     private final OrderRepository orderRepository;
 
 
@@ -45,9 +39,6 @@ public class UserService {
                        OrderRepository orderRepository
                        ) {
         this.userRepository = userRepository;
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.redisService = redisService;
         this.orderRepository = orderRepository;
     }
 
@@ -63,6 +54,7 @@ public class UserService {
                 .weight(signUpDto.getWeight())
                 .phoneNumber(signUpDto.getPhoneNumber())
                 .status("Y")
+                .amount(0)
                 .grade(UserGrade.BRONZE)
                 .build();
 
@@ -91,7 +83,7 @@ public class UserService {
         return userRepository.findById(userNo)
                 .filter(user -> !"Y".equals(user.getDelYn())) // 삭제된 회원은 조회되지 않도록 필터링
                 .map(UserResDto::new)
-                .orElse(null);
+                .orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_USER));
     }
 
     @Transactional
@@ -114,8 +106,8 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmailAndDelYnAndStatus(email,"N", "Y");
+    public User findByEmail(String email) {
+        return userRepository.findByEmailAndDelYnAndStatus(email,"N", "Y").orElseThrow(()-> new BobIssueException(ResponseCode.FAILED_FIND_EMAIL));
     }
 
     @Scheduled(cron = "0 0 0 1 * ?")

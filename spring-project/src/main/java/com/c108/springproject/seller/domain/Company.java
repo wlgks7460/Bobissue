@@ -22,10 +22,15 @@ public class Company extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String license;
+    private String license; // 사업자 등록 번호
 
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
 
+    @Column(nullable = false)
+    private String bank;
+
+    @Column(nullable = false)
+    private String bankAccount;
 
 }

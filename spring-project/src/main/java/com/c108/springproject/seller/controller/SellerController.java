@@ -7,9 +7,13 @@ import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
+import com.c108.springproject.seller.service.MailService;
 import com.c108.springproject.seller.service.SellerService;
+import com.c108.springproject.seller.dto.EmailReqDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,10 +23,12 @@ import java.util.List;
 public class SellerController {
 
     private final SellerService sellerService;
+    private final MailService mailService;
 
     @Autowired
-    public SellerController(SellerService sellerService) {
+    public SellerController(SellerService sellerService, MailService mailService) {
         this.sellerService = sellerService;
+        this.mailService = mailService;
     }
 
     @PostMapping("sign-up")
@@ -59,5 +65,13 @@ public class SellerController {
     @GetMapping("/profile")
     public ResponseDto sellerProfile() {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER, new DefaultResponse<SellerProfiltResDto>(sellerService.sellerProfile()));
+    }
+
+    @PostMapping("/mail")
+    public ResponseDto sendEmail(@RequestBody EmailReqDto emailReqDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        mailService.sendMail(email, emailReqDto);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEND_EMAIL, new DefaultResponse<String>(emailReqDto.getRecipient()));
     }
 }
