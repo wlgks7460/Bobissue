@@ -188,21 +188,21 @@ const router = createBrowserRouter([
       {
         path: 'seller/signup',
         element: <Seller.Signup />,
-      },
-      {
+      },      {
         path: '/seller/company/register',
-        element: <Seller.RegisterCompany />, // ✅ Seller. 접두사 추가
+        element: <Seller.RegisterCompany />,
       },
-
+  
       {
         // seller section
         path: 'seller',
         element: <Seller.SellerHome />,
         children: [
-          //회사등록관련
+          //회사등록관련  
+     
 
           {
-            path: 'company/append',
+            path: '/seller/company/append',
             element: <Seller.AppendAccount />, // ✅ Seller. 접두사 추가
           },
           {

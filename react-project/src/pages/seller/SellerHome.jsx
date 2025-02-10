@@ -51,7 +51,7 @@ const SellerMainPage = () => {
 
     if (!savedToken) {
       const redirectPath = `${location.pathname}${location.search}`
-      navigate(`/seller/login?path=${encodeURIComponent(redirectPath)}`, { replace: true })
+      navigate(`/seller/login`)
     } else {
       setToken(savedToken)
     }

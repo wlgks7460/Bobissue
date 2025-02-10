@@ -9,23 +9,32 @@ const InquiryList = () => {
   const [answerFilter, setAnswerFilter] = useState('all') // 답변 여부 필터 ('all', 'answered', 'unanswered')
   const [typeFilter, setTypeFilter] = useState('all') // 문의 유형 필터
   const navigate = useNavigate() // 네비게이션 훅
-  const debug_mode = true // 디버그 모드 설정
+  const debug_mode = false // 디버그 모드 설정
   const sellerEmail = localStorage.getItem('userId') // 판매자 이메일 가져오기
 
   // ✅ 데이터 로딩
+
   useEffect(() => {
-    if (debug_mode) {
-      setInquiries(dummyData)
-      setFilteredInquiries(dummyData)
-    } else {
-      API.get(`/questions`)
-        .then((response) => {
-          setInquiries(response.data)
-          setFilteredInquiries(response.data)
-        })
-        .catch((error) => console.error('Error fetching inquiries:', error))
-    }
-  }, [debug_mode, sellerEmail])
+    const fetchInquiries = async () => {
+      try {
+        if (debug_mode) {
+          setInquiries(dummyData);
+          setFilteredInquiries(dummyData);
+        } else {
+          const response = await API.get(`/questions`);
+          console.log(response);
+          setInquiries(response.data);
+          setFilteredInquiries(response.data);
+        }
+      } catch (error) {
+      
+        console.error('Error fetching inquiries:', error);
+      }
+    };
+  
+    fetchInquiries();
+  }, [debug_mode, sellerEmail]);
+  
 
   // ✅ 필터 적용
   useEffect(() => {
