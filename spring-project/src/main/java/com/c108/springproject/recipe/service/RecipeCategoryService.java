@@ -9,6 +9,7 @@ import com.c108.springproject.recipe.dto.response.RecipeCategoryResDto;
 import com.c108.springproject.recipe.repository.RecipeCategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class RecipeCategoryService {
     
     // 생성
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public RecipeCategory createCategory(RecipeCategoryReqDto request) {
         try {
             RecipeCategory category = RecipeCategory.builder()
@@ -54,7 +56,8 @@ public class RecipeCategoryService {
     }
 
     //수정
-
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public RecipeCategoryResDto updateRecipeCategory(int recipeCategoryNo, RecipeCategoryReqDto recipeCategoryReqDto ) {
         RecipeCategory recipeCategory = recipeCategoryRepository.findById(recipeCategoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.RECIPECATEGORY_NOT_FOUND));
         try {
@@ -68,6 +71,8 @@ public class RecipeCategoryService {
         }
     }
 
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public int deleteRecipeCategory(int recipeCategoryNo) {
         RecipeCategory recipeCategory = recipeCategoryRepository.findById(recipeCategoryNo).orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_CATEGORY));
         try {
