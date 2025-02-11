@@ -188,18 +188,18 @@ const router = createBrowserRouter([
       {
         path: 'seller/signup',
         element: <Seller.Signup />,
-      },      {
+      },
+      {
         path: '/seller/company/register',
         element: <Seller.RegisterCompany />,
       },
-  
+
       {
         // seller section
         path: 'seller',
         element: <Seller.SellerHome />,
         children: [
-          //회사등록관련  
-     
+          //회사등록관련
 
           {
             path: '/seller/company/append',
@@ -208,6 +208,10 @@ const router = createBrowserRouter([
           {
             path: 'company/search',
             element: <Seller.SearchAccount />, // ✅ Seller. 접두사 추가
+          },
+          {
+            path: 'company/update',
+            element: <Seller.UpdateCompany />,
           },
           //상품 관리 관련
           {

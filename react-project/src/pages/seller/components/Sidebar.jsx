@@ -92,6 +92,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             links: [
               { to: 'company/append', text: '계정 추가하기' },
               { to: 'company/search', text: '계정 관리하기' },
+              { to: 'company/update', text: '회사 정보수정' },
             ],
           },
           {
