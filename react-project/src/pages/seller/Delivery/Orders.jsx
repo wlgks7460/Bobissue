@@ -95,42 +95,51 @@ const Orders = () => {
   }
 
   return (
-    <div className='p-6 w-full bg-gray-50 min-h-screen'>
-      <h1 className='text-3xl font-bold text-gray-800 mb-6'>주문 관리</h1>
+    <div className='p-6 w-full bg-gradient-to-b from-gray-100 to-gray-50 min-h-screen'>
+      <h1 className='text-3xl font-bold text-gray-800 mb-6'>🛒 주문 관리</h1>
 
       {isLoading ? (
         <p className='text-gray-500 text-lg'>로딩 중...</p>
       ) : error ? (
         <p className='text-red-500 text-lg'>{error}</p>
       ) : (
-        <div className='overflow-x-auto shadow-lg rounded-lg bg-white'>
+        <div className='overflow-hidden border border-gray-300 rounded-xl bg-white'>
           <table className='w-full text-left border-collapse'>
-            <thead className='bg-gray-200 text-gray-700'>
+            <thead className='bg-gray-100 text-gray-700'>
               <tr>
                 <th className='p-4 border-b'>선택</th>
                 <th className='p-4 border-b'>주문 번호</th>
                 <th className='p-4 border-b'>상품명</th>
-                <th className='p-4 border-b'>옵션/수량</th>
+                <th className='p-4 border-b'>옵션 / 수량</th>
                 <th className='p-4 border-b'>주문 상태</th>
               </tr>
             </thead>
             <tbody>
               {orderList.map((order) => (
-                <tr key={order.orderId} className='border-b hover:bg-gray-100'>
+                <tr key={order.orderId} className='border-b hover:bg-gray-100 transition'>
                   <td className='p-4'>
-                    <input
-                      type='checkbox'
-                      checked={selectedOrders.includes(order.orderId)}
-                      onChange={() => handleSelectOrder(order.orderId)}
-                      disabled={order.status !== '결제완료'}
-                      className='cursor-pointer accent-blue-500'
-                    />
+                    <label className='flex items-center cursor-pointer'>
+                      <input
+                        type='checkbox'
+                        checked={selectedOrders.includes(order.orderId)}
+                        onChange={() => handleSelectOrder(order.orderId)}
+                        disabled={order.status !== '결제완료'}
+                        className='peer hidden'
+                      />
+                      <span
+                        className={`w-5 h-5 inline-block border-2 rounded-md ${
+                          selectedOrders.includes(order.orderId)
+                            ? 'bg-blue-500 border-blue-500'
+                            : 'border-gray-400'
+                        }`}
+                      ></span>
+                    </label>
                   </td>
                   <td className='p-4'>
                     {order.status === '결제완료' ? (
                       <button
                         onClick={() => handleOpenPopup(order)}
-                        className='text-blue-600 hover:text-blue-800 font-medium'
+                        className='text-blue-600 hover:text-blue-800 font-medium transition'
                       >
                         {order.orderId}
                       </button>
@@ -147,10 +156,10 @@ const Orders = () => {
                       className={`px-3 py-1 text-sm font-semibold rounded-full 
                       ${
                         order.status === '결제완료'
-                          ? 'bg-green-100 text-green-700'
+                          ? 'bg-green-100 text-green-700 border border-green-300'
                           : order.status === '배송중'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-gray-200 text-gray-700'
+                            ? 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+                            : 'bg-gray-200 text-gray-700 border border-gray-300'
                       }`}
                     >
                       {order.status}
