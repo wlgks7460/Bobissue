@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReportUpdateReqDto {
     private String status;
-    private int updatedUser;
+    private String updatedUser;
 }

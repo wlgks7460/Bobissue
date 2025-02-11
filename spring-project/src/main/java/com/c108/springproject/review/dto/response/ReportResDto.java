@@ -23,9 +23,9 @@ public class ReportResDto {
     private String content;
     private String status;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
 
     public static ReportResDto toDto(Report report) {
         return ReportResDto.builder()

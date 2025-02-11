@@ -15,5 +15,5 @@ public class ReportCreateReqDto {
     private int categoryNo;
     private String title;
     private String content;
-    private int createdUser;
+    private String createdUser;
 }

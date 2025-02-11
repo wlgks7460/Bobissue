@@ -15,9 +15,9 @@ public class CastResDto {
     private String startAt;
     private int castTime;
     private String createAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYN;
 
 

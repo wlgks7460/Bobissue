@@ -15,5 +15,5 @@ public class ReviewCreateReqDto {
     private int itemNo;
     private String content;
     private int rating;
-    private int createdUser;
+//    private String createdUser;
 }

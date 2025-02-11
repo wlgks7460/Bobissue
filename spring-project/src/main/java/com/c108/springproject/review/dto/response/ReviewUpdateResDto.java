@@ -20,9 +20,9 @@ public class ReviewUpdateResDto {
     private String content;
     private int rating;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYn;
 
     public static ReviewUpdateResDto toDto(Review review) {

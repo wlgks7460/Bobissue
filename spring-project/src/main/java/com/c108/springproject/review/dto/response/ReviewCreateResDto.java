@@ -21,9 +21,9 @@ public class ReviewCreateResDto {
     private String content;
     private int rating;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
 
     public static ReviewCreateResDto toDto(Review review) {
         return ReviewCreateResDto.builder()

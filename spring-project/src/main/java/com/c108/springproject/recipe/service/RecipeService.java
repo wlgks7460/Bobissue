@@ -157,7 +157,7 @@ public class RecipeService {
 
             // 기본 정보 업데이트
             recipe.update(category, request.getName(), request.getTime());
-            recipe.setUpdatedUser(request.getUpdatedUser());
+//            recipe.setUpdatedUser(request.getUpdatedUser());
 
 
             // 재료 정보 업데이트
