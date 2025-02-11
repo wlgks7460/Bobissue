@@ -87,14 +87,15 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(int userNo, UserDto userDto) {
+    public UserResDto updateUser(int userNo, UserDto userDto) {
+        User user;
         try{
-            User user = userRepository.findById(userNo).orElse(null);
+            user = userRepository.findById(userNo).orElse(null);
             user.updateUser(userDto);
         } catch (BobIssueException e) {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_USER);
         }
-
+        return UserResDto.toDto(user);
     }
 
     @Transactional

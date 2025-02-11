@@ -7,6 +7,7 @@ export const userSlice = createSlice({
     refreshToken: localStorage.getItem('refresh_token') || null, // jwt refresh_token
     isAuthenticated: !!localStorage.getItem('access_token'), // 로그인 상태
     status: localStorage.getItem('status') || '',
+    userInfo: {},
   },
   reducers: {
     /** 로그인 */
@@ -28,6 +29,10 @@ export const userSlice = createSlice({
       localStorage.removeItem('access_token')
       localStorage.removeItem('refresh_token')
       localStorage.removeItem('status')
+    },
+    /** 유저 정보 저장 & 수정 */
+    setUserInfo: (state, action) => {
+      state.userInfo = action.payload
     },
   },
 })
