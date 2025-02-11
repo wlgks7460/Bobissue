@@ -11,6 +11,7 @@ import com.c108.springproject.item.dto.response.ItemListResDto;
 import com.c108.springproject.item.dto.response.ItemResDto;
 import com.c108.springproject.item.dto.response.ItemUpdateResDto;
 import com.c108.springproject.item.service.ItemService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +52,11 @@ public class ItemController {
             e.printStackTrace();
             throw e;
         } catch (Exception e) {
-            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
+            try {
+                throw e;
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -98,10 +103,13 @@ public class ItemController {
             ItemUpdateResDto updatedItem = itemService.updateItem(itemNo, reqDto, images);
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_ITEM, new DefaultResponse<>(updatedItem));
         } catch (BobIssueException e) {
-            e.printStackTrace();
             throw e;
         } catch (Exception e) {
-            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
+            try {
+                throw e;
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
     
