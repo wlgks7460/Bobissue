@@ -9,6 +9,7 @@ export { default as Signup } from './Login/Signup'
 export { default as RegisterCompany } from './Company/register' // 회사 등록
 export { default as AppendAccount } from './Company/append' // 계정 추가
 export { default as SearchAccount } from './Company/Search' // 계정 조회
+export { default as UpdateCompany } from './Company/Update'
 
 // 상품 관리 관련
 export { default as Register } from './Products/Register'

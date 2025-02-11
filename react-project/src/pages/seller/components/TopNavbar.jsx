@@ -1,10 +1,26 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 const TopNavbar = ({ toggleSidebar }) => {
   const navigate = useNavigate() // 로그인 페이지로 이동하기 위한 네비게이션 함수
+  const [debugMode, setDebugMode] = useState(false) // ✅ 디버그 모드 상태
 
-  // 로그아웃 함수
+  // ✅ 컴포넌트가 마운트될 때 localStorage에서 debug_mode 값 불러오기
+  useEffect(() => {
+    const storedDebugMode = localStorage.getItem('debug_mode')
+    if (storedDebugMode) {
+      setDebugMode(storedDebugMode === 'true') // "true"를 boolean 값으로 변환
+    }
+  }, [])
+
+  // ✅ 디버그 모드 토글 함수
+  const toggleDebugMode = () => {
+    const newMode = !debugMode
+    setDebugMode(newMode)
+    localStorage.setItem('debug_mode', newMode) // localStorage에 저장
+  }
+
+  // ✅ 로그아웃 함수
   const handleLogout = () => {
     localStorage.removeItem('access_token') // 로컬스토리지에서 access_token 삭제
     sessionStorage.removeItem('access_token') // 세션스토리지에서도 삭제 (필요한 경우)
@@ -53,10 +69,20 @@ const TopNavbar = ({ toggleSidebar }) => {
           Home
         </Link>
 
-        {/* 로그아웃 버튼 추가 */}
+        {/* ✅ 디버그 모드 토글 버튼 */}
+        <button
+          onClick={toggleDebugMode}
+          className={`px-2 py-1 rounded-[15px] text-white focus:outline-none ${
+            debugMode ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-500 hover:bg-gray-600'
+          }`}
+        >
+          {debugMode ? '디버그 ON' : '디버그 OFF'}
+        </button>
+
+        {/* 로그아웃 버튼 */}
         <button
           onClick={handleLogout}
-          className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none'
+          className='bg-red-500 text-white px-2 py-1 rounded-[15px] hover:bg-red-600 focus:outline-none'
         >
           로그아웃
         </button>
