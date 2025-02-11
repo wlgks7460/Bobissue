@@ -60,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers( "/oauth2/**").permitAll() // OAuth2 관련 URL 허용
                         .requestMatchers(
                                 "/api/users/sign-up",
+                                "/api/users/kakao/sign-up",
                                 "/api/auths/**",
                                 "/api/sellers/sign-up",
                                 "/api/check-password",

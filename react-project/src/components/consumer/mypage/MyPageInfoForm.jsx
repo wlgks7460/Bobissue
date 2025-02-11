@@ -33,11 +33,10 @@ const MyPageInfoForm = ({ userNo }) => {
     } else if (!payload.phoneNumber.trim()) {
       alert('전화번호를 확인해주세요.')
     } else {
-      console.log(payload)
       API.put(`/users/${userInfo.userNo}`, payload)
         .then((res) => {
-          console.log(res)
-          // dispatch(userReducerActions.setUserInfo(res.data.result.data))
+          alert('수정되었습니다.')
+          dispatch(userReducerActions.setUserInfo(res.data.result.data))
         })
         .catch((err) => {
           console.error(err)

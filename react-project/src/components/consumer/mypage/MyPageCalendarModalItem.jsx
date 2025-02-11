@@ -1,7 +1,15 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import dayjs from 'dayjs'
 
 const MyPageCalendarModalItem = ({ meal }) => {
   const [mode, setMode] = useState('read')
+
+  const nameRef = useRef()
+  const timeRef = useRef()
+  const calorieRef = useRef()
+
+  const [hour, setHour] = useState(dayjs(meal.eatTime).hour())
+  const [minute, setMinute] = useState(dayjs(meal.eatTime).minute())
 
   return (
     <div>
@@ -15,10 +23,10 @@ const MyPageCalendarModalItem = ({ meal }) => {
             />
           </div>
           <div>
-            <h4 className='font-bold'>{meal.title}</h4>
+            <h4 className='font-bold'>{meal.name}</h4>
             <div>
-              <span className='me-5'>{meal.time}</span>
-              <span className='text-sm text-gray-500'>{meal.calories} kcal</span>
+              <span className='me-5'>{`${hour < 12 ? '오전' : '오후'} ${hour - 12}:${minute}`}</span>
+              <span className='text-sm text-gray-500'>{meal.calorie} kcal</span>
             </div>
             <div className='flex gap-3'>
               <button className='p-1 text-indigo-600' onClick={() => setMode('update')}>
@@ -42,19 +50,22 @@ const MyPageCalendarModalItem = ({ meal }) => {
             <div>
               <input
                 type='text'
-                defaultValue={meal.title}
+                defaultValue={meal.name}
+                ref={nameRef}
                 className='font-bold px-2 py-1 border border-gray-300 rounded mb-2'
               />
               <div className='flex gap-3 mb-2'>
                 <input
                   type='time'
-                  defaultValue={meal.time}
+                  defaultValue={`${hour}:${minute}`}
+                  ref={timeRef}
                   className='px-2 py-1 border border-gray-300 rounded'
                 />
                 <span className='flex px-2 py-1 border border-gray-300 rounded'>
                   <input
                     type='number'
-                    defaultValue={meal.calories}
+                    defaultValue={meal.calorie}
+                    ref={calorieRef}
                     className='text-right w-[80px]'
                   />
                   kcal
