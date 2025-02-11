@@ -66,12 +66,25 @@ const SellerRegister = () => {
     return fieldValue === appliedSearchQuery.trim().toLowerCase()
   })
 
-  const handleApproveSeller = async (companyNo, sellerNo) => {
+  const handleApproveSeller = async (companyNo, sellerNo, companyName, representativeEmail) => {
     if (!window.confirm('해당 판매자를 승인 상태로 변경하시겠습니까?')) return
 
     try {
+      // 1️⃣ 판매자 승인 API 호출
       const response = await API.put(`/admin/${sellerNo}/approve`)
       console.log('판매자 승인 응답:', response)
+
+      // 2️⃣ 승인 성공 후 메일 발송 API 호출
+      const mailData = {
+        title: '판매자 승인 완료 안내',
+        content: `안녕하세요,\n\n"${companyName}" 회사의 판매자 권한이 승인되었습니다.\n\n사이트에서 판매를 진행하실 수 있습니다.\n\n감사합니다.`,
+        recipient: representativeEmail,
+      }
+
+      const mailResponse = await API.post('/admin/seller/mail', mailData)
+      console.log('메일 발송 응답:', mailResponse)
+
+      // 3️⃣ 상태 업데이트 (승인된 판매자 목록 업데이트)
       setApprovals((prevApprovals) =>
         prevApprovals.map((company) => {
           if (company.companyNo === companyNo) {
@@ -90,11 +103,14 @@ const SellerRegister = () => {
           return company
         }),
       )
+
+      alert(`"${companyName}" 회사의 판매자 승인 및 메일 발송이 완료되었습니다.`)
     } catch (error) {
-      console.error('판매자 승인 실패:', error)
-      alert('판매자 승인이 실패했습니다.')
+      console.error('판매자 승인 또는 메일 발송 실패:', error)
+      alert('판매자 승인 또는 메일 발송에 실패했습니다.')
     }
   }
+
   const handleSearch = () => {
     console.log('🔍 검색 실행:', searchType, searchQuery)
     setAppliedSearchQuery(searchQuery)
@@ -143,6 +159,8 @@ const SellerRegister = () => {
                         handleApproveSeller(
                           company.companyNo,
                           company.representativeSeller?.sellerNo,
+                          company.companyName,
+                          company.representativeSeller?.email,
                         )
                       }
                       className='bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600'
