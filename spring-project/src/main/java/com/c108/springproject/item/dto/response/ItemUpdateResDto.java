@@ -45,7 +45,7 @@ public class ItemUpdateResDto {
                 .images(item.getImages().stream()
                         .map(image -> ImageDto.toDto(image))
                         .collect(Collectors.toList()))
-                .companyNo(item.getCompanyNo())
+                .companyNo(item.getCompany())
                 .name(item.getName())
                 .price(item.getPrice())
                 .salePrice(item.getSalePrice())

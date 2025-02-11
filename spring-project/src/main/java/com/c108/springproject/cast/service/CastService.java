@@ -62,7 +62,7 @@ public class CastService {
 
             for(CastItemReqDto castItemReqDto : castItemReqDtos){
                 Item item = itemRepository.findById(castItemReqDto.getItemNo()).orElseThrow(()-> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
-                if(seller.getCompany().getCompanyNo() != item.getCompanyNo().getCompanyNo()){
+                if(seller.getCompany().getCompanyNo() != item.getCompany().getCompanyNo()){
                     throw new BobIssueException(ResponseCode.UNAUTHORIZED_ITEM);
                 }
 
