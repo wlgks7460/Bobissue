@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import dayjs from 'dayjs'
 
-const MyPageCalendarModalItem = ({ meal }) => {
+const MyPageCalendarModalItem = ({ meal, updateData }) => {
   const [mode, setMode] = useState('read')
 
   const nameRef = useRef()
@@ -10,6 +10,11 @@ const MyPageCalendarModalItem = ({ meal }) => {
 
   const [hour, setHour] = useState(dayjs(meal.eatTime).hour())
   const [minute, setMinute] = useState(dayjs(meal.eatTime).minute())
+
+  const handleUpdate = (e) => {
+    e.preventDefault()
+    updateData()
+  }
 
   return (
     <div>
