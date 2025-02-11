@@ -53,7 +53,7 @@ public class CalendarService {
 
     @Transactional
     public MealResDto createMeal(int userNo, String eatDate, MealReqDto mealReqDto) {
-        eatDate = eatDate+mealReqDto.getEatTime();
+        eatDate = eatDate+" "+mealReqDto.getEatTime();
         Calendar calendar = Calendar.builder()
                 .userNo(userNo)
                 .name(mealReqDto.getName())
@@ -80,19 +80,15 @@ public class CalendarService {
     }
 
     @Transactional
-    public MealResDto updateMeal(int userNo,long calendarNo,MealReqDto mealReqDto){
+    public MealResDto updateMeal(long calendarNo,MealReqDto mealReqDto){
         Calendar meal = calendarRepository.findById((int) calendarNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_CALENDAL));
 
         meal= Calendar.builder()
-                .calendarNo(meal.getCalendarNo())  // calendarNo는 변경하지 않음
                 .name(mealReqDto.getName())                // 새로운 이름으로 업데이트
                 .eatDate(meal.getEatDate()+" "+mealReqDto.getEatTime())        // 기존 eatDate 유지
                 .calorie(mealReqDto.getCalorie())          // 새로운 칼로리로 업데이트
-                .userNo(userNo)                            // userNo 유지
                 .build();
-
-//        calendarRepository.save(meal);
 
         return MealResDto.toDto(meal);
     }

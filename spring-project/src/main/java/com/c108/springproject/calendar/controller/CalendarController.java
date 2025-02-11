@@ -60,12 +60,9 @@ public class CalendarController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CALENDAR, new DefaultResponse<List<MealResDto>>(calendarService.findAllMealByDay(userNo, eatDate)));
     }
 
-    @PostMapping("/{calendarNo}")
+    @PutMapping("/{calendarNo}")
     public ResponseDto updateMeal(@PathVariable long calendarNo, @RequestBody MealReqDto mealReqDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        int userNo = userService.findByEmail(email).getUserNo();
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_CALENDAR, new DefaultResponse<MealResDto>(calendarService.updateMeal(userNo, calendarNo, mealReqDto)));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_CALENDAR, new DefaultResponse<MealResDto>(calendarService.updateMeal(calendarNo, mealReqDto)));
     }
 
     @DeleteMapping("/{calendarNo}")
