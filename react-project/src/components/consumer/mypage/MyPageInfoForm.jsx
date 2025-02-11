@@ -1,21 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import API from '../../../utils/API'
+import { useDispatch } from 'react-redux'
+import { userReducerActions } from '../../../redux/reducers/userSlice'
+import { useNavigate } from 'react-router-dom'
 
 const MyPageInfoForm = ({ userNo }) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const [userInfo, setUserInfo] = useState({})
 
   const nameRef = useRef() // 이름
   const birthRef = useRef() // 생년월일
   const [maxday, setMaxday] = useState() // 현재 날짜
   const phoneRef = useRef() // 전화번호
-  const [gender, setGender] = useState('') // 성별
   const heightRef = useRef() // 키
   const weightRef = useRef() // 몸무게
-
-  // 성별 값 변경 함수
-  const handleGender = (e) => {
-    setGender(e.target.value)
-  }
 
   // 정보 수정 함수
   const updateUserInfo = (e) => {
@@ -25,7 +25,6 @@ const MyPageInfoForm = ({ userNo }) => {
       name: nameRef.current.value,
       birthday: birthRef.current.value.split('-').join(''),
       phoneNumber: phoneRef.current.value,
-      gender: gender,
       height: heightRef.current.value || 0.0,
       weight: weightRef.current.value || 0.0,
     }
@@ -35,9 +34,10 @@ const MyPageInfoForm = ({ userNo }) => {
       alert('전화번호를 확인해주세요.')
     } else {
       console.log(payload)
-      API.post(`/users/${userInfo.userNo}`, payload)
+      API.put(`/users/${userInfo.userNo}`, payload)
         .then((res) => {
           console.log(res)
+          // dispatch(userReducerActions.setUserInfo(res.data.result.data))
         })
         .catch((err) => {
           console.error(err)
@@ -48,14 +48,31 @@ const MyPageInfoForm = ({ userNo }) => {
   const formatDate = (date) => {
     return date?.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
   }
+
+  // 회원 탈퇴
+  const deleteUser = (e) => {
+    e.preventDefault()
+    confirm('탈퇴하시겠습니까?')
+    API.delete(`/users/${userNo}`)
+      .then((res) => {
+        console.log(res)
+        if (res.status === 200) {
+          dispatch(userReducerActions.logout())
+          dispatch(userReducerActions.setUserInfo({}))
+          navigate('')
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   // 현재 날짜 가져오기
   useEffect(() => {
     // mount
     API.get(`/users/profile`)
       .then((res) => {
-        console.log(res.data)
         setUserInfo(res.data.result.data)
-        setGender(res.data.result.data.gender)
       })
       .catch((err) => {
         console.error(err)
@@ -114,38 +131,7 @@ const MyPageInfoForm = ({ userNo }) => {
             ref={phoneRef}
           />
         </div>
-        {/* 성별 */}
-        <div className='flex items-center'>
-          <p className='inline-block w-[150px] me-5'>
-            성별<span className='text-red-600'>*</span>
-          </p>
-          <div className='grid grid-cols-2 w-[400px]'>
-            <div className='flex items-center'>
-              <input
-                type='radio'
-                id='male'
-                name='gender'
-                value='M'
-                className='w-5 h-5 me-5 accent-indigo-600'
-                onChange={handleGender}
-                checked={gender === 'M'}
-              />
-              <label htmlFor='male'>남</label>
-            </div>
-            <div className='flex items-center'>
-              <input
-                type='radio'
-                id='female'
-                name='gender'
-                value='F'
-                className='w-5 h-5 me-5 accent-indigo-600'
-                onChange={handleGender}
-                checked={gender === 'F'}
-              />
-              <label htmlFor='female'>여</label>
-            </div>
-          </div>
-        </div>
+
         {/* 키 */}
         <div className='flex items-center'>
           <label htmlFor='height' className='inline-block w-[150px] me-5'>
@@ -158,6 +144,7 @@ const MyPageInfoForm = ({ userNo }) => {
             placeholder='키(cm)를 입력해주세요.'
             pattern='^\d+(\.\d{1,2})?$'
             ref={heightRef}
+            defaultValue={userInfo.height}
           />
         </div>
         {/* 몸무게 */}
@@ -172,13 +159,20 @@ const MyPageInfoForm = ({ userNo }) => {
             placeholder='몸무게(kg)를 입력해주세요.'
             pattern='^\d+(\.\d{1,2})?$'
             ref={weightRef}
+            defaultValue={userInfo.weight}
           />
         </div>
         <input
           type='submit'
           value='수정하기'
-          className='w-full h-[50px] border border-gray-400 rounded bg-indigo-400 hover:bg-indigo-600 text-white cursor-pointer'
+          className='w-full h-[50px] rounded bg-indigo-400 hover:bg-indigo-600 text-white cursor-pointer'
         />
+        <button
+          className='w-full h-[50px] bg-red-400 hover:bg-red-600 text-white rounded'
+          onClick={deleteUser}
+        >
+          탈퇴하기
+        </button>
       </form>
     </div>
   )
