@@ -37,6 +37,10 @@ const MyPageAddressForm = ({ addresses, setAddresses }) => {
             addressNo: res.data.result.data,
           })
           setAddresses(temp)
+          setPostCode(null)
+          setAddress(null)
+          addressDetailRef.current.value = ''
+          nameRef.current.value = ''
         })
         .catch((err) => {
           console.error(err)
@@ -68,7 +72,7 @@ const MyPageAddressForm = ({ addresses, setAddresses }) => {
               readOnly
             />
           </div>
-          <div className='flex justify-between mb-2'>
+          <div className='flex justify-between'>
             <input
               type='text'
               className='w-[200px] h-[50px] border border-gray-400 rounded px-3'

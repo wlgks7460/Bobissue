@@ -8,12 +8,27 @@ import API from '../../../utils/API'
 const MyPageAddress = () => {
   const { userNo } = useOutletContext()
   const [addresses, setAddresses] = useState([]) // 배송지 리스트
+  const [baseAddress, setBaseAddress] = useState({}) // 기본 배송지
 
+  // 기본 배송지 조회
+  const getBaseAddress = () => {
+    API.get('/address/base')
+      .then((res) => {
+        console.log(res)
+        setBaseAddress(res.data.result.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 배송지 리스트 조회
   const getAddresses = () => {
     API.get('/address/list')
       .then((res) => {
         console.log(res)
         setAddresses(res.data.result.data)
+        getBaseAddress()
       })
       .catch((err) => {
         console.error(err)
@@ -39,7 +54,14 @@ const MyPageAddress = () => {
             </div>
           )}
           {addresses.map((v) => (
-            <MyPageAddressItem key={v.addressNo} addressItem={v} />
+            <MyPageAddressItem
+              key={v.addressNo}
+              addressItem={v}
+              addresses={addresses}
+              setAddresses={setAddresses}
+              baseAddressNo={baseAddress.addressNo}
+              setBaseAddress={setBaseAddress}
+            />
           ))}
         </div>
       </div>
