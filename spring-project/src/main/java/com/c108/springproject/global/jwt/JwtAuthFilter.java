@@ -65,7 +65,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (Exception exception) {
             logger.error("could not set user authentication in security context", exception);
         }
-
         filterChain.doFilter(request, response);
     }
 
@@ -89,12 +88,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         return new User(split[0], "", List.of(new SimpleGrantedAuthority(split[1])));
     }
 
-    private void reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Exception exception) {
+    private void reissueAccessToken(HttpServletRequest request, HttpServletResponse response, Exception exception){
         try {
             String refreshToken = parseBearerToken(request, "refreshToken");
             if (refreshToken == null) {
                 log.error("Refresh 없음");
-                throw exception;
+                throw new BobIssueException(ResponseCode.INVALID_TOKEN);
             }
             String oldAccessToken = parseBearerToken(request, HttpHeaders.AUTHORIZATION);
 //            jwtTokenProvider.validateRefreshToken(refreshToken, oldAccessToken);
@@ -112,6 +111,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             request.setAttribute("exception", e);
             log.info("재발급 실패");
+            throw new BobIssueException(e.getMessage(), ResponseCode.INVALID_TOKEN);
         }
     }
 

@@ -36,7 +36,7 @@ public class AddressService {
                     .name(addressReqDto.getName())
                     .build();
             return addressRepository.save(new_address);
-        } catch (BobIssueException e) {
+        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_CREATE_ADDRESS);
         }
     }
@@ -46,7 +46,7 @@ public class AddressService {
         try{
             List<Address> addressList = addressRepository.findAllByUserNo(userNo);
             return addressList;
-        }catch (BobIssueException e){
+        }catch (Exception e){
             throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_ADDRESS);
         }
     }
@@ -68,8 +68,8 @@ public class AddressService {
     public void deleteAddress(int addressNo) {
         Address address = addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
         try{
-            address.setDelYn("Y");
-        }catch (BobIssueException e){
+            address.delete();
+        }catch (Exception e){
             throw new BobIssueException(ResponseCode.FAILED_DELETE_ADDRESS);
         }
     }
@@ -79,7 +79,7 @@ public class AddressService {
         try{
             User user = userRepository.findById(userNo).orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_USER));
             user.setBaseAddress(addressNo);
-        }catch(BobIssueException e){
+        }catch(Exception e){
             throw new BobIssueException(ResponseCode.FAILED_SET_BASE_ADDRESS);
         }
         Address address = addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));

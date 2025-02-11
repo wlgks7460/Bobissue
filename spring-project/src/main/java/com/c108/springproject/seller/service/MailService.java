@@ -27,7 +27,8 @@ public class MailService {
             mimeMessageHelper.setSubject(subject); // 메일 제목
             mimeMessageHelper.setText(emailReqDto.getContent()); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
-        } catch (BobIssueException | MessagingException e) {
+            System.out.println("이메일 전송");
+        } catch (Exception | Error e) {
             throw new BobIssueException(ResponseCode.FAILED_SEND_EMAIL);
         }
     }

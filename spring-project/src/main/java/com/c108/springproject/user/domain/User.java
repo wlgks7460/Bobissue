@@ -1,7 +1,7 @@
 package com.c108.springproject.user.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
-import com.c108.springproject.user.dto.UserDto;
+import com.c108.springproject.user.dto.UserUpdateReqDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -60,13 +60,12 @@ public class User extends BaseEntity {
     @Setter
     private int baseAddress;
 
-    public void updateUser(UserDto userDto) {
-        this.name = userDto.getName();
-        this.email = userDto.getEmail();
-        this.height = userDto.getHeight();
-        this.weight = userDto.getWeight();
-        this.phoneNumber = userDto.getPhoneNumber();
-        this.birthday = userDto.getBirthday();
+    public void updateUser(UserUpdateReqDto userUpdateReqDto) {
+        this.name = userUpdateReqDto.getName();
+        this.height = userUpdateReqDto.getHeight();
+        this.weight = userUpdateReqDto.getWeight();
+        this.phoneNumber = userUpdateReqDto.getPhoneNumber();
+        this.birthday = userUpdateReqDto.getBirthday();
     }
 
     public void updateGrade(int amount) {

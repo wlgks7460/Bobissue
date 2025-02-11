@@ -33,7 +33,9 @@ public class SellerService {
 
     @Transactional
     public int signUp(SignUpReqDto signUpDto) {
-        Seller new_seller = Seller.builder()
+        Seller new_seller;
+        try{
+        new_seller = Seller.builder()
                 .email(signUpDto.getEmail())
                 .password(signUpDto.getPassword())
                 .callNumber(signUpDto.getCallNumber())
@@ -43,6 +45,11 @@ public class SellerService {
                 .build();
 
         sellerRepository.save(new_seller);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new BobIssueException(e.getMessage(), ResponseCode.FAILED_CREATE_SELLER);
+        }
         return new_seller.getSellerNo();
     }
 
@@ -57,7 +64,7 @@ public class SellerService {
 //                sellerDtos.add(new SellerDto(seller));
 //            }
 //            return sellerDtos;
-//        }catch (BobIssueException e){
+//        }catch (Exception e){
 //            throw new BobIssueException(ResponseCode.SELLER_NOT_FOUND);
 //        }
 
@@ -81,7 +88,7 @@ public class SellerService {
         try{
             Seller seller = sellerRepository.findById(sellerNo).orElse(null);
             seller.updateSeller(sellerUpdateReq);
-        } catch (BobIssueException e) {
+        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_SELLER);
         }
     }

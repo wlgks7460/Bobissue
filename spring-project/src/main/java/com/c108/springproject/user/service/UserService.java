@@ -3,15 +3,13 @@ package com.c108.springproject.user.service;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.jwt.JwtTokenProvider;
-import com.c108.springproject.global.jwt.RefreshToken.RefreshToken;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository;
 import com.c108.springproject.global.redis.RedisService;
 import com.c108.springproject.order.repository.OrderRepository;
 import com.c108.springproject.user.domain.User;
-import com.c108.springproject.auths.dto.request.LoginReqDto;
 import com.c108.springproject.user.domain.UserGrade;
 import com.c108.springproject.user.dto.SignUpReqDto;
-import com.c108.springproject.user.dto.UserDto;
+import com.c108.springproject.user.dto.UserUpdateReqDto;
 import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,21 +42,26 @@ public class UserService {
 
     @Transactional
     public User signUp(SignUpReqDto signUpDto) {
-        User new_user=User.builder()
-                .name(signUpDto.getName())
-                .birthday(signUpDto.getBirthday())
-                .email(signUpDto.getEmail())
-                .password(signUpDto.getPassword())
-                .gender(signUpDto.getGender())
-                .height(signUpDto.getHeight())
-                .weight(signUpDto.getWeight())
-                .phoneNumber(signUpDto.getPhoneNumber())
-                .status("Y")
-                .amount(0)
-                .grade(UserGrade.BRONZE)
-                .build();
+        User new_user;
+        try {
+            new_user = User.builder()
+                    .name(signUpDto.getName())
+                    .birthday(signUpDto.getBirthday())
+                    .email(signUpDto.getEmail())
+                    .password(signUpDto.getPassword())
+                    .gender(signUpDto.getGender())
+                    .height(signUpDto.getHeight())
+                    .weight(signUpDto.getWeight())
+                    .phoneNumber(signUpDto.getPhoneNumber())
+                    .status("Y")
+                    .amount(0)
+                    .grade(UserGrade.BRONZE)
+                    .build();
 
-        return userRepository.save(new_user);
+            return userRepository.save(new_user);
+        }catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_CREATE_USER);
+        }
     }
 
     @Transactional
@@ -72,10 +75,13 @@ public class UserService {
 
     @Transactional
     public List<UserResDto> findUserList() {
-
-        return userRepository.findByDelYn("N").stream()
-                .map(UserResDto::new)
-                .collect(Collectors.toList());
+        try{
+            return userRepository.findByDelYn("N").stream()
+                    .map(UserResDto::new)
+                    .collect(Collectors.toList());
+        } catch (Error | Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FOUND_USER_LIST);
+        }
     }
 
     @Transactional
@@ -87,12 +93,12 @@ public class UserService {
     }
 
     @Transactional
-    public UserResDto updateUser(int userNo, UserDto userDto) {
+    public UserResDto updateUser(int userNo, UserUpdateReqDto userUpdateReqDto) {
         User user;
         try{
-            user = userRepository.findById(userNo).orElse(null);
-            user.updateUser(userDto);
-        } catch (BobIssueException e) {
+            user = userRepository.findById(userNo).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+            user.updateUser(userUpdateReqDto);
+        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_USER);
         }
         return UserResDto.toDto(user);
@@ -101,9 +107,13 @@ public class UserService {
     @Transactional
     public void deleteUser(int userNo) {
         User user = userRepository.findById(userNo).orElseThrow(() ->
-                new BobIssueException(ResponseCode.FAILED_DELETE_USER));
+                new BobIssueException(ResponseCode.NOT_FOUND_USER));
 
-        user.delete();
+        try{
+            user.delete();
+        }catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_USER);
+        }
     }
 
     @Transactional
@@ -113,21 +123,26 @@ public class UserService {
 
     @Scheduled(cron = "0 0 0 1 * ?")
     public void updateUserGrades() {
-        YearMonth lastMonth = YearMonth.now().minusMonths(1);
-        LocalDateTime startDate = lastMonth.atDay(1).atStartOfDay();              // 지난달 1일 00:00:00
-        LocalDateTime endDate = lastMonth.atEndOfMonth().atTime(23, 59, 59);     // 지난달 마지막 날 23:59:59
+        System.out.println("매월 1일 사용자 등급 업데이트 완료");
+        try{
+            YearMonth lastMonth = YearMonth.now().minusMonths(1);
+            LocalDateTime startDate = lastMonth.atDay(1).atStartOfDay();              // 지난달 1일 00:00:00
+            LocalDateTime endDate = lastMonth.atEndOfMonth().atTime(23, 59, 59);     // 지난달 마지막 날 23:59:59
 
-        // 모든 사용자 가져오기
-        List<User> users = userRepository.findAll();
+            // 모든 사용자 가져오기
+            List<User> users = userRepository.findAll();
 
-        for (User user : users) {
-            // 해당 사용자의 지난달 확정 주문 금액 가져오기
-            Integer totalPrice = orderRepository.getTotalPriceByUserForMonth(user.getUserNo(), startDate, endDate);
-            int amount = totalPrice != null ? totalPrice : 0;
+            for (User user : users) {
+                // 해당 사용자의 지난달 확정 주문 금액 가져오기
+                Integer totalPrice = orderRepository.getTotalPriceByUserForMonth(user.getUserNo(), startDate, endDate);
+                int amount = totalPrice != null ? totalPrice : 0;
 
-            // 사용자 등급 업데이트
-            user.updateGrade(amount);
-            userRepository.save(user);
+                // 사용자 등급 업데이트
+                user.updateGrade(amount);
+                userRepository.save(user);
+            }
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_GRADE);
         }
     }
 
