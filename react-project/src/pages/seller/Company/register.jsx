@@ -1,6 +1,6 @@
-import React, { useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import API from '@/utils/API'
-import { CheckCircle, AlertCircle } from 'lucide-react' // 아이콘 추가
+import { CheckCircle, AlertCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const banks = [
@@ -18,12 +18,14 @@ const banks = [
 
 const CompanyRegister = () => {
   const navigate = useNavigate()
-  useEffect(()=>{
+
+  // ✅ 페이지 로드 시 로그인 확인
+  useEffect(() => {
     const token = localStorage.getItem('access_token')
-    if(!token){
+    if (!token) {
       navigate('/seller/login')
     }
-  })
+  }, [navigate]) // ✅ 의존성 배열 추가
 
   const [form, setForm] = useState({
     companyName: '',
@@ -35,15 +37,29 @@ const CompanyRegister = () => {
   const [message, setMessage] = useState({ text: '', type: '' })
   const [loading, setLoading] = useState(false)
 
+  // ✅ 회사 등록 여부 확인 함수
+  const fetchCompanyData = async () => {
+    try {
+      const response = await API.get('/sellers/company')
+      console.log(response)
+      const companyNo = response.data?.result?.data?.companyNo || false
+      if (companyNo) {
+        navigate('/seller') // 회사 정보가 있으면 바로 대시보드로 이동
+      }
+    } catch (error) {
+      console.error('회사 정보 불러오기 실패:', error)
+    }
+  }
+
+  // ✅ 페이지 로드 시 회사 정보 확인
+  useEffect(() => {
+    fetchCompanyData()
+  }, []) // ✅ 최초 1회 실행
+
   // 📌 입력 필드 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target
-
-    if (name === 'bankAccount') {
-      setForm({ ...form, [name]: value.replace(/\D/g, '') }) // 숫자만 입력 가능
-    } else {
-      setForm({ ...form, [name]: value })
-    }
+    setForm({ ...form, [name]: name === 'bankAccount' ? value.replace(/\D/g, '') : value }) // 숫자만 입력 가능
   }
 
   // 📌 은행 선택 핸들러
@@ -55,7 +71,12 @@ const CompanyRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!form.companyName || !form.companyLicense || form.bankName === '은행 선택' || !form.bankAccount) {
+    if (
+      !form.companyName ||
+      !form.companyLicense ||
+      form.bankName === '은행 선택' ||
+      !form.bankAccount
+    ) {
       setMessage({ text: '❌ 모든 필수 정보를 입력하세요.', type: 'error' })
       return
     }
@@ -65,26 +86,23 @@ const CompanyRegister = () => {
 
     try {
       const response = await API.post('/sellers/company', {
-        companyName: form.companyName,
-        companyLicense: form.companyLicense,
-        bankName: form.bankName, // ✅ bankCode 대신 bankName 전송
-        status:'Y',
+        name: form.companyName,
+        license: form.companyLicense,
+        bank: form.bankName,
         bankAccount: form.bankAccount,
       })
 
       if (response.status === 200) {
         setMessage({ text: '✅ 회사 정보가 성공적으로 등록되었습니다.', type: 'success' })
-        setForm({
-          companyName: '',
-          companyLicense: '',
-          bankName: '은행 선택',
-          bankAccount: '',
-        })
+        setForm({ companyName: '', companyLicense: '', bankName: '은행 선택', bankAccount: '' })
+
+        // ✅ 등록 후 회사 정보 다시 불러오기
+        fetchCompanyData()
       }
     } catch (error) {
       setMessage({ text: '❌ 등록 중 오류가 발생했습니다.', type: 'error' })
     } finally {
-      setLoading(false) // ✅ 로딩 해제
+      setLoading(false)
     }
   }
 
@@ -157,28 +175,14 @@ const CompanyRegister = () => {
           </div>
         </div>
 
-        {/* ✅ 메시지 표시 */}
-        {message.text && (
-          <div
-            className={`mt-4 flex items-center gap-2 text-sm p-2 rounded-lg ${
-              message.type === 'success' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
-            }`}
-          >
-            {message.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
-            {message.text}
-          </div>
-        )}
-
-        {/* ✅ 버튼 그룹 */}
-        <div className='flex justify-between mt-6'>
-          <button
-            type='submit'
-            className='w-1/2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all'
-            disabled={loading}
-          >
-            {loading ? '저장 중...' : '등록하기'}
-          </button>
-        </div>
+        {/* ✅ 버튼 */}
+        <button
+          type='submit'
+          className='w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all'
+          disabled={loading}
+        >
+          {loading ? '저장 중...' : '등록하기'}
+        </button>
       </form>
     </div>
   )

@@ -9,7 +9,7 @@ const SellerMainPage = () => {
   const navigate = useNavigate()
   const [registration, setRegistration] = useState(false) // 회사 등록 여부
   const [token, setToken] = useState(null)
-  const debug_mode = true // ✅ 디버그 모드 설정
+  const debug_mode = false // ✅ 디버그 모드 설정
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   const [menuState, setMenuState] = useState({
@@ -29,12 +29,12 @@ const SellerMainPage = () => {
     const fetchCompanyData = async () => {
       if (debug_mode) {
         setTimeout(() => {
-          setRegistration(true) // 🔹 필요에 따라 true 또는 false 변경
+          setRegistration(false) // 🔹 필요에 따라 true 또는 false 변경
         }, 500)
       } else {
         try {
-          const response = await API.get('/company')
-          setRegistration(response.data?.isRegistered || false)
+          const response = await API.get('/sellers/company')
+          setRegistration(response.data.result.data?.companyNo || false)
         } catch (error) {
           console.error('회사 등록 여부 확인 실패:', error)
           setRegistration(false)
