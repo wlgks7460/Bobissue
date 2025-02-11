@@ -18,7 +18,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByReview(Review review);
 
     // 특정 사용자가 특정 리뷰에 대해 신고한 적이 있는지 확인
-    boolean existsByReviewAndCreatedUser(Review review, int createdUser);
+    boolean existsByReviewAndCreatedUser(Review review, String createdUser);
 
     // 특정 리뷰의 신고 수 카운트
     long countByReview(Review review);

@@ -79,8 +79,8 @@ public class ReviewService {
             }
         }
         
-        review.setCreatedUser(request.getCreatedUser());
-        review.setUpdatedUser(request.getCreatedUser());
+//        review.setCreatedUser(request.getCreatedUser());
+//        review.setUpdatedUser(request.getCreatedUser());
 
         Review savedReview = reviewRepository.save(review);
         return ReviewCreateResDto.toDto(savedReview);
@@ -97,7 +97,7 @@ public class ReviewService {
 
         return reviewRepository.findByItemNoAndDelYn(itemNo, "N").stream()
                 .map(review -> {
-                    User user = userRepository.findById(review.getCreatedUser())
+                    User user = userRepository.findByEmail(review.extractEmail())
                             .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
                     return ReviewListResDto.toDto(review, user);
                 })
@@ -178,7 +178,7 @@ public class ReviewService {
 
         // 리뷰 내용 수정
         review.update(request.getContent(), request.getRating());
-        review.setUpdatedUser(request.getUpdatedUser());
+//        review.setUpdatedUser(request.getUpdatedUser());
 
         Review updatedReview = reviewRepository.save(review);
         return ReviewUpdateResDto.toDto(updatedReview);

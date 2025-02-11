@@ -15,8 +15,8 @@ public class RecipeCreateReqDto {
     private int categoryNo;
     private String name;
     private int time;
-    private int createdUser;
-    private int updatedUser;
+//    private int createdUser;
+//    private int updatedUser;
     private List<MaterialReqDto> materials;
 
 }

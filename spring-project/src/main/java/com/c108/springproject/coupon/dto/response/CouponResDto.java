@@ -15,9 +15,9 @@ public class CouponResDto {
     private int minDeliveryPrice;
     private int term;
     private String createAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYN;
 
     public static CouponResDto toDto (Coupon coupon){
