@@ -1,9 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-const MypageSidebar = ({ userInfo }) => {
-  const userGradeIcon = ['🍚', '🍙', '🍛', '🍱']
-  const userGrade = ['일반 회원', '우수 회원', 'VIP', 'VVIP']
+const MypageSidebar = () => {
+  const userInfo = useSelector((state) => state.user.userInfo)
+  const userGradeIcon = {
+    BRONZE: '🥉',
+    SILVER: '🥈',
+    GOLD: '🥇',
+  }
+  useEffect
   const [showUserGradeTooltip, setShowUserGradeTooltip] = useState(false)
   return (
     <div className='flex-none w-[300px]'>
@@ -16,11 +22,11 @@ const MypageSidebar = ({ userInfo }) => {
               onMouseOver={() => setShowUserGradeTooltip(true)}
               onMouseOut={() => setShowUserGradeTooltip(false)}
             >
-              {userGradeIcon[userInfo.gradeNo]}
+              {userGradeIcon[userInfo.grade]}
             </span>
             {showUserGradeTooltip && (
               <div className='absolute w-[80px] text-center bg-black/30 rounded'>
-                <span className='text-white'>{userGrade[userInfo.gradeNo]}</span>
+                <span className='text-white'>{userInfo.grade}</span>
               </div>
             )}
           </div>

@@ -2,51 +2,56 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import MyPageCalendarModalForm from './MyPageCalendarModalForm'
 import MyPageCalendarModalItem from './MyPageCalendarModalItem'
+import API from '../../../utils/API'
 
-const MyPageCalendarModal = ({ setModalOpen, selectedDate }) => {
+const MyPageCalendarModal = ({
+  setModalOpen,
+  selectedDate,
+  getCalendarData,
+  currentYear,
+  currentMonth,
+}) => {
   const [todayMeal, setTodayMeal] = useState([])
   const [showForm, setShowForm] = useState(false)
 
-  // 더미 데이터: 각 식사에 대한 정보 (시간, 제목, 칼로리, 이미지 URL)
-  const mealData = [
-    {
-      id: 0,
-      date: '2025-02-07', // 날짜 정보 추가
-      time: '08:00 AM',
-      title: '아침 식단: 토스트 & 커피',
-      calories: 350,
-      image: 'https://example.com/images/toast-coffee.jpg', // 이미지 URL
-    },
-    {
-      id: 1,
-      date: '2025-02-07',
-      time: '12:30 PM',
-      title: '점심 식단: 치킨 샐러드',
-      calories: 550,
-      image: 'https://example.com/images/chicken-salad.jpg', // 이미지 URL
-    },
-    {
-      id: 2,
-      date: '2025-02-07',
-      time: '06:00 PM',
-      title: '저녁 식단: 불고기 덮밥',
-      calories: 700,
-      image: 'https://example.com/images/bulgogi-rice.jpg', // 이미지 URL
-    },
-    {
-      id: 3,
-      date: '2025-02-08',
-      time: '08:30 AM',
-      title: '아침 식단: 팬케이크 & 오렌지 주스',
-      calories: 400,
-      image: 'https://example.com/images/pancake-orange-juice.jpg',
-    },
-  ]
+  const year = dayjs(selectedDate).year()
+  const month = dayjs(selectedDate).month() + 1
+  const day = dayjs(selectedDate).date()
+
+  // 식단 데이터 조회
+  const getDayData = () => {
+    API.get(`/calendar/${year}/${month}/${day}`)
+      .then((res) => {
+        setTodayMeal(res.data.result.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  // 식단 데이터 생성
+  const createData = (mealTitle, mealTime, mealCalories) => {
+    const payload = {
+      name: mealTitle,
+      eatTime: mealTime.replace(':', '') + '00',
+      calorie: Number(mealCalories),
+    }
+    API.post(`/calendar/${year}/${month}/${day}`, payload)
+      .then((res) => {
+        const result = res.data.result.data
+        setTodayMeal([...todayMeal, result])
+        setShowForm(false)
+        getCalendarData(currentYear, currentMonth)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 식단 데이터 수정
+  const updateData = (mealTitle, mealTime, mealCalories) => {}
 
   useEffect(() => {
-    // selectedDate에 해당하는 식단만 필터링
-    const filteredMeals = mealData.filter((meal) => meal.date === selectedDate)
-    setTodayMeal(filteredMeals)
+    getDayData()
   }, [selectedDate])
 
   return (
@@ -58,7 +63,7 @@ const MyPageCalendarModal = ({ setModalOpen, selectedDate }) => {
             <h3 className='text-xl text-center my-5'>{selectedDate} 식단</h3>
             {/* 식단 입력 폼 */}
             {showForm ? (
-              <MyPageCalendarModalForm setShowForm={setShowForm} />
+              <MyPageCalendarModalForm setShowForm={setShowForm} createData={createData} />
             ) : (
               <button
                 className='w-full h-[50px] bg-gray-300 rounded'
@@ -75,7 +80,9 @@ const MyPageCalendarModal = ({ setModalOpen, selectedDate }) => {
                 {todayMeal.length === 0 ? (
                   <p className='text-center text-gray-500'>오늘의 식단이 없습니다.</p>
                 ) : (
-                  todayMeal.map((meal) => <MyPageCalendarModalItem key={meal.id} meal={meal} />)
+                  todayMeal.map((meal) => (
+                    <MyPageCalendarModalItem key={meal.eatTime} meal={meal} />
+                  ))
                 )}
               </div>
             </div>
