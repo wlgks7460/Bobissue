@@ -22,9 +22,9 @@ public class CastResDto {
     private List<CastItemResDto> castItemList;
     private String castStatus;
     private String createAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYN;
 
 

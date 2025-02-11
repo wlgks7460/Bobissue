@@ -21,9 +21,9 @@ public class ItemUpdateResDto {
     private int price;
     private int salePrice;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String expiredAt;
     private String description;
     private int stock;

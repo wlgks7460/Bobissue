@@ -14,9 +14,9 @@ public class UserCouponResDto {
     private String status;
     private String expiredAt;
     private String createAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYN;
 
     public static UserCouponResDto toDto(UserCoupon userCoupon){

@@ -22,9 +22,9 @@ public class QuestionResDto {
     private int userNo;
     private String status;
     private String createAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYN;
 
     public static QuestionResDto toDto(Question question){

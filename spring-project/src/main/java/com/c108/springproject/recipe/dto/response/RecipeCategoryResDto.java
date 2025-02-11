@@ -12,9 +12,9 @@ public class RecipeCategoryResDto {
     private int categoryNo;
     private String name;
     private String createAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYn;
 
     public static RecipeCategoryResDto toDto(RecipeCategory recipeCategory) {

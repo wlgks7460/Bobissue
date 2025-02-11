@@ -15,5 +15,6 @@ public class UserDto {
     private float height;
     private float weight;
     private String phoneNumber;
+    private String birthday;
 
 }

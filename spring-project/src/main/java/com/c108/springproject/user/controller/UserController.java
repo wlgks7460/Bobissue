@@ -61,8 +61,7 @@ public class UserController {
 
     @PutMapping("/{userNo}")
     public ResponseDto updateUser(@PathVariable int userNo, @RequestBody UserDto userDto) {
-        userService.updateUser(userNo, userDto);
-        return new ResponseDto(HttpStatus.ACCEPTED, ResponseCode.SUCCESS_FIND_USER, null);
+        return new ResponseDto(HttpStatus.ACCEPTED, ResponseCode.SUCCESS_FIND_USER, new DefaultResponse<UserResDto>(userService.updateUser(userNo, userDto)));
     }
 
     @DeleteMapping("/{userNo}")

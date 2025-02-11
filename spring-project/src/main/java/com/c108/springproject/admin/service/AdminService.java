@@ -2,12 +2,12 @@ package com.c108.springproject.admin.service;
 
 import com.c108.springproject.admin.dto.AdminResDto;
 import com.c108.springproject.admin.dto.CompanyUpdateAdminReqDto;
+import com.c108.springproject.admin.dto.SellerApprovalListDto;
 import com.c108.springproject.admin.repository.AdminRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
-import com.c108.springproject.seller.dto.request.CompanyUpdateReqDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
 import com.c108.springproject.seller.dto.response.SellerResDto;
@@ -103,5 +103,35 @@ public class AdminService {
         Company company = companyRepository.findById(companyNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.COMPANY_NOT_FOUND));
         return CompanyResDto.toDto(company, sellerResDtos);
+    }
+
+
+    // 판매자 계정 판매 권한 부여 및 취소
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public String changeSellerApprovalStatus(int sellerNo) {
+        Seller seller = sellerRepository.findById(sellerNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        // Seller 엔티티의 메서드
+        seller.updateApprovalStatus();
+
+        sellerRepository.save(seller);
+        return seller.getApprovalStatus();
+
+    }
+    
+    // 승인 상태와 함께 회사별 판매자 조회
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public List<SellerApprovalListDto> getSellerApprovalsByCompany() {
+        List<Company> companies = companyRepository.findAll();
+
+        return companies.stream()
+                .map(company -> {
+                    List<Seller> sellers = sellerRepository.findByCompanyCompanyNo(company.getCompanyNo());
+                    return SellerApprovalListDto.toDto(company, sellers);
+                })
+                .collect(Collectors.toList());
     }
 }
