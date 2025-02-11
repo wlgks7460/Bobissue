@@ -36,6 +36,11 @@ public class CastController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CAST, new DefaultResponse<CastResDto>(castService.findCastByNo(cast_no)));
     }
 
+//    @PostMapping("/{cast_no}/start")
+//    public ResponseDto startCast(@PathVariable int cast_no){
+//        return new ResponseDto(HttpStatus.OK, ResponseCode.)
+//    }
+
     @PutMapping("/{cast_no}")
     public ResponseDto updateCast(@PathVariable int cast_no, @RequestBody CastReqDto castReqDto){
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_CAST, new DefaultResponse<CastResDto>(castService.updateCast(cast_no, castReqDto)));

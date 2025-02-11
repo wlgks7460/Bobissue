@@ -37,17 +37,20 @@ public class Cast extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 15)
     private String startAt;
 
-    @Column(nullable = false)
-    private int castTime;
+    @Column(nullable = false, length = 15)
+    private String endAt;
 
     @OneToMany(mappedBy = "cast", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CastItem> castItems;
+
+    @Enumerated(EnumType.STRING)
+    private CastStatus castStatus;
 
     public void updateCast(CastReqDto castReqDto){
         this.title = castReqDto.getTitle();
         this.content = castReqDto.getContent();
         this.startAt = castReqDto.getStartAt();
-        this.castTime = castReqDto.getCastTime();
+        this.endAt = castReqDto.getEndAt();
     }
 
 

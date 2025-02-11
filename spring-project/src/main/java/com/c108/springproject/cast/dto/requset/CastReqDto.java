@@ -16,7 +16,7 @@ public class CastReqDto {
     private String title;
     private String content;
     private String startAt;
-    private int castTime;
+    private String endAt;
     private List<CastItemReqDto> items;
 
 }

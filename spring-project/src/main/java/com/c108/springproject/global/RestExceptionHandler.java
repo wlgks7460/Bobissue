@@ -15,6 +15,7 @@ public class RestExceptionHandler {
     @ExceptionHandler({BobIssueException.class})
     @Order(value = Ordered.HIGHEST_PRECEDENCE)
     public ResponseEntity<?> handlerBobIssueException(BobIssueException e) {
+        System.out.println(e.getData());
         return new ResponseEntity<>(DefaultResponse.ErrorResponse.builder().error(e.getData()).build(), HttpStatus.CONFLICT);
     }
 }
