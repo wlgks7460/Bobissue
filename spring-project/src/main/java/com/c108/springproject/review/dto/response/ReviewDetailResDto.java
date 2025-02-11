@@ -21,9 +21,9 @@ public class ReviewDetailResDto {
     private String content;
     private int rating;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private long reportCount;    // 신고 횟수
 
     public static ReviewDetailResDto toDto(Review review) {

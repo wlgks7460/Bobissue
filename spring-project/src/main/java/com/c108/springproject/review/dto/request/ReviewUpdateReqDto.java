@@ -16,6 +16,6 @@ public class ReviewUpdateReqDto {
     private Long imageNo;
     private String content;
     private int rating;
-    private int updatedUser;
+//    private int updatedUser;
     private List<Long> keepImageIds;
 }

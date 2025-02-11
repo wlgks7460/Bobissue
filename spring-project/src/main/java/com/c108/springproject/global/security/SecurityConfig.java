@@ -90,6 +90,10 @@ public class SecurityConfig {
                                 .userInfoEndpoint(c -> c.userService(customOAuthUserService))
                                 .successHandler(oAuth2SuccessHandler)
                 )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                )
                 .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class);
         return httpSecurity.build();
     }
