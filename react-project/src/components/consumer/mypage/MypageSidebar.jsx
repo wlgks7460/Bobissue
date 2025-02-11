@@ -65,7 +65,9 @@ const MypageSidebar = () => {
           <Link to={'/mypage/calender'} className='text-left'>
             식단 관리
           </Link>
-          <Link>내 레시피</Link>
+          <Link to={'/mypage/recipe'} className='text-left'>
+            내 레시피
+          </Link>
         </div>
         <hr className='border-gray-300' />
         <div className='flex flex-col gap-3'>
