@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import API from '@/utils/API'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -10,10 +11,23 @@ const LiveApply = () => {
   const [selectedTimes, setSelectedTimes] = useState([]) // ✅ 최대 2개까지 선택 가능
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('패션')
+  const [selectedItem, setSelectedItem] = useState('') // ✅ 선택한 상품
+  const [items, setItems] = useState([]) // ✅ API에서 불러온 상품 목록
 
   const availableTimes = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00']
-  const categories = ['패션', '전자제품', '뷰티', '식품', '헬스', '교육', '기타']
+
+  // ✅ API에서 상품 목록 불러오기
+  useEffect(() => {
+    async function fetchItems() {
+      try {
+        const response = await API.get('/item')
+        setItems(response.data?.result?.data || []) // ✅ 상품 목록 저장
+      } catch (error) {
+        console.error('상품 정보 불러오기 실패:', error)
+      }
+    }
+    fetchItems()
+  }, [])
 
   // ✅ 연속된 시간인지 확인하는 함수
   const isConsecutive = (times) => {
@@ -25,12 +39,10 @@ const LiveApply = () => {
   // ✅ 방송 시간 선택 핸들러
   const handleTimeSelection = (time) => {
     if (selectedTimes.includes(time)) {
-      // ✅ 이미 선택된 시간 클릭 시 제거
       setSelectedTimes((prev) => prev.filter((t) => t !== time))
     } else {
-      // ✅ 새 시간 선택 (최대 2개 & 연속된 시간대만 선택 가능)
       const newTimes = [...selectedTimes, time]
-      if (newTimes.length <= 2 && isConsecutive(newTimes)) {
+      if (newTimes.length <= 1 && isConsecutive(newTimes)) {
         setSelectedTimes(newTimes)
       }
     }
@@ -63,16 +75,17 @@ const LiveApply = () => {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        {/* 📌 카테고리 선택 */}
-        <label className='block text-lg font-semibold mt-4'>카테고리</label>
+        {/* 📌 상품 선택 (API에서 불러온 상품 목록) */}
+        <label className='block text-lg font-semibold mt-4'>상품 선택</label>
         <select
           className='border p-2 w-full rounded'
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          value={selectedItem}
+          onChange={(e) => setSelectedItem(e.target.value)}
         >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+          <option value=''>상품을 선택하세요</option>
+          {items.map((item) => (
+            <option key={item.itemNo} value={item.itemNo}>
+              {item.name}
             </option>
           ))}
         </select>
@@ -92,7 +105,7 @@ const LiveApply = () => {
 
         {/* 📌 시간 선택 */}
         <label className='block text-lg font-semibold mt-4 flex items-center'>
-          <FaClock className='mr-2 text-green-500' /> 방송 시간 선택 (최대 2시간)
+          <FaClock className='mr-2 text-green-500' /> 방송 시간 선택 (최대 1시간)
         </label>
         <div className='grid grid-cols-4 gap-2'>
           {availableTimes.map((time) => (
@@ -113,11 +126,11 @@ const LiveApply = () => {
         {/* 📌 라이브 신청 버튼 */}
         <button
           className={`mt-6 w-full py-2 text-white font-semibold rounded flex items-center justify-center ${
-            selectedDate && selectedTimes.length > 0
+            selectedDate && selectedTimes.length > 0 && selectedItem
               ? 'bg-green-500 hover:bg-green-600'
               : 'bg-gray-400 cursor-not-allowed'
           }`}
-          disabled={!selectedDate || selectedTimes.length === 0}
+          disabled={!selectedDate || selectedTimes.length === 0 || !selectedItem}
         >
           <FaVideo className='mr-2' />
           라이브 신청하기

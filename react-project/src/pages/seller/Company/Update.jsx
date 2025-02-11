@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import API from '@/utils/API'
 import { useNavigate } from 'react-router-dom'
+import button from '../../../components/ui/button'
 
 // ✅ 은행 리스트
 const banks = [

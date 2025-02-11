@@ -18,23 +18,21 @@ const InquiryList = () => {
     const fetchInquiries = async () => {
       try {
         if (debug_mode) {
-          setInquiries(dummyData);
-          setFilteredInquiries(dummyData);
+          setInquiries(dummyData)
+          setFilteredInquiries(dummyData)
         } else {
-          const response = await API.get(`/questions`);
-          console.log(response);
-          setInquiries(response.data);
-          setFilteredInquiries(response.data);
+          const response = await API.get(`/question`)
+          console.log(response.data.result.data)
+          setInquiries(response.data.result.data)
+          setFilteredInquiries(response.data)
         }
       } catch (error) {
-      
-        console.error('Error fetching inquiries:', error);
+        console.error('Error fetching inquiries:', error)
       }
-    };
-  
-    fetchInquiries();
-  }, [debug_mode, sellerEmail]);
-  
+    }
+
+    fetchInquiries()
+  }, [debug_mode, sellerEmail])
 
   // ✅ 필터 적용
   useEffect(() => {
@@ -69,7 +67,7 @@ const InquiryList = () => {
 
       {/* ✅ 클릭 가능한 카테고리 버튼 */}
       <div className='flex space-x-6 justify-center text-[16px] font-medium my-6'>
-        {['제품', '배송', '결제', '반품', '기타'].map((category) => (
+        {['제품', '배송', '결제', '환불', '기타'].map((category) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
