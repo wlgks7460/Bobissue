@@ -71,11 +71,13 @@ const MyPageAddressItem = ({
       })
   }
 
+  // 배송지 삭제
   const deleteAddress = (e) => {
     e.preventDefault()
     API.delete(`/address/${addressItem.addressNo}`)
       .then((res) => {
         console.log(res)
+        setAddresses((prev) => prev.filter((v) => v.addressNo !== addressItem.addressNo))
       })
       .catch((err) => {
         console.log(err)
