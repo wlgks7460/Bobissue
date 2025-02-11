@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SellerDto {
+    private int sellerNo;
     private String name;
     private String callNumber;
     private String email;
@@ -18,6 +19,7 @@ public class SellerDto {
     private int companyNo;
 
     public SellerDto(Seller seller) {
+        this.sellerNo = seller.getSellerNo();
         this.email = seller.getEmail();
         this.status = seller.getStatus();
         this.companyNo = (seller.getCompany() != null) ? seller.getCompany().getCompanyNo() : 0; // 기본값 0
