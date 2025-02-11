@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import dummyData from '../Dummy/Inquiries/inquiry' // 더미 데이터 import
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import ReplyForm from './Form/Reply' // 답장 폼 import
 import ReplyEditForm from './Form/ReplyEdit' // 답장 수정 폼 import
 import DeleteButton from './Form/Delete' // 삭제 버튼 import
@@ -9,6 +9,7 @@ import API from '@/utils/API' // API import
 
 const Inquiry = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const queryParams = new URLSearchParams(location.search)
   const id = queryParams.get('id')
   const [inquiry, setInquiry] = useState(null) // Inquiry 상태
@@ -26,7 +27,7 @@ const Inquiry = () => {
       } else {
         const question_no = id
         // API에서 문의 데이터 가져오기
-        API.get(`/questions/${question_no}}`)
+        API.get(`/questions/${question_no}`)
           .then((response) => {
             setInquiry(response.data)
             setIsAnswered(response.data.isAnswered)
@@ -62,7 +63,12 @@ const Inquiry = () => {
             {isAnswered ? (
               <ReplyEditForm inquiryId={id} />
             ) : (
-              <ReplyForm inquiryId={id} debug_mode={debug_mode} />
+              <button
+                onClick={() => navigate(`/seller/inquiries/reply?id=${id}`)}
+                className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition'
+              >
+                답장하기
+              </button>
             )}
           </div>
 

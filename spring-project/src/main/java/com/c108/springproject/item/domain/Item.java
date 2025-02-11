@@ -35,7 +35,7 @@ public class Item extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "company_no", nullable = false)
-    private Company companyNo;
+    private Company company;
 
     @Column(nullable = false, length = 100)
     private String name;

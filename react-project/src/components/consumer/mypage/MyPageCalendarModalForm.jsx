@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import dayjs from 'dayjs'
 
-const MyPageCalendarModalForm = ({ setShowForm }) => {
+const MyPageCalendarModalForm = ({ setShowForm, createData }) => {
   const [mealTime, setMealTime] = useState(dayjs().format('HH:mm')) // 식사 시간
   const [mealTitle, setMealTitle] = useState('') // 식사 제목
   const [mealCalories, setMealCalories] = useState('') // 칼로리
@@ -10,13 +10,7 @@ const MyPageCalendarModalForm = ({ setShowForm }) => {
   // 폼 제출 핸들러
   const handleSubmit = (e) => {
     e.preventDefault()
-    const newMeal = {
-      time: mealTime,
-      title: mealTitle,
-      calories: mealCalories,
-      image: mealImage,
-    }
-    console.log(newMeal) // 콘솔에 출력하거나 데이터를 저장하는 로직
+    createData(mealTitle, mealTime, mealCalories)
   }
 
   // 이미지 파일 선택 핸들러
