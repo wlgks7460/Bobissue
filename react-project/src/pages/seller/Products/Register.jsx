@@ -9,6 +9,8 @@ import ProductDate from './Form/Product/ProductDate'
 const Register = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [debug_mode, setDebugMode] = useState(false) // ✅ 디버그 모드 추가
+
   const [product, setProduct] = useState({
     name: '',
     categoryNo: '',
@@ -26,8 +28,11 @@ const Register = () => {
     if (!token) {
       alert('상품 등록을 위해 로그인해주세요.')
       navigate('/login')
-    } else {
     }
+
+    // ✅ 디버그 모드 체크 (localStorage에서 불러오기)
+    const storedDebugMode = localStorage.getItem('debug_mode') === 'true'
+    setDebugMode(storedDebugMode)
   }, [navigate])
 
   // ✅ 상품 등록 요청 함수
@@ -64,14 +69,30 @@ const Register = () => {
 
       // ✅ 이미지 파일 추가 (파일이 있는 경우만)
       if (product.images.length > 0) {
-        product.images.forEach((img, index) => {
+        product.images.forEach((img) => {
           if (img.file) {
             formData.append('images', img.file)
           }
         })
       }
 
-      // ✅ 디버깅용 FormData 체크 (파일이 잘 추가되었는지 확인)
+      // ✅ 디버그 모드일 경우 API 호출 없이 콘솔 출력
+      if (debug_mode) {
+        console.log('📌 [DEBUG MODE] 상품 등록 요청 데이터:', {
+          categoryNo: product.categoryNo,
+          name: product.name,
+          price: product.price,
+          salePrice: product.salePrice,
+          stock: product.stock,
+          expiredAt: product.expiredAt,
+          description: product.description,
+          images: product.images.map((img) => img.file?.name),
+        })
+        setLoading(false)
+        return
+      }
+
+      // ✅ FormData 디버깅 (파일 포함 확인)
       for (const pair of formData.entries()) {
         console.log(`📌 FormData 확인: ${pair[0]} →`, pair[1])
       }
@@ -104,10 +125,11 @@ const Register = () => {
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
 
+        {/* ✅ 등록 버튼 */}
         <button
           type='submit'
-          className={`mt-5 p-3 text-white border-black ${
-            loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+          className={`mt-5 p-1 text-white rounded-[4px]  ${
+            loading ? 'bg-amber-600 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600'
           }`}
           disabled={loading}
         >
