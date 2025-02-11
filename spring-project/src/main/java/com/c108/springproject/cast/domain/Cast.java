@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,7 +24,7 @@ public class Cast extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int castNo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_no", nullable = false)
     private Seller sellerNo;
 
@@ -35,14 +37,31 @@ public class Cast extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 15)
     private String startAt;
 
-    @Column(nullable = false)
-    private int castTime;
+    @Column(nullable = false, length = 15)
+    private String endAt;
+
+    @OneToMany(mappedBy = "cast", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CastItem> castItems;
+
+    @Enumerated(EnumType.STRING)
+    private CastStatus castStatus;
+
+    @Column
+    private String castRoomId;
 
     public void updateCast(CastReqDto castReqDto){
         this.title = castReqDto.getTitle();
         this.content = castReqDto.getContent();
         this.startAt = castReqDto.getStartAt();
-        this.castTime = castReqDto.getCastTime();
+        this.endAt = castReqDto.getEndAt();
+    }
+
+    public void registerCast(){
+        this.castStatus = CastStatus.AWAIT;
+    }
+
+    public void refusalCast(){
+        this.castStatus = CastStatus.REFUSAL;
     }
 
 

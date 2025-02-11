@@ -1,5 +1,7 @@
 package com.c108.springproject.global.jwt;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -63,6 +65,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (Exception exception) {
             logger.error("could not set user authentication in security context", exception);
         }
+
         filterChain.doFilter(request, response);
     }
 
