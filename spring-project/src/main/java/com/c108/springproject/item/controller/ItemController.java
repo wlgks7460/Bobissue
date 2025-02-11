@@ -33,7 +33,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    // 살품 생성
+    // 상품 생성
     @PostMapping(value = "",consumes = {
             MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_OCTET_STREAM_VALUE  // 이걸 추가
@@ -47,8 +47,10 @@ public class ItemController {
             ItemCreateReqDto itemCreateReqDto = objectMapper.readValue(itemString, ItemCreateReqDto.class);
             ItemCreateResDto resDto = itemService.createItem(itemCreateReqDto, images);
             return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ITEM, new DefaultResponse<>(resDto));
-        } catch (Exception e) {
+        } catch (BobIssueException e) {
             e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
         }
     }
@@ -56,15 +58,27 @@ public class ItemController {
     // 상품 전체 조회
     @GetMapping("")
     public ResponseDto getAllItems() {
-        List<ItemListResDto> items = itemService.getAllItems();
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ITEM, new DefaultResponse<>(items));
+        try {
+            List<ItemListResDto> items = itemService.getAllItems();
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ITEM, new DefaultResponse<>(items));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     // 상품 상세 조회
     @GetMapping("/{itemNo}")
     public ResponseDto getItem(@PathVariable int itemNo) {
-        ItemResDto item = itemService.getItem(itemNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ITEM, new DefaultResponse<>(item));
+        try {
+            ItemResDto item = itemService.getItem(itemNo);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ITEM, new DefaultResponse<>(item));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     // 상품 수정
@@ -83,8 +97,10 @@ public class ItemController {
 
             ItemUpdateResDto updatedItem = itemService.updateItem(itemNo, reqDto, images);
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_ITEM, new DefaultResponse<>(updatedItem));
-        } catch (Exception e) {
+        } catch (BobIssueException e) {
             e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
         }
     }
@@ -92,25 +108,53 @@ public class ItemController {
     // 상품 삭제
     @DeleteMapping("/{itemNo}")
     public ResponseDto deleteItem(@PathVariable int itemNo) {
-        itemService.deleteItem(itemNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_ITEM, new DefaultResponse<>(itemNo));
+        try {
+            itemService.deleteItem(itemNo);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_ITEM, new DefaultResponse<>(itemNo));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
+    // 상품 찜
     @PostMapping("/{itemNo}/like")
     public ResponseDto addLike(@PathVariable int itemNo) {
-        itemService.addLike(itemNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_LIKE, new DefaultResponse<>(itemNo));
+        try {
+            itemService.addLike(itemNo);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_LIKE, new DefaultResponse<>(itemNo));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @DeleteMapping("/{itemNo}/like")
     public ResponseDto removeLike(@PathVariable int itemNo) {
-        itemService.removeLike(itemNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_LIKE, new DefaultResponse<>(itemNo));
+        try {
+
+            itemService.removeLike(itemNo);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_LIKE, new DefaultResponse<>(itemNo));
+
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @GetMapping("/like")
     public ResponseDto getLikedItems() {
-        List<ItemListResDto> items = itemService.getLikedItems();
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_LIKES, new DefaultResponse<>(items));
+        try {
+            List<ItemListResDto> items = itemService.getLikedItems();
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_LIKES, new DefaultResponse<>(items));
+
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }
