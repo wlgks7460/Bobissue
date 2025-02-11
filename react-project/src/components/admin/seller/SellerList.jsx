@@ -52,7 +52,7 @@ const SellerListTable = () => {
       if (!window.confirm('해당 회원 상태를 변경하시겠습니까?')) {
         return
       }
-      const response = await API.put(`admin/${seller.sellerNo}/user-status`)
+      const response = await API.put(`/admin/${seller.sellerNo}/user-status`)
       console.log('판매자 상태 변경 응답:', response)
       const newStatus = response.data.result === 'DEACTIVE' ? 'N' : 'Y'
       setSellers((prevSellers) =>
@@ -219,9 +219,6 @@ const SellerListTable = () => {
                 <th className='px-6 py-3 text-center text-sm font-medium text-gray-600'>
                   계정상태
                 </th>
-                <th className='px-6 py-3 text-center text-sm font-medium text-gray-600'>
-                  상세조회
-                </th>
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-100'>
@@ -251,21 +248,12 @@ const SellerListTable = () => {
                         {seller.status === 'Y' ? '활성' : '비활성'}
                       </button>
                     </td>
-                    <td className='px-6 py-4 text-center'>
-                      <button
-                        onClick={() => handleSellerClick(seller)}
-                        className='p-2 rounded-full bg-white hover:bg-gray-200 transition duration-200'
-                        title='판매자 상세 조회'
-                      >
-                        <Search size={18} className='text-gray-700' />
-                      </button>
-                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan={approvalFilter === 'approved' ? 7 : 6}
+                    colSpan={approvalFilter === 'approved' ? 6 : 5}
                     className='px-6 py-4 text-center text-gray-500'
                   >
                     검색 결과가 없습니다.

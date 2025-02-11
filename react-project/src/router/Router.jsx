@@ -444,10 +444,10 @@ const router = createBrowserRouter([
                 path: 'info', // 판매자 관리 페이지
                 element: <SellerInfoPage />,
               },
-              {
-                path: ':sellerNo',
-                element: <SellerDetailPage />,
-              },
+              // {
+              //   path: ':sellerNo', // 판매자 상세조회 페이지
+              //   element: <SellerDetailPage />,
+              // },
               {
                 path: 'register',
                 element: <SellerRegisterPage />, // 판매자 신규신청 페이지
