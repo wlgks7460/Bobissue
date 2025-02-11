@@ -172,7 +172,7 @@ const SellerRegister = () => {
             <select
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
-              className='w-100 border rounded-md px-3 py-2'
+              className='w-72 border rounded-md px-3 py-2'
             >
               <option value='companyNo'>회사번호</option>
               <option value='companyName'>회사명</option>
@@ -185,7 +185,7 @@ const SellerRegister = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className='w-150 border rounded-md px-3 py-2'
+              className='w-80 border rounded-md px-3 py-2'
             />
             <button
               onClick={handleSearch}
