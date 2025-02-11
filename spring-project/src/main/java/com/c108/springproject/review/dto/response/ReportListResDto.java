@@ -21,7 +21,7 @@ public class ReportListResDto {
     private String title;
     private String status;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
 
 
     public static ReportListResDto toDto(Report report) {

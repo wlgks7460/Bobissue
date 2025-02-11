@@ -16,9 +16,9 @@ public class AnswerResDto {
     private Long questionNo;
     private String status;
     private String createAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String delYN;
 
     public static AnswerResDto toDto(Answer answer){

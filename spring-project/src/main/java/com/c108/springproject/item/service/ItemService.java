@@ -21,6 +21,7 @@ import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,7 +68,11 @@ public class ItemService {
                 .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
         company = seller.getCompany();
 
-
+        // 판매 권한 체크
+        String aprovalStatus = seller.getApprovalStatus();
+        if (aprovalStatus.equals("N")) {
+            throw new BobIssueException(ResponseCode.UNAUTHORIZED_SELLER_ACCESS);
+        }
 
         // 1. 카테고리 존재 확인 및 가져오기
         ItemCategory category = itemCategoryRepository.findById(reqDto.getCategoryNo())
@@ -76,7 +81,7 @@ public class ItemService {
         // 2. Item 엔티티 생성
         Item item = Item.builder()
                 .categoryNo(category)
-                .companyNo(company)
+                .company(company)
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())
@@ -109,6 +114,17 @@ public class ItemService {
     // 전체 상품 조회
     @Transactional
     public List<ItemListResDto> getAllItems() {
+        // 어드민이면 삭제된 것까지 조회
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        boolean isAdmin = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(role-> role.equals("ADMIN"));
+        if (isAdmin) {
+            return itemRepository.findAll().stream()
+                    .map(ItemListResDto::toDto)
+                    .collect(Collectors.toList());
+        }
+
         return itemRepository.findByDelYn("N").stream()
                 .map(ItemListResDto::toDto)
                 .collect(Collectors.toList());
@@ -117,6 +133,7 @@ public class ItemService {
     // 상품 상세 조회
     @Transactional
     public ItemResDto getItem(int itemNo) {
+
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
         return ItemResDto.toDto(item);
@@ -136,9 +153,20 @@ public class ItemService {
                 .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
         company = seller.getCompany();
 
+        String aprovalStatus = seller.getApprovalStatus();
+        if (aprovalStatus.equals("N")) {
+            throw new BobIssueException(ResponseCode.UNAUTHORIZED_SELLER_ACCESS);
+        }
+
         // 1. 기존 상품 조회
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+
+        Company itemCompany = item.getCompany();
+
+        if (!company.equals(itemCompany)) {
+            throw new BobIssueException(ResponseCode.UNAUTHORIZED_COMPANY_ACCESS);
+        }
 
         List<ItemImage> updatedImages = new ArrayList<>();
 
@@ -182,7 +210,7 @@ public class ItemService {
                 .itemNo(itemNo)
                 .categoryNo(category)
                 .images(updatedImages)
-                .companyNo(company)
+                .company(company)
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
                 .salePrice(reqDto.getSalePrice())
@@ -203,8 +231,25 @@ public class ItemService {
 
     // 상품 삭제
     @Transactional
-    @PreAuthorize("hasAnyAuthority('SELLER')")
+    @PreAuthorize("hasAnyAuthority('SELLER', 'ADMIN')")
     public void deleteItem(int itemNo) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        boolean isAdmin = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(role-> role.equals("ADMIN"));
+
+        // 어드민이 아닐 경우 판매자 정보 확인
+        if (!isAdmin) {
+            Seller seller = sellerRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+            String aprovalStatus = seller.getApprovalStatus();
+
+            if (aprovalStatus.equals("N")) {
+                throw new BobIssueException(ResponseCode.UNAUTHORIZED_SELLER_ACCESS);
+            }
+        }
+
         Item item = itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
@@ -228,9 +273,17 @@ public class ItemService {
     
     // 찜
     @Transactional
-    @PreAuthorize("hasAnyAuthority('USER')")
+//    @PreAuthorize("hasAnyAuthority('USER')")
     public void addLike(int itemNo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // 유저가 아닌 경우 예외 처리
+        boolean isUser = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(role-> role.equals("USER"));
+
+        if (!isUser) {
+            throw new BobIssueException(ResponseCode.NOT_USER);
+        }
+        
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
 

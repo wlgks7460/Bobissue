@@ -60,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers( "/oauth2/**").permitAll() // OAuth2 관련 URL 허용
                         .requestMatchers(
                                 "/api/users/sign-up",
+                                "/api/users/kakao/sign-up",
                                 "/api/auths/**",
                                 "/api/sellers/sign-up",
                                 "/api/check-password",
@@ -89,6 +90,10 @@ public class SecurityConfig {
                         oauth -> oauth
                                 .userInfoEndpoint(c -> c.userService(customOAuthUserService))
                                 .successHandler(oAuth2SuccessHandler)
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
                 )
                 .addFilterBefore(jwtAuthFilter, BasicAuthenticationFilter.class);
         return httpSecurity.build();

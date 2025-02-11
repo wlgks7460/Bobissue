@@ -16,7 +16,7 @@ public class RecipeUpdateReqDto {
     private int categoryNo;
     private String name;
     private int time;
-    private int updatedUser;
+//    private int updatedUser;
     private List<MaterialReqDto> materials;
     private List<Long> keepImageIds; // 유지할 이미지를 받을 곳
 }

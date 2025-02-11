@@ -9,6 +9,7 @@ import com.c108.springproject.item.dto.response.ItemCategoryListResDto;
 import com.c108.springproject.item.dto.response.ItemCategoryResDto;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class ItemCategoryService {
 
     // 카테고리 만들기
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ItemCategory createCategory(ItemCategoryReqDto dto) {
         // 상위 카테고리는 parentNo가 null
         ItemCategory parentCategory = null;
@@ -74,6 +76,7 @@ public class ItemCategoryService {
     
     // 카테고리 수정
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ItemCategoryResDto updateCategory(int categoryNo, ItemCategoryReqDto dto) {
         ItemCategory category = itemcategoryRepository.findById(categoryNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
@@ -86,6 +89,7 @@ public class ItemCategoryService {
     
     // delete void로 반환하는 것은 반환 값이 필요 없음
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void deleteCategory(int categoryNo) {
         if (itemcategoryRepository.existsById(categoryNo)) {
             itemcategoryRepository.deleteById(categoryNo);

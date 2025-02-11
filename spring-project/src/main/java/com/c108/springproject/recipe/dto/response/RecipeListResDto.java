@@ -23,9 +23,9 @@ public class RecipeListResDto {
     private int time;
     private List<MaterialResDto> materials;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
 
     public static RecipeListResDto toDto(Recipe recipe) {
         return RecipeListResDto.builder()

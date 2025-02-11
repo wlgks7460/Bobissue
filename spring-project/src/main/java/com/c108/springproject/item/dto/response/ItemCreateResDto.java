@@ -12,14 +12,14 @@ public class ItemCreateResDto {
     private int itemNo;
     private ItemCategoryResDto category;
     private java.util.List<ImageDto> images;  // ImageNo 대신 List<ImageDto>로 변경
-    private Company companyNo;
+    private Company company;
     private String name;
     private int price;
     private int salePrice;
     private String createdAt;
-    private int createdUser;
+    private String createdUser;
     private String updatedAt;
-    private int updatedUser;
+    private String updatedUser;
     private String expiredAt;
     private String description;
     private int stock;
@@ -41,7 +41,7 @@ public class ItemCreateResDto {
                                 .originalName(image.getOriginalName())
                                 .build())
                         .collect(java.util.stream.Collectors.toList()))
-                .companyNo(item.getCompanyNo())
+                .company(item.getCompany())
                 .name(item.getName())
                 .price(item.getPrice())
                 .salePrice(item.getSalePrice())
