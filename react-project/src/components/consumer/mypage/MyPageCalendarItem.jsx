@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import dayjs from 'dayjs'
-import MyPageCalendarModal from './MyPageCalendarModal'
 
-const MyPageCalendarItem = ({ label, date }) => {
-  const dayOfWeek = dayjs(date).format('ddd') // 달력 요일
-  const [todayCal, setTodayCal] = useState(0) // 해당 날짜의 칼로리
+const MyPageCalendarItem = ({ label, date, events }) => {
+  const dayOfWeek = dayjs(date).format('ddd') // 요일 가져오기
+
+  // 해당 날짜의 이벤트 찾기
+  const event = events.find((event) => dayjs(event.start).isSame(dayjs(date), 'day'))
+  const todayCal = event ? event.cal : null // 해당 날짜의 칼로리 (없으면 null)
+
   return (
     <div className='p-1 flex flex-col'>
       <div className='w-full flex justify-start'>
@@ -14,9 +17,12 @@ const MyPageCalendarItem = ({ label, date }) => {
           {label}
         </button>
       </div>
-      <div>
-        <span className='text-sm text-gray-500'>{todayCal} kCal</span>
-      </div>
+      {/* 칼로리 값이 있을 때만 출력 */}
+      {todayCal !== null && (
+        <div>
+          <span className='text-sm text-gray-500'>{todayCal} kCal</span>
+        </div>
+      )}
     </div>
   )
 }

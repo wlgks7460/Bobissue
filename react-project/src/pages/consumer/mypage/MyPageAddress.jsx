@@ -26,9 +26,10 @@ const MyPageAddress = () => {
   const getAddresses = () => {
     API.get('/address/list')
       .then((res) => {
-        console.log(res)
         setAddresses(res.data.result.data)
-        getBaseAddress()
+        if (res.data.result.data.length > 0) {
+          getBaseAddress()
+        }
       })
       .catch((err) => {
         console.error(err)

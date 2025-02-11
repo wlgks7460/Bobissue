@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
@@ -6,6 +6,7 @@ import 'moment/locale/ko'
 import dayjs from 'dayjs'
 import MyPageCalendarItem from '../../../components/consumer/mypage/MyPageCalendarItem'
 import MyPageCalendarModal from '../../../components/consumer/mypage/MyPageCalendarModal'
+import API from '../../../utils/API'
 
 moment.locale('ko') // 한글 버전
 const localizer = momentLocalizer(moment)
@@ -14,6 +15,11 @@ const MyPageCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null) // 클릭한 날짜
   const [modalOpen, setModalOpen] = useState(false) // 모달 상태
 
+  const [currentYear, setCurrentYear] = useState(dayjs().year()) // 현재 연도
+  const [currentMonth, setCurrentMonth] = useState(dayjs().month() + 1) // 현재 월
+
+  const [events, setEvents] = useState([]) // 캘린더에 표시할 이벤트
+
   // 날짜 클릭시 모달 출력
   const handleDateClick = (slotInfo) => {
     const clickedDate = dayjs(slotInfo.start).format('YYYY-MM-DD')
@@ -21,10 +27,46 @@ const MyPageCalendar = () => {
     setModalOpen(true) // 모달 열기
   }
 
+  // 월별 데이터 가져오기
+  const getCalendarData = (year, month) => {
+    API.get(`/calendar/${year}/${month}`)
+      .then((res) => {
+        const eventData = Object.keys(res.data.result.data).map((key) => {
+          return {
+            start: dayjs(key).toDate(),
+            end: dayjs(key).toDate(),
+            title: `${res.data.result.data[key]} kCal`,
+            cal: res.data.result.data[key],
+          }
+        })
+        setEvents(eventData)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    // mount
+    getCalendarData(currentYear, currentMonth)
+    // unmount
+    return () => {}
+  }, [currentYear, currentMonth])
+
   // 커스텀 툴바
   const CustomToolbar = (toolbar) => {
-    const goToBack = () => toolbar.onNavigate('PREV')
-    const goToNext = () => toolbar.onNavigate('NEXT')
+    const goToBack = () => {
+      toolbar.onNavigate('PREV')
+      const newMonth = dayjs(toolbar.date).subtract(1, 'month')
+      setCurrentYear(newMonth.year())
+      setCurrentMonth(newMonth.month() + 1)
+    }
+    const goToNext = () => {
+      toolbar.onNavigate('NEXT')
+      const newMonth = dayjs(toolbar.date).add(1, 'month')
+      setCurrentYear(newMonth.year())
+      setCurrentMonth(newMonth.month() + 1)
+    }
 
     const formattedDate = dayjs(toolbar.date).format('YYYY년 M월')
 
@@ -79,12 +121,20 @@ const MyPageCalendar = () => {
         components={{
           month: {
             header: CustomWeekdayHeader,
-            dateHeader: MyPageCalendarItem,
+            dateHeader: (props) => <MyPageCalendarItem {...props} events={events} />,
           },
           toolbar: CustomToolbar,
         }}
       />
-      {modalOpen && <MyPageCalendarModal setModalOpen={setModalOpen} selectedDate={selectedDate} />}
+      {modalOpen && (
+        <MyPageCalendarModal
+          setModalOpen={setModalOpen}
+          selectedDate={selectedDate}
+          getCalendarData={getCalendarData}
+          currentYear={currentYear}
+          currentMonth={currentMonth}
+        />
+      )}
     </div>
   )
 }
