@@ -3,7 +3,7 @@ import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
 
 const SellerRegister = () => {
-  const breadcrumbPaths = [{ name: 'Home' }, { name: '판매자관리' }, { name: '판매승인' }]
+  const breadcrumbPaths = [{ name: 'Home' }, { name: '판매자관리' }, { name: '판매권한 승인' }]
 
   const [approvals, setApprovals] = useState([])
   const [loading, setLoading] = useState(true)
@@ -57,6 +57,7 @@ const SellerRegister = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentItems = pendingCompanies.slice(indexOfFirstItem, indexOfLastItem)
   const totalPages = Math.ceil(pendingCompanies.length / itemsPerPage)
+  const [isEmailSending, setIsEmailSending] = useState(false)
 
   const filteredApprovedCompanies = approvedCompanies.filter((company) => {
     if (!appliedSearchQuery) return true
@@ -73,6 +74,7 @@ const SellerRegister = () => {
       // 1️⃣ 판매자 승인 API 호출
       const response = await API.put(`/admin/${sellerNo}/approve`)
       console.log('판매자 승인 응답:', response)
+      setIsEmailSending(true) // 이메일 전송 시작
 
       // 2️⃣ 승인 성공 후 메일 발송 API 호출
       const mailData = {
@@ -108,6 +110,8 @@ const SellerRegister = () => {
     } catch (error) {
       console.error('판매자 승인 또는 메일 발송 실패:', error)
       alert('판매자 승인 또는 메일 발송에 실패했습니다.')
+    } finally {
+      setIsEmailSending(false) // 이메일 전송 완료
     }
   }
 
@@ -163,9 +167,12 @@ const SellerRegister = () => {
                           company.representativeSeller?.email,
                         )
                       }
-                      className='bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600'
+                      className={`bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 ${
+                        isEmailSending ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                      disabled={isEmailSending} // 버튼 비활성화
                     >
-                      승인
+                      {isEmailSending ? '이메일 전송 중...' : '승인'}
                     </button>
                   </td>
                 </tr>

@@ -229,7 +229,7 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/seller/register')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      판매자 신규신청
+                      판매권한 승인
                     </div>
                   </div>
                 )}
