@@ -2,6 +2,7 @@ package com.c108.springproject.item.dto.response;
 
 import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemCategory;
+import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class ItemCategoryResDto {
 //    private List<ItemCategoryResDto> children;
     private String createdAt;
     private String updatedAt;
-    private List<Item> items;
+    private List<CategoryItemResDto> items;
 
     public static ItemCategoryResDto toDto(ItemCategory category) {
         return ItemCategoryResDto.builder()
@@ -30,12 +31,12 @@ public class ItemCategoryResDto {
                 .name(category.getName())
                 .parentNo(category.getParent() != null ? category.getParent().getCategoryNo() : null)
                 .parentName(category.getParent() != null ? category.getParent().getName() : null)
-//                .children(category.getChildren().stream()
-//                        .map(ItemCategoryResDto::toDto)
-//                        .collect(Collectors.toList()))
                 .createdAt(category.getCreatedAt().toString())
                 .updatedAt(category.getUpdatedAt().toString())
-                .items(category.getItems())
+                .items(category.getItems().stream()
+                        .map(CategoryItemResDto::toDto)
+                        .collect(Collectors.toList()))
+
                 .build();
     }
 }

@@ -222,7 +222,8 @@ public enum ResponseCode {
     UNAUTHORIZED_COMPANY_ACCESS("UNAUTHORIZED_COMPANY_ACCESS", "해당 상품에 대한 회사 권한이 없습니다"),
     UNAUTHORIZED_SELLER_ACCESS("UNAUTHORIZED_SELLER_ACCESS", "판매자 권한이 없습니다"),
     UNAUTHORIZED_ITEM("UNAUTHORIZED_ITEM", "권한 없는 상품 입니다."),
-    NOT_USER("NOT_USER", "이용자가 아닙니다")
+    NOT_USER("NOT_USER", "이용자가 아닙니다"),
+    UNAUTHORIZED_RECIPE("UNAUTHORIZED_RECIPE", "권한 없는 레시피입니다.")
 
     ;
 

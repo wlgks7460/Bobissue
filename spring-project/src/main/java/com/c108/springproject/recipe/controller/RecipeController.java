@@ -10,6 +10,7 @@ import com.c108.springproject.recipe.dto.response.RecipeCreateResDto;
 import com.c108.springproject.recipe.dto.response.RecipeListResDto;
 import com.c108.springproject.recipe.dto.response.RecipeUpdateResDto;
 import com.c108.springproject.recipe.service.RecipeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -45,9 +46,15 @@ public class RecipeController {
             RecipeCreateReqDto recipeCreateReqDto = objectMapper.readValue(recipeString, RecipeCreateReqDto.class);
             RecipeCreateResDto recipeCreateResDto = recipeService.createRecipe(recipeCreateReqDto, images);
             return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_RECIPE, new DefaultResponse<>(recipeCreateResDto));
-        } catch (Exception e) {
+        } catch (BobIssueException e) {
             e.printStackTrace();
-            throw new BobIssueException(ResponseCode.FAILED_CREATE_RECIPE);
+            throw e;
+        } catch (Exception e) {
+            try {
+                throw e;
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     }
@@ -61,10 +68,6 @@ public class RecipeController {
             @RequestPart(value = "images", required = false)List<MultipartFile> images
     ) {
         try {
-            // 디버깅 로그
-//            System.out.println("Received update request for recipe: " + recipeNo);
-//            System.out.println("Request body: " + recipeUpdateReqDtoString);
-
             ObjectMapper objectMapper = new ObjectMapper();
             // JSON 파싱 시 알 수 없는 속성 무시
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -72,48 +75,92 @@ public class RecipeController {
             RecipeUpdateReqDto recipeUpdateReqDto = objectMapper.readValue(recipeString, RecipeUpdateReqDto.class);
             // 디버깅용 로그
 //            System.out.println("Parsed DTO: " + recipeUpdateReqDto);
-
             RecipeUpdateResDto recipeUpdateResDto = recipeService.updateRecipe(recipeNo, recipeUpdateReqDto, images);
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_RECIPE, new DefaultResponse<>(recipeUpdateResDto));
-        } catch (Exception e) {
+        } catch (BobIssueException e) {
 //            System.out.println("Error in updateRecipe: " + e.getMessage());
-//            e.printStackTrace();
-            throw new BobIssueException(ResponseCode.FAILED_UPDATE_RECIPE);
+            throw e;
+        } catch (Exception e) {
+            try {
+                throw e;
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
     @GetMapping("")
     public ResponseDto getAllRecipe() {
-        List<RecipeListResDto> recipe = recipeService.findAllRecipe();
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_RECIPE, new DefaultResponse<>(recipe));
+        try {
+            List<RecipeListResDto> recipe = recipeService.findAllRecipe();
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_RECIPE, new DefaultResponse<>(recipe));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @GetMapping("/{recipeNo}")
     public ResponseDto getRecipe(@PathVariable int recipeNo) {
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_RECIPE, new DefaultResponse<>(recipeService.findRecipe(recipeNo)));
+        try {
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_RECIPE, new DefaultResponse<>(recipeService.findRecipe(recipeNo)));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @DeleteMapping("/{recipeNo}")
     public ResponseDto deleteRecipe(@PathVariable int recipeNo) {
-        recipeService.deleteRecipe(recipeNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_RECIPE, new DefaultResponse<>(null)
-        );
+        try {
+            recipeService.deleteRecipe(recipeNo);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_RECIPE, new DefaultResponse<>(null)
+            );
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @PostMapping("{recipeNo}/like")
     public ResponseDto likeRecipe(@PathVariable int recipeNo) {
-        recipeService.addLike(recipeNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_LIKE, new DefaultResponse<>(recipeNo));
+        try {
+            recipeService.addLike(recipeNo);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_LIKE, new DefaultResponse<>(recipeNo));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
+
+
     @DeleteMapping("{recipeNo}/like")
     public ResponseDto removeLike(@PathVariable int recipeNo) {
-        recipeService.removeLike(recipeNo);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_LIKE, new DefaultResponse<>(recipeNo));
+        try {
+            recipeService.removeLike(recipeNo);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_LIKE, new DefaultResponse<>(recipeNo));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
+
+
     @GetMapping("/like")
     public ResponseDto getLikedRecipe() {
-        List<RecipeListResDto> recipes = recipeService.getLikedRecipe();
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_LIKES, new DefaultResponse<>(recipes));
+        try {
+            List<RecipeListResDto> recipes = recipeService.getLikedRecipe();
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_LIKES, new DefaultResponse<>(recipes));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 

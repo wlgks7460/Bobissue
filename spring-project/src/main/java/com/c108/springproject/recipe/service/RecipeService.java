@@ -19,6 +19,7 @@ import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +50,7 @@ public class RecipeService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER', 'USER', 'ADMIN')")
     public RecipeCreateResDto createRecipe(RecipeCreateReqDto request, List<MultipartFile> files) {
         try {
             // 레시피 카테고리 조회
@@ -112,10 +114,25 @@ public class RecipeService {
 
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER', 'USER', 'ADMIN')")
     public RecipeUpdateResDto updateRecipe(int recipeNo, RecipeUpdateReqDto request, List<MultipartFile> files) {
         try {
             Recipe recipe = recipeRepository.findById(recipeNo)
                     .orElseThrow(() -> new BobIssueException(ResponseCode.RECIPE_NOT_FOUND));
+
+            // 자기가 만든 것만 처리가능하게 어드민은 그냥 하게 하고 아니면 확인 해야 함
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            boolean isUserOrSeller = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                    .anyMatch(role-> role.equals("USER") || role.equals("SELLER"));
+
+            if (isUserOrSeller) {
+                String createdUser = recipe.extractEmail();
+                String currentUser = authentication.getName();
+                if (!createdUser.equals(currentUser)) {
+                    throw  new BobIssueException(ResponseCode.UNAUTHORIZED_RECIPE);
+                }
+            }
 
             // 이미지 필드
             List<RecipeImage> updatedImages = new ArrayList<>();
@@ -171,7 +188,6 @@ public class RecipeService {
                         .item(item)
                         .cnt(materialDto.getCnt())
                         .build();
-
                 recipe.getMaterials().add(material);
             }
 
@@ -191,6 +207,7 @@ public class RecipeService {
     // 전체조회
     @Transactional
     public List<RecipeListResDto> findAllRecipe() {
+
         List<Recipe> recipes = recipeRepository.findAll();
         List<RecipeListResDto> recipeListResDtos = new ArrayList<>();
         for(Recipe recipe: recipes) {
@@ -201,18 +218,36 @@ public class RecipeService {
 
     @Transactional
     public RecipeResDto findRecipe(int recipeNo) {
+
         Recipe recipe = recipeRepository.findById(recipeNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.RECIPE_NOT_FOUND));
+
+        System.out.println();
+
         return RecipeResDto.toDto(recipe);
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER', 'USER', 'ADMIN')")
     public void deleteRecipe(int recipeNo) {
         Recipe recipe = recipeRepository.findById(recipeNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.RECIPE_NOT_FOUND));
-        
-        // 레시피 삭제 시 레시피 이미지 같이 처리
 
+        // 자기가 만든 것만 처리가능하게 어드민은 그냥 하게 하고 아니면 확인 해야 함
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        boolean isUserOrSeller = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(role-> role.equals("USER") || role.equals("SELLER"));
+
+        if (isUserOrSeller) {
+            String createdUser = recipe.extractEmail();
+            String currentUser = authentication.getName();
+            if (!createdUser.equals(currentUser)) {
+                throw  new BobIssueException(ResponseCode.UNAUTHORIZED_RECIPE);
+            }
+        }
+
+        // 레시피 삭제 시 레시피 이미지 같이 처리
         List<String> deleteUrls = recipe.getImages().stream()
                         .map(RecipeImage::getImageUrl)
                                 .collect(Collectors.toList());
@@ -233,6 +268,15 @@ public class RecipeService {
     @PreAuthorize("hasAnyAuthority('USER')")
     public void addLike(int recipeNo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 유저가 아닌 경우 예외 처리
+        boolean isUser = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(role-> role.equals("USER"));
+
+        if (!isUser) {
+            throw new BobIssueException(ResponseCode.NOT_USER);
+        }
+
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
 
@@ -252,10 +296,20 @@ public class RecipeService {
         recipeLikeRepository.save(recipeLike);
     }
 
+
     @Transactional
     @PreAuthorize("hasAnyAuthority('USER')")
     public void removeLike(int recipeNo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 유저가 아닌 경우 예외 처리
+        boolean isUser = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(role-> role.equals("USER"));
+
+        if (!isUser) {
+            throw new BobIssueException(ResponseCode.NOT_USER);
+        }
+
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
 
@@ -270,6 +324,14 @@ public class RecipeService {
     @PreAuthorize("hasAnyAuthority('USER')")
     public List<RecipeListResDto> getLikedRecipe() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 유저가 아닌 경우 예외 처리
+        boolean isUser = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .anyMatch(role-> role.equals("USER"));
+
+        if (!isUser) {
+            throw new BobIssueException(ResponseCode.NOT_USER);
+        }
 
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));

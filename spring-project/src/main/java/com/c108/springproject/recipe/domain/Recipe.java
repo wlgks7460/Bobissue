@@ -36,7 +36,7 @@ public class Recipe extends BaseEntity {
     private int time;
 
     @Builder.Default
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Material> materials = new ArrayList<>();
 
     public void update(RecipeCategory category, String name, int time) {
