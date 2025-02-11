@@ -129,4 +129,37 @@ public class CastService {
         }
     }
 
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public int registerCast(int cast_no){
+        try{
+            Cast cast = castRepository.findByCastNo(cast_no).orElseThrow(()-> new BobIssueException(ResponseCode.CAST_NOT_FOUND));
+            cast.registerCast();
+            return cast.getCastNo();
+        }catch (Exception e){
+            throw new BobIssueException(ResponseCode.FAILED_REGISTER_CAST);
+        }
+    }
+
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public int refusalCast(int cast_no){
+        try{
+            Cast cast = castRepository.findByCastNo(cast_no).orElseThrow(()-> new BobIssueException(ResponseCode.CAST_NOT_FOUND));
+            cast.refusalCast();
+            return cast.getCastNo();
+        }catch (Exception e){
+            throw new BobIssueException(ResponseCode.FAILED_REFUSAL_CAST);
+        }
+    }
+
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public int startCast(int cast_no){
+//        try {
+//
+//        }
+        return 1;
+    }
+
 }

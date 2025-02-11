@@ -46,11 +46,22 @@ public class Cast extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private CastStatus castStatus;
 
+    @Column
+    private String castRoomId;
+
     public void updateCast(CastReqDto castReqDto){
         this.title = castReqDto.getTitle();
         this.content = castReqDto.getContent();
         this.startAt = castReqDto.getStartAt();
         this.endAt = castReqDto.getEndAt();
+    }
+
+    public void registerCast(){
+        this.castStatus = CastStatus.AWAIT;
+    }
+
+    public void refusalCast(){
+        this.castStatus = CastStatus.REFUSAL;
     }
 
 
