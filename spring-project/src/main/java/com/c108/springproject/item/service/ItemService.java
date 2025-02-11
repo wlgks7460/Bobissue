@@ -331,4 +331,11 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
+
+    public List<ItemSearchListResDto> searItems(String search) {
+        List<Item> items= itemRepository.searchItems(search);
+
+        return items.stream().map(ItemSearchListResDto::toDto).collect(Collectors.toList());
+    }
+
 }

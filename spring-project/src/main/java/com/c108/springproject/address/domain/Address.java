@@ -3,6 +3,7 @@ package com.c108.springproject.address.domain;
 import com.c108.springproject.address.dto.AddressReqDto;
 import com.c108.springproject.address.dto.AddressResDto;
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,9 +24,9 @@ public class Address extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    //ManyToOne
-    @Column(nullable = false)
-    private int userNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_no", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private String postalCode;

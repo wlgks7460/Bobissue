@@ -70,7 +70,12 @@ public class User extends BaseEntity {
     }
 
     public void updateGrade(int amount) {
-        this.grade = UserGrade.getGradeByAmount(this.amount);
+        this.grade = UserGrade.getGradeByAmount(amount);
+    }
+
+    public String setStatus(){
+        status = status.equals("Y") ? "N" : "Y";
+        return this.status;
     }
 
 

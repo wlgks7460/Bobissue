@@ -15,6 +15,7 @@ import com.c108.springproject.user.dto.UserDto;
 import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +34,6 @@ public class UserService {
 
 
     public UserService(UserRepository userRepository,
-                       RefreshTokenRepository refreshTokenRepository,
-                       JwtTokenProvider jwtTokenProvider,
-                       RedisService redisService,
                        OrderRepository orderRepository
                        ) {
         this.userRepository = userRepository;
@@ -43,25 +41,31 @@ public class UserService {
     }
 
     @Transactional
-    public User signUp(SignUpReqDto signUpDto) {
-        User new_user=User.builder()
-                .name(signUpDto.getName())
-                .birthday(signUpDto.getBirthday())
-                .email(signUpDto.getEmail())
-                .password(signUpDto.getPassword())
-                .gender(signUpDto.getGender())
-                .height(signUpDto.getHeight())
-                .weight(signUpDto.getWeight())
-                .phoneNumber(signUpDto.getPhoneNumber())
-                .status("Y")
-                .amount(0)
-                .grade(UserGrade.BRONZE)
-                .build();
+    public int signUp(SignUpReqDto signUpDto) {
+        try {
+            User new_user=User.builder()
+                    .name(signUpDto.getName())
+                    .birthday(signUpDto.getBirthday())
+                    .email(signUpDto.getEmail())
+                    .password(signUpDto.getPassword())
+                    .gender(signUpDto.getGender())
+                    .height(signUpDto.getHeight())
+                    .weight(signUpDto.getWeight())
+                    .phoneNumber(signUpDto.getPhoneNumber())
+                    .status("Y")
+                    .amount(0)
+                    .grade(UserGrade.BRONZE)
+                    .build();
 
-        return userRepository.save(new_user);
+            userRepository.save(new_user);
+            return new_user.getUserNo();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_SIGNUP_USER);
+        }
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public UserResDto userProfile(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmailAndDelYnAndStatus(email,"N" ,"Y").orElseThrow(
@@ -71,39 +75,53 @@ public class UserService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public List<UserResDto> findUserList() {
-
-        return userRepository.findByDelYn("N").stream()
-                .map(UserResDto::new)
-                .collect(Collectors.toList());
+        try {
+            return userRepository.findByDelYn("N").stream()
+                    .map(UserResDto::new)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.SUCCESS_FOUND_USER_LIST);
+        }
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public UserResDto findUserById(int userNo) {
-        return userRepository.findById(userNo)
-                .filter(user -> !"Y".equals(user.getDelYn())) // 삭제된 회원은 조회되지 않도록 필터링
-                .map(UserResDto::new)
-                .orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_USER));
+        try {
+            return userRepository.findById(userNo)
+                    .filter(user -> !"Y".equals(user.getDelYn())) // 삭제된 회원은 조회되지 않도록 필터링
+                    .map(UserResDto::new)
+                    .orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_USER));
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.NOT_FOUND_USER);
+        }
+
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public UserResDto updateUser(int userNo, UserDto userDto) {
-        User user;
         try{
-            user = userRepository.findById(userNo).orElse(null);
+            User user = userRepository.findById(userNo).orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_USER));
             user.updateUser(userDto);
+            return UserResDto.toDto(user);
         } catch (BobIssueException e) {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_USER);
         }
-        return UserResDto.toDto(user);
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public void deleteUser(int userNo) {
         User user = userRepository.findById(userNo).orElseThrow(() ->
-                new BobIssueException(ResponseCode.FAILED_DELETE_USER));
-
-        user.delete();
+                new BobIssueException(ResponseCode.NOT_FOUND_USER));
+        try{
+            user.delete();
+        } catch (BobIssueException e) {
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_USER);
+        }
     }
 
     @Transactional

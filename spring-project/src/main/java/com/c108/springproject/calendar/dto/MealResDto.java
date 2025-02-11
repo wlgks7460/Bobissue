@@ -11,19 +11,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MealResDto {
-
+    private long calendarNo;
     private String name;
     private String eatTime;
     private int calorie;
     //이미지
 
     public static MealResDto toDto(Calendar calendar) {
-        MealResDto mealResDto = MealResDto.builder()
+        return MealResDto.builder()
+                .calendarNo(calendar.getCalendarNo())
                 .name(calendar.getName())
                 .calorie(calendar.getCalorie())
                 .eatTime(calendar.getEatDate())
                 .build();
-
-        return mealResDto;
     }
 }
