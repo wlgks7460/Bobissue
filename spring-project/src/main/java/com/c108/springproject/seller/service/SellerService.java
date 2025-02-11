@@ -2,13 +2,18 @@ package com.c108.springproject.seller.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
+import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
+import com.c108.springproject.seller.dto.response.ExtraAccountResDto;
 import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.repository.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,5 +101,46 @@ public class SellerService {
         return SellerProfiltResDto.toDto(seller);
     }
 
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public List<ExtraAccountResDto> createExtraAccounts(List<ExtraAccountReqDto> extraAccountReqDtos) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        String curApprovalStatus = seller.getApprovalStatus();
+
+        if (curApprovalStatus.equals("N")) {
+            throw new BobIssueException(ResponseCode.NOT_APPROVED_SELLER);
+        }
+
+        Company company = seller.getCompany();
+
+        if (company == null) {
+            throw new BobIssueException(ResponseCode.COMPANY_NOT_FOUND);
+        }
+
+        return extraAccountReqDtos.stream()
+                .map(reqDto -> {
+                    if (sellerRepository.existsByEmail(reqDto.getEmail())) {
+                        throw new BobIssueException(ResponseCode.DUPLICATE_EMAIL);
+                    }
+
+                    Seller newSeller = Seller.builder()
+                            .email(reqDto.getEmail())
+                            .password(reqDto.getPassword())
+                            .callNumber(reqDto.getCallNumber())
+                            .name(reqDto.getName())
+                            .company(company)
+                            .status("Y")
+                            .approvalStatus("N")
+                            .build();
+
+                    return ExtraAccountResDto.toDto(sellerRepository.save(newSeller));
+                })
+                .collect(Collectors.toList());
+    }
 
 }

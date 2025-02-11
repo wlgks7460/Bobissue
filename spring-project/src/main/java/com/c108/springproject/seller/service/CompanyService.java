@@ -80,7 +80,15 @@ public class CompanyService {
     // 회사 정보 상세 조회
     @Transactional
     @PreAuthorize("hasAnyAuthority('SELLER')")
-    public CompanyResDto getCompany(int companyNo) {
+    public CompanyResDto getCompany() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        int companyNo = seller.getCompany().getCompanyNo();
+
         List<Seller> sellers = sellerRepository.findByCompanyCompanyNo(companyNo);
 
         List<SellerResDto> sellerResDtos = sellers.stream()

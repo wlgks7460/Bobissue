@@ -51,4 +51,9 @@ public class Seller extends BaseEntity {
         this.company = company;
     }
 
+    // 판매 승인 메서드
+    public void updateApprovalStatus() {
+        this.approvalStatus = this.approvalStatus.equals("Y") ? "N" : "Y";
+    }
+
 }

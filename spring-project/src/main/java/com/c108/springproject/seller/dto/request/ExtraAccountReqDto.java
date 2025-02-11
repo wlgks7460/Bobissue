@@ -1,5 +1,8 @@
 package com.c108.springproject.seller.dto.request;
 
+
+import com.c108.springproject.seller.domain.Company;
+import com.c108.springproject.seller.domain.Seller;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,15 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyReqDto {
+public class ExtraAccountReqDto {
+    private String email;
+    private String password;
+    private String callNumber;
     private String name;
-
-    private String license;
-
-//    private String status;
-
-    private String bank;
-
-    private String bankAccount;
-
 }
