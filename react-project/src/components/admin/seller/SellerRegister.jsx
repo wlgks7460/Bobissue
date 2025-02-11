@@ -81,7 +81,7 @@ const SellerRegister = () => {
         recipient: representativeEmail,
       }
 
-      const mailResponse = await API.post('/admin/seller/mail', mailData)
+      const mailResponse = await API.post('/sellers/mail', mailData)
       console.log('메일 발송 응답:', mailResponse)
 
       // 3️⃣ 상태 업데이트 (승인된 판매자 목록 업데이트)
