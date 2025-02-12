@@ -1,5 +1,6 @@
 package com.c108.springproject.seller.controller;
 
+import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
@@ -78,9 +79,23 @@ public class SellerController {
 
     @PostMapping("/mail")
     public ResponseDto sendEmail(@RequestBody EmailReqDto emailReqDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        mailService.sendMail(email, emailReqDto);
+        String email;
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            email = authentication.getName();
+        } catch(BobIssueException e) {
+            throw new BobIssueException(ResponseCode.FAILED_SEND_EMAIL);
+        } catch (Error | Exception e) {
+//            return new ResponseDto(HttpStatus.UNAUTHORIZED, ResponseCode.INVALID_TOKEN, null);
+            throw new BobIssueException(ResponseCode.INVALID_TOKEN);
+        }
+
+        try{
+            mailService.sendMail(email, emailReqDto);
+        }catch (Error | Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_SEND_EMAIL);
+        }
+
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEND_EMAIL, new DefaultResponse<String>(emailReqDto.getRecipient()));
     }
 

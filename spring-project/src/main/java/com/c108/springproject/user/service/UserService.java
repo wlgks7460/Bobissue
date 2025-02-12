@@ -117,11 +117,9 @@ public class UserService {
     public void deleteUser(int userNo) {
         User user = userRepository.findById(userNo).orElseThrow(() ->
                 new BobIssueException(ResponseCode.NOT_FOUND_USER));
-        try{
-            user.delete();
-        } catch (BobIssueException e) {
-            throw new BobIssueException(ResponseCode.FAILED_DELETE_USER);
-        }
+
+        user.delete();
+
     }
 
     @Transactional
@@ -131,21 +129,26 @@ public class UserService {
 
     @Scheduled(cron = "0 0 0 1 * ?")
     public void updateUserGrades() {
-        YearMonth lastMonth = YearMonth.now().minusMonths(1);
-        LocalDateTime startDate = lastMonth.atDay(1).atStartOfDay();              // 지난달 1일 00:00:00
-        LocalDateTime endDate = lastMonth.atEndOfMonth().atTime(23, 59, 59);     // 지난달 마지막 날 23:59:59
+        System.out.println("매월 1일 사용자 등급 업데이트 완료");
+        try{
+            YearMonth lastMonth = YearMonth.now().minusMonths(1);
+            LocalDateTime startDate = lastMonth.atDay(1).atStartOfDay();              // 지난달 1일 00:00:00
+            LocalDateTime endDate = lastMonth.atEndOfMonth().atTime(23, 59, 59);     // 지난달 마지막 날 23:59:59
 
-        // 모든 사용자 가져오기
-        List<User> users = userRepository.findAll();
+            // 모든 사용자 가져오기
+            List<User> users = userRepository.findAll();
 
-        for (User user : users) {
-            // 해당 사용자의 지난달 확정 주문 금액 가져오기
-            Integer totalPrice = orderRepository.getTotalPriceByUserForMonth(user.getUserNo(), startDate, endDate);
-            int amount = totalPrice != null ? totalPrice : 0;
+            for (User user : users) {
+                // 해당 사용자의 지난달 확정 주문 금액 가져오기
+                Integer totalPrice = orderRepository.getTotalPriceByUserForMonth(user.getUserNo(), startDate, endDate);
+                int amount = totalPrice != null ? totalPrice : 0;
 
-            // 사용자 등급 업데이트
-            user.updateGrade(amount);
-            userRepository.save(user);
+                // 사용자 등급 업데이트
+                user.updateGrade(amount);
+                userRepository.save(user);
+            }
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_GRADE);
         }
     }
 

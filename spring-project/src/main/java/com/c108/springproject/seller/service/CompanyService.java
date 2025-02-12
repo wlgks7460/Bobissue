@@ -56,7 +56,7 @@ public class CompanyService {
             sellerRepository.save(seller);
 
             return CompanyListResDto.toDto(company);
-        } catch (BobIssueException e) {
+        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_CREATE_COMPANY);
         }
 

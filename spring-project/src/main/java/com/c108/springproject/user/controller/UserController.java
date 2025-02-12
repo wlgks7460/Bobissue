@@ -6,7 +6,7 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.auths.dto.request.LoginReqDto;
 import com.c108.springproject.user.dto.SignUpReqDto;
-import com.c108.springproject.user.dto.UserDto;
+import com.c108.springproject.user.dto.UserUpdateReqDto;
 import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +42,7 @@ public class UserController {
 
     @GetMapping
     public ResponseDto findUserList() {
-        List<UserResDto> userList = userService.findUserList();
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FOUND_USER_LIST, new DefaultResponse<List<UserResDto>>(userList));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FOUND_USER_LIST, new DefaultResponse<List<UserResDto>>(userService.findUserList()));
     }
 
     @GetMapping("/profile")
@@ -58,8 +57,8 @@ public class UserController {
     }
 
     @PutMapping("/{userNo}")
-    public ResponseDto updateUser(@PathVariable int userNo, @RequestBody UserDto userDto) {
-        return new ResponseDto(HttpStatus.ACCEPTED, ResponseCode.SUCCESS_FIND_USER, new DefaultResponse<UserResDto>(userService.updateUser(userNo, userDto)));
+    public ResponseDto updateUser(@PathVariable int userNo, @RequestBody UserUpdateReqDto userUpdateReqDto) {
+        return new ResponseDto(HttpStatus.ACCEPTED, ResponseCode.SUCCESS_FIND_USER, new DefaultResponse<UserResDto>(userService.updateUser(userNo, userUpdateReqDto)));
     }
 
     @DeleteMapping("/{userNo}")
