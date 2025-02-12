@@ -79,24 +79,15 @@ public class SellerController {
 
     @PostMapping("/mail")
     public ResponseDto sendEmail(@RequestBody EmailReqDto emailReqDto) {
-        String email;
-        try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            email = authentication.getName();
-        } catch(BobIssueException e) {
-            throw new BobIssueException(ResponseCode.FAILED_SEND_EMAIL);
-        } catch (Error | Exception e) {
-//            return new ResponseDto(HttpStatus.UNAUTHORIZED, ResponseCode.INVALID_TOKEN, null);
-            throw new BobIssueException(ResponseCode.INVALID_TOKEN);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
         try{
             mailService.sendMail(email, emailReqDto);
         }catch (Error | Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_SEND_EMAIL);
         }
-
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEND_EMAIL, new DefaultResponse<String>(emailReqDto.getRecipient()));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEND_EMAIL, null);
     }
 
     // 회사 CRUD

@@ -27,7 +27,7 @@ public class UserResDto {
     private String updateAt;
     private UserGrade grade;
     private int baseAddress;
-
+    private String status;
 
     public UserResDto(User user) {
         this.userNo = user.getUserNo();
@@ -42,6 +42,7 @@ public class UserResDto {
         this.updateAt = user.getUpdatedAt();
         this.grade = user.getGrade();
         this.baseAddress = user.getBaseAddress();
+        this.status = user.getStatus();
     }
 
 
@@ -59,6 +60,7 @@ public class UserResDto {
                 .updateAt(user.getUpdatedAt())
                 .grade(user.getGrade())
                 .baseAddress(user.getBaseAddress())
+                .status(user.getStatus())
                 .build();
     }
 

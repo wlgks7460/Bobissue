@@ -11,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -20,16 +22,20 @@ public class MailService {
 
     public void sendMail(String email, EmailReqDto emailReqDto) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
-            mimeMessageHelper.setTo(emailReqDto.getRecipient()); // 메일 수신자
-            String subject = email + "님께서 발송 : " + emailReqDto.getTitle();
-            mimeMessageHelper.setSubject(subject); // 메일 제목
-            mimeMessageHelper.setText(emailReqDto.getContent()); // 메일 본문 내용, HTML 여부
-            javaMailSender.send(mimeMessage);
-            System.out.println("이메일 전송");
-        } catch (Exception | Error e) {
-            throw new BobIssueException(ResponseCode.FAILED_SEND_EMAIL);
+
+        List<String> recipients = emailReqDto.getRecipient();
+        for (String recipient : recipients) {
+            try {
+                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+                mimeMessageHelper.setTo(recipient); // 메일 수신자
+                String subject = email + "님께서 발송 : " + emailReqDto.getTitle();
+                mimeMessageHelper.setSubject(subject); // 메일 제목
+                mimeMessageHelper.setText(emailReqDto.getContent()); // 메일 본문 내용, HTML 여부
+                javaMailSender.send(mimeMessage);
+                System.out.println("이메일 전송");
+            } catch (Exception | Error e) {
+                throw new BobIssueException(ResponseCode.FAILED_SEND_EMAIL);
+            }
         }
     }
 }
