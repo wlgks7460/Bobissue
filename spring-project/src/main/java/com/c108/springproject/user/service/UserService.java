@@ -2,16 +2,11 @@ package com.c108.springproject.user.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
-import com.c108.springproject.global.jwt.JwtTokenProvider;
-import com.c108.springproject.global.jwt.RefreshToken.RefreshToken;
-import com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository;
-import com.c108.springproject.global.redis.RedisService;
 import com.c108.springproject.order.repository.OrderRepository;
 import com.c108.springproject.user.domain.User;
-import com.c108.springproject.auths.dto.request.LoginReqDto;
 import com.c108.springproject.user.domain.UserGrade;
 import com.c108.springproject.user.dto.SignUpReqDto;
-import com.c108.springproject.user.dto.UserDto;
+import com.c108.springproject.user.dto.UserUpdateReqDto;
 import com.c108.springproject.user.dto.UserResDto;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -102,7 +97,7 @@ public class UserService {
 
     @Transactional
     @PreAuthorize("hasAnyAuthority('USER')")
-    public UserResDto updateUser(int userNo, UserDto userDto) {
+    public UserResDto updateUser(int userNo, UserUpdateReqDto userDto) {
         try{
             User user = userRepository.findById(userNo).orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_USER));
             user.updateUser(userDto);
