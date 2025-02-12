@@ -7,8 +7,9 @@ export { default as Signup } from './Login/Signup'
 
 // 판매자 회사 등록 관련
 export { default as RegisterCompany } from './Company/register' // 회사 등록
-export { default as AppendAccount } from './Company/append' // 계정 추가
+export { default as AppendAccount } from './Company/Append' // 계정 추가
 export { default as SearchAccount } from './Company/Search' // 계정 조회
+export { default as UpdateCompany } from './Company/Update'
 
 // 상품 관리 관련
 export { default as Register } from './Products/Register'
@@ -44,8 +45,8 @@ export { default as InReply } from './Inquiry/Reply'
 export { default as InReplylist } from './Inquiry/Replylist'
 
 // 판매 통계 관련
-export { default as Performance } from './stats/Performance'
-export { default as Products } from './stats/Products'
+export { default as Performance } from './Stats/Performance'
+export { default as Products } from './Stats/Products'
 
 // 공지사항 관련
 export { default as Notices } from './Notices/Notices'

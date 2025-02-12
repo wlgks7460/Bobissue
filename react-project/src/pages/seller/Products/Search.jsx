@@ -7,23 +7,30 @@ const Search = () => {
   const navigate = useNavigate()
   const [allProducts, setAllProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
   useEffect(() => {
+    if (debug_mode) {
+      console.log('debug')
+      return
+    }
     const fetchAllProducts = async () => {
       try {
         const response = await API.get('/item')
         console.log('📌 API 응답 데이터:', response.data)
 
         if (response.data.status === 'OK' && Array.isArray(response.data.result?.data)) {
-          // 상품 데이터 가공 (유니크 ID 추가)
+          // ✅ 상품 데이터 가공 (유니크 ID 추가 및 companyNo 변경 반영)
           const cleanData = response.data.result.data.map((item, index) => ({
             ...item,
             uniqueId: `${item.itemNo}-${index}`,
             imageUrl: item.images?.[0]?.imageUrl || '', // 첫 번째 이미지 가져오기
             categoryName: item.category?.name || '카테고리 없음',
             parentCategory: item.category?.parentName || '상위 카테고리 없음',
+            companyNo: item.company?.companyNo || null, // ✅ 변경된 company 구조 반영
+            companyName: item.company?.name || '회사 없음', // ✅ 회사명 가져오기
           }))
-
+          console.log(cleanData)
           setAllProducts(cleanData)
           setFilteredProducts(cleanData)
         } else {
@@ -37,7 +44,7 @@ const Search = () => {
     fetchAllProducts()
   }, [])
 
-  // 필터 적용 함수
+  // ✅ 필터 적용 함수 (companyNo → company로 변경 반영)
   const applyFilters = (filters) => {
     let filtered = allProducts
 
@@ -46,15 +53,13 @@ const Search = () => {
     }
 
     if (filters.companyNo) {
-      filtered = filtered.filter(
-        (product) => product.companyNo?.companyNo === Number(filters.companyNo)
-      )
+      filtered = filtered.filter((product) => product.companyNo === Number(filters.companyNo))
     }
 
     setFilteredProducts(filtered)
   }
 
-  // 상세 페이지 이동
+  // ✅ 상세 페이지 이동
   const handleClickNavigate = (productId) => {
     navigate(`/seller/products/view/${productId}`)
   }
@@ -100,10 +105,9 @@ const Search = () => {
                     )}
                   </td>
                   <td className='border px-4 py-2 text-blue-500'>{product.name}</td>
-                  <td className='border px-4 py-2'>{product.companyNo?.name || '회사 없음'}</td>
-                  <td className='border px-4 py-2'>
-                    {product.price?.toLocaleString() || '0'} 원
-                  </td>
+                  <td className='border px-4 py-2'>{product.companyName}</td>{' '}
+                  {/* ✅ 변경된 회사명 사용 */}
+                  <td className='border px-4 py-2'>{product.price?.toLocaleString() || '0'} 원</td>
                   <td className='border px-4 py-2'>
                     {product.salePrice?.toLocaleString() || '0'} 원
                   </td>

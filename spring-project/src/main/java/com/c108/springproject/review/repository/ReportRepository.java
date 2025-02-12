@@ -28,4 +28,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     // 특정 상태이면서 삭제되지 않은 신고 목록 조회
     List<Report> findByStatusAndDelYn(String status, String delYn);
+
+
 }

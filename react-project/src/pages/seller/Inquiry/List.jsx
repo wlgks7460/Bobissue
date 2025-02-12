@@ -1,31 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import API from '@/utils/API' // Import API
-import dummyData from '../Dummy/Inquiries/Inquiry'
+import API from '@/utils/API'
+// import dummyData from '../Dummy/Inquiries/Inquiry'
 
 const InquiryList = () => {
-  const [inquiries, setInquiries] = useState([]) // 전체 문의 목록
-  const [filteredInquiries, setFilteredInquiries] = useState([]) // 필터링된 문의 목록
-  const [answerFilter, setAnswerFilter] = useState('all') // 답변 여부 필터 ('all', 'answered', 'unanswered')
-  const [typeFilter, setTypeFilter] = useState('all') // 문의 유형 필터
-  const navigate = useNavigate() // 네비게이션 훅
-  const debug_mode = true // 디버그 모드 설정
-  const sellerEmail = localStorage.getItem('userId') // 판매자 이메일 가져오기
+  const [inquiries, setInquiries] = useState([])
+  const [filteredInquiries, setFilteredInquiries] = useState([])
+  const [answerFilter, setAnswerFilter] = useState('all')
+  const [typeFilter, setTypeFilter] = useState('all')
+  const navigate = useNavigate()
+
+  // ✅ 문자열을 Boolean 값으로 변환
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
+
+  console.log('Debug Mode:', debug_mode) // ✅ debug_mode가 제대로 인식되는지 확인
 
   // ✅ 데이터 로딩
   useEffect(() => {
-    if (debug_mode) {
-      setInquiries(dummyData)
-      setFilteredInquiries(dummyData)
-    } else {
-      API.get(`/questions`)
-        .then((response) => {
-          setInquiries(response.data)
-          setFilteredInquiries(response.data)
-        })
-        .catch((error) => console.error('Error fetching inquiries:', error))
+    const fetchInquiries = async () => {
+      try {
+        // if (debug_mode) {
+        //   console.log('🚀 Debug Mode 활성화 - Dummy Data 사용')
+        //   setInquiries(dummyData)
+        //   setFilteredInquiries(dummyData)
+        //   return
+        // }
+
+        const response = await API.get(`/question`)
+        console.log('✅ API 응답:', response.data.result.data)
+        setInquiries(response.data.result.data)
+        setFilteredInquiries(response.data.result.data)
+      } catch (error) {
+        console.error('❌ Error fetching inquiries:', error)
+      }
     }
-  }, [debug_mode, sellerEmail])
+
+    fetchInquiries()
+  }, [debug_mode]) // ✅ debug_mode가 변경될 때마다 useEffect 실행
 
   // ✅ 필터 적용
   useEffect(() => {
@@ -41,12 +52,12 @@ const InquiryList = () => {
       updatedList = updatedList.filter((item) => item.type === typeFilter)
     }
 
-    setFilteredInquiries(updatedList)
+    setFilteredInquiries([...updatedList])
   }, [answerFilter, typeFilter, inquiries])
 
   // ✅ 카테고리 클릭 핸들러
   const handleCategoryClick = (category) => {
-    setTypeFilter(category === typeFilter ? 'all' : category) // 같은 카테고리 클릭 시 전체 보기
+    setTypeFilter(category === typeFilter ? 'all' : category)
   }
 
   // ✅ 문의글 클릭 핸들러
@@ -58,9 +69,9 @@ const InquiryList = () => {
     <div className='max-w-4xl mx-auto mt-10 p-6 bg-white border border-gray-300 rounded-lg shadow-md'>
       <h1 className='text-2xl font-bold text-gray-800 border-b pb-3 text-center'>상품 문의</h1>
 
-      {/* ✅ 클릭 가능한 카테고리 버튼 */}
+      {/* ✅ 카테고리 버튼 */}
       <div className='flex space-x-6 justify-center text-[16px] font-medium my-6'>
-        {['제품', '배송', '결제', '반품', '기타'].map((category) => (
+        {['제품', '배송', '결제', '환불', '기타'].map((category) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
@@ -75,9 +86,8 @@ const InquiryList = () => {
         ))}
       </div>
 
-      {/* ✅ 필터 선택 옵션 */}
+      {/* ✅ 필터 옵션 */}
       <div className='flex gap-6 mb-6 items-center'>
-        {/* 답변 여부 필터 */}
         <div className='flex items-center gap-2'>
           <label htmlFor='answerFilter' className='text-sm font-medium text-gray-700'>
             답변 여부:

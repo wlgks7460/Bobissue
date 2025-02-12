@@ -20,6 +20,8 @@ import ConsumerMyPageInfo from '../pages/consumer/mypage/MyPageInfo'
 import ConsumerMyPageAddress from '../pages/consumer/mypage/MyPageAddress'
 import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
 import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
+import ConsumerMyPageRecipe from '../pages/consumer/mypage/MyPageRecipe'
+import ConsumerMyPageRecipeCreate from '../pages/consumer/mypage/MyPageRecipeCreate'
 // 이용자 고객센터
 import ConsumerBoard from '../pages/consumer/board/Board'
 import ConsumerBoardFAQ from '../pages/consumer/board/BoardFAQ'
@@ -131,6 +133,14 @@ const router = createBrowserRouter([
                 path: 'calender',
                 element: <ConsumerMyPageCalendar />,
               },
+              {
+                path: 'recipe',
+                element: <ConsumerMyPageRecipe />,
+              },
+              {
+                path: 'recipe/create',
+                element: <ConsumerMyPageRecipeCreate />,
+              },
             ],
           },
           {
@@ -192,7 +202,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/seller/company/register',
-        element: <Seller.RegisterCompany />, // ✅ Seller. 접두사 추가
+        element: <Seller.RegisterCompany />,
       },
 
       {
@@ -203,12 +213,16 @@ const router = createBrowserRouter([
           //회사등록관련
 
           {
-            path: 'company/append',
+            path: '/seller/company/append',
             element: <Seller.AppendAccount />, // ✅ Seller. 접두사 추가
           },
           {
             path: 'company/search',
             element: <Seller.SearchAccount />, // ✅ Seller. 접두사 추가
+          },
+          {
+            path: 'company/update',
+            element: <Seller.UpdateCompany />,
           },
           //상품 관리 관련
           {

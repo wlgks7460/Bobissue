@@ -1,194 +1,263 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Breadcrumb from '../common/Breadcrumb'
-import ExcelJS from 'exceljs'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileExcel } from '@fortawesome/free-solid-svg-icons'
+import API from '../../../utils/API'
 
 const SellerRegister = () => {
-  // Breadcrumb에 사용할 경로 데이터
-  const breadcrumbPaths = [
-    { name: 'Home' }, // 홈
-    { name: '판매자관리' }, // 판매자 관리
-    { name: '판매자 신규신청' }, // 현재 페이지
-  ]
+  const breadcrumbPaths = [{ name: 'Home' }, { name: '판매자관리' }, { name: '판매권한 승인' }]
 
-  // 예제 데이터
-  const [newApplications, setNewApplications] = useState([
-    { id: 1, name: '가맹점몰', username: 'submall', date: '2025-01-23', status: '대기' },
-    { id: 2, name: '한글몰', username: 'testmall', date: '2025-01-24', status: '대기' },
-  ])
+  const [approvals, setApprovals] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  // 승인된 판매자 목록
-  const [approvedApplications, setApprovedApplications] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [appliedSearchQuery, setAppliedSearchQuery] = useState('')
+  const [searchType, setSearchType] = useState('companyNo')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
-  // 대기 상태의 신청 건수 계산
-  const pendingCount = newApplications.filter((application) => application.status === '대기').length
+  useEffect(() => {
+    const fetchApprovals = async () => {
+      try {
+        const response = await API.get('/admin/seller-approvals')
+        console.log('📢 API 응답 데이터:', response.data.result.data)
+        setApprovals(response.data.result.data)
+      } catch (err) {
+        console.error('판매상태 조회 실패:', err)
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchApprovals()
+  }, [])
 
-  // 상태 변경 핸들러
-  const handleStatusChange = (id) => {
-    setNewApplications((prevApplications) =>
-      prevApplications.map((application) => {
-        if (application.id === id) {
-          const updatedApplication = { ...application, status: '승인' }
-          setApprovedApplications((prev) => [...prev, updatedApplication]) // 승인된 목록 추가
-          return updatedApplication
+  const processCompanies = (status) => {
+    return approvals
+      .filter((company) =>
+        status === 'pending'
+          ? company.statistics.pendingCount > 0
+          : company.statistics.approvedCount > 0,
+      )
+      .map((company) => {
+        const sortedSellers = company.sellers.sort((a, b) => a.sellerNo - b.sellerNo)
+        const representativeSeller = sortedSellers.find(
+          (seller) => seller.approvalStatus === (status === 'pending' ? 'N' : 'Y'),
+        )
+        return {
+          ...company,
+          representativeSeller,
         }
-        return application
-      }),
-    )
+      })
   }
 
-  // 엑셀 다운로드 핸들러
-  const downloadExcel = () => {
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('승인된 판매자 목록')
+  const pendingCompanies = processCompanies('pending')
+  const approvedCompanies = processCompanies('approved')
 
-    // 컬럼 정의
-    worksheet.columns = [
-      { header: '번호', key: 'id', width: 10 },
-      { header: '회원명', key: 'name', width: 20 },
-      { header: '아이디', key: 'username', width: 20 },
-      { header: '신청일', key: 'date', width: 15 },
-      { header: '상태', key: 'status', width: 10 },
-    ]
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentItems = pendingCompanies.slice(indexOfFirstItem, indexOfLastItem)
+  const totalPages = Math.ceil(pendingCompanies.length / itemsPerPage)
+  const [isEmailSending, setIsEmailSending] = useState(false)
 
-    // 승인된 판매자 목록 추가
-    approvedApplications.forEach((application) => worksheet.addRow(application))
+  const filteredApprovedCompanies = approvedCompanies.filter((company) => {
+    if (!appliedSearchQuery) return true
+    const fieldValue = String(company[searchType] || '')
+      .trim()
+      .toLowerCase()
+    return fieldValue === appliedSearchQuery.trim().toLowerCase()
+  })
 
-    // 엑셀 다운로드
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], { type: 'application/octet-stream' })
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = '승인된_판매자_목록.xlsx'
-      link.click()
-      window.URL.revokeObjectURL(url)
-    })
+  const handleApproveSeller = async (companyNo, sellerNo, companyName, representativeEmail) => {
+    if (!window.confirm('해당 판매자를 승인 상태로 변경하시겠습니까?')) return
+
+    try {
+      // 1️⃣ 판매자 승인 API 호출
+      const response = await API.put(`/admin/${sellerNo}/approve`)
+      console.log('판매자 승인 응답:', response)
+      setIsEmailSending(true) // 이메일 전송 시작
+
+      // 2️⃣ 승인 성공 후 메일 발송 API 호출
+      const mailData = {
+        title: '판매자 승인 완료 안내',
+        content: `안녕하세요,\n\n"${companyName}" 회사의 판매자 권한이 승인되었습니다.\n\n사이트에서 판매를 진행하실 수 있습니다.\n\n감사합니다.`,
+        recipient: representativeEmail,
+      }
+
+      const mailResponse = await API.post('/sellers/mail', mailData)
+      console.log('메일 발송 응답:', mailResponse)
+
+      // 3️⃣ 상태 업데이트 (승인된 판매자 목록 업데이트)
+      setApprovals((prevApprovals) =>
+        prevApprovals.map((company) => {
+          if (company.companyNo === companyNo) {
+            return {
+              ...company,
+              sellers: company.sellers.map((seller) =>
+                seller.sellerNo === sellerNo ? { ...seller, approvalStatus: 'Y' } : seller,
+              ),
+              statistics: {
+                ...company.statistics,
+                approvedCount: company.statistics.approvedCount + 1,
+                pendingCount: company.statistics.pendingCount - 1,
+              },
+            }
+          }
+          return company
+        }),
+      )
+
+      alert(`"${companyName}" 회사의 판매자 승인 및 메일 발송이 완료되었습니다.`)
+    } catch (error) {
+      console.error('판매자 승인 또는 메일 발송 실패:', error)
+      alert('판매자 승인 또는 메일 발송에 실패했습니다.')
+    } finally {
+      setIsEmailSending(false) // 이메일 전송 완료
+    }
   }
 
+  const handleSearch = () => {
+    console.log('🔍 검색 실행:', searchType, searchQuery)
+    setAppliedSearchQuery(searchQuery)
+  }
   return (
-    <div className='p-6'>
-      {/* Breadcrumb */}
+    <div className='p-6 bg-white min-h-screen'>
       <Breadcrumb paths={breadcrumbPaths} />
-      <h1 className='text-2xl font-bold mb-6'>판매자 신규신청</h1>
+      <h1 className='text-2xl font-bold mb-6'>판매권한 승인</h1>
 
-      {/* 기본 검색 */}
-      <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
-      <div className='flex flex-col space-y-4 mb-6'>
-        <div className='flex space-x-4'>
-          <div>
-            <label className='block text-sm font-medium mb-1'>검색어</label>
-            <select className='border rounded-md px-3 py-2'>
-              <option>아이디</option>
-              <option>회원명</option>
-            </select>
-          </div>
-          <div>
-            <label className='block text-sm font-medium mb-1'>검색 입력</label>
-            <input
-              type='text'
-              className='border rounded-md px-3 py-2 w-full'
-              placeholder='검색어를 입력하세요'
-            />
-          </div>
-        </div>
-        <div className='flex space-x-4'>
-          <div>
-            <label className='block text-sm font-medium mb-1'>기간 검색</label>
-            <select className='border rounded-md px-3 py-2'>
-              <option>신청일</option>
-              <option>승인일</option>
-            </select>
-          </div>
-          <div>
-            <label className='block text-sm font-medium mb-1'>시작 날짜</label>
-            <input type='date' className='border rounded-md px-3 py-2' />
-          </div>
-          <div>
-            <label className='block text-sm font-medium mb-1'>종료 날짜</label>
-            <input type='date' className='border rounded-md px-3 py-2' />
-          </div>
-        </div>
-      </div>
-      <div className='flex space-x-2'>
-        <button className='bg-black text-white px-4 py-2 rounded'>검색</button>
-        <button className='bg-gray-300 text-black px-4 py-2 rounded'>초기화</button>
-      </div>
-
-      {/* 신규 신청 건 */}
-      <div className='flex items-center justify-between mt-8 mb-4'>
-        <h2 className='text-lg font-semibold'>신규 신청 건</h2>
-        <span className='text-sm text-gray-500'>{`총 ${pendingCount}건`}</span>
-      </div>
-      <table className='table-auto w-full border'>
-        <thead>
-          <tr className='bg-gray-100'>
-            <th className='border px-4 py-2'>번호</th>
-            <th className='border px-4 py-2'>회원명</th>
-            <th className='border px-4 py-2'>아이디</th>
-            <th className='border px-4 py-2'>신청일</th>
-            <th className='border px-4 py-2'>상태</th>
-            <th className='border px-4 py-2'>승인</th>
-          </tr>
-        </thead>
-        <tbody>
-          {newApplications.map((application) => (
-            <tr key={application.id}>
-              <td className='border px-4 py-2 text-center'>{application.id}</td>
-              <td className='border px-4 py-2'>{application.name}</td>
-              <td className='border px-4 py-2'>{application.username}</td>
-              <td className='border px-4 py-2 text-center'>{application.date}</td>
-              <td className='border px-4 py-2 text-center'>{application.status}</td>
-              <td className='border px-4 py-2 text-center'>
-                {application.status === '대기' ? (
-                  <button
-                    onClick={() => handleStatusChange(application.id)}
-                    className='bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600'
-                  >
-                    승인
-                  </button>
-                ) : (
-                  <span className='text-gray-500'>승인됨</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* 승인된 판매자 목록 */}
-      <div className='mt-12'>
-        <div className='flex justify-between items-center mb-4'>
-          <h2 className='text-lg font-semibold'>승인된 판매자 목록</h2>
-          <button
-            onClick={downloadExcel}
-            className='bg-transparent border border-gray-500 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 flex items-center space-x-2'
-          >
-            <FontAwesomeIcon icon={faFileExcel} className='text-green-500' />
-            <span>엑셀 다운로드</span>
-          </button>
-        </div>
-        <table className='table-auto w-full border'>
-          <thead>
-            <tr className='bg-gray-100'>
-              <th className='border px-4 py-2'>번호</th>
-              <th className='border px-4 py-2'>회원명</th>
-              <th className='border px-4 py-2'>아이디</th>
-              <th className='border px-4 py-2'>신청일</th>
-              <th className='border px-4 py-2'>상태</th>
+      {/* 승인 대기 목록 */}
+      <div className='mb-8'>
+        <h2 className='text-lg font-semibold mb-4'>| 승인 대기 회사 목록</h2>
+        <table className='min-w-full border border-gray-300'>
+          <thead className='bg-gray-50'>
+            <tr>
+              <th className='border px-4 py-2'>회사번호</th>
+              <th className='border px-4 py-2'>회사명</th>
+              <th className='border px-4 py-2'>대표 이메일</th>
+              <th className='border px-4 py-2'>대표 전화번호</th>
+              <th className='border px-4 py-2'>회사정보</th>
+              <th className='border px-4 py-2'>승인</th>
             </tr>
           </thead>
           <tbody>
-            {approvedApplications.map((application) => (
-              <tr key={application.id}>
-                <td className='border px-4 py-2 text-center'>{application.id}</td>
-                <td className='border px-4 py-2'>{application.name}</td>
-                <td className='border px-4 py-2'>{application.username}</td>
-                <td className='border px-4 py-2 text-center'>{application.date}</td>
-                <td className='border px-4 py-2 text-center'>{application.status}</td>
+            {currentItems.length > 0 ? (
+              currentItems.map((company) => (
+                <tr key={company.companyNo} className='hover:bg-gray-100'>
+                  <td className='border px-4 py-2 text-center'>{company.companyNo}</td>
+                  <td className='border px-4 py-2 text-center'>{company.companyName}</td>
+                  <td className='border px-4 py-2 text-center'>
+                    {company.representativeSeller?.email || '-'}
+                  </td>
+                  <td className='border px-4 py-2 text-center'>
+                    {company.representativeSeller?.callNumber || '-'}
+                  </td>
+                  <td className='border px-4 py-2'>
+                    <div className='text-sm'>
+                      <strong>사업자등록번호</strong>: {company.license}
+                      <br />
+                      <strong>은행</strong>: {company.bank} | 계좌: {company.bankAccount}
+                    </div>
+                  </td>
+                  <td className='border px-4 py-2 text-center'>
+                    <button
+                      onClick={() =>
+                        handleApproveSeller(
+                          company.companyNo,
+                          company.representativeSeller?.sellerNo,
+                          company.companyName,
+                          company.representativeSeller?.email,
+                        )
+                      }
+                      className={`bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 ${
+                        isEmailSending ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                      disabled={isEmailSending} // 버튼 비활성화
+                    >
+                      {isEmailSending ? '이메일 전송 중...' : '승인'}
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan='6' className='border px-4 py-2 text-center text-gray-500'>
+                  승인 대기 중인 회사가 없습니다.
+                </td>
               </tr>
-            ))}
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 승인 완료 목록 */}
+      <div className='mb-8'>
+        <h2 className='mb-4 text-lg font-semibold'>| 승인 완료 회사 목록</h2>
+        {/* ✅ 검색 필터 */}
+        <div className='mb-4'>
+          <div className='flex flex-col sm:flex-row sm:items-end gap-4'>
+            <select
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+              className='w-72 border rounded-md px-3 py-2'
+            >
+              <option value='companyNo'>회사번호</option>
+              <option value='companyName'>회사명</option>
+              <option value='representativeEmail'>대표 이메일</option>
+              <option value='representativePhone'>대표 전화번호</option>
+            </select>
+            <input
+              type='text'
+              placeholder='검색어 입력'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className='w-80 border rounded-md px-3 py-2'
+            />
+            <button
+              onClick={handleSearch}
+              className='bg-blue-500 text-white text-sm px-4 py-3 w-24 rounded-md hover:bg-blue-600'
+            >
+              조회
+            </button>
+          </div>
+        </div>
+        <table className='min-w-full border border-gray-300'>
+          <thead className='bg-gray-50'>
+            <tr>
+              <th className='border px-4 py-2'>회사번호</th>
+              <th className='border px-4 py-2'>회사명</th>
+              <th className='border px-4 py-2'>대표 이메일</th>
+              <th className='border px-4 py-2'>대표 전화번호</th>
+              <th className='border px-4 py-2'>회사정보</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredApprovedCompanies.length > 0 ? (
+              filteredApprovedCompanies.map((company) => (
+                <tr key={company.companyNo} className='hover:bg-gray-100'>
+                  <td className='border px-4 py-2 text-center'>{company.companyNo}</td>
+                  <td className='border px-4 py-2 text-center'>{company.companyName}</td>
+                  <td className='border px-4 py-2 text-center'>
+                    {company.representativeSeller?.email || '-'}
+                  </td>
+                  <td className='border px-4 py-2 text-center'>
+                    {company.representativeSeller?.callNumber || '-'}
+                  </td>
+                  <td className='border px-4 py-2'>
+                    <div className='text-sm'>
+                      <strong>사업자등록번호</strong>: {company.license}
+                      <br />
+                      <strong>은행</strong>: {company.bank} | 계좌: {company.bankAccount}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan='5' className='border px-4 py-2 text-center text-gray-500'>
+                  해당 회사가 목록에 존재하지 않습니다.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

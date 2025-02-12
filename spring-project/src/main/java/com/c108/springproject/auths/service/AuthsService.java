@@ -4,9 +4,7 @@ import com.c108.springproject.admin.domain.Admin;
 import com.c108.springproject.admin.repository.AdminRepository;
 import com.c108.springproject.auths.dto.request.LoginReqDto;
 import com.c108.springproject.global.BobIssueException;
-import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
-import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.global.jwt.JwtTokenProvider;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshToken;
 import com.c108.springproject.global.jwt.RefreshToken.RefreshTokenRepository;
@@ -15,18 +13,15 @@ import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.repository.UserRepository;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

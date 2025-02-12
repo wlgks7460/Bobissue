@@ -47,6 +47,11 @@ public class Seller extends BaseEntity {
         this.callNumber = sellerUpdateReq.getCallNumber();
     }
 
+    public String setStatus(){
+        status = status.equals("Y") ? "N" : "Y";
+        return this.status;
+    }
+
     public void updateCompany(Company company) {
         this.company = company;
     }

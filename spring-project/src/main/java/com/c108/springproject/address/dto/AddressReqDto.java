@@ -1,5 +1,6 @@
 package com.c108.springproject.address.dto;
 
+import com.c108.springproject.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

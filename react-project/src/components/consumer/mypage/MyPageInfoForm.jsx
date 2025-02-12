@@ -21,7 +21,6 @@ const MyPageInfoForm = ({ userNo }) => {
   const updateUserInfo = (e) => {
     e.preventDefault()
     const payload = {
-      email: userInfo.email,
       name: nameRef.current.value,
       birthday: birthRef.current.value.split('-').join(''),
       phoneNumber: phoneRef.current.value,
