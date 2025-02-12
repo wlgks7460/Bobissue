@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import API from '@/utils/API'
-import dummyData from '../Dummy/Inquiries/Inquiry'
+// import dummyData from '../Dummy/Inquiries/Inquiry'
 
 const InquiryList = () => {
   const [inquiries, setInquiries] = useState([])
@@ -19,12 +19,12 @@ const InquiryList = () => {
   useEffect(() => {
     const fetchInquiries = async () => {
       try {
-        if (debug_mode) {
-          console.log('🚀 Debug Mode 활성화 - Dummy Data 사용')
-          setInquiries(dummyData)
-          setFilteredInquiries(dummyData)
-          return
-        }
+        // if (debug_mode) {
+        //   console.log('🚀 Debug Mode 활성화 - Dummy Data 사용')
+        //   setInquiries(dummyData)
+        //   setFilteredInquiries(dummyData)
+        //   return
+        // }
 
         const response = await API.get(`/question`)
         console.log('✅ API 응답:', response.data.result.data)
