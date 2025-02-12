@@ -5,11 +5,13 @@ import {
   Bars3Icon,
   MagnifyingGlassIcon,
   XCircleIcon,
+  BookOpenIcon,
 } from '@heroicons/react/24/solid'
 import API from '../../../utils/API'
 import SearchBarCategory from './SearchBarCategory'
 import { useDispatch } from 'react-redux'
 import { categoryReducerActions } from '../../../redux/reducers/categorySlice'
+import IconLink from './IconLink'
 
 const SearchBar = () => {
   const navigate = useNavigate()
@@ -80,10 +82,9 @@ const SearchBar = () => {
             </button>
           </div>
         </div>
-        <div className='w-[150px] flex-none flex justify-end'>
-          <Link to={'/cart'}>
-            <ShoppingBagIcon className='w-7 text-indigo-600' />
-          </Link>
+        <div className='w-[150px] flex-none flex justify-end items-center gap-5'>
+          <IconLink path={'/recipe'} tootip={'레시피 보기'} Icon={BookOpenIcon} />
+          <IconLink path={'/cart'} tootip={'장바구니 보기'} Icon={ShoppingBagIcon} />
         </div>
       </div>
     </div>
