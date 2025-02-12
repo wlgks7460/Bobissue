@@ -112,7 +112,7 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/members/email')}
                       className='cursor-pointer p-2 hover:bg-gray-100'
                     >
-                      회원 일괄메일발송
+                      회원 메일발송
                     </div>
                   </div>
                 )}
