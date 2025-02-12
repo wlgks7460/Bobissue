@@ -96,6 +96,7 @@ const EditProduct = () => {
         stock: parseInt(product.stock, 10),
         expiredAt: product.expiredAt,
         description: product.description,
+        keepImageIds:[1],
       }
 
       formData.append('item', JSON.stringify(itemData))
@@ -103,9 +104,13 @@ const EditProduct = () => {
       // ✅ 이미지 파일 추가
       product.images.forEach((img) => {
         if (img.file) {
+          console.log('hello');
           formData.append('images', img.file) // 새 이미지 업로드
         }
       })
+      for (const pair of formData.entries()) {
+        console.log(`📌 FormData 확인: ${pair[0]} →`, pair[1])
+      }
 
       await API.put(`/item/${itemNo}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },

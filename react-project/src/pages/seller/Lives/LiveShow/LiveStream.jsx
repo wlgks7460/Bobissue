@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 
 const LiveStreamSetup = () => {
+  const debug_mode =localStorage.getItem('debug_mode')
   const location = useLocation()
   const event = location.state?.event
   const videoRef = useRef(null)
@@ -21,7 +22,9 @@ const LiveStreamSetup = () => {
   const eventEndTime = moment(eventStartTime).add(event?.duration || 60, 'minutes')
 
   // 📌 라이브 시작 가능 여부 체크
-  const isLiveAvailable = event && now.isBetween(eventStartTime, eventEndTime)
+// 📌 라이브 시작 가능 여부 체크 (디버그 모드일 경우 항상 가능)
+const isLiveAvailable = debug_mode === 'true' || (event && now.isBetween(eventStartTime, eventEndTime));
+
 
   // 📌 웹캠(미리보기) 설정
   useEffect(() => {
