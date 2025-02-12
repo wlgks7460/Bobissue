@@ -101,8 +101,8 @@ public class CalendarService {
         Calendar meal = calendarRepository.findById((int) calendarNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_CALENDAL));
         try {
-
             meal= Calendar.builder()
+                    .calendarNo(calendarNo)
                     .name(mealReqDto.getName())                // 새로운 이름으로 업데이트
                     .eatDate(meal.getEatDate()+" "+mealReqDto.getEatTime())        // 기존 eatDate 유지
                     .calorie(mealReqDto.getCalorie())          // 새로운 칼로리로 업데이트

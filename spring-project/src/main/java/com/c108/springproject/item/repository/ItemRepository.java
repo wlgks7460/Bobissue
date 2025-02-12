@@ -14,7 +14,7 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     List<Item> findByDelYn(String delYn);
 
-    @Query("SELECT i FROM Item i JOIN i.categoryNo c JOIN i.company co " +
+    @Query("SELECT i FROM Item i JOIN i.category c JOIN i.company co " +
             "WHERE (:search IS NULL OR LOWER(i.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "OR LOWER(co.name) LIKE LOWER(CONCAT('%', :search, '%')))")
