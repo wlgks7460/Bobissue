@@ -6,7 +6,7 @@ const LiveCalender = () => {
   const breadcrumbPaths = [
     { name: 'Home' }, // 홈
     { name: '라이브커머스 관리' },
-    { name: '라이브 일정관리' },
+    { name: '라이브일정관리' },
   ]
 
   return (

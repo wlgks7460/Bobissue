@@ -6,7 +6,7 @@ const LiveManagement = () => {
   const breadcrumbPaths = [
     { name: 'Home' }, // 홈
     { name: '라이브커머스 관리' },
-    { name: '라이브 신청관리' },
+    { name: '라이브신청관리' },
   ]
 
   return (
