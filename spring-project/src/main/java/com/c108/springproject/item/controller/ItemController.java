@@ -165,4 +165,11 @@ public class ItemController {
             throw e;
         }
     }
+
+//    @GetMapping("/search/{search}")
+//    public ResponseDto searchItems(@PathVariable String search) {
+//        itemService.searItems(search);
+//        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<>());
+//
+//    }
 }

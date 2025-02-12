@@ -21,6 +21,7 @@ public class CastResDto {
     private String endAt;
     private List<CastItemResDto> castItemList;
     private String castStatus;
+    private String castRoomId;
     private String createAt;
     private String createdUser;
     private String updatedAt;
@@ -39,6 +40,7 @@ public class CastResDto {
                         .map(item -> new CastItemResDto(item.getItem().getItemNo(), item.getItem().getName(), item.getItem().getDescription()))
                         .collect(Collectors.toList()))
                 .castStatus(cast.getCastStatus().getValue())
+                .castRoomId(cast.getCastRoomId())
                 .createAt(cast.getCreatedAt())
                 .createdUser(cast.getCreatedUser())
                 .updatedAt(cast.getUpdatedAt())

@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,20 +32,25 @@ public class SellerService {
 
     @Transactional
     public int signUp(SignUpReqDto signUpDto) {
-        Seller new_seller = Seller.builder()
-                .email(signUpDto.getEmail())
-                .password(signUpDto.getPassword())
-                .callNumber(signUpDto.getCallNumber())
-                .name(signUpDto.getName())
-                .status("Y")
-                .approvalStatus("N") // 판매 가능 기본값 No
-                .build();
+        try {
+            Seller new_seller = Seller.builder()
+                    .email(signUpDto.getEmail())
+                    .password(signUpDto.getPassword())
+                    .callNumber(signUpDto.getCallNumber())
+                    .name(signUpDto.getName())
+                    .status("Y")
+                    .approvalStatus("N") // 판매 가능 기본값 No
+                    .build();
 
-        sellerRepository.save(new_seller);
-        return new_seller.getSellerNo();
+            sellerRepository.save(new_seller);
+            return new_seller.getSellerNo();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_SIGNUP_SELLER);
+        }
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public List<SellerDto> findSellerList() {
 
 //        List<Seller> sellers = sellerRepository.findAll();
@@ -61,22 +65,29 @@ public class SellerService {
 //            throw new BobIssueException(ResponseCode.SELLER_NOT_FOUND);
 //        }
 
-
-        return sellerRepository.findAllActiveSellers().stream()
-                .map(SellerDto::new)
-                .collect(Collectors.toList());
+        try {
+            return sellerRepository.findSellersByDelYn("N").stream()
+                    .map(SellerDto::new)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_SELLER);
+        }
     }
 
     @Transactional
     public SellerDto findSellerById(int sellerNo) {
-
-        return sellerRepository.findById(sellerNo)
-                .filter(seller -> !"Y".equals(seller.getDelYn()))
-                .map(SellerDto::new)
-                .orElse(null);
+        try {
+            return sellerRepository.findById(sellerNo)
+                    .filter(seller -> !"Y".equals(seller.getDelYn()))
+                    .map(SellerDto::new)
+                    .orElse(null);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_SELLER);
+        }
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public void updateSeller(int sellerNo, SellerUpdateReq sellerUpdateReq) {
         try{
             Seller seller = sellerRepository.findById(sellerNo).orElse(null);
@@ -87,18 +98,27 @@ public class SellerService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public void deleteSeller(int sellerNo) {
         Seller seller=sellerRepository.findById(sellerNo).orElseThrow(()->
-                new BobIssueException(ResponseCode.FAILED_DELETE_SELLER));
-        seller.delete();
+                new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+        try {
+            seller.delete();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_SELLER);
+        }
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
     public SellerProfiltResDto sellerProfile(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
-
-        return SellerProfiltResDto.toDto(seller);
+        try {
+           return SellerProfiltResDto.toDto(seller);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_SELLER);
+        }
     }
 
     @Transactional
