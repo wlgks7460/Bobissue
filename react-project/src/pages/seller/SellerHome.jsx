@@ -10,6 +10,7 @@ const SellerMainPage = () => {
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [status, setStatus] = useState('N')
 
   const [menuState, setMenuState] = useState({
     product: false,
@@ -36,8 +37,7 @@ const SellerMainPage = () => {
 
   // ✅ 2. 회사 등록 여부 확인 (로그인이 된 상태에서만 실행)
   useEffect(() => {
-    if (!token) return // ✅ 로그인되지 않은 경우 실행 안 함
-
+    if (!token) return // ✅ 로그인되지 않은 경우 실행 안 함함
     const fetchCompanyData = async () => {
       {
         try {
@@ -52,6 +52,21 @@ const SellerMainPage = () => {
 
     fetchCompanyData()
   }, [token]) // ✅ token이 설정된 후에 실행됨
+
+  useEffect(() => {
+    async function fetchUserStatus() {
+      {
+        try {
+          const response = await API.get('/sellers/profile')
+          console.log(response.data.result.data)
+          setStatus(response.data?.result?.data.approvalStatus || 'N')
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    }
+    fetchUserStatus()
+  })
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {
@@ -75,7 +90,7 @@ const SellerMainPage = () => {
   return (
     <div>
       {/* ✅ 회사 등록 여부가 확인되기 전에는 로딩 화면 */}
-      {registration === null ? (
+      {registration === null || status !== 'Y' ? (
         <div className='flex items-center justify-center min-h-screen'>회사 정보 확인 중...</div>
       ) : !registration ? (
         <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 p-8'>
