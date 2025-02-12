@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import dayjs from 'dayjs'
 
-const MyPageCalendarModalItem = ({ meal }) => {
+const MyPageCalendarModalItem = ({ meal, updateData, deleteData }) => {
   const [mode, setMode] = useState('read')
 
   const nameRef = useRef()
@@ -10,6 +10,22 @@ const MyPageCalendarModalItem = ({ meal }) => {
 
   const [hour, setHour] = useState(dayjs(meal.eatTime).hour())
   const [minute, setMinute] = useState(dayjs(meal.eatTime).minute())
+
+  const handleUpdate = (e) => {
+    e.preventDefault()
+    updateData(
+      nameRef.current.value,
+      timeRef.current.value,
+      calorieRef.current.value,
+      meal.calendarNo,
+    )
+    setMode('read')
+  }
+
+  const handleDelete = (e) => {
+    e.preventDefault()
+    deleteData(meal.calendarNo)
+  }
 
   return (
     <div>
@@ -32,7 +48,9 @@ const MyPageCalendarModalItem = ({ meal }) => {
               <button className='p-1 text-indigo-600' onClick={() => setMode('update')}>
                 수정
               </button>
-              <button className='p-1 text-red-600'>삭제</button>
+              <button className='p-1 text-red-600' onClick={handleDelete}>
+                삭제
+              </button>
             </div>
           </div>
         </div>
@@ -73,7 +91,9 @@ const MyPageCalendarModalItem = ({ meal }) => {
               </div>
               <div className='flex gap-3'>
                 <input type='file' name='' id='' accept='image/*' />
-                <button className='p-1 text-indigo-600'>수정</button>
+                <button className='p-1 text-indigo-600' onClick={handleUpdate}>
+                  수정
+                </button>
                 <button className='p-1 text-red-600' onClick={() => setMode('read')}>
                   취소
                 </button>

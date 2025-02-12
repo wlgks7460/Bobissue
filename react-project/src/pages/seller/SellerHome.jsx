@@ -10,7 +10,6 @@ const SellerMainPage = () => {
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const debug_mode = true // ✅ 디버그 모드 설정
 
   const [menuState, setMenuState] = useState({
     product: false,
@@ -40,11 +39,7 @@ const SellerMainPage = () => {
     if (!token) return // ✅ 로그인되지 않은 경우 실행 안 함
 
     const fetchCompanyData = async () => {
-      if (debug_mode) {
-        setTimeout(() => {
-          setRegistration(false) // 🔹 필요에 따라 true 또는 false 변경
-        }, 500)
-      } else {
+      {
         try {
           const response = await API.get('/sellers/company')
           setRegistration(response.data.result.data?.companyNo || false)
@@ -56,7 +51,7 @@ const SellerMainPage = () => {
     }
 
     fetchCompanyData()
-  }, [token, debug_mode]) // ✅ token이 설정된 후에 실행됨
+  }, [token]) // ✅ token이 설정된 후에 실행됨
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {

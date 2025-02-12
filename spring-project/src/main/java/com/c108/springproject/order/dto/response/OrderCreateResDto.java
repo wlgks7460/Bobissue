@@ -28,7 +28,7 @@ public class OrderCreateResDto {
      public static OrderCreateResDto toDto(Order order) {
         return OrderCreateResDto.builder()
                 .orderNo(order.getOrderNo())
-                .userNo(order.getUserNo())
+                .userNo(order.getUser().getUserNo())
                 .userCouponNo(order.getUserCouponNo())
                 .totalPrice(order.getTotalPrice())
                 .payment(order.getPayment())
