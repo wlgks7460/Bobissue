@@ -50,7 +50,7 @@ const MemberLevelManagement = () => {
     <div className='p-6'>
       {/* Breadcrumb */}
       <Breadcrumb paths={breadcrumbPaths} />
-      <h1 className='text-2xl font-bold mb-6 text-gray-800'>회원 레벨 관리</h1>
+      <h1 className='text-2xl font-bold mb-6 text-gray-800'>회원 레벨관리</h1>
 
       {/* 정책 설명 */}
       <section className='mb-10'>
