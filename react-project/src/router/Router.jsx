@@ -54,7 +54,7 @@ import SellerTreePage from '../pages/admin/seller/SellerTreePage'
 import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
-import SellerDetailPage from '../pages/admin/seller/SellerDetailPage'
+// import SellerDetailPage from '../pages/admin/seller/SellerDetailPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -64,6 +64,9 @@ import LiveNoticePage from '../pages/admin/live/LiveNoticePage'
 import LiveOnAirPage from '../pages/admin/live/LiveOnAirPage'
 import LiveEndedPage from '../pages/admin/live/LiveEndedPage'
 import ViwerMangagementPage from '../pages/admin/live/ViewerManagementPage'
+import LiveCalenderPage from '../pages/admin/live/LiveCalenderPage'
+import LiveRegisterDetailPage from '../pages/admin/live/LiveRegisterDetailPage'
+
 // (관리자) 컨텐츠관리
 import CouponIssuePage from '../pages/admin/coupon/CouponIssuePage'
 import CouponStatusPage from '../pages/admin/coupon/CouponStatusPage'
@@ -517,8 +520,21 @@ const router = createBrowserRouter([
             path: 'live',
             children: [
               {
-                path: 'management', // 라이브 관리 (신청/일정) 페이지
-                element: <LiveManagementPage />,
+                path: 'register', // 라이브 신청 수리 페이지
+                children: [
+                  {
+                    path: '',
+                    element: <LiveManagementPage />,
+                  },
+                  {
+                    path: ':castNo',
+                    element: <LiveRegisterDetailPage />,
+                  },
+                ],
+              },
+              {
+                path: 'calender', // 라이브 일정 관리 페이지
+                element: <LiveCalenderPage />,
               },
               {
                 path: 'notice', // 라이브 공지 관리 페이지
