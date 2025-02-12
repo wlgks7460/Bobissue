@@ -12,7 +12,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewCreateReqDto {
-    private int itemNo;
+//    private int itemNo;
     private String content;
     private int rating;
 //    private String createdUser;
