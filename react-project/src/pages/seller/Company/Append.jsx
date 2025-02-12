@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import API from '@/utils/API' // ✅ API 유틸리티 임포트
-import Button from '@/components/ui/Button' // ✅ 버튼 컴포넌트 활용
+import Button from '../../../components/ui/Button' // ✅ 버튼 컴포넌트 활용
 
 const Append = () => {
   const debug_mode = false // ✅ 디버그 모드 (true일 경우 API 요청 실행 X)
