@@ -36,9 +36,14 @@ public class CastController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CAST, new DefaultResponse<CastResDto>(castService.findCastByNo(cast_no)));
     }
 
+    @GetMapping("/registerList")
+    public ResponseDto registerCastList(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CAST, new DefaultResponse.ListResponse<CastResDto>(castService.findRegisterCastList()));
+    }
+
     @PatchMapping("/{cast_no}/register")
     public ResponseDto registerCast(@PathVariable int cast_no){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.FAILED_REGISTER_CAST, new DefaultResponse<Integer>(castService.registerCast(cast_no)));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_REGISTER_CAST, new DefaultResponse<Integer>(castService.registerCast(cast_no)));
     }
 
     @PatchMapping("/{cast_no}/refusal")
@@ -48,7 +53,12 @@ public class CastController {
 
     @PatchMapping("/{cast_no}/start")
     public ResponseDto startCast(@PathVariable int cast_no){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_START_CAST, new DefaultResponse<Integer>(castService.startCast(cast_no)));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_START_CAST, new DefaultResponse<CastResDto>(castService.startCast(cast_no)));
+    }
+
+    @PatchMapping("/{cast_no}/end")
+    public ResponseDto endCast(@PathVariable int cast_no){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_END_CAST, new DefaultResponse<CastResDto>(castService.endCast(cast_no)));
     }
 
     @PutMapping("/{cast_no}")
