@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewUpdateReqDto {
-    private Long imageNo;
+//    private Long imageNo;
     private String content;
     private int rating;
 //    private int updatedUser;

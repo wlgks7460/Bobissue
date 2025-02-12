@@ -222,8 +222,6 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(recipeNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.RECIPE_NOT_FOUND));
 
-        System.out.println();
-
         return RecipeResDto.toDto(recipe);
     }
 
