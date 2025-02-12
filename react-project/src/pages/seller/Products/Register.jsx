@@ -9,7 +9,7 @@ import ProductDate from './Form/Product/ProductDate'
 const Register = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const [debug_mode, setDebugMode] = useState(false) // ✅ 디버그 모드 추가
+  const debug_mode = localStorage.getItem('debug_mode') === 'true' // ✅ 디버그 모드 추가
 
   const [product, setProduct] = useState({
     name: '',
@@ -27,12 +27,10 @@ const Register = () => {
     const token = localStorage.getItem('access_token')
     if (!token) {
       alert('상품 등록을 위해 로그인해주세요.')
-      navigate('/login')
+      navigate('/seller/login')
     }
 
     // ✅ 디버그 모드 체크 (localStorage에서 불러오기)
-    const storedDebugMode = localStorage.getItem('debug_mode') === 'true'
-    setDebugMode(storedDebugMode)
   }, [navigate])
 
   // ✅ 상품 등록 요청 함수
@@ -58,14 +56,18 @@ const Register = () => {
     try {
       const formData = new FormData()
 
-      // ✅ 상품 정보 JSON을 FormData에 개별적으로 추가
-      formData.append('categoryNo', product.categoryNo)
-      formData.append('name', product.name)
-      formData.append('price', parseFloat(product.price))
-      formData.append('salePrice', parseFloat(product.salePrice))
-      formData.append('stock', parseInt(product.stock, 10))
-      formData.append('expiredAt', product.expiredAt)
-      formData.append('description', product.description)
+      // ✅ 상품 정보 JSON을 "items" 키로 추가
+      const productData = {
+        categoryNo: parseInt(product.categoryNo, 10),
+        name: product.name,
+        price: parseFloat(product.price),
+        salePrice: parseFloat(product.salePrice),
+        stock: parseInt(product.stock, 10),
+        expiredAt: product.expiredAt,
+        description: product.description,
+      }
+
+      formData.append('item', JSON.stringify(productData))
 
       // ✅ 이미지 파일 추가 (파일이 있는 경우만)
       if (product.images.length > 0) {
@@ -79,13 +81,7 @@ const Register = () => {
       // ✅ 디버그 모드일 경우 API 호출 없이 콘솔 출력
       if (debug_mode) {
         console.log('📌 [DEBUG MODE] 상품 등록 요청 데이터:', {
-          categoryNo: product.categoryNo,
-          name: product.name,
-          price: product.price,
-          salePrice: product.salePrice,
-          stock: product.stock,
-          expiredAt: product.expiredAt,
-          description: product.description,
+          item: productData,
           images: product.images.map((img) => img.file?.name),
         })
         setLoading(false)

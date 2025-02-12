@@ -96,7 +96,7 @@ const Orders = () => {
 
   return (
     <div className='p-6 w-full bg-gradient-to-b from-gray-100 to-gray-50 min-h-screen'>
-      <h1 className='text-3xl font-bold text-gray-800 mb-6'>🛒 주문 관리</h1>
+      <h1 className='text-[28px] text-center font-bold text-gray-800 mb-6'>주문 관리</h1>
 
       {isLoading ? (
         <p className='text-gray-500 text-lg'>로딩 중...</p>
