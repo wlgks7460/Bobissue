@@ -83,7 +83,7 @@ public class ItemService {
 
         // 2. Item 엔티티 생성
         Item item = Item.builder()
-                .categoryNo(category)
+                .category(category)
                 .company(company)
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
@@ -211,7 +211,7 @@ public class ItemService {
         // 3. 상품 정보 업데이트
         Item updatedItem = Item.builder()
                 .itemNo(itemNo)
-                .categoryNo(category)
+                .category(category)
                 .images(updatedImages)
                 .company(company)
                 .name(reqDto.getName())

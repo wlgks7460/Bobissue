@@ -22,7 +22,7 @@ public class OrderListResDto {
     public static OrderListResDto toDto(Order order, String orderStatus, String deliveryStatus) {
         return OrderListResDto.builder()
                 .orderNo(order.getOrderNo())
-                .userNo(order.getUserNo())
+                .userNo(order.getUser().getUserNo())
                 .payment(order.getPayment())
                 .totalPrice(order.getTotalPrice())
                 .orderStatus(orderStatus)
