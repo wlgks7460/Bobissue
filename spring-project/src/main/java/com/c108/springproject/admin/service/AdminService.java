@@ -56,8 +56,7 @@ public class AdminService {
     public String changeUserStatus(int userNo) {
         User user =userRepository.findById(userNo).orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_USER));
         try {
-            user.setStatus();
-            return user.getStatus();
+            return user.setStatus();
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_CHANGE_USER_STATUS);
         }
@@ -69,8 +68,7 @@ public class AdminService {
     public String changeSellerStatus(int sellerNo) {
         Seller seller = sellerRepository.findById(sellerNo).orElseThrow(()-> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
         try {
-            seller.setStatus();
-            return seller.getStatus();
+            return seller.setStatus();
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_CHANGE_SELLER_STATUS);
         }
