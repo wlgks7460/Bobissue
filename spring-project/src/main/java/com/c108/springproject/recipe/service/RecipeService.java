@@ -70,6 +70,7 @@ public class RecipeService {
                     .category(category)
                     .name(request.getName())
                     .time(request.getTime())
+                    .description(request.getDescription())
                     .materials(new ArrayList<>())
                     .build();
 
@@ -173,7 +174,7 @@ public class RecipeService {
 
 
             // 기본 정보 업데이트
-            recipe.update(category, request.getName(), request.getTime());
+            recipe.update(category, request.getName(), request.getTime(), request.getDescription());
 //            recipe.setUpdatedUser(request.getUpdatedUser());
 
 
