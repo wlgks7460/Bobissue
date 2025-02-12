@@ -122,11 +122,14 @@ const ItemDetail = () => {
               <div className='grow flex flex-col gap-5'>
                 <div className='flex'>
                   <span className='w-[150px] text-gray-500'>카테고리</span>{' '}
-                  <span className='text-black'>{item.category?.name}</span>
+                  <span className='text-black'>
+                    {item.category?.parentName && `${item.category.parentName} > `}
+                    {item.category?.name}
+                  </span>
                 </div>
                 <div className='flex'>
                   <span className='w-[150px] text-gray-500'>판매자</span>{' '}
-                  <span className='text-black'>{item.createdUser}</span>
+                  <span className='text-black'>{item.company?.name}</span>
                 </div>
                 <div className='flex'>
                   <span className='w-[150px] text-gray-500'>배송비</span>{' '}
