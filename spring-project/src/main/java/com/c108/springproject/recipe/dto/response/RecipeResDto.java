@@ -20,6 +20,7 @@ public class RecipeResDto {
     private String categoryName;
     private String name;
     private int time;
+    private String description;
     private String content;  // 상세 설명
     private List<MaterialResDto> materials;
     private String createdAt;
@@ -38,6 +39,7 @@ public class RecipeResDto {
                 .categoryName(recipe.getCategory().getName())
                 .name(recipe.getName())
                 .time(recipe.getTime())
+                .description(recipe.getDescription())
                 .materials(recipe.getMaterials().stream()
                         .map(MaterialResDto::toDto)
                         .collect(Collectors.toList()))
