@@ -29,7 +29,7 @@ public class ItemCategory extends BaseEntity {
     private ItemCategory parent; // 부모 카테고리
 
     @Builder.Default
-    @OneToMany(mappedBy = "categoryNo")
+    @OneToMany(mappedBy = "category")
     private List<Item> items = new ArrayList<>();
 
     @OneToMany(mappedBy = "parent")

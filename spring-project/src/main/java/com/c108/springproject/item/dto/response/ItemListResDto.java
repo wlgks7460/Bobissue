@@ -2,7 +2,6 @@ package com.c108.springproject.item.dto.response;
 
 
 import com.c108.springproject.item.domain.Item;
-import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,12 +29,12 @@ public class ItemListResDto {
         return ItemListResDto.builder()
                 .itemNo(item.getItemNo())
                 .category(ItemCategoryListResDto.builder()
-                        .categoryNo(item.getCategoryNo().getCategoryNo())
-                        .name(item.getCategoryNo().getName())
-                        .parentNo(item.getCategoryNo().getParent() != null ?
-                                item.getCategoryNo().getParent().getCategoryNo() : null)
-                        .parentName(item.getCategoryNo().getParent() != null ?
-                                item.getCategoryNo().getParent().getName() : null)
+                        .categoryNo(item.getCategory().getCategoryNo())
+                        .name(item.getCategory().getName())
+                        .parentNo(item.getCategory().getParent() != null ?
+                                item.getCategory().getParent().getCategoryNo() : null)
+                        .parentName(item.getCategory().getParent() != null ?
+                                item.getCategory().getParent().getName() : null)
                         .build())
                 .images(item.getImages().stream()
                         .map(image -> ImageDto.toDto(image))

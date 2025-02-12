@@ -19,6 +19,8 @@ import com.c108.springproject.order.repository.DeliveryStatusRepository;
 import com.c108.springproject.order.repository.OrderDetailRepository;
 import com.c108.springproject.order.repository.OrderRepository;
 import com.c108.springproject.order.repository.OrderStatusRepository;
+import com.c108.springproject.user.domain.User;
+import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +34,21 @@ public class OrderService {
     private final ItemRepository itemRepository;
     private final OrderStatusRepository orderStatusRepository;
     private final DeliveryStatusRepository deliveryStatusRepository;
+    private final UserRepository userRepository;
 
 
-    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ItemRepository itemRepository, OrderStatusRepository orderStatusRepository, DeliveryStatusRepository deliveryStatusRepository) {
+    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ItemRepository itemRepository, OrderStatusRepository orderStatusRepository, DeliveryStatusRepository deliveryStatusRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.itemRepository = itemRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.deliveryStatusRepository = deliveryStatusRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
     public OrderCreateResDto createOrder(OrderCreateReqDto request) {
+        User user = userRepository.findById(request.getUserNo()).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
         try {
             // 1. 주문할 상품들의 재고 확인
             validateItems(request.getItems());
@@ -53,7 +58,7 @@ public class OrderService {
 
             // 3. 주문 기본 정보 생성
             Order order = Order.builder()
-                    .userNo(request.getUserNo())
+                    .user(user)
                     .addressNo(request.getAddressNo())
                     .userCouponNo(request.getUserCouponNo())
                     .payment(request.getPayment())

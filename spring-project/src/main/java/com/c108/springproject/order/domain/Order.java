@@ -1,6 +1,7 @@
 package com.c108.springproject.order.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,8 +20,9 @@ public class Order extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderNo;
 
-    @Column(nullable = false)
-    private int userNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_no", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private int addressNo;
@@ -29,7 +31,7 @@ public class Order extends BaseEntity {
     private Long userCouponNo;
 
     @Column(nullable = false)
-    private int orderCategoryNo; //
+    private int orderCategoryNo;
 
     @Column(nullable = false)
     private int delCategoryNo;

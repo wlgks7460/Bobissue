@@ -9,6 +9,7 @@ import com.c108.springproject.item.domain.ItemImage;
 import com.c108.springproject.item.domain.ItemLike;
 import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
+import com.c108.springproject.item.dto.request.SearchReqDto;
 import com.c108.springproject.item.dto.response.*;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
 import com.c108.springproject.item.repository.ItemLikeRepository;
@@ -19,6 +20,8 @@ import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -80,7 +83,7 @@ public class ItemService {
 
         // 2. Item 엔티티 생성
         Item item = Item.builder()
-                .categoryNo(category)
+                .category(category)
                 .company(company)
                 .name(reqDto.getName())
                 .price(reqDto.getPrice())
@@ -208,7 +211,7 @@ public class ItemService {
         // 3. 상품 정보 업데이트
         Item updatedItem = Item.builder()
                 .itemNo(itemNo)
-                .categoryNo(category)
+                .category(category)
                 .images(updatedImages)
                 .company(company)
                 .name(reqDto.getName())
@@ -331,11 +334,22 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public SearchResDto searchItems(SearchReqDto reqDto) {
+        int pageSize = 10;
+        PageRequest pageable = PageRequest.of(reqDto.getPage(), pageSize);
+        Page<Item> itemsPage = itemRepository.searchItems(reqDto.getSearch(), pageable);
 
-//    public List<ItemSearchListResDto> searchItems(String search) {
-//        List<Item> items= itemRepository.searchItems(search);
-//
-//        return items.stream().map(ItemSearchListResDto::toDto).collect(Collectors.toList());
-//    }
+        List<ItemSearchListResDto> items = itemsPage.getContent()
+                .stream()
+                .map(ItemSearchListResDto::toDto)
+                .collect(Collectors.toList());
+
+        return SearchResDto.builder()
+                .items(items)
+                .page(itemsPage.getNumber())
+                .size(itemsPage.getTotalPages())
+                .build();
+    }
 
 }
