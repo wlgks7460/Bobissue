@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import TopNavbar from './components/TopNavbar'
 import Sidebar from './components/Sidebar'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import API from '@/utils/API' // API 호출 모듈
 
 const SellerMainPage = () => {
-  const location = useLocation()
   const navigate = useNavigate()
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
@@ -27,7 +26,6 @@ const SellerMainPage = () => {
   // ✅ 1. 로그인 상태 확인
   useEffect(() => {
     const savedToken = localStorage.getItem('access_token')
-
     if (!savedToken) {
       navigate('/seller/login')
     } else {
@@ -37,44 +35,42 @@ const SellerMainPage = () => {
 
   // ✅ 2. 회사 등록 여부 확인 (로그인이 된 상태에서만 실행)
   useEffect(() => {
-    if (!token) return // ✅ 로그인되지 않은 경우 실행 안 함함
+    if (!token) return
+
     const fetchCompanyData = async () => {
-      {
-        try {
-          const response = await API.get('/sellers/company')
-          setRegistration(response.data.result.data?.companyNo || false)
-        } catch (error) {
-          console.error('회사 등록 여부 확인 실패:', error)
-          setRegistration(false)
-        }
+      try {
+        const response = await API.get('/sellers/company')
+        setRegistration(response.data.result.data?.companyNo || false)
+      } catch (error) {
+        console.error('회사 등록 여부 확인 실패:', error)
+        setRegistration(false)
       }
     }
 
     fetchCompanyData()
-  }, [token]) // ✅ token이 설정된 후에 실행됨
+  }, [token])
 
   useEffect(() => {
-    async function fetchUserStatus() {
-      {
-        try {
-          const response = await API.get('/sellers/profile')
-          console.log(response.data.result.data)
-          setStatus(response.data?.result?.data.approvalStatus || 'N')
-        } catch (err) {
-          console.log(err)
-        }
+    if (!token) return
+
+    const fetchUserStatus = async () => {
+      try {
+        const response = await API.get('/sellers/profile')
+        setStatus(response.data?.result?.data.approvalStatus || 'N')
+      } catch (err) {
+        console.error(err)
       }
     }
+
     fetchUserStatus()
-  })
+  }, [token]) // ✅ token이 설정된 후에 실행됨
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {
-      const updatedState = Object.keys(prevState).reduce((acc, key) => {
+      return Object.keys(prevState).reduce((acc, key) => {
         acc[key] = key === menu ? !prevState[key] : false
         return acc
       }, {})
-      return updatedState
     })
   }
 
@@ -82,16 +78,29 @@ const SellerMainPage = () => {
     setSidebarOpen(!sidebarOpen)
   }
 
-  // ✅ 로그인 상태 확인 중에는 아무것도 렌더링하지 않음
+  const handleLogout = () => {
+    localStorage.removeItem('access_token')
+    navigate('/seller/login')
+  }
+
+  // ✅ 로그인 상태 확인 중에는 로딩 화면 표시
   if (token === null) {
     return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
   }
 
   return (
     <div>
-      {/* ✅ 회사 등록 여부가 확인되기 전에는 로딩 화면 */}
+      {/* ✅ 회사 등록 여부 확인 중 */}
       {registration === null || status !== 'Y' ? (
-        <div className='flex items-center justify-center min-h-screen'>회사 정보 확인 중...</div>
+        <div className='flex flex-col items-center justify-center min-h-screen'>
+          <p className='text-lg font-medium'>회사 정보 확인 중...</p>
+          <button
+            onClick={handleLogout}
+            className='mt-4 px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow hover:bg-red-600 transition'
+          >
+            로그아웃
+          </button>
+        </div>
       ) : !registration ? (
         <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 p-8'>
           <h1 className='text-2xl font-semibold text-gray-800'>회사 등록 필요</h1>
@@ -105,22 +114,22 @@ const SellerMainPage = () => {
         </div>
       ) : (
         <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
-          {/* Top Navbar (Sticky 적용) */}
+          {/* Top Navbar */}
           <div className='fixed top-0 z-50 w-full h-16 bg-white border-b border-gray-300'>
             <TopNavbar toggleSidebar={toggleSidebar} />
           </div>
 
           <div className='flex flex-1 mt-16 min-h-[calc(100vh-64px)]'>
-            {/* Sidebar (탑 메뉴바 아래로 배치, 슬라이딩 효과 적용) */}
+            {/* Sidebar */}
             <div
               className={`fixed left-0 top-16 h-[calc(100%-64px)] z-40 transition-transform duration-300 ease-in-out bg-white border-r border-gray-300
-            ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}
-          `}
+              ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}
+            `}
             >
               <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} menuState={menuState} />
             </div>
 
-            {/* Main Content (Sidebar가 열릴 때 밀려나도록 조정) */}
+            {/* Main Content */}
             <main
               className={`flex-1 p-2 transition-all relative duration-300 mt-2 min-h-[calc(80vh-32px)] ${
                 sidebarOpen ? 'ml-64' : 'ml-0'
@@ -130,7 +139,7 @@ const SellerMainPage = () => {
             </main>
           </div>
 
-          {/* Footer (스크롤 시 항상 바닥에 고정) */}
+          {/* Footer */}
           <footer className='w-full text-center py-4 bg-gray-100 text-gray-600 text-sm border-t border-gray-300 mt-auto'>
             &copy; 2025 판매자 플랫폼. 모든 권리 보유.
           </footer>
