@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import API from '@/utils/API' // ✅ API 유틸리티 임포트
-import Button from '@/components/ui/Button' // ✅ 버튼 컴포넌트 활용
 
 const Append = () => {
   const debug_mode = false // ✅ 디버그 모드 (true일 경우 API 요청 실행 X)
@@ -66,7 +65,7 @@ const Append = () => {
             value={newAccount.email}
             onChange={handleInputChange}
             placeholder='이메일'
-            className='border p-2 rounded'
+            className='border p-2 rounded w-full'
             required
           />
           <input
@@ -75,7 +74,7 @@ const Append = () => {
             value={newAccount.password}
             onChange={handleInputChange}
             placeholder='비밀번호'
-            className='border p-2 rounded'
+            className='border p-2 rounded w-full'
             required
           />
         </div>
@@ -86,7 +85,7 @@ const Append = () => {
             value={newAccount.callNumber}
             onChange={handleInputChange}
             placeholder='전화번호'
-            className='border p-2 rounded'
+            className='border p-2 rounded w-full'
             required
           />
           <input
@@ -95,15 +94,18 @@ const Append = () => {
             value={newAccount.name}
             onChange={handleInputChange}
             placeholder='이름'
-            className='border p-2 rounded'
+            className='border p-2 rounded w-full'
             required
           />
         </div>
 
         {/* ✅ 계정 추가 버튼 */}
-        <Button variant='primary' size='md' onClick={handleAddAccount}>
+        <button
+          className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition'
+          onClick={handleAddAccount}
+        >
           계정 추가
-        </Button>
+        </button>
       </div>
 
       {/* ✅ 추가된 계정 리스트 */}
@@ -117,24 +119,25 @@ const Append = () => {
               <span>
                 {account.name} ({account.email}) - {account.callNumber}
               </span>
-              <Button variant='danger' size='sm' onClick={() => handleDeleteAccount(index)}>
+              <button
+                className='bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition'
+                onClick={() => handleDeleteAccount(index)}
+              >
                 삭제
-              </Button>
+              </button>
             </li>
           ))}
         </ul>
       )}
 
       {/* ✅ 계정 전송 버튼 */}
-      <Button
-        variant='primary'
-        size='lg'
-        className='mt-4 w-full'
+      <button
+        className='bg-green-500 text-white px-6 py-3 rounded-md mt-4 w-full disabled:bg-gray-300'
         onClick={handleSubmit}
         disabled={extraAccounts.length === 0}
       >
         계정 리스트 전송
-      </Button>
+      </button>
     </div>
   )
 }
