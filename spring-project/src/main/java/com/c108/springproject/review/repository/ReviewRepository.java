@@ -21,5 +21,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r.rating, COUNT(r) FROM Review r WHERE r.item.itemNo = :itemNo AND r.delYn = 'N' GROUP BY r.rating")
     List<Object[]> countReviewsByRating(@Param("itemNo") int itemNo);
 
-    List<Review> findByItemNo(int itemNo);
+    List<Review> findByItemItemNo(int itemNo);
 }
