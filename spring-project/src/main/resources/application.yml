@@ -5,6 +5,11 @@ spring:
   application:
     name: spring-project
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+
   profiles:
     include: aws
 

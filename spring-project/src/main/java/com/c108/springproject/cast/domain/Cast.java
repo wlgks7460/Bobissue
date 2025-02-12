@@ -40,7 +40,7 @@ public class Cast extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 15)
     private String endAt;
 
-    @OneToMany(mappedBy = "cast", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cast", cascade = CascadeType.ALL, fetch = FetchType.LAZY , orphanRemoval = true)
     private List<CastItem> castItems;
 
     @Enumerated(EnumType.STRING)
@@ -62,6 +62,16 @@ public class Cast extends BaseEntity implements Serializable {
 
     public void refusalCast(){
         this.castStatus = CastStatus.REFUSAL;
+    }
+
+    public void startCast(String castRoomId){
+        this.castStatus = CastStatus.ONAIR;
+        this.castRoomId = castRoomId;
+    }
+
+    public void endCast(){
+        this.castStatus = CastStatus.TERMINATE;
+        this.castRoomId = null;
     }
 
 

@@ -20,4 +20,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // 특정 상품의 평점별 리뷰 수 계산
     @Query("SELECT r.rating, COUNT(r) FROM Review r WHERE r.itemNo = :itemNo AND r.delYn = 'N' GROUP BY r.rating")
     List<Object[]> countReviewsByRating(@Param("itemNo") int itemNo);
+
+    List<Review> findByItemNo(int itemNo);
 }

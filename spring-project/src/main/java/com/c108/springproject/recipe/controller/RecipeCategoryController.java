@@ -1,5 +1,6 @@
 package com.c108.springproject.recipe.controller;
 
+import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
@@ -24,11 +25,17 @@ public class RecipeCategoryController {
     // 레시피 카테고리 생성
     @PostMapping("")
     public ResponseDto createRecipeCategory(@RequestBody RecipeCategoryReqDto recipeCategoryReqDto) {
-        RecipeCategory recipeCategory = recipeCategoryService.createCategory(recipeCategoryReqDto);
-        return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_RECIPECATEGORY, new DefaultResponse<Object>(recipeCategory));
+        try {
+            RecipeCategory recipeCategory = recipeCategoryService.createCategory(recipeCategoryReqDto);
+            return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_RECIPECATEGORY, new DefaultResponse<Object>(recipeCategory));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
-    // 레시피 카테고리 전체 조회
+    // 레시피 카테고리 전체 조회 인증X
     @GetMapping("")
     public ResponseDto findAllRecipeCategory() {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CATEGORY, new DefaultResponse<List>(recipeCategoryService.findAllRecipeCategory()));
@@ -45,12 +52,24 @@ public class RecipeCategoryController {
     public ResponseDto updateRecipeCategory(
             @PathVariable int recipeCategoryNo,
             @RequestBody RecipeCategoryReqDto dto) {
-        RecipeCategoryResDto updatedCategory = recipeCategoryService.updateRecipeCategory(recipeCategoryNo, dto);
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_CATEGORY, new DefaultResponse<>(updatedCategory));
+        try {
+            RecipeCategoryResDto updatedCategory = recipeCategoryService.updateRecipeCategory(recipeCategoryNo, dto);
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_CATEGORY, new DefaultResponse<>(updatedCategory));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @DeleteMapping("/{recipeCategoryNo}")
     public ResponseDto deleteRecipeCategory(@PathVariable int recipeCategoryNo) {
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_CATEGORY, new DefaultResponse<Integer>(recipeCategoryService.deleteRecipeCategory(recipeCategoryNo)));
+        try {
+            return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_CATEGORY, new DefaultResponse<Integer>(recipeCategoryService.deleteRecipeCategory(recipeCategoryNo)));
+        } catch (BobIssueException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

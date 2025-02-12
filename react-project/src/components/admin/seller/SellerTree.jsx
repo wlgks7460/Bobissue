@@ -1,148 +1,180 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Breadcrumb from '../common/Breadcrumb'
+import API from '../../../utils/API'
+import { useInView } from 'react-intersection-observer' // 라이브러리 import
 
 const SellerTreeStructure = () => {
-  const breadcrumbPaths = [{ name: 'Home' }, { name: '판매자 관리' }, { name: '판매자 트리구조' }]
+  const breadcrumbPaths = [{ name: 'Home' }, { name: '판매자관리' }, { name: '판매자 트리구조' }]
+  const [treeData, setTreeData] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [displayedData, setDisplayedData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchType, setSearchType] = useState('companyName')
+  const [hasMore, setHasMore] = useState(true)
+  const itemsPerPage = 5 // 한 번에 로드할 개수
 
-  // 예제 트리 데이터
-  const treeData = [
-    {
-      id: 1,
-      name: '대표자',
-      username: 'admin',
-      role: '대표자',
-      phone: '010-0000-0000',
-      joinDate: '2020-10-04',
-      loginCount: 1451,
-      children: [
-        {
-          id: 2,
-          name: '관리자 1',
-          username: 'manager1',
-          role: '관리자 1',
-          phone: '010-1111-1111',
-          joinDate: '2020-10-05',
-          loginCount: 878,
-          children: [
-            {
-              id: 3,
-              name: '관리자 2',
-              username: 'manager2',
-              role: '관리자 2',
-              phone: '010-2222-2222',
-              joinDate: '2020-10-06',
-              loginCount: 754,
-            },
-          ],
-        },
-        {
-          id: 4,
-          name: '관리자 1-2',
-          username: 'manager1-2',
-          role: '관리자 1',
-          phone: '010-3333-3333',
-          joinDate: '2020-10-07',
-          loginCount: 600,
-        },
-      ],
-    },
-  ]
+  // Intersection Observer Hook (마지막 요소 감지)
+  const { ref, inView } = useInView({ threshold: 1 })
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredTree, setFilteredTree] = useState([])
-
-  // 검색 핸들러
-  const handleSearch = () => {
-    const findTree = (nodes, term) => {
-      for (const node of nodes) {
-        if (node.name.includes(term) || node.username.includes(term)) {
-          return node
-        }
-        if (node.children) {
-          const result = findTree(node.children, term)
-          if (result) return result
-        }
+  useEffect(() => {
+    const fetchTreeData = async () => {
+      try {
+        const response = await API.get('/admin/seller-approvals')
+        const formattedData = formatTreeData(response.data.result.data)
+        setTreeData(formattedData)
+        setFilteredData(formattedData)
+        setDisplayedData(formattedData.slice(0, itemsPerPage)) // 초기 데이터
+      } catch (err) {
+        console.error('트리 데이터 불러오기 실패:', err)
+        setError(err)
+      } finally {
+        setLoading(false)
       }
-      return null
+    }
+    fetchTreeData()
+  }, [])
+
+  // 📌 대표 판매자 판별 및 트리 구조 변환
+  const formatTreeData = (data) => {
+    return data
+      .filter((company) => company.sellers.length > 1) // 추가 계정이 있는 회사만 필터링
+      .map((company) => {
+        let representativeSeller =
+          company.sellers.length === 1
+            ? company.sellers[0]
+            : company.sellers.reduce((prev, curr) => (prev.sellerNo < curr.sellerNo ? prev : curr))
+
+        return {
+          companyNo: company.companyNo,
+          companyName: company.companyName,
+          license: company.license,
+          bank: company.bank,
+          bankAccount: company.bankAccount,
+          representativeSeller,
+          sellers: company.sellers,
+        }
+      })
+  }
+
+  // 📌 검색 기능 (회사 이름 또는 대표 이메일 기준)
+  const handleSearch = () => {
+    if (!searchQuery.trim()) {
+      setFilteredData(treeData)
+      setDisplayedData(treeData.slice(0, itemsPerPage))
+      return
     }
 
-    const result = findTree(treeData, searchTerm)
-    setFilteredTree(result ? [result] : [])
+    const filtered = treeData.filter((company) => {
+      const searchField =
+        searchType === 'companyName'
+          ? company.companyName.toLowerCase()
+          : company.representativeSeller.email.toLowerCase()
+      return searchField.includes(searchQuery.toLowerCase())
+    })
+
+    setFilteredData(filtered)
+    setDisplayedData(filtered.slice(0, itemsPerPage))
+    setHasMore(filtered.length > itemsPerPage)
   }
 
-  // 역할별 이모티콘과 한글 이름 설정
-  const getRoleIconAndName = (role) => {
-    switch (role) {
-      case '대표자':
-        return { icon: '👑', name: '대표자' }
-      case '관리자 1':
-        return { icon: '🛠️', name: '관리자 1' }
-      case '관리자 2':
-        return { icon: '🔧', name: '관리자 2' }
-      default:
-        return { icon: '❓', name: '알 수 없음' }
+  // 📌 무한 스크롤 데이터 로드
+  useEffect(() => {
+    if (inView && hasMore) {
+      setTimeout(() => {
+        const newLength = displayedData.length + itemsPerPage
+        setDisplayedData(filteredData.slice(0, newLength))
+        if (newLength >= filteredData.length) {
+          setHasMore(false)
+        }
+      }, 500)
     }
-  }
-
-  // 트리 렌더링 함수
-  const renderTree = (nodes) => {
-    return (
-      <ul className='ml-4'>
-        {nodes.map((node) => {
-          const { icon, name } = getRoleIconAndName(node.role)
-          return (
-            <li key={node.id} className='mb-2'>
-              <div className='p-2 border rounded bg-white mb-2 flex items-center space-x-2'>
-                <span>{icon}</span>
-                <span className='font-semibold'>{node.name}</span>
-                <span className='text-gray-500'>({name})</span>
-                <div className='text-sm text-gray-600'>
-                  아이디: {node.username}, 휴대폰: {node.phone}, 가입일: {node.joinDate}, 로그인수:{' '}
-                  {node.loginCount}
-                </div>
-              </div>
-              {node.children && <div className='ml-6'>{renderTree(node.children)}</div>}
-            </li>
-          )
-        })}
-      </ul>
-    )
-  }
+  }, [inView, hasMore])
 
   return (
-    <div className='p-6'>
+    <div className='p-6 bg-white min-h-screen'>
       <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>판매자 트리구조</h1>
 
-      {/* 검색 섹션 */}
-      <div className='mb-6'>
-        <label className='block text-sm font-medium mb-2'>대표 관리자 검색</label>
-        <div className='flex space-x-2'>
-          <input
-            type='text'
-            placeholder='관리자 이름 또는 ID를 입력하세요'
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className='border rounded-md px-3 py-2 flex-grow'
-          />
-          <button
-            onClick={handleSearch}
-            className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
-          >
-            검색
-          </button>
-        </div>
+      {/* 📌 가이드 추가 */}
+      <div className='bg-yellow-100 p-4 rounded-md mb-6'>
+        <p className='text-yellow-700 font-medium'>
+          ※ 추가 계정을 보유한 회사들을 관리하는 페이지입니다. 대표 판매자 및 추가 판매자 계정을
+          확인할 수 있습니다.
+        </p>
+      </div>
+      <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
+
+      {/* 🔍 검색 기능 추가 */}
+      <div className='mb-4 flex flex-col sm:flex-row gap-4 items-center'>
+        <select
+          value={searchType}
+          onChange={(e) => setSearchType(e.target.value)}
+          className='border border-gray-300 rounded-md px-3 py-2 w-48'
+        >
+          <option value='companyName'>회사 이름</option>
+          <option value='representativeEmail'>대표 이메일</option>
+        </select>
+
+        <input
+          type='text'
+          placeholder='검색어 입력'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          className='border border-gray-300 rounded-md px-3 py-2 w-80'
+        />
+        <button onClick={handleSearch} className='bg-blue-500 text-white px-4 py-2 rounded-md'>
+          검색
+        </button>
       </div>
 
-      {/* 검색 결과 트리 */}
-      <div className='border p-4 rounded-md bg-gray-50'>
-        <h2 className='text-lg font-semibold mb-4'>검색 결과</h2>
-        {filteredTree.length > 0 ? (
-          renderTree(filteredTree)
-        ) : (
-          <p className='text-gray-500'>검색 결과가 없습니다.</p>
-        )}
-      </div>
+      {loading ? (
+        <p className='text-center text-gray-500'>데이터 로딩 중...</p>
+      ) : error ? (
+        <p className='text-center text-red-500'>데이터를 불러오는 중 오류가 발생했습니다.</p>
+      ) : displayedData.length === 0 ? (
+        <p className='text-center text-gray-500'>조회 결과가 존재하지 않습니다.</p>
+      ) : (
+        <div className='ml-4 border-l-2 border-gray-300 pl-4'>
+          {displayedData.map((company, index) => (
+            <div key={company.companyNo} className='mb-6'>
+              <div className='bg-gray-100 p-4 rounded-lg shadow-md'>
+                <p className='text-lg font-bold text-blue-700'>{company.companyName}</p>
+                <p className='text-sm text-gray-600'>
+                  대표 판매자: {company.representativeSeller.name}
+                </p>
+                <p className='text-sm text-gray-600'>
+                  이메일: {company.representativeSeller.email}
+                </p>
+                <p className='text-sm text-gray-600'>
+                  승인 상태:{' '}
+                  {company.representativeSeller.approvalStatus === 'Y' ? '✅ 승인됨' : '⏳ 대기 중'}
+                </p>
+              </div>
+
+              {company.sellers.length > 1 && (
+                <div className='ml-6 border-l-2 border-gray-300 pl-4 mt-2'>
+                  {company.sellers
+                    .filter((seller) => seller.sellerNo !== company.representativeSeller.sellerNo)
+                    .map((seller) => (
+                      <div
+                        key={seller.sellerNo}
+                        className='bg-blue-50 p-3 rounded-lg mt-2 shadow-sm'
+                      >
+                        <p className='text-sm font-semibold'>{seller.name}</p>
+                        <p className='text-xs text-gray-500'>이메일: {seller.email}</p>
+                      </div>
+                    ))}
+                </div>
+              )}
+              {/* Intersection Observer 적용 (마지막 요소 감지) */}
+              {index === displayedData.length - 1 && <div ref={ref} className='h-10' />}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -202,7 +202,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/seller/company/register',
-        element: <Seller.RegisterCompany />, // ✅ Seller. 접두사 추가
+        element: <Seller.RegisterCompany />,
       },
 
       {
@@ -213,12 +213,16 @@ const router = createBrowserRouter([
           //회사등록관련
 
           {
-            path: 'company/append',
+            path: '/seller/company/append',
             element: <Seller.AppendAccount />, // ✅ Seller. 접두사 추가
           },
           {
             path: 'company/search',
             element: <Seller.SearchAccount />, // ✅ Seller. 접두사 추가
+          },
+          {
+            path: 'company/update',
+            element: <Seller.UpdateCompany />,
           },
           //상품 관리 관련
           {

@@ -13,6 +13,9 @@ import com.c108.springproject.review.repository.ReportCategoryRepository;
 import com.c108.springproject.review.repository.ReportRepository;
 import com.c108.springproject.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,8 +38,15 @@ public class ReportService {
 
     // 리뷰 신고하기
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ReportResDto createReport(Long reviewNo, ReportCreateReqDto request) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            String username = authentication.getName();
+
+            String checkReport = "USER " + username;
+
             // 리뷰 확인
             Review review = reviewRepository.findById(reviewNo)
                     .orElseThrow(() -> new BobIssueException(ResponseCode.REVIEW_NOT_FOUND));
@@ -46,7 +56,7 @@ public class ReportService {
                     .orElseThrow(() -> new BobIssueException(ResponseCode.CATEGORY_NOT_FOUND));
 
             // 이미 동일한 사용자가 해당 리뷰를 신고했는지 확인
-            if (reportRepository.existsByReviewAndCreatedUser(review, request.getCreatedUser())) {
+            if (reportRepository.existsByReviewAndCreatedUser(review, checkReport)) {
                 throw new BobIssueException(ResponseCode.ALREADY_REPORTED);
             }
 
@@ -65,6 +75,13 @@ public class ReportService {
             report.setUpdatedUser(request.getCreatedUser());
 
             Report savedReport = reportRepository.save(report);
+
+            long reportCount = reportRepository.countByReview(review);
+
+            if (reportCount >= 5) {
+                review.delete();
+            }
+
             return ReportResDto.toDto(savedReport);
         } catch (BobIssueException e) {
             throw e;
@@ -74,8 +91,8 @@ public class ReportService {
     }
 
     // 신고 상태 변경 (관리자 전용)
-
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ReportResDto updateReportStatus(Long reportNo, ReportUpdateReqDto request) {
         try {
             Report report = reportRepository.findById(reportNo)
@@ -98,6 +115,7 @@ public class ReportService {
 
     // 신고 목록 조회 (관리자 전용)
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public List<ReportListResDto> getReportsByStatus(String status) {
         try {
             // 상태값이 지정된 경우에만 검증
@@ -121,6 +139,7 @@ public class ReportService {
 
     // 신고 상태 조회
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ReportResDto getReport(Long reportNo) {
         Report report = reportRepository.findById(reportNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.REPORT_NOT_FOUND));
@@ -130,7 +149,6 @@ public class ReportService {
 
 
     // 신고 생성 요청 데이터 검증
-
     private void validateReportCreateRequest(ReportCreateReqDto request) {
         if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
             throw new BobIssueException(ResponseCode.INVALID_REPORT_TITLE);
