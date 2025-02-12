@@ -332,10 +332,10 @@ public class ItemService {
     }
 
 
-    public List<ItemSearchListResDto> searItems(String search) {
-        List<Item> items= itemRepository.searchItems(search);
-
-        return items.stream().map(ItemSearchListResDto::toDto).collect(Collectors.toList());
-    }
+//    public List<ItemSearchListResDto> searchItems(String search) {
+//        List<Item> items= itemRepository.searchItems(search);
+//
+//        return items.stream().map(ItemSearchListResDto::toDto).collect(Collectors.toList());
+//    }
 
 }

@@ -233,7 +233,7 @@ public enum ResponseCode {
     FAILED_DELETE_COMPANY("FAILED_DELETE_COMPANY", "회사 삭제 실패"),
     FAILED_UPDATE_COMPANY("FAILED_UPDATE_COMPANY", "회사 수정 실패"),
     SUCCESS_SEARCH("SUCCESS_SEARCH", "검색 완료"),
-
+    NOT_FOUND_ITEM_CATEGORY("NOT_FOUND_ITEM_CATEGORY", "카테고리 조회 실패"),
     ;
 
 
