@@ -110,7 +110,7 @@ const Dashboard = () => {
             <h3 className='text-lg font-semibold'>{item.title}</h3>
             <p className='text-sm text-gray-600'>{item.description}</p>
             <Link to={item.link} className='mt-4'>
-              <button className='bg-rosegold-500 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
+              <button className='bg-amber-400 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
                 {item.title} 보기
               </button>
             </Link>
