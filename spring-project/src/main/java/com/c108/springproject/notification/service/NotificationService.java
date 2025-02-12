@@ -1,5 +1,7 @@
 package com.c108.springproject.notification.service;
 
+import com.c108.springproject.admin.domain.Admin;
+import com.c108.springproject.admin.repository.AdminRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.notification.domain.Notification;
@@ -8,6 +10,8 @@ import com.c108.springproject.notification.dto.request.NotificationReqDto;
 import com.c108.springproject.notification.dto.response.NotificationResDto;
 import com.c108.springproject.notification.repository.NotificationRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,16 +21,21 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final AdminRepository adminRepository;
 
-    public NotificationService(NotificationRepository notificationRepository) {
+    public NotificationService(NotificationRepository notificationRepository, AdminRepository adminRepository) {
         this.notificationRepository = notificationRepository;
+        this.adminRepository = adminRepository;
     }
 
     @Transactional
     public Notification createNotification(NotificationReqDto notificationReqDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String id = authentication.getName();
+        Admin admin= adminRepository.findByAdminId(id).orElseThrow(() -> new BobIssueException(ResponseCode.ADMIN_NOT_FOUND));
         try {
             Notification new_notification = Notification.builder()
-                    .adminNo(1)
+                    .admin(admin)
                     .title(notificationReqDto.getTitle())
                     .content(notificationReqDto.getContent())
                     .reader(NotificationRead.valueOf(notificationReqDto.getReader()))

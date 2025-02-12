@@ -3,6 +3,8 @@ package com.c108.springproject.question.service;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.s3.S3Service;
+import com.c108.springproject.item.domain.Item;
+import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.question.domain.Question;
 import com.c108.springproject.question.domain.QuestionCategory;
 import com.c108.springproject.question.domain.QuestionImage;
@@ -24,20 +26,23 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final S3Service s3Service;
+    private final ItemRepository itemRepository;
 
-    public QuestionService(QuestionRepository questionRepository, S3Service s3Service) {
+    public QuestionService(QuestionRepository questionRepository, S3Service s3Service, ItemRepository itemRepository) {
         this.questionRepository = questionRepository;
         this.s3Service = s3Service;
+        this.itemRepository = itemRepository;
     }
 
     @Transactional
     public Question createQuestion(QuestionReqDto questionReqDto, List<MultipartFile> files) {
+        Item item = itemRepository.findById(questionReqDto.getItemNo()).orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
         try {
             QuestionCategory category = QuestionCategory.valueOf(questionReqDto.getCategory());
             // 문의 생성
             Question new_question = Question.builder()
                     .title(questionReqDto.getTitle())
-                    .itemNo(questionReqDto.getItemNo()) // 아이템 번호가 0이면 기타 문의
+                    .item(item) // 아이템 번호가 0이면 기타 문의
                     .content(questionReqDto.getContent())
                     .category(category)
                     .isPrivate(questionReqDto.getIsPrivate())

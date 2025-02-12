@@ -1,5 +1,6 @@
 package com.c108.springproject.order.domain;
 
+import com.c108.springproject.address.domain.Address;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.user.domain.User;
 import jakarta.persistence.*;
@@ -24,8 +25,9 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private int addressNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_no", nullable = false)
+    private Address address;
 
     @Column(nullable = true)
     private Long userCouponNo;

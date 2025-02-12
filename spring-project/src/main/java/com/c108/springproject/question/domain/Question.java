@@ -1,7 +1,9 @@
 package com.c108.springproject.question.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.question.dto.request.QuestionUpdateReqDto;
+import com.c108.springproject.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,13 +38,9 @@ public class Question extends BaseEntity implements Serializable {
 //    @JoinColumn(name = "image_no", nullable = false)
 //    private Image imageNo;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "item_no", nullable = false)
-//    private Item itemNo;
-
-    // null 이면 기타 문의
-    @Column(nullable = false)
-    private int itemNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_no", nullable = false)
+    private Item item;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -51,11 +49,9 @@ public class Question extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String isPrivate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User userNo;
-    @Column(nullable = false)
-    private int userNo;
+    @ManyToOne
+    @JoinColumn(name = "user_no", nullable = false)
+    private User user;
 
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
