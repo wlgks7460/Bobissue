@@ -26,7 +26,7 @@ public class Cast extends BaseEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_no", nullable = false)
-    private Seller sellerNo;
+    private Seller seller;
 
     @Column(nullable = false)
     private String title;

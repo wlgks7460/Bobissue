@@ -1,5 +1,6 @@
 package com.c108.springproject.notification.domain;
 
+import com.c108.springproject.admin.domain.Admin;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.notification.dto.request.NotificationReqDto;
 import jakarta.persistence.*;
@@ -21,10 +22,9 @@ public class Notification extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int noticeNo;
 
-//    @ManyToOne
-//    @J
-    @Column(nullable = false)
-    private int adminNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_no", nullable = false)
+    private Admin admin;
 
     @Column(nullable = false)
     private String title;

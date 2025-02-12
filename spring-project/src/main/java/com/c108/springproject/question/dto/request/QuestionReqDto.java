@@ -19,7 +19,5 @@ public class QuestionReqDto {
     private int itemNo;
     private String isPrivate;
 //    private User userNo;
-//    private User userNo;
-//    private User userNo;
 
 }

@@ -25,7 +25,7 @@ public class AnswerResDto {
         return AnswerResDto.builder()
                 .answerNo(answer.getAnswerNo())
                 .content(answer.getContent())
-                .sellerNo(answer.getSellerNo())
+                .sellerNo(answer.getSeller().getSellerNo())
                 .questionNo(answer.getQuestionNo().getQuestionNo())
                 .status(answer.getStatus())
                 .createAt(answer.getCreatedAt())

@@ -3,6 +3,7 @@ package com.c108.springproject.review.service;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.s3.S3Service;
+import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemImage;
 import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.review.domain.Report;
@@ -58,8 +59,9 @@ public class ReviewService {
             throw new BobIssueException(ResponseCode.INVALID_RATING);
         }
 
+        Item item=itemRepository.findById(request.getItemNo()).orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
         Review review = Review.builder()
-                .itemNo(request.getItemNo())
+                .item(item)
 //                .imageNo(request.getImageNo())
                 .content(request.getContent())
                 .rating(request.getRating())
