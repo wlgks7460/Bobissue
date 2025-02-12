@@ -56,7 +56,7 @@ public class Cast extends BaseEntity implements Serializable {
         this.endAt = castReqDto.getEndAt();
     }
 
-    public void registerCast(){
+    public void acceptCast(){
         this.castStatus = CastStatus.AWAIT;
     }
 

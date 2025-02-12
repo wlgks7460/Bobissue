@@ -207,7 +207,7 @@ public class CastService {
 
     @Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public int registerCast(int cast_no){
+    public int acceptCast(int cast_no){
         Cast cast = castRepository.findByCastNo(cast_no).orElseThrow(()-> new BobIssueException(ResponseCode.CAST_NOT_FOUND));
         if(cast.getCastStatus().equals(CastStatus.AWAIT)){
             throw new BobIssueException(ResponseCode.ALREADY_APPROVED_CAST);
@@ -222,10 +222,10 @@ public class CastService {
         }
 
         try{
-            cast.registerCast();
+            cast.acceptCast();
             return cast.getCastNo();
         }catch (Exception e){
-            throw new BobIssueException(ResponseCode.FAILED_REGISTER_CAST);
+            throw new BobIssueException(ResponseCode.FAILED_ACCEPT_CAST);
         }
     }
 
