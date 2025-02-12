@@ -36,8 +36,8 @@ const Notices = () => {
   return (
     <div className='w-full max-w-[1100px] mx-auto'>
       {/* 제목 */}
-      <div className='mb-6 text-center'>
-        <h1 className='text-2xl font-bold text-gray-900'>공지사항</h1>
+      <div className='mb-6 p-4 text-center'>
+        <h1 className='text-[28px] font-bold text-gray-900'>공지사항</h1>
         <p className='text-sm text-gray-600'>중요한 공지사항을 확인하세요.</p>
       </div>
 
@@ -57,13 +57,13 @@ const Notices = () => {
       </div>
 
       {/* 공지사항 리스트 */}
-      <div className='bg-white shadow-md rounded-lg overflow-hidden'>
+      <div className='bg-white rounded-[10px] overflow-hidden'>
         <table className='w-full text-sm text-gray-700'>
           <thead className='bg-gray-100'>
             <tr className='text-left'>
               <th className='px-4 py-3 w-12 text-center'>번호</th>
               <th className='px-4 py-3 w-24 text-center'>분류</th>
-              <th className='px-4 py-3'>제목</th>
+              <th className='px-4 py-3 text-center'>제목</th>
               <th className='px-4 py-3 w-20 text-center'>작성자</th>
               <th className='px-4 py-3 w-28 text-center'>작성일</th>
             </tr>

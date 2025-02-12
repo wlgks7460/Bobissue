@@ -7,10 +7,11 @@ const Search = () => {
   const navigate = useNavigate()
   const [allProducts, setAllProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
-  const debug_mode = localStorage.getItem('debug_mode')
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
   useEffect(() => {
     if (debug_mode) {
+      console.log('debug')
       return
     }
     const fetchAllProducts = async () => {
