@@ -18,6 +18,7 @@ public class RecipeCreateResDto {
     private int categoryNo;
     private String categoryName;
     private String name;
+    private String description;
     private int time;
     private List<MaterialResDto> materials;
     private String createdAt;
@@ -36,6 +37,7 @@ public class RecipeCreateResDto {
                 .categoryName(recipe.getCategory().getName())
                 .name(recipe.getName())
                 .time(recipe.getTime())
+                .description(recipe.getDescription())
                 .materials(recipe.getMaterials().stream()
                         .map(MaterialResDto::toDto)
                         .collect(Collectors.toList()))

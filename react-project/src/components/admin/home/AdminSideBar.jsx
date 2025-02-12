@@ -94,7 +94,7 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/members/level')}
                       className='cursor-pointer p-2 hover:bg-gray-100'
                     >
-                      회원 레벨 관리
+                      회원 레벨관리
                     </div>
                     <div
                       onClick={() => navigate('/admin/members/register')}
@@ -112,7 +112,7 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/members/email')}
                       className='cursor-pointer p-2 hover:bg-gray-100'
                     >
-                      회원 일괄메일발송
+                      회원 메일발송
                     </div>
                   </div>
                 )}
