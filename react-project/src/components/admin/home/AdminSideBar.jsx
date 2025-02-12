@@ -384,13 +384,19 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/live/management')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      라이브관리 (신청/일정)
+                      라이브 신청관리
+                    </div>{' '}
+                    <div
+                      onClick={() => navigate('/admin/live/calender')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      라이브 일정관리
                     </div>
                     <div
                       onClick={() => navigate('/admin/live/notice')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      라이브공지관리
+                      라이브 공지관리
                     </div>
                   </div>
                 )}
