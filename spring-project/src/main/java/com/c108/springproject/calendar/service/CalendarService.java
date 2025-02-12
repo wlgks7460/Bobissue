@@ -80,7 +80,7 @@ public class CalendarService {
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public List<MealResDto> findAllMealByDay(int userNo, String eatDate) {
         try {
-            List<Calendar> meals = calendarRepository.findMealsByUserUserNoAndEatDateAndDelYn(userNo, eatDate, "N");
+            List<Calendar> meals = calendarRepository.findMealsByDay(userNo, eatDate);
 
             return meals.stream()
                     .map(meal -> MealResDto.builder()
@@ -101,8 +101,8 @@ public class CalendarService {
         Calendar meal = calendarRepository.findById((int) calendarNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_CALENDAL));
         try {
-
             meal= Calendar.builder()
+                    .calendarNo(calendarNo)
                     .name(mealReqDto.getName())                // 새로운 이름으로 업데이트
                     .eatDate(meal.getEatDate()+" "+mealReqDto.getEatTime())        // 기존 eatDate 유지
                     .calorie(mealReqDto.getCalorie())          // 새로운 칼로리로 업데이트

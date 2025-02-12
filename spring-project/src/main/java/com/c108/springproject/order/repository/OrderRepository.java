@@ -16,7 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT SUM(o.totalPrice) " +
             "FROM Order o " +
-            "WHERE o.userNo = :userNo " +
+            "WHERE o.user.userNo = :userNo " +
             "AND o.orderCategoryNo = 2 " +
             "AND o.createdAt BETWEEN :startDate AND :endDate")
     Integer getTotalPriceByUserForMonth(@Param("userNo") int userNo,
