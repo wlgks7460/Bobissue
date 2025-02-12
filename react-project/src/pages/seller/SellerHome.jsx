@@ -10,7 +10,7 @@ const SellerMainPage = () => {
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const debug_mode = true // ✅ 디버그 모드 설정
+  const debug_mode = false // ✅ 디버그 모드 설정
 
   const [menuState, setMenuState] = useState({
     product: false,
