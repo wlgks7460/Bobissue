@@ -97,7 +97,7 @@ public class ReviewService {
         itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
-        return reviewRepository.findByItemNoAndDelYn(itemNo, "N").stream()
+        return reviewRepository.findByItemItemNoAndDelYn(itemNo, "N").stream()
                 .map(review -> {
                     User user = userRepository.findByEmail(review.extractEmail())
                             .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
