@@ -24,7 +24,7 @@ public class NotificationResDto {
                 .noticeNo(notification.getNoticeNo())
                 .title(notification.getTitle())
                 .content(notification.getContent())
-                .adminNo(notification.getAdminNo())
+                .adminNo(notification.getAdmin().getAdminNo())
                 .reader(String.valueOf(notification.getReader()))
                 .createAt(notification.getCreatedAt())
                 .createdUser(notification.getCreatedUser())

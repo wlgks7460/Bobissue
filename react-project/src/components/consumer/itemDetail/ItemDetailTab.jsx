@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import ItemDetailDescription from './itemDetailDescription'
+import ItemDetailDescription from './ItemDetailDescription'
 import ItemDetailReview from './ItemDetailReview'
 import ItemDetailQuestion from './ItemDetailQuestion'
 

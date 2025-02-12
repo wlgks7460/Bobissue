@@ -30,8 +30,8 @@ public class OrderUpdateResDto {
     public static OrderUpdateResDto toDto(Order order, String orderStatus, String deliveryStatus) {
         return OrderUpdateResDto.builder()
                 .orderNo(order.getOrderNo())
-                .userNo(order.getUserNo())
-                .addressNo(order.getAddressNo())
+                .userNo(order.getUser().getUserNo())
+                .addressNo(order.getAddress().getAddressNo())
                 .userCouponNo(order.getUserCouponNo())
                 .payment(order.getPayment())
                 .totalPrice(order.getTotalPrice())

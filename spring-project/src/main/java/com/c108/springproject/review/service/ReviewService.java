@@ -3,6 +3,7 @@ package com.c108.springproject.review.service;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.s3.S3Service;
+import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemImage;
 import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.review.domain.Report;
@@ -72,8 +73,10 @@ public class ReviewService {
             throw new BobIssueException(ResponseCode.INVALID_RATING);
         }
 
+        Item item=itemRepository.findById(itemNo).orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+
         Review review = Review.builder()
-                .itemNo(itemNo)
+                .item(item)
 //                .imageNo(request.getImageNo())
                 .content(request.getContent())
                 .rating(request.getRating())
@@ -92,7 +95,7 @@ public class ReviewService {
                 review.getImages().add(reviewImage);
             }
         }
-        
+
 //        review.setCreatedUser(request.getCreatedUser());
 //        review.setUpdatedUser(request.getCreatedUser());
 
@@ -112,6 +115,8 @@ public class ReviewService {
         itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
+         return reviewRepository.findByItemItemNoAndDelYn(itemNo, "N").stream()
+
 //        if (isAdmin) {
 //            // 관리자는 모든 리뷰(삭제된 리뷰 포함) 조회
 //            return reviewRepository.findByItemNo(itemNo).stream()
@@ -124,7 +129,7 @@ public class ReviewService {
 //        }
 
 
-        return reviewRepository.findByItemNoAndDelYn(itemNo, "N").stream()
+//        return reviewRepository.findByItemNoAndDelYn(itemNo, "N").stream()
                 .map(review -> {
                     User user = userRepository.findByEmail(review.extractEmail())
                             .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));

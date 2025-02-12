@@ -1,5 +1,7 @@
 package com.c108.springproject.order.service;
 
+import com.c108.springproject.address.domain.Address;
+import com.c108.springproject.address.repository.AddressRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.item.domain.Item;
@@ -19,6 +21,8 @@ import com.c108.springproject.order.repository.DeliveryStatusRepository;
 import com.c108.springproject.order.repository.OrderDetailRepository;
 import com.c108.springproject.order.repository.OrderRepository;
 import com.c108.springproject.order.repository.OrderStatusRepository;
+import com.c108.springproject.user.domain.User;
+import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +36,24 @@ public class OrderService {
     private final ItemRepository itemRepository;
     private final OrderStatusRepository orderStatusRepository;
     private final DeliveryStatusRepository deliveryStatusRepository;
+    private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
 
-    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ItemRepository itemRepository, OrderStatusRepository orderStatusRepository, DeliveryStatusRepository deliveryStatusRepository) {
+    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ItemRepository itemRepository, OrderStatusRepository orderStatusRepository, DeliveryStatusRepository deliveryStatusRepository, UserRepository userRepository, AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
         this.itemRepository = itemRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.deliveryStatusRepository = deliveryStatusRepository;
+        this.userRepository = userRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Transactional
     public OrderCreateResDto createOrder(OrderCreateReqDto request) {
+        User user = userRepository.findById(request.getUserNo()).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+        Address address = addressRepository.findById(request.getAddressNo()).orElseThrow(()-> new BobIssueException(ResponseCode.FAILED_FIND_CALENDAR));
         try {
             // 1. 주문할 상품들의 재고 확인
             validateItems(request.getItems());
@@ -53,8 +63,8 @@ public class OrderService {
 
             // 3. 주문 기본 정보 생성
             Order order = Order.builder()
-                    .userNo(request.getUserNo())
-                    .addressNo(request.getAddressNo())
+                    .user(user)
+                    .address(address)
                     .userCouponNo(request.getUserCouponNo())
                     .payment(request.getPayment())
                     .requests(request.getRequests())

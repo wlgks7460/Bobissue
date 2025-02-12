@@ -1,7 +1,9 @@
 package com.c108.springproject.review.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.domain.ItemImage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +24,10 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long reviewNo;
 
-    @Column(nullable = false)
-    private int itemNo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_no", nullable = false)
+    @JsonIgnore
+    private Item item;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default // 이거 Builder 통해서 객체를 생성할 때는 images 리스트 초기화 안된대영

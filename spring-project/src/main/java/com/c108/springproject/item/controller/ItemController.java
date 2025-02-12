@@ -6,10 +6,8 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
-import com.c108.springproject.item.dto.response.ItemCreateResDto;
-import com.c108.springproject.item.dto.response.ItemListResDto;
-import com.c108.springproject.item.dto.response.ItemResDto;
-import com.c108.springproject.item.dto.response.ItemUpdateResDto;
+import com.c108.springproject.item.dto.request.SearchReqDto;
+import com.c108.springproject.item.dto.response.*;
 import com.c108.springproject.item.service.ItemService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -112,7 +110,7 @@ public class ItemController {
             }
         }
     }
-    
+
     // 상품 삭제
     @DeleteMapping("/{itemNo}")
     public ResponseDto deleteItem(@PathVariable int itemNo) {
@@ -166,10 +164,9 @@ public class ItemController {
         }
     }
 
-//    @GetMapping("/search/{search}")
-//    public ResponseDto searchItems(@PathVariable String search) {
-//        itemService.searItems(search);
-//        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<>());
-//
-//    }
+    @GetMapping("/search")
+    public ResponseDto searchItems(@RequestBody SearchReqDto reqDto) {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<SearchResDto>(itemService.searchItems(reqDto)));
+    }
+
 }

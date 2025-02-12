@@ -52,7 +52,7 @@ public class CastService {
         Seller seller = sellerRepository.findByEmail(authentication.getName()).orElseThrow(()-> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
         try{
             Cast new_cast = Cast.builder()
-                    .sellerNo(seller)
+                    .seller(seller)
                     .title(castReqDto.getTitle())
                     .content(castReqDto.getContent())
                     .startAt(castReqDto.getStartAt())

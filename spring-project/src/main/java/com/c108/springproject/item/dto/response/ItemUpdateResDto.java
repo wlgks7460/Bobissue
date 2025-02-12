@@ -33,14 +33,14 @@ public class ItemUpdateResDto {
         return ItemUpdateResDto.builder()
                 .itemNo(item.getItemNo())
                 .category(ItemCategoryResDto.builder()
-                        .categoryNo(item.getCategoryNo().getCategoryNo())
-                        .name(item.getCategoryNo().getName())
-                        .parentNo(item.getCategoryNo().getParent() != null ?
-                                item.getCategoryNo().getParent().getCategoryNo() : null)
-                        .parentName(item.getCategoryNo().getParent() != null ?
-                                item.getCategoryNo().getParent().getName() : null)
-                        .createdAt(item.getCategoryNo().getCreatedAt())
-                        .updatedAt(item.getCategoryNo().getUpdatedAt())
+                        .categoryNo(item.getCategory().getCategoryNo())
+                        .name(item.getCategory().getName())
+                        .parentNo(item.getCategory().getParent() != null ?
+                                item.getCategory().getParent().getCategoryNo() : null)
+                        .parentName(item.getCategory().getParent() != null ?
+                                item.getCategory().getParent().getName() : null)
+                        .createdAt(item.getCategory().getCreatedAt())
+                        .updatedAt(item.getCategory().getUpdatedAt())
                         .build())
                 .images(item.getImages().stream()
                         .map(image -> ImageDto.toDto(image))
