@@ -65,6 +65,8 @@ import LiveOnAirPage from '../pages/admin/live/LiveOnAirPage'
 import LiveEndedPage from '../pages/admin/live/LiveEndedPage'
 import ViwerMangagementPage from '../pages/admin/live/ViewerManagementPage'
 import LiveCalenderPage from '../pages/admin/live/LiveCalenderPage'
+import LiveRegisterDetailPage from '../pages/admin/live/LiveRegisterDetailPage'
+
 // (관리자) 컨텐츠관리
 import CouponIssuePage from '../pages/admin/coupon/CouponIssuePage'
 import CouponStatusPage from '../pages/admin/coupon/CouponStatusPage'
@@ -518,11 +520,20 @@ const router = createBrowserRouter([
             path: 'live',
             children: [
               {
-                path: 'management', // 라이브 신청 수리 페이지
-                element: <LiveManagementPage />,
+                path: 'register', // 라이브 신청 수리 페이지
+                children: [
+                  {
+                    path: '',
+                    element: <LiveManagementPage />,
+                  },
+                  {
+                    path: ':castNo',
+                    element: <LiveRegisterDetailPage />,
+                  },
+                ],
               },
               {
-                path: 'calender',
+                path: 'calender', // 라이브 일정 관리 페이지
                 element: <LiveCalenderPage />,
               },
               {

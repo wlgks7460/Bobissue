@@ -381,22 +381,22 @@ const AdminSideBar = () => {
                 {subOpen === 7 && (
                   <div className='pl-4 py-1 space-y-2'>
                     <div
-                      onClick={() => navigate('/admin/live/management')}
+                      onClick={() => navigate('/admin/live/register')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      라이브 신청관리
+                      라이브커머스 신청관리
                     </div>{' '}
                     <div
                       onClick={() => navigate('/admin/live/calender')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      라이브 일정관리
+                      라이브커머스 일정관리
                     </div>
                     <div
                       onClick={() => navigate('/admin/live/notice')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      라이브 공지관리
+                      라이브커머스 공지관리
                     </div>
                   </div>
                 )}
