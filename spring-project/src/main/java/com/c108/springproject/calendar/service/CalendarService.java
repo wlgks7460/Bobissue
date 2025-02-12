@@ -80,7 +80,7 @@ public class CalendarService {
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public List<MealResDto> findAllMealByDay(int userNo, String eatDate) {
         try {
-            List<Calendar> meals = calendarRepository.findMealsByUserUserNoAndEatDateAndDelYn(userNo, eatDate, "N");
+            List<Calendar> meals = calendarRepository.findMealsByDay(userNo, eatDate);
 
             return meals.stream()
                     .map(meal -> MealResDto.builder()
