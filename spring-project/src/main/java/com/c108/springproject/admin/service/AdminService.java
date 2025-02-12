@@ -13,6 +13,7 @@ import com.c108.springproject.seller.dto.response.CompanyResDto;
 import com.c108.springproject.seller.dto.response.SellerResDto;
 import com.c108.springproject.seller.repository.CompanyRepository;
 import com.c108.springproject.seller.repository.SellerRepository;
+import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -36,23 +37,43 @@ public class AdminService {
         this.companyRepository = companyRepository;
     }
 
+    // 관리자 조회
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public List<AdminResDto> findAdminList() {
-        return adminRepository.findAll().stream()
-                .map(AdminResDto::new)
-                .collect(Collectors.toList());
+        try {
+            return adminRepository.findAll().stream()
+                    .map(AdminResDto::new)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.ADMIN_NOT_FOUND);
+        }
     }
 
+    // 사용자 활성화 상태 변경
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public String changeUserStatus(int userNo) {
-        userRepository.changeUserStatus(userNo);
-        return userRepository.findUserStatus(userNo);
+        User user =userRepository.findById(userNo).orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_USER));
+        try {
+            user.setStatus();
+            return user.getStatus();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_CHANGE_USER_STATUS);
+        }
     }
 
+    // 판매자 활성화 상태 변경
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public String changeSellerStatus(int sellerNo) {
-        sellerRepository.changeSellerStatus(sellerNo);
-        return sellerRepository.findSellerStatus(sellerNo);
+        Seller seller = sellerRepository.findById(sellerNo).orElseThrow(()-> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+        try {
+            seller.setStatus();
+            return seller.getStatus();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_CHANGE_SELLER_STATUS);
+        }
     }
 
     // 회사 삭제
@@ -61,6 +82,7 @@ public class AdminService {
     public void deleteCompany(int companyNo) {
         Company company = companyRepository.findByCompanyNo(companyNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.COMPANY_NOT_FOUND));
+
         company.delete();
     }
 
@@ -73,11 +95,16 @@ public class AdminService {
 
         company.updateCompanyByAdmin(companyUpdateAdminReqDto);
 
-        List<Seller> sellers = sellerRepository.findByCompanyCompanyNo(companyNo);
-        List<SellerResDto> sellerResDtos = sellers.stream()
-                .map(SellerResDto::toDto)
-                .collect(Collectors.toList());
-        return CompanyResDto.toDto(company, sellerResDtos);
+        try {
+            List<Seller> sellers = sellerRepository.findByCompanyCompanyNo(companyNo);
+            List<SellerResDto> sellerResDtos = sellers.stream()
+                    .map(SellerResDto::toDto)
+                    .collect(Collectors.toList());
+            return CompanyResDto.toDto(company, sellerResDtos);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_UPDATE_COMPANY);
+        }
+
     }
 
 
@@ -113,12 +140,15 @@ public class AdminService {
         Seller seller = sellerRepository.findById(sellerNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
 
-        // Seller 엔티티의 메서드
-        seller.updateApprovalStatus();
+        try {
+            // Seller 엔티티의 메서드
+            seller.updateApprovalStatus();
 
-        sellerRepository.save(seller);
-        return seller.getApprovalStatus();
-
+            sellerRepository.save(seller);
+            return seller.getApprovalStatus();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_APPROVAL_SELL);
+        }
     }
     
     // 승인 상태와 함께 회사별 판매자 조회
@@ -127,11 +157,15 @@ public class AdminService {
     public List<SellerApprovalListDto> getSellerApprovalsByCompany() {
         List<Company> companies = companyRepository.findAll();
 
-        return companies.stream()
-                .map(company -> {
-                    List<Seller> sellers = sellerRepository.findByCompanyCompanyNo(company.getCompanyNo());
-                    return SellerApprovalListDto.toDto(company, sellers);
-                })
-                .collect(Collectors.toList());
+        try {
+            return companies.stream()
+                    .map(company -> {
+                        List<Seller> sellers = sellerRepository.findByCompanyCompanyNo(company.getCompanyNo());
+                        return SellerApprovalListDto.toDto(company, sellers);
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_APPROVAL_BY_COMPANY);
+        }
     }
 }

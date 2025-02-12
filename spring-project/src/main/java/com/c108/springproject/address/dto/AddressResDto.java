@@ -1,6 +1,7 @@
 package com.c108.springproject.address.dto;
 
 import com.c108.springproject.address.domain.Address;
+import com.c108.springproject.user.domain.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import lombok.Data;
 public class AddressResDto {
 
     private int addressNo;
-    private int userNo;
+    private User user;
     private String postalCode;
     private String address;
     private String addressDetail;
@@ -18,7 +19,7 @@ public class AddressResDto {
     public static AddressResDto toDto(Address address) {
         AddressResDto addressResDto = AddressResDto.builder()
                 .addressNo(address.getAddressNo())
-                .userNo(address.getUserNo())
+                .user(address.getUser())
                 .postalCode(address.getPostalCode())
                 .address(address.getAddress())
                 .addressDetail(address.getAddressDetail())

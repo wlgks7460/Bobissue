@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserUpdateReqDto {
     private String name;
-    private String email;
     private float height;
     private float weight;
     private String phoneNumber;

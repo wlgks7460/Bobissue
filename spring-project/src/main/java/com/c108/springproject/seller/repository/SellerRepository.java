@@ -12,16 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Integer> {
-    @Query("SELECT s FROM Seller s WHERE s.delYn = 'N'")
-    List<Seller> findAllActiveSellers();
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Seller s SET s.status = CASE WHEN s.status = 'Y' THEN 'N' ELSE 'Y' END WHERE s.sellerNo = :sellerNo")
-    void changeSellerStatus(int sellerNo);
-
-    @Query("SELECT s.status FROM Seller s WHERE s.sellerNo = :sellerNo")
-    String findSellerStatus(int sellerNo);
+    List<Seller> findSellersByDelYn(String delYn);
 
     Optional<Seller> findBySellerNo(int sellerNo);
     Optional<Seller> findByEmail(String email);

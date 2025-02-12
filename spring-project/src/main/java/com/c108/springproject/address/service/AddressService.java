@@ -9,10 +9,10 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AddressService {
@@ -26,17 +26,19 @@ public class AddressService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public Address createAddress(AddressReqDto addressReqDto) {
+        User user = userRepository.findById(addressReqDto.getUserNo()).orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_USER));
         try {
             Address new_address = Address.builder()
-                    .userNo(addressReqDto.getUserNo())
+                    .user(user)
                     .postalCode(addressReqDto.getPostalCode())
                     .address(addressReqDto.getAddress())
                     .addressDetail(addressReqDto.getAddressDetail())
                     .name(addressReqDto.getName())
                     .build();
             return addressRepository.save(new_address);
-        } catch (BobIssueException e) {
+        } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_CREATE_ADDRESS);
         }
     }
@@ -44,54 +46,60 @@ public class AddressService {
     @Transactional
     public List<Address> findAllAddress(int userNo) {
         try{
-            List<Address> addressList = addressRepository.findAllByUserNo(userNo);
+            List<Address> addressList = addressRepository.findAllByUserUserNoAndDelYn(userNo, "N");
             return addressList;
-        }catch (BobIssueException e){
+        }catch (Exception e){
             throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_ADDRESS);
         }
     }
 
     @Transactional
     public AddressResDto findAddressByNo(int addressNo) {
-        Address address = addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
+        Address address = addressRepository.findByAddressNoAndDelYn(addressNo, "N").orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
         return AddressResDto.toDto(address);
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public AddressResDto updateAddress(int addressNo, AddressReqDto addressReqDto) {
-        Address address=addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_UPDATE_ADDRESS));
+        Address address=addressRepository.findByAddressNoAndDelYn(addressNo, "N").orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_UPDATE_ADDRESS));
         address.changeAddressDetail(addressReqDto);
         return AddressResDto.toDto(address);
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public void deleteAddress(int addressNo) {
-        Address address = addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
+        Address address = addressRepository.findByAddressNoAndDelYn(addressNo, "N").orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
         try{
-            address.setDelYn("Y");
-        }catch (BobIssueException e){
+            address.delete();
+        }catch (Exception e){
             throw new BobIssueException(ResponseCode.FAILED_DELETE_ADDRESS);
         }
     }
 
+    // 기본 배송지 설정
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public AddressResDto setBaseAddress(int userNo, int addressNo) {
         try{
             User user = userRepository.findById(userNo).orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_USER));
             user.setBaseAddress(addressNo);
-        }catch(BobIssueException e){
+        }catch(Exception e){
             throw new BobIssueException(ResponseCode.FAILED_SET_BASE_ADDRESS);
         }
-        Address address = addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
+        Address address = addressRepository.findByAddressNoAndDelYn(addressNo, "N").orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
 
         return AddressResDto.toDto(address);
     }
 
+    // 기본 배송지 조회
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public AddressResDto getBaseAddress(int userNo) {
         User user = userRepository.findById(userNo).orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_USER));
         int addressNo = user.getBaseAddress();
-        Address address = addressRepository.findById(addressNo).orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
+        Address address = addressRepository.findByAddressNoAndDelYn(addressNo, "N").orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
 
         return AddressResDto.toDto(address);
     }
