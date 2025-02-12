@@ -48,7 +48,37 @@ const MyPageCalendarModal = ({
   }
 
   // 식단 데이터 수정
-  const updateData = (mealTitle, mealTime, mealCalories) => {}
+  const updateData = (mealTitle, mealTime, mealCalories, calendarNo) => {
+    const payload = {
+      name: mealTitle,
+      eatTime: mealTime.replace(':', '') + '00',
+      calorie: Number(mealCalories),
+    }
+    console.log(calendarNo)
+    API.put(`/calendar/${calendarNo}`, payload)
+      .then((res) => {
+        alert('수정되었습니다.')
+        console.log(res)
+        getDayData()
+        getCalendarData(currentYear, currentMonth)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 식단 데이터 삭제
+  const deleteData = (calendarNo) => {
+    API.delete(`/calendar/${calendarNo}`)
+      .then((res) => {
+        alert('삭제되었습니다.')
+        getDayData()
+        getCalendarData(currentYear, currentMonth)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   useEffect(() => {
     getDayData()
@@ -81,7 +111,12 @@ const MyPageCalendarModal = ({
                   <p className='text-center text-gray-500'>오늘의 식단이 없습니다.</p>
                 ) : (
                   todayMeal.map((meal) => (
-                    <MyPageCalendarModalItem key={meal.eatTime} meal={meal} />
+                    <MyPageCalendarModalItem
+                      key={meal.eatTime}
+                      meal={meal}
+                      updateData={updateData}
+                      deleteData={deleteData}
+                    />
                   ))
                 )}
               </div>

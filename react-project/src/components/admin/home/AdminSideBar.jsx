@@ -94,7 +94,7 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/members/level')}
                       className='cursor-pointer p-2 hover:bg-gray-100'
                     >
-                      회원 레벨 관리
+                      회원 레벨관리
                     </div>
                     <div
                       onClick={() => navigate('/admin/members/register')}
@@ -112,7 +112,7 @@ const AdminSideBar = () => {
                       onClick={() => navigate('/admin/members/email')}
                       className='cursor-pointer p-2 hover:bg-gray-100'
                     >
-                      회원 일괄메일발송
+                      회원 메일발송
                     </div>
                   </div>
                 )}
@@ -381,16 +381,22 @@ const AdminSideBar = () => {
                 {subOpen === 7 && (
                   <div className='pl-4 py-1 space-y-2'>
                     <div
-                      onClick={() => navigate('/admin/live/management')}
+                      onClick={() => navigate('/admin/live/register')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      라이브관리 (신청/일정)
+                      라이브커머스 신청관리
+                    </div>{' '}
+                    <div
+                      onClick={() => navigate('/admin/live/calender')}
+                      className='cursor-pointer p-2  hover:bg-gray-100'
+                    >
+                      라이브커머스 일정관리
                     </div>
                     <div
                       onClick={() => navigate('/admin/live/notice')}
                       className='cursor-pointer p-2  hover:bg-gray-100'
                     >
-                      라이브공지관리
+                      라이브커머스 공지관리
                     </div>
                   </div>
                 )}

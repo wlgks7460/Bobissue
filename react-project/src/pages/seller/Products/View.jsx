@@ -51,14 +51,11 @@ const View = () => {
     const isConfirmed = window.confirm(`'${product.name}' 상품을 삭제하시겠습니까?`)
     if (isConfirmed) {
       try {
-        const response = await API.post('/api/delete-request', {
-          productId: product.itemNo,
-          reason: '사용자 요청',
-        })
+        const response = await API.delete(`/item/${itemNo}`)
 
         if (response.status === 200) {
-          alert('삭제 요청이 관리자에게 전송되었습니다.')
-          navigate('/seller/products')
+          alert('상품이 삭제되었습니다.')
+          navigate('/seller/products/search')
         } else {
           alert('삭제 요청을 처리하는 데 실패했습니다. 다시 시도해주세요.')
         }

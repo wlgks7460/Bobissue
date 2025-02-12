@@ -47,8 +47,7 @@ public class RecipeController {
             RecipeCreateResDto recipeCreateResDto = recipeService.createRecipe(recipeCreateReqDto, images);
             return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_RECIPE, new DefaultResponse<>(recipeCreateResDto));
         } catch (BobIssueException e) {
-            e.printStackTrace();
-            throw e;
+            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
         } catch (Exception e) {
             try {
                 throw e;
@@ -79,7 +78,7 @@ public class RecipeController {
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_RECIPE, new DefaultResponse<>(recipeUpdateResDto));
         } catch (BobIssueException e) {
 //            System.out.println("Error in updateRecipe: " + e.getMessage());
-            throw e;
+            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
         } catch (Exception e) {
             try {
                 throw e;
@@ -94,10 +93,8 @@ public class RecipeController {
         try {
             List<RecipeListResDto> recipe = recipeService.findAllRecipe();
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_RECIPE, new DefaultResponse<>(recipe));
-        } catch (BobIssueException e) {
-            throw e;
         } catch (Exception e) {
-            throw e;
+            throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_RECIPE);
         }
     }
 
@@ -108,7 +105,7 @@ public class RecipeController {
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
-            throw e;
+            throw new BobIssueException(ResponseCode.FAILED_FIND_RECIPE);
         }
     }
 
@@ -121,7 +118,7 @@ public class RecipeController {
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
-            throw e;
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_RECIPE);
         }
     }
 
@@ -133,7 +130,7 @@ public class RecipeController {
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
-            throw e;
+            throw new BobIssueException(ResponseCode.FAILED_CREATE_LIKE);
         }
     }
 
@@ -146,7 +143,7 @@ public class RecipeController {
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
-            throw e;
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_LIKE);
         }
     }
 
@@ -159,7 +156,7 @@ public class RecipeController {
         } catch (BobIssueException e) {
             throw e;
         } catch (Exception e) {
-            throw e;
+            throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_LIKE);
         }
     }
 

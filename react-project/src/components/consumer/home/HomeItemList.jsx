@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ItemCard from '../common/ItemCard'
 import API from '../../../utils/API'
+import { Link } from 'react-router-dom'
 
 const HomeItemList = ({ category }) => {
   // 화면 감지 관련
@@ -48,7 +49,7 @@ const HomeItemList = ({ category }) => {
     <div className='w-[70rem]' ref={divRef}>
       <div className='flex justify-between mb-5'>
         <p className='text-xl'>{category.name}</p>
-        <button>+ 더보기</button>
+        <Link to={`/category/${category.categoryNo}`}>+ 더보기</Link>
       </div>
       <div className='grid grid-cols-4 gap-3'>
         {items.map((v) => (

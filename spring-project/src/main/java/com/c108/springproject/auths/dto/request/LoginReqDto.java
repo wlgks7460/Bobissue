@@ -19,7 +19,7 @@ public class LoginReqDto {
     public static LoginReqDto kakaoLogin(String email){
         return LoginReqDto.builder()
                 .email(email)
-                .password("kakao")
+                .password("kakaoLogin")
                 .isOAuth(true)
                 .build();
     }
