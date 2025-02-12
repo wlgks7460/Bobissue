@@ -20,7 +20,7 @@ public class MealImage extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long imageNo;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // 이거 OneToOne 이랑 OneToMany 연결되어서 빨간 줄
     @JoinColumn(name = "calendar_no")
     @JsonIgnore
     private Calendar calendar;
