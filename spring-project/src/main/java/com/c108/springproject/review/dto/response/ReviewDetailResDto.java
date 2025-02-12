@@ -29,7 +29,7 @@ public class ReviewDetailResDto {
     public static ReviewDetailResDto toDto(Review review) {
         return ReviewDetailResDto.builder()
                 .reviewNo(review.getReviewNo())
-                .itemNo(review.getItemNo())
+                .itemNo(review.getItem().getItemNo())
                 .images(review.getImages().stream()
                         .map(image -> ReviewImageDto.builder()
                                 .imageNo(image.getImageNo())

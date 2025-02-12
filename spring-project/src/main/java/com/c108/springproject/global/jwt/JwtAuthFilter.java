@@ -102,6 +102,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.info("Refresh Token 검증 완료");
             String newAccessToken = jwtTokenProvider.recreateAccessToken(oldAccessToken);
             User user = parseUserSpecification(newAccessToken);
+            System.out.println(user.getAuthorities());
             UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken.authenticated(user, newAccessToken, user.getAuthorities());
             authenticated.setDetails(new WebAuthenticationDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticated);

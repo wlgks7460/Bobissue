@@ -32,7 +32,7 @@ public class OrderDetailResDto {
         return OrderDetailResDto.builder()
                 .orderNo(order.getOrderNo())
                 .userNo(order.getUser().getUserNo())
-                .addressNo(order.getAddressNo())
+                .addressNo(order.getAddress().getAddressNo())
                 .userCouponNo(order.getUserCouponNo())
                 .payment(order.getPayment())
                 .totalPrice(order.getTotalPrice())
