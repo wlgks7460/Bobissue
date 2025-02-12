@@ -73,7 +73,7 @@ const SellerMainPage = () => {
   }
 
   return (
-    <>
+    <div>
       {/* ✅ 회사 등록 여부가 확인되기 전에는 로딩 화면 */}
       {registration === null ? (
         <div className='flex items-center justify-center min-h-screen'>회사 정보 확인 중...</div>
@@ -121,7 +121,7 @@ const SellerMainPage = () => {
           </footer>
         </div>
       )}
-    </>
+    </div>
   )
 }
 
