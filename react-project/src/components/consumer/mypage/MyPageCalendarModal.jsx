@@ -54,12 +54,29 @@ const MyPageCalendarModal = ({
       eatTime: mealTime.replace(':', '') + '00',
       calorie: Number(mealCalories),
     }
+    console.log(calendarNo)
     API.put(`/calendar/${calendarNo}`, payload)
       .then((res) => {
+        alert('수정되었습니다.')
         console.log(res)
+        getDayData()
+        getCalendarData(currentYear, currentMonth)
       })
       .catch((err) => {
         console.error(err)
+      })
+  }
+
+  // 식단 데이터 삭제
+  const deleteData = (calendarNo) => {
+    API.delete(`/calendar/${calendarNo}`)
+      .then((res) => {
+        alert('삭제되었습니다.')
+        getDayData()
+        getCalendarData(currentYear, currentMonth)
+      })
+      .catch((err) => {
+        console.log(err)
       })
   }
 
@@ -98,6 +115,7 @@ const MyPageCalendarModal = ({
                       key={meal.eatTime}
                       meal={meal}
                       updateData={updateData}
+                      deleteData={deleteData}
                     />
                   ))
                 )}
