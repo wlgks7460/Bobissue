@@ -41,7 +41,7 @@ public class SecurityConfig {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowedOriginPatterns(List.of(
                             "http://localhost:5173",
-                            "http://43.202.60.173:5173"
+                            "http://43.202.60.173:5173",
                             "http://bobissue.duckdns.org",
                             "https://bobissue.duckdns.org",
                             "ws://**",
