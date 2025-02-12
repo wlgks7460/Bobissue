@@ -45,8 +45,8 @@ export { default as InReply } from './Inquiry/Reply'
 export { default as InReplylist } from './Inquiry/Replylist'
 
 // 판매 통계 관련
-export { default as Performance } from './stats/Performance'
-export { default as Products } from './stats/Products'
+export { default as Performance } from './Stats/Performance'
+export { default as Products } from './Stats/Products'
 
 // 공지사항 관련
 export { default as Notices } from './Notices/Notices'
