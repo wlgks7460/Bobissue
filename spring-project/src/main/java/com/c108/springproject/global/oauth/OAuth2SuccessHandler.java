@@ -50,7 +50,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String redirectUrl;
 
         if (user.isPresent()) {
-
+            System.out.println("하이욤");
             Map<String, String> tokens = authsService.userLogin(LoginReqDto.kakaoLogin(email));
             String encodedAccessToken = URLEncoder.encode(tokens.get("access_token"), StandardCharsets.UTF_8);
             String encodedRefreshToken = URLEncoder.encode(tokens.get("access_token"), StandardCharsets.UTF_8);
