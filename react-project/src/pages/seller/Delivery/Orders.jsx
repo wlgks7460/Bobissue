@@ -3,7 +3,7 @@ import OrderPopup from './Popup/OrderPopup'
 import API from '../../../utils/API'
 
 const Orders = () => {
-  const debug_mode = localStorage.getItem('debug_mode') === 'true'
+  const debugMode = true // 디버그 모드 활성화
 
   const [orderList, setOrderList] = useState([])
   const [allProducts, setAllProducts] = useState([])
@@ -54,7 +54,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true)
-      if (debug_mode) {
+      if (debugMode) {
         console.log('📢 [디버그 모드] 더미 데이터 사용 중...')
         setOrderList(dummyOrders)
         setIsLoading(false)
