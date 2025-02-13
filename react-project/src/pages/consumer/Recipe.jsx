@@ -20,7 +20,7 @@ const Recipe = () => {
             <div className='grid grid-cols-4'>
               {recipes.map((v) => (
                 <div className='flex flex-col justify-center items-center' key={v.recipeNo}>
-                  <Link>
+                  <Link to={`/recipe/${v.recipeNo}`}>
                     <img
                       src={v.images[0]?.imageUrl || recipeDefaultImg}
                       alt=''

@@ -31,6 +31,7 @@ import ConsumerBoardNoticeDetail from '../pages/consumer/board/BoardNoticeDetail
 import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
 // 이용자 레시피
 import ConsumerRecipe from '../pages/consumer/Recipe'
+import ConsumerRecipeDetail from '../pages/consumer/RecipeDetail'
 
 // 관리자 section
 
@@ -202,6 +203,10 @@ const router = createBrowserRouter([
           {
             path: 'recipe',
             element: <ConsumerRecipe />,
+          },
+          {
+            path: 'recipe/:recipeNo',
+            element: <ConsumerRecipeDetail />,
           },
         ],
       },

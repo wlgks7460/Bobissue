@@ -8,7 +8,6 @@ const RecipeCategory = ({ setRecipes }) => {
   const getRecipeCategory = () => {
     API.get('/recipecategory')
       .then((res) => {
-        console.log(res)
         setCategories(res.data.result.data)
       })
       .catch((err) => {
@@ -20,7 +19,6 @@ const RecipeCategory = ({ setRecipes }) => {
   const getAllRecipe = () => {
     API.get('/recipe')
       .then((res) => {
-        console.log(res)
         setRecipes(res.data.result.data)
       })
       .catch((err) => {
