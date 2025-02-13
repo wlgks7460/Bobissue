@@ -44,10 +44,10 @@ const PasswordVerification = () => {
   }
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300'>
+    <div className='flex items-center justify-center min-h-screen bg-gradient-to-br '>
       <form
         onSubmit={handleSubmit}
-        className='w-full max-w-md bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl shadow-xl'
+        className='w-full border border-blue-500 max-w-md bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-[12px]'
       >
         <h2 className='text-3xl font-bold text-gray-800 mb-6 text-center'>비밀번호 확인</h2>
 
