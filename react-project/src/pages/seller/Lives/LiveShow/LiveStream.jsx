@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
+import SockJS from 'sockjs-client' // ✅ SockJS 사용
+import { Client } from '@stomp/stompjs' // ✅ STOMP 사용
 import LiveChat from './LiveChat.jsx'
 
 const LiveStreamSetup = () => {
@@ -8,7 +10,7 @@ const LiveStreamSetup = () => {
   const location = useLocation()
   const event = location.state?.event
   const videoRef = useRef(null)
-  const wsRef = useRef(null) // 📌 스트리밍 서버 웹소켓 참조 추가
+  const stompClientRef = useRef(null) // 📌 STOMP 클라이언트 참조 추가
   const [stream, setStream] = useState(null)
   const [isStreaming, setIsStreaming] = useState(false)
   const [micOn, setMicOn] = useState(true)
@@ -21,7 +23,26 @@ const LiveStreamSetup = () => {
   const endAt = event?.endAt ? moment(event.endAt, 'YYYYMMDD HHmmss') : null
   const isLiveAvailable = startAt && endAt && now.isBetween(startAt, endAt)
 
-  // 📌 방송 시작 / 중지 핸들러
+  // 📌 마이크 및 비디오 ON/OFF 시 스트림 재설정
+  useEffect(() => {
+    const setupStream = async () => {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: cameraOn,
+          audio: micOn,
+        })
+        setStream(mediaStream)
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream
+        }
+      } catch (error) {
+        console.error('❌ 미디어 장치를 가져오는 데 실패했습니다.', error)
+      }
+    }
+    setupStream()
+  }, [cameraOn, micOn]) // 마이크 또는 카메라 상태 변경 시 다시 스트림 설정
+
+  // 📌 방송 시작 / 중지 핸들러 (SockJS + STOMP 사용)
   const handleStreamToggle = () => {
     console.log(`라이브 가능 여부: ${isLiveAvailable}, 디버그 모드: ${debug_mode}`)
 
@@ -33,10 +54,17 @@ const LiveStreamSetup = () => {
       setIsStreaming(false)
       setChatActive(false) // 📌 방송이 종료되면 채팅도 종료
 
-      // 📌 스트리밍 웹소켓 종료
-      if (wsRef.current) {
-        wsRef.current.close()
-        wsRef.current = null
+      // 📌 STOMP 연결 해제
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate()
+        stompClientRef.current = null
+        console.log('🎥 스트리밍 서버 연결 종료')
+      }
+
+      // 📌 스트림 종료
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop())
+        setStream(null)
       }
     } else {
       navigator.mediaDevices
@@ -47,36 +75,47 @@ const LiveStreamSetup = () => {
             videoRef.current.srcObject = mediaStream
           }
         })
-        .catch((error) => console.error('미디어 장치를 가져오는 데 실패했습니다.', error))
+        .catch((error) => console.error('❌ 미디어 장치를 가져오는 데 실패했습니다.', error))
 
       setIsStreaming(true)
       setChatActive(true) // 📌 방송 시작 시 채팅도 시작
 
-      // 📌 스트리밍 서버 연결
-      const baseWebSocketUrl = 'http://localhost:8080/ws/live'
-      const streamKey = event?.id || 'defaultStreamKey'
-      const broadcasterId = localStorage.getItem('user_id') || 'guest'
-      const wsUrl = `${baseWebSocketUrl}?streamKey=${streamKey}&broadcaster=${broadcasterId}`
+      // 📌 SockJS + STOMP를 사용하여 WebSocket 연결
+      const socket = new SockJS('http://localhost:8080/ws/live')
+      const client = new Client({
+        webSocketFactory: () => socket,
+        reconnectDelay: 5000, // 자동 재연결 (5초)
+        onConnect: () => {
+          console.log('✅ 스트리밍 서버 연결 완료')
+          stompClientRef.current = client
 
-      wsRef.current = new WebSocket(wsUrl)
+          // 방송 시작 메시지 서버에 전송
+          client.publish({
+            destination: '/pub/live/start',
+            body: JSON.stringify({
+              streamKey: event?.id || 'defaultStreamKey',
+              broadcaster: localStorage.getItem('user_id') || 'guest',
+            }),
+          })
+        },
+        onStompError: (frame) => {
+          console.error('❌ STOMP 오류 발생:', frame)
+        },
+      })
 
-      wsRef.current.onopen = () => {
-        console.log('🎥 스트리밍 서버 연결됨', wsUrl)
-      }
-
-      wsRef.current.onerror = () => {
-        console.error('❌ 스트리밍 서버 연결 실패')
-        setIsStreaming(false)
-        setChatActive(false)
-        wsRef.current = null
-      }
-
-      wsRef.current.onclose = () => {
-        console.log('🎥 스트리밍 서버 연결 종료')
-        setIsStreaming(false)
-        setChatActive(false)
-      }
+      stompClientRef.current = client
+      client.activate()
     }
+  }
+
+  // 📌 마이크 토글 핸들러
+  const handleMicToggle = () => {
+    setMicOn((prevMicOn) => !prevMicOn)
+  }
+
+  // 📌 카메라 토글 핸들러
+  const handleCameraToggle = () => {
+    setCameraOn((prevCameraOn) => !prevCameraOn)
   }
 
   return (
@@ -105,6 +144,24 @@ const LiveStreamSetup = () => {
           disabled={!debug_mode && !isLiveAvailable}
         >
           {isStreaming ? '방송 중지' : '방송 시작'}
+        </button>
+
+        <button
+          onClick={handleMicToggle}
+          className={`px-4 py-2 font-bold text-white rounded ${
+            micOn ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 hover:bg-gray-600'
+          }`}
+        >
+          {micOn ? '마이크 끄기' : '마이크 켜기'}
+        </button>
+
+        <button
+          onClick={handleCameraToggle}
+          className={`px-4 py-2 font-bold text-white rounded ${
+            cameraOn ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-gray-500 hover:bg-gray-600'
+          }`}
+        >
+          {cameraOn ? '카메라 끄기' : '카메라 켜기'}
         </button>
       </div>
 
