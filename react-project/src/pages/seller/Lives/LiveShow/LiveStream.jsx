@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 
 const LiveStreamSetup = () => {
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
   const location = useLocation()
   const event = location.state?.event
   const videoRef = useRef(null)
@@ -14,17 +15,19 @@ const LiveStreamSetup = () => {
   const [messages, setMessages] = useState([]) // 📌 채팅 메시지 상태 추가
   const [inputMessage, setInputMessage] = useState('')
 
-  // 📌 현재 날짜 및 시간 정보 가져오기
+  // 📌 현재 시간
   const now = moment()
-  const eventDate = moment(event?.date, 'YYYY-MM-DD')
-  const eventStartTime = moment(`${event?.date}T${event?.time.split('-')[0]}`, 'YYYY-MM-DDTHH:mm')
-  const eventEndTime = moment(eventStartTime).add(event?.duration || 60, 'minutes')
+
+  // 📌 방송 시작/종료 시간 변환
+  const startAt = event?.startAt ? moment(event.startAt, 'YYYYMMDD HHmmss') : null
+  const endAt = event?.endAt ? moment(event.endAt, 'YYYYMMDD HHmmss') : null
 
   // 📌 라이브 시작 가능 여부 체크
-  const isLiveAvailable = event && now.isBetween(eventStartTime, eventEndTime)
+  const isLiveAvailable = startAt && endAt && now.isBetween(startAt, endAt)
 
   // 📌 웹캠(미리보기) 설정
   useEffect(() => {
+    console.log(debug_mode)
     const setupStream = async () => {
       try {
         const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -45,11 +48,13 @@ const LiveStreamSetup = () => {
 
   // 📌 방송 시작 / 중지 핸들러
   const handleStreamToggle = () => {
-    if (!isLiveAvailable) return
+    console.log(`라이브 가능 여부: ${isLiveAvailable}, 디버그 모드: ${debug_mode}`)
+
+    if (!isLiveAvailable && !debug_mode) {
+      return
+    }
 
     if (isStreaming) {
-      stream.getTracks().forEach((track) => track.stop()) // 모든 미디어 트랙 중지
-      setStream(null)
       setIsStreaming(false)
 
       // 📌 웹소켓 종료
@@ -82,8 +87,15 @@ const LiveStreamSetup = () => {
         setMessages((prev) => [...prev, message]) // 📌 메시지를 리스트에 추가
       }
 
+      wsRef.current.onerror = () => {
+        console.error('웹소켓 연결 실패')
+        setIsStreaming(false) // 📌 연결 실패 시 방송 중지 상태로 변경
+        wsRef.current = null
+      }
+
       wsRef.current.onclose = () => {
         console.log('웹소켓 연결 종료')
+        setIsStreaming(false) // 📌 웹소켓이 예상치 않게 종료되면 방송 중지 상태로 변경
       }
     }
   }
@@ -118,14 +130,15 @@ const LiveStreamSetup = () => {
     <div className='p-6'>
       <h1 className='font-bold text-[32px] mb-4'>라이브 방송 환경 설정</h1>
 
-      {!isLiveAvailable && (
+      {!isLiveAvailable && !debug_mode && (
         <div className='text-red-500 text-lg font-semibold mb-4'>
-          🚫 라이브 방송은 {event?.date} {event?.time} 동안에만 가능합니다.
+          🚫 라이브 방송은 {startAt?.format('YYYY-MM-DD HH:mm')} ~ {endAt?.format('HH:mm')} 동안에만
+          가능합니다.
         </div>
       )}
 
       {/* 📌 방송 화면 미리보기 */}
-      <div className='relative border p-4 rounded-lg shadow-md bg-black w-full mx-auto'>
+      <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto'>
         <video ref={videoRef} autoPlay playsInline className='w-full h-[500px] bg-black'></video>
       </div>
 
@@ -134,13 +147,9 @@ const LiveStreamSetup = () => {
         <button
           onClick={handleStreamToggle}
           className={`px-4 py-2 font-bold text-white rounded ${
-            isLiveAvailable
-              ? isStreaming
-                ? 'bg-red-500 hover:bg-red-600'
-                : 'bg-green-500 hover:bg-green-600'
-              : 'bg-gray-400 cursor-not-allowed'
+            isStreaming ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
           }`}
-          disabled={!isLiveAvailable}
+          disabled={!debug_mode && !isLiveAvailable} // debug_mode가 true면 항상 활성화
         >
           {isStreaming ? '방송 중지' : '방송 시작'}
         </button>

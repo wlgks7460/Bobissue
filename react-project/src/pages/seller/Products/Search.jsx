@@ -105,8 +105,7 @@ const Search = () => {
                     )}
                   </td>
                   <td className='border px-4 py-2 text-blue-500'>{product.name}</td>
-                  <td className='border px-4 py-2'>{product.companyName}</td>{' '}
-                  {/* ✅ 변경된 회사명 사용 */}
+                  <td className='border px-4 py-2'>{product.companyName}</td> {/* ✅ 공백 제거 */}
                   <td className='border px-4 py-2'>{product.price?.toLocaleString() || '0'} 원</td>
                   <td className='border px-4 py-2'>
                     {product.salePrice?.toLocaleString() || '0'} 원
