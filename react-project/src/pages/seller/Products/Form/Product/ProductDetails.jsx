@@ -2,7 +2,7 @@ import React from 'react'
 
 const ProductDetails = ({ product, setProduct }) => {
   return (
-    <div className='w-[700px] mt-5 p-2 border border-black bg-gray-50 space-y-2'>
+    <div className='w-[700px] rounded-[15px] mt-5 p-2 border border-cyan-500 bg-gray-50 space-y-2'>
       <h2 className='text-[16px] font-bold'>상품 주요 정보</h2>
 
       {/* 가격 입력 */}

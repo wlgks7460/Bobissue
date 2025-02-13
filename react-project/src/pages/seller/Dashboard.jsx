@@ -19,106 +19,96 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className='mx-auto p-6 bg-gray-100 min-h-screen'>
+    <div className='max-w-6xl mx-auto p-6 bg-lime-100 min-h-screen'>
       <h1 className='text-3xl font-bold text-gray-800 mb-6'>대시보드</h1>
 
-      {/* 상단 기능 메뉴 */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6'>
-        {[
-          {
-            title: '상품 관리',
-            description: '등록된 상품을 확인하고 관리하세요.',
-            link: 'products/search',
-            color: 'bg-amber-500',
-          },
-          {
-            title: '주문 관리',
-            description: '진행 중인 주문을 확인하세요.',
-            link: 'delivery/orders',
-            color: 'bg-green-500',
-          },
-          {
-            title: '판매 통계',
-            description: '판매 데이터를 확인하세요.',
-            link: 'stats/performance',
-            color: 'bg-lime-500',
-          },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'
-          >
-            <h3 className='text-lg font-semibold'>{item.title}</h3>
-            <p className='text-sm text-gray-600'>{item.description}</p>
-            <Link to={item.link} className='mt-4'>
-              <button
-                className={`${item.color} text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition`}
-              >
-                {item.title} 보기
-              </button>
-            </Link>
-          </div>
-        ))}
-      </div>
+      {/* 📌 2열 레이아웃 */}
+      <div className='flex flex-col lg:flex-row gap-6'>
+        {/* 좌측 섹션 */}
+        <div className='flex-1 space-y-6'>
+          <Section title='📦 상품 관리'>
+            <DashboardItem
+              title='상품 조회 & 관리'
+              description='등록된 상품을 확인하고 관리하세요.'
+              link='products/search'
+              color='bg-yellow-500'
+            />
+            <DashboardItem
+              title='상품 등록'
+              description={hasPendingProduct ? '이어서 등록하세요.' : '새로운 상품을 등록하세요.'}
+              link='products/register'
+              color='bg-red-500'
+            />
+          </Section>
 
-      {/* 상품 등록 및 라이브 신청 */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6'>
-        <div className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'>
-          <h3 className='text-lg font-semibold'>
-            {hasPendingProduct ? '이어서 상품 등록하기' : '새로운 상품을 등록하세요'}
-          </h3>
-          <Link to='products/register' className='mt-4'>
-            <button className='bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
-              {hasPendingProduct ? '이어서 등록하기' : '상품 등록하기'}
-            </button>
-          </Link>
+          <Section title='라이브 커머스'>
+            <DashboardItem
+              title='라이브 신청'
+              description='라이브 커머스를 신청하세요.'
+              link='lives/apply'
+              color='bg-orange-500'
+            />
+          </Section>
         </div>
 
-        <div className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'>
-          <h3 className='text-lg font-semibold'>라이브 커머스를 신청하세요</h3>
-          <Link to='lives/apply' className='mt-4'>
-            <button className='bg-orange-500 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
-              라이브 신청하기
-            </button>
-          </Link>
-        </div>
-      </div>
+        {/* 우측 섹션 */}
+        <div className='flex-1 space-y-6'>
+          <Section title='판매 & 주문'>
+            <DashboardItem
+              title='주문 관리'
+              description='진행 중인 주문을 확인하세요.'
+              link='delivery/orders'
+              color='bg-green-500'
+            />
+            <DashboardItem
+              title='판매 통계'
+              description='판매 데이터를 확인하세요.'
+              link='stats/performance'
+              color='bg-blue-500'
+            />
+          </Section>
 
-      {/* 추가 정보 섹션 */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
-        {[
-          {
-            title: '공지사항',
-            description: '새로운 업데이트 및 판매자 공지를 확인하세요.',
-            link: 'notices',
-          },
-          {
-            title: '고객 문의',
-            description: '고객의 질문과 요청을 확인하세요.',
-            link: 'inquiries/list',
-          },
-          {
-            title: '정산 관리',
-            description: '정산 내역을 확인하고 관리하세요.',
-            link: 'settlement/overview',
-          },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'
-          >
-            <h3 className='text-lg font-semibold'>{item.title}</h3>
-            <p className='text-sm text-gray-600'>{item.description}</p>
-            <Link to={item.link} className='mt-4'>
-              <button className='bg-amber-400 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
-                {item.title} 보기
-              </button>
-            </Link>
-          </div>
-        ))}
+          <Section title='고객 & 정산'>
+            <DashboardItem
+              title='고객 문의'
+              description='고객의 질문과 요청을 확인하세요.'
+              link='inquiries/list'
+              color='bg-purple-500'
+            />
+            <DashboardItem
+              title='정산 관리'
+              description='정산 내역을 확인하고 관리하세요.'
+              link='settlement/overview'
+              color='bg-indigo-500'
+            />
+          </Section>
+        </div>
       </div>
     </div>
   )
 }
+
+// 📌 공통 섹션 컴포넌트
+const Section = ({ title, children }) => (
+  <div className='p-4 bg-white rounded-lg shadow-md'>
+    <h2 className='text-xl font-semibold text-gray-700 border-b pb-2 mb-3'>{title}</h2>
+    <div className='space-y-2'>{children}</div>
+  </div>
+)
+
+// 📌 개별 대시보드 아이템
+const DashboardItem = ({ title, description, link, color }) => (
+  <Link to={link} className='block'>
+    <div
+      className={`flex justify-between items-center p-4 rounded-md text-white ${color} hover:opacity-90 transition`}
+    >
+      <div>
+        <h3 className='font-bold text-lg'>{title}</h3>
+        <p className='text-sm'>{description}</p>
+      </div>
+      <span className='text-xl'>→</span>
+    </div>
+  </Link>
+)
 
 export default Dashboard

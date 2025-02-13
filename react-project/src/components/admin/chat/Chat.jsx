@@ -11,7 +11,9 @@ const ChatRoom = ({ chattingRoomId }) => {
   const stompClientRef = useRef(null) // WebSocket 클라이언트 저장
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:8080/ws/chat') // ✅ WebSocket 엔드포인트
+    const socket = new SockJS('http://localhost:8080/ws/chat')
+
+    //  // ✅ WebSocket 엔드포인트
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // 자동 재연결 (5초)
