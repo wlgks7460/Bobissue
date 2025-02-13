@@ -31,5 +31,9 @@ public class WebSocketStompBrokerConfig implements WebSocketMessageBrokerConfigu
                 .addEndpoint("/ws/chat")
                 .setAllowedOriginPatterns("http://localhost:5173", "http://bobissue.duckdns.org", "https://bobissue.duckdns.org")
                 .withSockJS();
+        registry
+                .addEndpoint("/ws/live")
+                .setAllowedOriginPatterns("http://localhost:5173", "http://bobissue.duckdns.org", "https://bobissue.duckdns.org")
+                .withSockJS();
     }
 }

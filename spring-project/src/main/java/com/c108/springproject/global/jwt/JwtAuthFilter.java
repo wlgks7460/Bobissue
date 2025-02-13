@@ -50,6 +50,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
 
             String token = parseBearerToken(request, HttpHeaders.AUTHORIZATION);
+
+            String path = request.getRequestURI();
+            if (path.startsWith("/ws/")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             log.info("Filter is running");
             if (token != null && !token.equalsIgnoreCase("null")) {
                 User user = parseUserSpecification(token);
