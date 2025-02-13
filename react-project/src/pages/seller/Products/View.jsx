@@ -81,7 +81,7 @@ const View = () => {
             <img
               src={product.productImage}
               alt={product.name}
-              className='w-full h-64 object-cover rounded-lg border shadow-md'
+              className='w-full object-cover rounded-lg border shadow-md'
             />
           ) : (
             <p className='text-center text-gray-500'>이미지가 없습니다.</p>

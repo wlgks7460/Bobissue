@@ -7,42 +7,46 @@ import ProductDetails from './Form/Product/ProductDetails'
 import ProductDate from './Form/Product/ProductDate'
 
 const EditProduct = () => {
-  const { id } = useParams() // URL에서 상품 ID 가져오기
+  const { itemNo } = useParams() // URL에서 상품 ID 가져오기
   const [product, setProduct] = useState({
     name: '',
     categoryNo: '',
-    companyNo: '',
     price: '',
     salePrice: '',
     stock: '',
-    images: [], // 빈 배열로 초기화하여 undefined 방지
+    images: [],
     description: '',
     expiredAt: '',
+    keepImagesId: [], // ✅ 유지할 이미지 ID 리스트 추가
   })
-  const [createdUser] = useState(localStorage.getItem('access_token'))
-  const [updatedUser] = useState(localStorage.getItem('access_token'))
+  const [originalProduct, setOriginalProduct] = useState(null) // ✅ 기존 상품 데이터 저장
   const navigate = useNavigate()
-  const { itemNo } = useParams()
-  console.log(itemNo)
 
-  // 기존 상품 데이터 불러오기
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await API.get(`api/items/${itemNo}`)
-        const itemData = response.data.result.data // 응답 데이터 구조 반영
+        const response = await API.get(`item/${itemNo}`)
+        const itemData = response.data.result.data
 
-        setProduct({
+        const formattedProduct = {
           name: itemData.name,
-          categoryNo: itemData.category?.categoryNo || '', // category가 없을 경우 대비
-          companyNo: itemData.companyNo || '',
+          categoryNo: itemData.category?.categoryNo || '',
           price: itemData.price || '',
           salePrice: itemData.salePrice || '',
           stock: itemData.stock || '',
-          images: itemData.images || [], // undefined 방지 (빈 배열 기본값)
+          images: itemData.images || [],
           description: itemData.description || '',
           expiredAt: itemData.expiredAt || '',
+          keepImageIds: [],
+        }
+        console.log(itemData.images)
+        itemData.images.forEach((img) => {
+          formattedProduct.keepImageIds.push(img.imageNo)
         })
+
+        console.log(formattedProduct)
+        setProduct(formattedProduct)
+        setOriginalProduct(formattedProduct) // ✅ 기존 데이터 저장
       } catch (error) {
         console.error('상품 데이터를 불러오는 데 실패했습니다.', error)
         alert('상품 데이터를 불러오는 데 실패했습니다.')
@@ -50,28 +54,35 @@ const EditProduct = () => {
     }
 
     fetchProductData()
-  }, [id])
+  }, [itemNo])
 
-  // 이미지 업로드 핸들러
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0]
-    if (file) {
-      setProduct((prev) => ({
-        ...prev,
-        images: [
-          ...prev.images,
-          {
-            imageNo: null, // 새 이미지이므로 imageNo 없음
-            imageUrl: URL.createObjectURL(file), // 미리보기 URL
-            originalName: file.name,
-            file: file,
-          },
-        ],
-      }))
-    }
+  // ✅ 변경 여부 확인 함수
+  const isProductChanged = () => {
+    if (!originalProduct) return true
+    return JSON.stringify(originalProduct) !== JSON.stringify(product)
   }
 
-  // 폼 제출 핸들러 (상품 수정)
+  // ✅ 이미지 삭제 핸들러 (keepImagesId에서 제거)
+  const handleRemoveImage = (imageIndex) => {
+    setProduct((prev) => {
+      const newImages = [...prev.images]
+      const removedImage = newImages[imageIndex]
+
+      if (removedImage.imageNo) {
+        // 기존 이미지라면 keepImagesId에서 제거
+        const updatedKeepImageIds = prev.keepImageIds.filter((id) => id !== removedImage.imageNo)
+        return {
+          ...prev,
+          images: newImages.filter((_, i) => i !== imageIndex),
+          keepImageIds: updatedKeepImageIds,
+        }
+      }
+
+      return { ...prev, images: newImages.filter((_, i) => i !== imageIndex) }
+    })
+  }
+
+  // ✅ 폼 제출 핸들러 (상품 수정)
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -83,7 +94,6 @@ const EditProduct = () => {
     if (
       !product.name ||
       !product.categoryNo ||
-      !product.companyNo ||
       !product.price ||
       !product.salePrice ||
       !product.stock ||
@@ -94,33 +104,48 @@ const EditProduct = () => {
       return
     }
 
+    // ✅ 기존 값과 동일하면 제출 불가
+    if (!isProductChanged()) {
+      alert('수정된 내용이 없습니다.')
+      return
+    }
+
     try {
       const formData = new FormData()
-      formData.append('name', product.name)
-      formData.append('categoryNo', product.categoryNo)
-      formData.append('companyNo', product.companyNo)
-      formData.append('price', parseFloat(product.price))
-      formData.append('salePrice', parseFloat(product.salePrice))
-      formData.append('stock', parseInt(product.stock, 10))
-      formData.append('expiredAt', product.expiredAt)
-      formData.append('description', product.description)
 
-      // 기존 이미지 및 새 이미지 처리
+      // ✅ 기존 이미지 중 유지할 이미지 ID 필터링
+
+      // ✅ 상품 데이터 JSON 변환 후 추가
+      const itemData = {
+        name: product.name,
+        categoryNo: product.categoryNo,
+        price: parseFloat(product.price),
+        salePrice: parseFloat(product.salePrice),
+        stock: parseInt(product.stock, 10),
+        expiredAt: product.expiredAt,
+        description: product.description,
+        keepImageIds: product.keepImageIds, // ✅ 유지할 이미지 ID 추가
+      }
+
+      formData.append('item', JSON.stringify(itemData))
+
+      // ✅ 새로운 이미지 파일 추가
       product.images.forEach((img) => {
         if (img.file) {
-          formData.append('productImages', img.file) // 새 이미지 업로드
+          formData.append('images', img.file) // 새 이미지만 추가
         }
       })
 
-      formData.append('createdUser', createdUser)
-      formData.append('updatedUser', updatedUser)
+      for (const pair of formData.entries()) {
+        console.log(`📌 FormData 확인: ${pair[0]} →`, pair[1])
+      }
 
-      await API.put(`api/items/${id}`, formData, {
+      await API.put(`/item/${itemNo}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
 
       alert('상품이 수정되었습니다!')
-      navigate('/seller/products/inquiry')
+      navigate('/seller/products/search')
     } catch (error) {
       console.error('수정 실패:', error)
       alert('수정 중 오류가 발생했습니다.')
@@ -132,10 +157,18 @@ const EditProduct = () => {
       <h1 className='font-bold text-[32px] mb-10'>상품 수정</h1>
       <form onSubmit={handleSubmit}>
         <ProductInfo product={product} setProduct={setProduct} />
-        <ProductImage product={product} setProduct={setProduct} />
+        <ProductImage
+          product={product}
+          setProduct={setProduct}
+          handleRemoveImage={handleRemoveImage}
+        />
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
-        <button type='submit' className='mt-5 p-3 bg-blue-500 text-white border-black'>
+        <button
+          type='submit'
+          className='mt-5 p-1 bg-lime-700 text-white border-black disabled:bg-gray-300'
+          disabled={!isProductChanged()} // ✅ 변경된 내용 없으면 버튼 비활성화
+        >
           상품 수정
         </button>
       </form>

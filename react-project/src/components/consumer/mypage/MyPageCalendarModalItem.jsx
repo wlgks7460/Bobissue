@@ -41,7 +41,7 @@ const MyPageCalendarModalItem = ({ meal, updateData, deleteData }) => {
           <div>
             <h4 className='font-bold'>{meal.name}</h4>
             <div>
-              <span className='me-5'>{`${hour < 12 ? '오전' : '오후'} ${hour - 12}:${minute}`}</span>
+              <span className='me-5'>{`${hour < 12 ? '오전' : '오후'} ${hour > 13 ? hour - 12 : hour === 0 ? hour + 12 : hour}:${minute}`}</span>
               <span className='text-sm text-gray-500'>{meal.calorie} kcal</span>
             </div>
             <div className='flex gap-3'>
@@ -75,7 +75,7 @@ const MyPageCalendarModalItem = ({ meal, updateData, deleteData }) => {
               <div className='flex gap-3 mb-2'>
                 <input
                   type='time'
-                  defaultValue={`${hour}:${minute}`}
+                  defaultValue={`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`}
                   ref={timeRef}
                   className='px-2 py-1 border border-gray-300 rounded'
                 />

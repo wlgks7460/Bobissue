@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { PlusIcon, MinusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
 const MyPageRecipeCreateModalSelectedItem = ({ item, selectedItems, setSelectedItems }) => {
   // 상품 가격 , 찍기
@@ -8,14 +9,16 @@ const MyPageRecipeCreateModalSelectedItem = ({ item, selectedItems, setSelectedI
   }
 
   // 수량 증가
-  const increaseCount = () => {
+  const increaseCount = (e) => {
+    e.preventDefault()
     setSelectedItems((prevItems) =>
       prevItems.map((i) => (i.itemNo === item.itemNo ? { ...i, count: i.count + 1 } : i)),
     )
   }
 
   // 수량 감소
-  const decreaseCount = () => {
+  const decreaseCount = (e) => {
+    e.preventDefault()
     if (item.count > 1) {
       setSelectedItems((prevItems) =>
         prevItems.map((i) => (i.itemNo === item.itemNo ? { ...i, count: i.count - 1 } : i)),
@@ -24,7 +27,8 @@ const MyPageRecipeCreateModalSelectedItem = ({ item, selectedItems, setSelectedI
   }
 
   // 아이템 삭제
-  const removeItem = (itemNo) => {
+  const removeItem = (e, itemNo) => {
+    e.preventDefault()
     setSelectedItems((prevItems) => prevItems.filter((i) => i.itemNo !== itemNo))
   }
 
@@ -35,6 +39,9 @@ const MyPageRecipeCreateModalSelectedItem = ({ item, selectedItems, setSelectedI
           src={item.data.images[0]?.imageUrl || ''}
           alt=''
           className='w-[80px] h-[80px] rounded cursor-pointer'
+          onError={(e) => {
+            e.target.src = itemDefaultImg
+          }}
         />
       </div>
       <div>
@@ -69,7 +76,7 @@ const MyPageRecipeCreateModalSelectedItem = ({ item, selectedItems, setSelectedI
             </button>
           </div>
           {/* 삭제 버튼 */}
-          <button className='p-2 text-red-500' onClick={() => removeItem(item.itemNo)}>
+          <button className='p-2 text-red-500' onClick={(e) => removeItem(e, item.itemNo)}>
             <TrashIcon className='w-5' />
           </button>
         </div>

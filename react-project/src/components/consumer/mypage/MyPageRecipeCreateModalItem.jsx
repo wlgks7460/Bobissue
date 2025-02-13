@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
 const MyPageRecipeCreateModalItem = ({ item, idx, handleSelectItem }) => {
   const [showName, setShowName] = useState(false)
@@ -14,6 +15,9 @@ const MyPageRecipeCreateModalItem = ({ item, idx, handleSelectItem }) => {
           src={item.images[0]?.imageUrl || ''}
           alt=''
           className='w-[80px] h-[80px] rounded cursor-pointer'
+          onError={(e) => {
+            e.target.src = itemDefaultImg
+          }}
         />
       </div>
       {showName && (
