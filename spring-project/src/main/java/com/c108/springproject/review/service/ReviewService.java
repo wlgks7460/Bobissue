@@ -73,7 +73,8 @@ public class ReviewService {
             throw new BobIssueException(ResponseCode.INVALID_RATING);
         }
 
-        Item item=itemRepository.findById(request.getItemNo()).orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+        Item item=itemRepository.findById(itemNo).orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+
         Review review = Review.builder()
                 .item(item)
 //                .imageNo(request.getImageNo())
@@ -94,7 +95,7 @@ public class ReviewService {
                 review.getImages().add(reviewImage);
             }
         }
-        
+
 //        review.setCreatedUser(request.getCreatedUser());
 //        review.setUpdatedUser(request.getCreatedUser());
 
@@ -114,9 +115,8 @@ public class ReviewService {
         itemRepository.findById(itemNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
-<<<<<<< spring-project/src/main/java/com/c108/springproject/review/service/ReviewService.java
-        return reviewRepository.findByItemItemNoAndDelYn(itemNo, "N").stream()
-=======
+         return reviewRepository.findByItemItemNoAndDelYn(itemNo, "N").stream()
+
 //        if (isAdmin) {
 //            // 관리자는 모든 리뷰(삭제된 리뷰 포함) 조회
 //            return reviewRepository.findByItemNo(itemNo).stream()
@@ -129,8 +129,7 @@ public class ReviewService {
 //        }
 
 
-        return reviewRepository.findByItemNoAndDelYn(itemNo, "N").stream()
->>>>>>> spring-project/src/main/java/com/c108/springproject/review/service/ReviewService.java
+//        return reviewRepository.findByItemNoAndDelYn(itemNo, "N").stream()
                 .map(review -> {
                     User user = userRepository.findByEmail(review.extractEmail())
                             .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
