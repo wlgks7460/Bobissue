@@ -4,12 +4,9 @@ import SearchBar from '../../components/consumer/common/SearchBar'
 import API from '../../utils/API'
 import recipeDefaultImg from '../../assets/consumer/recipeDefault.webp'
 import RecipeDetailItemList from '../../components/consumer/recipe/RecipeDetailItemList'
-import RecipeDetailModal from '../../components/consumer/recipe/RecipeDetailModal'
 
 const RecipeDetail = () => {
   const params = useParams()
-
-  const [showModal, setShowModal] = useState(false)
 
   const [recipeData, setRecipeData] = useState({})
   const [selectedImg, setSelectedImg] = useState({})
@@ -67,7 +64,7 @@ const RecipeDetail = () => {
           </div>
           <hr className='border border-gray-400 my-10' />
           {/* 재료 상품 */}
-          <RecipeDetailItemList materials={recipeData.materials} setShowModal={setShowModal} />
+          <RecipeDetailItemList materials={recipeData.materials} />
           <hr className='border border-gray-400 my-10' />
           {/* 레시피 상세 */}
           <div className='px-20'>
@@ -86,9 +83,6 @@ const RecipeDetail = () => {
           </div>
         </div>
       </div>
-      {showModal && (
-        <RecipeDetailModal setShowModal={setShowModal} materials={recipeData.materials} />
-      )}
     </div>
   )
 }

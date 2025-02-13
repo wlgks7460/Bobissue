@@ -2,8 +2,18 @@ import React, { useEffect, useState } from 'react'
 import API from '../../../utils/API'
 import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
-const RecipeDetailItem = ({ itemNo, cnt }) => {
+const RecipeDetailItem = ({ itemNo, cnt, selectedItem, setSelectedItem }) => {
   const [item, setItem] = useState({})
+
+  const [itemActive, setItemActive] = useState(false)
+
+  // 상품 핸들러
+  const handleItem = () => {
+    if (!itemActive) {
+      setSelectedItem([...selectedItem, { item, cnt }])
+    }
+    setItemActive(!itemActive)
+  }
 
   // 상품 데이터 불러오기
   const getItemData = () => {
@@ -24,7 +34,10 @@ const RecipeDetailItem = ({ itemNo, cnt }) => {
   }, [])
   return (
     <div className='flex flex-col gap-2'>
-      <div className='border inline-block border-gray-400 rounded'>
+      <div
+        className={`inline-block ${itemActive ? 'border-2 border-indigo-600' : 'border border-gray-400'} rounded`}
+        onClick={handleItem}
+      >
         <img
           src={item.images?.[0].imageUrl || itemDefaultImg}
           alt=''
