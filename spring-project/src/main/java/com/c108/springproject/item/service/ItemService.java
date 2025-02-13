@@ -221,7 +221,7 @@ public class ItemService {
                 .description(reqDto.getDescription())
                 .stock(reqDto.getStock())
                 .build();
-
+        updatedItem.setCreatedUser(item.getCreatedUser());
         updatedItem.setCreatedAt(item.getCreatedAt());
         String currentDate = new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date());
         updatedItem.setUpdatedAt(currentDate);
