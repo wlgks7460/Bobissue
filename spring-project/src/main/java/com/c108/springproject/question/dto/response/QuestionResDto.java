@@ -1,5 +1,7 @@
 package com.c108.springproject.question.dto.response;
 
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.question.domain.Question;
 import com.c108.springproject.question.domain.QuestionCategory;
 import lombok.Builder;
@@ -33,12 +35,12 @@ public class QuestionResDto {
                 .title(question.getTitle())
                 .content(question.getContent())
                 .category(question.getCategory().toString())
-                .itemNo(question.getItemNo())
+                .itemNo(question.getItem().getItemNo())
                 .images(question.getImages().stream()
                         .map(image -> QuestionImageDto.toDto(image))
                         .collect(Collectors.toList()))
                 .isPrivate(question.getIsPrivate())
-                .userNo(question.getUserNo())
+                .userNo(question.getUser().getUserNo())
                 .status(question.getStatus())
                 .createAt(question.getCreatedAt())
                 .createdUser(question.getCreatedUser())
