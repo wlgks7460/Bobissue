@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { PlusIcon, MinusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
 const MyPageRecipeCreateModalSelectedItem = ({ item, selectedItems, setSelectedItems }) => {
   // 상품 가격 , 찍기
@@ -38,6 +39,9 @@ const MyPageRecipeCreateModalSelectedItem = ({ item, selectedItems, setSelectedI
           src={item.data.images[0]?.imageUrl || ''}
           alt=''
           className='w-[80px] h-[80px] rounded cursor-pointer'
+          onError={(e) => {
+            e.target.src = itemDefaultImg
+          }}
         />
       </div>
       <div>
