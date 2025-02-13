@@ -45,7 +45,11 @@ const CartItem = ({ item, updateItemCount, removeItem }) => {
     <div>
       {/* 상품 정보 */}
       <div className='flex gap-3'>
-        <img src='' alt='' className='w-[60px] h-[60px] rounded border border-gray-400' />
+        <img
+          src={item.itemData.images?.[0].imageUrl}
+          alt=''
+          className='w-[60px] h-[60px] rounded border border-gray-400'
+        />
         <div className='h-[60px] flex flex-col justify-evenly'>
           <p>{item.itemData.name}</p>
           <p className='flex gap-3'>
