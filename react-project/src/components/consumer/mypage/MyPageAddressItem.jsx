@@ -108,7 +108,7 @@ const MyPageAddressItem = ({
       {/* 주소 변경 폼 */}
       {showUpdateForm && (
         <div>
-          <form className='my-5' onSubmit={updateAddress}>
+          <form key={addressItem.addressNo} className='my-5' onSubmit={updateAddress}>
             <div className='flex justify-between px-3'>
               <div className='w-[600px]'>
                 <div className='flex justify-between mb-2'>
@@ -137,7 +137,7 @@ const MyPageAddressItem = ({
                     className='w-[200px] h-[50px] border border-gray-400 rounded px-3'
                     placeholder='별칭'
                     ref={nameRef}
-                    defaultValue={addressItem.name}
+                    defaultValue={currentAddressItem.name}
                   />
                   <input
                     type='text'
@@ -145,7 +145,7 @@ const MyPageAddressItem = ({
                     className='w-[390px] h-[50px] border border-gray-400 rounded px-3'
                     placeholder='상세 주소'
                     ref={addressDetailRef}
-                    defaultValue={addressItem.addressDetail}
+                    defaultValue={currentAddressItem.addressDetail}
                   />
                 </div>
               </div>

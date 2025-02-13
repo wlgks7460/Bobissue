@@ -53,4 +53,29 @@ public abstract class Querydsl4RepositorySupport {
         return queryFactory;
     }
 
+
+    // 공통 query
+    // 유저 타입
+    protected enum UserType {
+        SELLER, ADMIN, USER;
+
+        public String getPrefix() {
+            return this.name() + " ";
+        }
+    }
+
+    protected static class UserInfo {
+        private final UserType userType;
+        private final String email;
+
+        protected UserInfo(UserType userType, String email) {
+            this.userType = userType;
+            this.email = email;
+        }
+    }
+
+
+
+
+
 }

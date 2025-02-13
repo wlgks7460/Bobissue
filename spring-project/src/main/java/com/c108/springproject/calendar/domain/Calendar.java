@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -22,6 +25,10 @@ public class Calendar extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MealImage> images = new ArrayList<>();
+
     @Column(nullable = false)
     private String eatDate;
 
@@ -29,9 +36,13 @@ public class Calendar extends BaseEntity {
     @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
-
     @Column
     private int calorie;
 
+    public void update(String name, String eatDate, int calorie) {
+        this.name = name;
+        this.eatDate = eatDate;
+        this.calorie = calorie;
+    }
 
 }

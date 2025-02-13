@@ -33,6 +33,21 @@ const Register = () => {
     // ✅ 디버그 모드 체크 (localStorage에서 불러오기)
   }, [navigate])
 
+  const handleRemoveImage = (imageIndex) => {
+    setProduct((prev) => {
+      // 먼저 imageUrl을 가져와서 revokeObjectURL을 수행
+      const imageUrlToRevoke = prev.images[imageIndex]?.imageUrl
+
+      const newImages = prev.images.filter((_, index) => index !== imageIndex)
+
+      if (imageUrlToRevoke) {
+        URL.revokeObjectURL(imageUrlToRevoke) // 🔹 여기서 해제
+      }
+
+      return { ...prev, images: newImages }
+    })
+  }
+
   // ✅ 상품 등록 요청 함수
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -116,7 +131,11 @@ const Register = () => {
     <div className='p-6'>
       <h1 className='font-bold text-[32px] mb-10'>상품 등록</h1>
       <form onSubmit={handleSubmit}>
-        <ProductImage product={product} setProduct={setProduct} />
+        <ProductImage
+          product={product}
+          handleRemoveImage={handleRemoveImage}
+          setProduct={setProduct}
+        />
         <ProductInfo product={product} setProduct={setProduct} />
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
