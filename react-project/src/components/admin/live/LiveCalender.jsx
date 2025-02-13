@@ -6,6 +6,7 @@ import 'moment/locale/ko'
 import dayjs from 'dayjs'
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
+import LiveDetailModal from './LiveModalDetail/' //✅ 모달 컴포넌트 추가
 
 moment.locale('ko') // 한글 설정
 const localizer = momentLocalizer(moment)
@@ -17,7 +18,8 @@ const LiveCalendar = () => {
     { name: '라이브커머스 일정관리' },
   ]
 
-  const [selectedBroadcast, setSelectedBroadcast] = useState(null) // 클릭한 방송 정보
+  const [selectedBroadcast, setSelectedBroadcast] = useState(null) // ✅ 선택한 방송 정보
+  const [isModalOpen, setIsModalOpen] = useState(false) // ✅ 모달 상태 추가
   const [events, setEvents] = useState([]) // 캘린더 이벤트
 
   // ✅ "등록"과 "거절" 상태 제외하고 데이터 가져오기
@@ -34,41 +36,50 @@ const LiveCalendar = () => {
           (broadcast) => !['등록', '거절'].includes(broadcast.castStatus),
         )
 
-        // ✅ 캘린더 이벤트로 변환 (시간 강조, 줄바꿈 가능하도록 설정)
+        // ✅ 캘린더 이벤트로 변환
         const formattedEvents = filteredBroadcasts.map((broadcast) => ({
-          title: `${broadcast.title}\n📅 ${moment(broadcast.startAt, 'YYYYMMDD HHmmss').format('HH:mm')} ~ ${moment(broadcast.endAt, 'YYYYMMDD HHmmss').format('HH:mm')}`, // 방송 제목 + 시간
+          title: `${moment(broadcast.startAt, 'YYYYMMDD HHmmss').format('HH:mm')} ~ ${moment(
+            broadcast.endAt,
+            'YYYYMMDD HHmmss',
+          ).format('HH:mm')} \n${broadcast.createdUser.split(' ')[1]}`,
           start: moment(broadcast.startAt, 'YYYYMMDD HHmmss').toDate(),
           end: moment(broadcast.endAt, 'YYYYMMDD HHmmss').toDate(),
-          status: broadcast.castStatus, // 방송 상태 (한글 그대로)
-          broadcast, // 방송 객체 전체 저장
+          status: broadcast.castStatus,
+          broadcast,
         }))
 
         console.log('📌 변환된 캘린더 데이터:', formattedEvents)
-        setEvents(formattedEvents) // 상태 업데이트
+        setEvents(formattedEvents)
       } catch (error) {
         console.error('❌ 방송 일정 불러오기 실패:', error)
-        setEvents([]) // 오류 발생 시 빈 배열 유지
+        setEvents([])
       }
     }
 
     fetchBroadcasts()
   }, [])
 
-  // ✅ 상태별 파스텔 톤 색상 적용
+  // ✅ 방송 클릭 시 모달 열기
+  const handleSelectEvent = (event) => {
+    setSelectedBroadcast(event.broadcast)
+    setIsModalOpen(true) // ✅ 모달 열기
+  }
+
+  // ✅ 상태별 색상 적용
   const getStatusColor = (status) => {
     switch (status) {
       case '대기':
-        return '#FDE68A' // 부드러운 연노랑
+        return '#FDE68A'
       case '방송중':
-        return '#A7F3D0' // 부드러운 민트색
+        return '#A7F3D0'
       case '종료':
-        return '#D1D5DB' // 연한 회색
+        return '#D1D5DB'
       default:
-        return '#E5E7EB' // 기본 회색 (연한 그레이)
+        return '#E5E7EB'
     }
   }
 
-  // ✅ `eventPropGetter`를 사용하여 이벤트 스타일을 조정 (더 깔끔하게 정리)
+  // ✅ `eventPropGetter`를 사용하여 이벤트 스타일 적용
   const eventPropGetter = (event) => {
     return {
       style: {
@@ -76,11 +87,11 @@ const LiveCalendar = () => {
         color: 'black',
         borderRadius: '8px',
         border: 'none',
-        padding: '6px 8px', // 여백 추가
-        fontSize: '12px', // 폰트 크기 조정
-        fontWeight: 'bold', // 강조
-        whiteSpace: 'pre-line', // 줄바꿈 가능하도록 설정
-        textAlign: 'center', // 중앙 정렬
+        padding: '6px 8px',
+        fontSize: '12px',
+        fontWeight: 'bold',
+        whiteSpace: 'pre-line',
+        textAlign: 'center',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -88,30 +99,22 @@ const LiveCalendar = () => {
     }
   }
 
-  // ✅ 방송 클릭 시 상세 정보 토글
-  const handleSelectEvent = (event) => {
-    setSelectedBroadcast(
-      selectedBroadcast?.castNo === event.broadcast.castNo ? null : event.broadcast,
-    )
-  }
-
   return (
-    <div className='p-5 max-w-7xl mx-auto'>
-      {' '}
-      {/* 가로 최대 크기 조정 */}
+    <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
-      <h2 className='text-2xl font-bold text-center mb-6'>📅 라이브커머스 일정</h2>
+      <h2 className='text-2xl font-bold mb-5'>📅 라이브커머스 일정</h2>
+
       <Calendar
         localizer={localizer}
-        events={events} // 📌 API에서 변환된 데이터를 여기에 전달
-        startAccessor='start' // 이벤트의 시작 시간
-        endAccessor='end' // 이벤트의 종료 시간
-        style={{ height: 1000, width: '100%' }} // ✅ 가로 폭을 전체 너비로 조정
+        events={events}
+        startAccessor='start'
+        endAccessor='end'
+        style={{ height: 1000, width: '100%' }}
         views={['month']}
         defaultView='month'
-        defaultDate={new Date()} // 기본 날짜를 현재 날짜로 설정
-        onSelectEvent={handleSelectEvent} // 클릭 시 상세 정보 표시
-        eventPropGetter={eventPropGetter} // ✅ 이벤트 스타일 적용 (겹침 해결)
+        defaultDate={new Date()}
+        onSelectEvent={handleSelectEvent} // ✅ 모달 열기 추가
+        eventPropGetter={eventPropGetter}
         messages={{
           next: '다음',
           previous: '이전',
@@ -126,31 +129,10 @@ const LiveCalendar = () => {
           noEventsInRange: '등록된 방송이 없습니다.',
         }}
       />
-      {/* 방송 상세 정보 (토글 적용) */}
-      {selectedBroadcast && (
-        <div className='bg-white border rounded-lg shadow-md p-6 mt-6 max-w-2xl mx-auto'>
-          <h3 className='text-lg font-bold mb-4'>📢 방송 상세 정보</h3>
-          <p>
-            <strong>방송 제목:</strong> {selectedBroadcast.title}
-          </p>
-          <p>
-            <strong>설명:</strong> {selectedBroadcast.content}
-          </p>
-          <p>
-            <strong>방송 시간:</strong>{' '}
-            {moment(selectedBroadcast.startAt, 'YYYYMMDD HHmmss').format('YYYY-MM-DD HH:mm')} ~{' '}
-            {moment(selectedBroadcast.endAt, 'YYYYMMDD HHmmss').format('YYYY-MM-DD HH:mm')}
-          </p>
-          <p>
-            <strong>판매자:</strong> {selectedBroadcast.createdUser.split(' ')[1]}
-          </p>
-          <p
-            className='inline-block px-3 py-1 rounded-md text-white'
-            style={{ backgroundColor: getStatusColor(selectedBroadcast.castStatus) }}
-          >
-            <strong>상태:</strong> {selectedBroadcast.castStatus}
-          </p>
-        </div>
+
+      {/* ✅ 방송 상세 모달 추가 */}
+      {isModalOpen && (
+        <LiveDetailModal broadcast={selectedBroadcast} onClose={() => setIsModalOpen(false)} />
       )}
     </div>
   )
