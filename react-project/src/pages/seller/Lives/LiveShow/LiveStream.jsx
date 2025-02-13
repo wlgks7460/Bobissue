@@ -15,14 +15,15 @@ const LiveStreamSetup = () => {
   const [messages, setMessages] = useState([]) // 📌 채팅 메시지 상태 추가
   const [inputMessage, setInputMessage] = useState('')
 
-  // 📌 현재 날짜 및 시간 정보 가져오기
+  // 📌 현재 시간
   const now = moment()
-  const eventDate = moment(event?.date, 'YYYY-MM-DD')
-  const eventStartTime = moment(`${event?.date}T${event?.time.split('-')[0]}`, 'YYYY-MM-DDTHH:mm')
-  const eventEndTime = moment(eventStartTime).add(event?.duration || 60, 'minutes')
+
+  // 📌 방송 시작/종료 시간 변환
+  const startAt = event?.startAt ? moment(event.startAt, 'YYYYMMDD HHmmss') : null
+  const endAt = event?.endAt ? moment(event.endAt, 'YYYYMMDD HHmmss') : null
 
   // 📌 라이브 시작 가능 여부 체크
-  const isLiveAvailable = event && now.isBetween(eventStartTime, eventEndTime)
+  const isLiveAvailable = startAt && endAt && now.isBetween(startAt, endAt)
 
   // 📌 웹캠(미리보기) 설정
   useEffect(() => {
@@ -47,8 +48,7 @@ const LiveStreamSetup = () => {
 
   // 📌 방송 시작 / 중지 핸들러
   const handleStreamToggle = () => {
-    console.log(isLiveAvailable)
-    console.log(debug_mode)
+    console.log(`라이브 가능 여부: ${isLiveAvailable}, 디버그 모드: ${debug_mode}`)
 
     if (!isLiveAvailable && !debug_mode) {
       return
@@ -130,14 +130,15 @@ const LiveStreamSetup = () => {
     <div className='p-6'>
       <h1 className='font-bold text-[32px] mb-4'>라이브 방송 환경 설정</h1>
 
-      {!isLiveAvailable && (
+      {!isLiveAvailable && !debug_mode && (
         <div className='text-red-500 text-lg font-semibold mb-4'>
-          🚫 라이브 방송은 {event?.date} {event?.time} 동안에만 가능합니다.
+          🚫 라이브 방송은 {startAt?.format('YYYY-MM-DD HH:mm')} ~ {endAt?.format('HH:mm')} 동안에만
+          가능합니다.
         </div>
       )}
 
       {/* 📌 방송 화면 미리보기 */}
-      <div className='relative border  rounded-lg shadow-md bg-black w-full mx-auto'>
+      <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto'>
         <video ref={videoRef} autoPlay playsInline className='w-full h-[500px] bg-black'></video>
       </div>
 
