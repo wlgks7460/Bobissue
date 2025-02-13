@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
-    <div className='w-screen h-60 bg-slate-200 mt-10 px-20 py-5'>
+    <div className='w-full h-60 bg-slate-200 mt-10 px-20 py-5'>
       <div className='flex'>
         {/* 고객센터 */}
         <div className='w-[350px]'>
