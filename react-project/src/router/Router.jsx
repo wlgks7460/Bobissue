@@ -31,6 +31,7 @@ import ConsumerBoardNoticeDetail from '../pages/consumer/board/BoardNoticeDetail
 import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
 // 이용자 레시피
 import ConsumerRecipe from '../pages/consumer/Recipe'
+import ConsumerRecipeDetail from '../pages/consumer/RecipeDetail'
 
 // 관리자 section
 
@@ -71,7 +72,7 @@ import LiveEndedPage from '../pages/admin/live/LiveEndedPage'
 import ViwerMangagementPage from '../pages/admin/live/ViewerManagementPage'
 import LiveCalenderPage from '../pages/admin/live/LiveCalenderPage'
 import LiveRegisterDetailPage from '../pages/admin/live/LiveRegisterDetailPage'
-
+import LiveMonitorPage from '../pages/admin/live/LiveMonitorPage'
 // (관리자) 컨텐츠관리
 import CouponIssuePage from '../pages/admin/coupon/CouponIssuePage'
 import CouponStatusPage from '../pages/admin/coupon/CouponStatusPage'
@@ -202,6 +203,10 @@ const router = createBrowserRouter([
           {
             path: 'recipe',
             element: <ConsumerRecipe />,
+          },
+          {
+            path: 'recipe/:recipeNo',
+            element: <ConsumerRecipeDetail />,
           },
         ],
       },
@@ -564,6 +569,10 @@ const router = createBrowserRouter([
               {
                 path: 'onair', // 진행중 라이브 페이지
                 element: <LiveOnAirPage />,
+              },
+              {
+                path: 'monitor',
+                element: <LiveMonitorPage />,
               },
               {
                 path: 'end', // 종료된 라이브 페이지

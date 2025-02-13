@@ -1,7 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import Breadcrumb from '../common/Breadcrumb'
 
 const LiveInProgress = () => {
+  const navigate = useNavigate()
+
   // Breadcrumb에 사용할 경로 데이터
   const breadcrumbPaths = [
     { name: 'Home' }, // 홈
@@ -14,7 +17,9 @@ const LiveInProgress = () => {
     { id: 1, title: '가맹점몰 라이브', viewers: 150, status: '진행 중' },
     { id: 2, title: '한글몰 라이브', viewers: 200, status: '진행 중' },
   ]
-
+  const handleMonitorClick = () => {
+    navigate('/admin/live/monitor')
+  }
   return (
     <div className='p-6'>
       {/* Breadcrumb */}
@@ -41,7 +46,10 @@ const LiveInProgress = () => {
                 <button className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>
                   종료
                 </button>
-                <button className='bg-green-500 text-white px-3 py-1 ml-2 rounded hover:bg-green-600'>
+                <button
+                  className='bg-green-500 text-white px-3 py-1 ml-2 rounded hover:bg-green-600'
+                  onClick={handleMonitorClick}
+                >
                   모니터링
                 </button>
               </td>
