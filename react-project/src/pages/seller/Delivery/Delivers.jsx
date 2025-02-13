@@ -52,15 +52,15 @@ const Delivers = () => {
       <div className='flex space-x-4 justify-center text-lg font-medium my-6'>
         {[
           { key: 'all', label: '전체' },
-          { key: 'preparing', label: '상품 준비 중' },
-          { key: 'shipping', label: '배송 중' },
-          { key: 'delivered', label: '배송 완료' },
-          { key: 'confirmed', label: '구매 확정' },
+          { key: 'preparing', label: '상품준비 중' },
+          { key: 'shipping', label: '배송중' },
+          { key: 'delivered', label: '배송완료' },
+          { key: 'confirmed', label: '구매확정' },
         ].map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setSelectedTab(key)}
-            className={`px-4 py-2 rounded-lg transition ${selectedTab === key ? 'bg-blue-600 text-white' : 'bg-gray-300 hover:bg-gray-400'}`}
+            className={`px-3 py-1 text-white rounded-[15px] transition ${selectedTab === key ? 'bg-amber-500 text-white' : 'bg-rose-300 hover:bg-rose-400'}`}
           >
             {label}
           </button>
