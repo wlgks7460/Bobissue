@@ -9,8 +9,27 @@ const ChatRoom = ({ chattingRoomId }) => {
   const [messages, setMessages] = useState([]) // 메시지 상태 관리
   const [message, setMessage] = useState('') // 입력된 메시지
   const stompClientRef = useRef(null) // WebSocket 클라이언트 저장
+  const videoRef = useRef(null) // 📌 WebRTC 비디오 참조
 
   useEffect(() => {
+    // 📌 WebRTC 스트림 설정
+    const setupStream = async () => {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        })
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream
+        }
+      } catch (error) {
+        console.error('미디어 장치를 가져오는 데 실패했습니다.', error)
+      }
+    }
+
+    setupStream()
+
+    // 📌 WebSocket 설정
     const socket = new SockJS('http://localhost:8080/ws/chat') // ✅ WebSocket 엔드포인트
     const client = new Client({
       webSocketFactory: () => socket,
@@ -32,7 +51,6 @@ const ChatRoom = ({ chattingRoomId }) => {
       },
     })
 
-    // 🌟 클라이언트를 먼저 저장 후 활성화
     stompClientRef.current = client
     client.activate()
 
@@ -88,9 +106,19 @@ const ChatRoom = ({ chattingRoomId }) => {
       <div className='w-full h-[600px] flex'>
         {/* 영상이 들어갈 부분 */}
         <div className='flex-1 bg-gray-300 mr-4 rounded-lg flex items-center justify-center text-center'>
-          영상이 들어갈 부분
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className='w-full h-full bg-black rounded-lg'
+          ></video>
         </div>
         <div className='w-full max-w-lg h-[600px] bg-white shadow-lg rounded-lg p-4 flex flex-col ml-auto'>
+          {/* 강제 종료 버튼 */}
+          <button className='mb-4 p-2 bg-red-600 text-white font-bold rounded hover:bg-red-700'>
+            🚨 라이브 강제 종료
+          </button>
+
           <div className='flex-1 overflow-y-auto border p-2 rounded-lg bg-gray-100 space-y-2'>
             {messages.length === 0 ? (
               <p className='text-gray-500 text-center'>메시지가 없습니다.</p>
