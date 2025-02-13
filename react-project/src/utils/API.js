@@ -47,7 +47,7 @@ API.interceptors.response.use(
         console.log(err.response)
         const { data, status } = err.response
         const loginStatus = store.getState().user.status
-        if (data.data.code === 'AUTHENTICATION_FAILED') {
+        if (status === 401) {
           console.warn('인증 실패: 로그아웃')
           store.dispatch(userReducerActions.logout())
           alert('인증이 만료되었습니다.')

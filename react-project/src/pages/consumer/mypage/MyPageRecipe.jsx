@@ -39,7 +39,7 @@ const MyPageRecipe = () => {
         {recipes.length > 0 ? (
           <div className='grid grid-cols-3 gap-y-10'>
             {recipes.map((v) => (
-              <MyPageRecipeItem key={v.recipeNo} recipe={v} />
+              <MyPageRecipeItem key={v.recipeNo} recipe={v} getRecipeData={getRecipeData} />
             ))}
           </div>
         ) : (

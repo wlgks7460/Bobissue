@@ -22,6 +22,7 @@ import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
 import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
 import ConsumerMyPageRecipe from '../pages/consumer/mypage/MyPageRecipe'
 import ConsumerMyPageRecipeCreate from '../pages/consumer/mypage/MyPageRecipeCreate'
+import ConsumerMyPageRecipeUpdate from '../pages/consumer/mypage/MyPageRecipeUpdate'
 // 이용자 고객센터
 import ConsumerBoard from '../pages/consumer/board/Board'
 import ConsumerBoardFAQ from '../pages/consumer/board/BoardFAQ'
@@ -145,6 +146,10 @@ const router = createBrowserRouter([
               {
                 path: 'recipe/create',
                 element: <ConsumerMyPageRecipeCreate />,
+              },
+              {
+                path: 'recipe/update/:recipeNo',
+                element: <ConsumerMyPageRecipeUpdate />,
               },
             ],
           },
