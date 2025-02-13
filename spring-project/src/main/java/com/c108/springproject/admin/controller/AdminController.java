@@ -101,5 +101,19 @@ public class AdminController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER_APPROVALS, new DefaultResponse<>(approvals));
     }
 
+    @GetMapping("/total-sales")
+    public ResponseDto getTotalSales() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_TOTAL_SALES, new DefaultResponse<>(adminService.getTotalSales()));
+    }
+
+    @GetMapping("/user-statistics")
+    public ResponseDto getUserStatistics() {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_USER_STATISTICS,
+                new DefaultResponse<>(adminService.getUserStatistics())
+        );
+    }
+
 
 }
