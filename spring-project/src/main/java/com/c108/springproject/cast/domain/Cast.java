@@ -2,6 +2,7 @@ package com.c108.springproject.cast.domain;
 
 import com.c108.springproject.cast.dto.requset.CastReqDto;
 import com.c108.springproject.global.entity.BaseEntity;
+import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,11 @@ public class Cast extends BaseEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_no", nullable = false)
-    private Seller sellerNo;
+    private Seller seller;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_no", nullable = false)
+    private Company company;
 
     @Column(nullable = false)
     private String title;
@@ -56,7 +61,7 @@ public class Cast extends BaseEntity implements Serializable {
         this.endAt = castReqDto.getEndAt();
     }
 
-    public void registerCast(){
+    public void acceptCast(){
         this.castStatus = CastStatus.AWAIT;
     }
 

@@ -41,10 +41,12 @@ public class SecurityConfig {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowedOriginPatterns(List.of(
                             "http://localhost:5173",
+                            "http://43.202.60.173:5173",
                             "http://bobissue.duckdns.org",
                             "https://bobissue.duckdns.org",
-                            "ws://**",
-                            "wss://**"
+                            "http://localhost:8080"  // WebSocket 요청을 허용
+//                            "ws://**",
+//                            "wss://**"
                     ));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));

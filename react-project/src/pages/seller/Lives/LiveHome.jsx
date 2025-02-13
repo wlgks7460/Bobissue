@@ -9,48 +9,44 @@ import API from '@/utils/API'
 
 moment.locale('ko') // 한글 설정
 const localizer = momentLocalizer(moment)
-const debug_mode = localStorage.getItem('debug_mode')
+const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
 const LiveHome = () => {
+  console.log(debug_mode)
   const [liveSchedules, setLiveSchedules] = useState([])
   const [selectedEvent, setSelectedEvent] = useState(null) // 모달용 상태
 
-  // 📌 useEffect: API에서 확정된 라이브 일정 가져오기
+  // 📌 API에서 확정된 라이브 일정 가져오기
   useEffect(() => {
     console.log(debug_mode)
     const fetchLiveSchedules = async () => {
       if (debug_mode) {
-        // ✅ 디버그 모드일 경우 더미 데이터 사용
+        // ✅ 디버그 모드: 더미 데이터 사용
         setLiveSchedules([
           {
-            id: 1,
+            castNo: 1,
             title: '🎨 미술 전시 라이브',
-            description: '최신 미술 트렌드를 소개하는 라이브 방송입니다.',
-            category: '예술',
-            date: '2025-02-20',
-            time: '14:00-15:30',
-            duration: 90,
-            host: '이아트',
-            thumbnail: 'https://example.com/images/art-live.jpg',
+            content: '최신 미술 트렌드를 소개하는 라이브 방송입니다.',
+            startAt: '20250220 140000',
+            endAt: '20250220 153000',
+            createdUser: '이아트',
           },
           {
-            id: 2,
+            castNo: 2,
             title: '📚 신간 도서 소개 라이브',
-            description: '인기 작가들의 신간을 소개하는 북 라이브!',
-            category: '도서',
-            date: '2025-02-25',
-            time: '19:00-20:30',
-            duration: 90,
-            host: '김작가',
-            thumbnail: 'https://example.com/images/book-live.jpg',
+            content: '인기 작가들의 신간을 소개하는 북 라이브!',
+            startAt: '20250225 190000',
+            endAt: '20250225 203000',
+            createdUser: '김작가',
           },
         ])
         return
       }
 
       try {
-        const response = await API.get('/api/seller/live-schedules')
-        setLiveSchedules(response.data.result)
+        const response = await API.get('/cast')
+        console.log(response.data.result.data)
+        setLiveSchedules(response.data.result.data)
       } catch (error) {
         console.error('라이브 일정 불러오기 실패:', error)
       }
@@ -60,22 +56,23 @@ const LiveHome = () => {
   }, [debug_mode])
 
   // 📌 캘린더 이벤트로 변환
-  const events = liveSchedules.map((schedule) => {
-    const start = moment(`${schedule.date}T${schedule.time.split('-')[0]}`, 'YYYY-MM-DDTHH:mm')
-    const end = start.clone().add(schedule.duration, 'minutes')
+  const convertToCalendarEvents = (schedules) => {
+    return schedules.map((schedule) => {
+      const start = moment(schedule.startAt, 'YYYYMMDD HHmmss').toDate()
+      const end = moment(schedule.endAt, 'YYYYMMDD HHmmss').toDate()
 
-    return {
-      title: schedule.title,
-      start: start.toDate(),
-      end: end.toDate(),
-      id: schedule.id,
-      time: schedule.time,
-      description: schedule.description,
-      category: schedule.category,
-      host: schedule.host,
-      thumbnail: schedule.thumbnail,
-    }
-  })
+      return {
+        id: schedule.castNo,
+        title: schedule.title,
+        start,
+        end,
+        description: schedule.content,
+        host: schedule.createdUser,
+      }
+    })
+  }
+
+  const events = convertToCalendarEvents(liveSchedules)
 
   // 📌 이벤트 클릭 시 모달 열기
   const handleEventClick = (event) => {
@@ -121,7 +118,7 @@ const LiveHome = () => {
             components={{
               event: ({ event }) => (
                 <span className='text-[10px] flex items-center space-x-1'>
-                  <FaCalendarAlt className='text-blue-500' /> <span>방송 일정이 있습니다.</span>
+                  <FaCalendarAlt className='text-blue-500' /> <span>{event.title}</span>
                 </span>
               ),
             }}
@@ -152,28 +149,15 @@ const LiveHome = () => {
               📝 {selectedEvent.description || '방송 설명 없음'}
             </p>
             <p className='text-sm text-gray-600'>
-              📂 <strong>카테고리:</strong> {selectedEvent.category || '미선택'}
-            </p>
-            <p className='text-sm text-gray-600 flex items-center mt-2'>
-              <FaUser className='mr-2 text-green-500' />
-              <strong>방송 신청자:</strong> {selectedEvent.host || '정보 없음'}
-            </p>
-            <p className='text-sm text-gray-600 mt-2'>
-              📅 <strong>방송 날짜:</strong> {selectedEvent.date}
+              🎤 <strong>방송자:</strong> {selectedEvent.host || '정보 없음'}
             </p>
             <p className='text-sm text-gray-600'>
-              ⏰ <strong>방송 시간:</strong> {selectedEvent.time}
+              📅 <strong>방송 시작:</strong>{' '}
+              {moment(selectedEvent.start).format('YYYY-MM-DD HH:mm')}
             </p>
-
-            {selectedEvent.thumbnail && (
-              <div className='mt-3'>
-                <img
-                  src={selectedEvent.thumbnail}
-                  alt='썸네일'
-                  className='w-full h-[200px] object-cover rounded-lg shadow'
-                />
-              </div>
-            )}
+            <p className='text-sm text-gray-600'>
+              ⏰ <strong>방송 종료:</strong> {moment(selectedEvent.end).format('YYYY-MM-DD HH:mm')}
+            </p>
 
             <div className='mt-4 flex justify-end space-x-2'>
               <button

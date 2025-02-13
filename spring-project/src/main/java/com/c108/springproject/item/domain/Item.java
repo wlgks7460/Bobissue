@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Item extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "category_no", nullable = false)
     @JsonIgnore // 순환참조 해결
-    private ItemCategory categoryNo;
+    private ItemCategory category;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemImage> images = new ArrayList<>();

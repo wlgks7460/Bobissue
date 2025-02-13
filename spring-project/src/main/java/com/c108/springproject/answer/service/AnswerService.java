@@ -8,7 +8,11 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.question.domain.Question;
 import com.c108.springproject.question.repository.QuestionRepository;
+import com.c108.springproject.seller.domain.Seller;
+import com.c108.springproject.seller.repository.SellerRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,20 +20,25 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
+    private final SellerRepository sellerRepository;
 
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository){
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository, SellerRepository sellerRepository){
         this.answerRepository =answerRepository;
         this.questionRepository = questionRepository;
+        this.sellerRepository = sellerRepository;
     }
 
     @Transactional
     public Answer createAnswer(Long question_no, AnswerReqDto answerReqDto){
         Question question = questionRepository.findByQuestionNo(question_no).orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
-        //Auth 인증에서 seller id 가져와서 조회후 seller 넣기
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
         try{
             Answer new_answer = Answer.builder()
                     .questionNo(question)
-                    .sellerNo(1)
+                    .seller(seller)
                     .content(answerReqDto.getContent())
                     .status("N")
                     .build();

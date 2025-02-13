@@ -31,8 +31,8 @@ public class OrderDetailResDto {
     public static OrderDetailResDto toDto(Order order, String orderStatus, String deliveryStatus) {
         return OrderDetailResDto.builder()
                 .orderNo(order.getOrderNo())
-                .userNo(order.getUserNo())
-                .addressNo(order.getAddressNo())
+                .userNo(order.getUser().getUserNo())
+                .addressNo(order.getAddress().getAddressNo())
                 .userCouponNo(order.getUserCouponNo())
                 .payment(order.getPayment())
                 .totalPrice(order.getTotalPrice())

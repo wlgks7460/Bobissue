@@ -38,10 +38,6 @@ const Login = () => {
   // 네이버 로그인 함수
   const naverLogin = (e) => {
     e.preventDefault()
-    const naverClientId = import.meta.env.VITE_NAVER_LOGIN_CLIENT_ID
-    const naverStateString = uuidv4()
-    const naverRedirectURL = import.meta.env.VITE_NAVER_LOGIN_REDIRECT_URL
-    window.location.href = `https://nid.naver.com/oauth2.0/authorize?client_id=${naverClientId}&response_type=code&redirect_uri=${naverRedirectURL}&state=${naverStateString}`
   }
 
   // 카카오 로그인 함수

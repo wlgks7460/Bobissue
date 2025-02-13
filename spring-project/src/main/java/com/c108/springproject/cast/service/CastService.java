@@ -50,9 +50,15 @@ public class CastService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getName());
         Seller seller = sellerRepository.findByEmail(authentication.getName()).orElseThrow(()-> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        if(castRepository.findByCastStatusAndCompany(CastStatus.REGISTER, seller.getCompany()).isPresent()){
+            throw new BobIssueException(ResponseCode.ALREADY_REGISTER_CAST_COMPANY);
+        }
+
         try{
             Cast new_cast = Cast.builder()
-                    .sellerNo(seller)
+                    .seller(seller)
+                    .company(seller.getCompany())
                     .title(castReqDto.getTitle())
                     .content(castReqDto.getContent())
                     .startAt(castReqDto.getStartAt())
@@ -207,7 +213,7 @@ public class CastService {
 
     @Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public int registerCast(int cast_no){
+    public CastResDto acceptCast(int cast_no){
         Cast cast = castRepository.findByCastNo(cast_no).orElseThrow(()-> new BobIssueException(ResponseCode.CAST_NOT_FOUND));
         if(cast.getCastStatus().equals(CastStatus.AWAIT)){
             throw new BobIssueException(ResponseCode.ALREADY_APPROVED_CAST);
@@ -222,10 +228,10 @@ public class CastService {
         }
 
         try{
-            cast.registerCast();
-            return cast.getCastNo();
+            cast.acceptCast();
+            return CastResDto.toDto(cast);
         }catch (Exception e){
-            throw new BobIssueException(ResponseCode.FAILED_REGISTER_CAST);
+            throw new BobIssueException(ResponseCode.FAILED_ACCEPT_CAST);
         }
     }
 

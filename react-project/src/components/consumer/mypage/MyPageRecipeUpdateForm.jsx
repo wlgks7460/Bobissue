@@ -1,0 +1,285 @@
+import React, { useEffect, useRef, useState } from 'react'
+import API from '../../../utils/API'
+import { useNavigate, useParams } from 'react-router-dom'
+import MyPageRecipeCreateModalSelectedItem from './MyPageRecipeCreateModalSelectedItem'
+import MyPageRecipeCreateModal from './MyPageRecipeCreateModal'
+
+const MyPageRecipeUpdateForm = () => {
+  const params = useParams()
+  const navigate = useNavigate()
+
+  const [showModal, setShowModal] = useState(false)
+
+  const [recipeCategory, setRecipeCategory] = useState([])
+
+  const [files, setFiles] = useState([])
+
+  const [selectedItems, setSelectedItems] = useState([]) // 선택된 상품 정보
+
+  const [recipeData, setRecipeData] = useState({})
+
+  const fileInputRef = useRef(null)
+  const categoryRef = useRef()
+  const nameRef = useRef()
+  const timeRef = useRef()
+  const contentRef = useRef()
+  const [keepImg, setKeepImg] = useState([])
+
+  // 이미지 input 핸들러
+  const handleFileInput = (e) => {
+    e.preventDefault()
+    fileInputRef.current.click()
+  }
+
+  // 파일 선택 시 파일 이름 업데이트
+  const handleFileChange = (e) => {
+    const tempFiles = e.target.files
+    const fileArray = Array.from(tempFiles).map((file, i) => {
+      return { id: `image${i}`, name: file.name, file: file }
+    })
+    setFiles([...files, ...fileArray])
+  }
+
+  // 불러온 이미지 목록에서 제거
+  const deleteKeepImg = (idx) => {
+    setKeepImg(keepImg.filter((_, i) => i !== idx))
+  }
+
+  // 파일 이미지 목록에서 제거
+  const deleteFile = (idx) => {
+    setFiles(files.filter((_, i) => i !== idx))
+  }
+
+  // 레시피 카테고리 불러오기
+  const getRecipeCategory = () => {
+    API.get('/recipecategory')
+      .then((res) => {
+        setRecipeCategory(res.data.result.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 재료 정보 불러오기
+  const getMaterials = (itemNo, count) => {
+    API.get(`/item/${itemNo}`)
+      .then((res) => {
+        console.log(res)
+        const tempData = {
+          itemNo,
+          data: res.data.result.data,
+          count,
+        }
+        setSelectedItems((prevItems) => {
+          if (!prevItems.some((item) => item.itemNo === itemNo)) {
+            return [...prevItems, tempData]
+          }
+          return prevItems // 중복이면 변경하지 않음
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 레시피 정보 불러오기
+  const getRecipeData = () => {
+    API.get(`/recipe/${params.recipeNo}`)
+      .then((res) => {
+        const result = res.data.result.data
+        setRecipeData(result)
+        categoryRef.current.value = result.categoryNo
+        nameRef.current.value = result.name
+        timeRef.current.value = result.time
+        contentRef.current.value = result.description
+        setKeepImg(result.images)
+        result.materials.forEach((v) => getMaterials(v.itemNo, v.cnt))
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 레시피 수정
+  const updateRecipe = (e) => {
+    e.preventDefault()
+    const recipe = {
+      categoryNo: Number(categoryRef.current.value),
+      name: nameRef.current.value,
+      time: Number(timeRef.current.value),
+      description: contentRef.current.value,
+      materials: selectedItems.map((v) => {
+        return { itemNo: v.itemNo, cnt: v.count }
+      }),
+      keepImageIds: keepImg.map((v) => v.imageNo),
+    }
+
+    const formData = new FormData()
+
+    formData.append('recipe', JSON.stringify(recipe))
+
+    files.forEach((obj) => {
+      formData.append('images', obj.file)
+    })
+
+    API.put(`/recipe/${params.recipeNo}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then((res) => {
+        console.log(res)
+        navigate('/mypage/recipe')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    // mount
+    getRecipeCategory()
+    getRecipeData()
+    // unmount
+    return () => {}
+  }, [])
+  return (
+    <div className='w-[500px]'>
+      <form className='flex flex-col gap-3' onSubmit={updateRecipe}>
+        <div className='flex gap-2'>
+          {/* 카테고리 */}
+          <select
+            defaultValue='0'
+            className='flex-none w-[150px] h-[50px] border border-gray-300 rounded px-2'
+            ref={categoryRef}
+          >
+            <option value='0' disabled hidden>
+              카테고리
+            </option>
+            {recipeCategory.map((v) => (
+              <option value={v.categoryNo} key={v.categoryNo}>
+                {v.name}
+              </option>
+            ))}
+          </select>
+          {/* 제목 */}
+          <input
+            type='text'
+            className='grow h-[50px] border border-gray-300 rounded px-2'
+            placeholder='제목을 적어주세요.'
+            ref={nameRef}
+          />
+        </div>
+        {/* 이미지 첨부 */}
+        <div>
+          <input
+            type='file'
+            className='hidden'
+            name='images'
+            multiple
+            accept='image/*'
+            onChange={handleFileChange}
+            ref={fileInputRef}
+          />
+          <button className='hover:text-indigo-600' onClick={handleFileInput}>
+            이미지 추가하기
+          </button>
+          {files.length + keepImg.length > 0 ? (
+            <div className='w-full h-[100px] mt-1 p-3 border border-gray-300 rounded overflow-y-auto flex flex-wrap gap-3'>
+              {/* 불러온 이미지 */}
+              {keepImg.map((v, i) => (
+                <div
+                  key={v.imageNo}
+                  className='h-[35px] flex items-centr px-2 bg-indigo-200 rounded'
+                >
+                  <span className='flex items-center'>{v.originalName}</span>
+                  <button
+                    className='ms-3 text-gray-400'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      deleteKeepImg(i)
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+              {/* 업로드 이미지 */}
+              {files.map((v, i) => (
+                <div key={v.id} className='h-[35px] flex items-centr px-2 bg-indigo-200 rounded'>
+                  <span className='flex items-center'>{v.name}</span>
+                  <button
+                    className='ms-3 text-gray-400'
+                    onClick={(e) => {
+                      e.preventDefault()
+                      deleteFile(i)
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className='text-center'>이미지가 없습니다.</p>
+          )}
+        </div>
+        {/* 상품 선택 */}
+        <div>
+          <button
+            className='hover:text-indigo-600 mb-2'
+            onClick={(e) => {
+              e.preventDefault()
+              setShowModal(true)
+            }}
+          >
+            상품 선택하기
+          </button>
+          <div className='overflow-y-auto max-h-[200px]'>
+            {selectedItems.length > 0 ? (
+              <div>
+                {selectedItems.map((v) => (
+                  <MyPageRecipeCreateModalSelectedItem
+                    key={v.itemNo}
+                    item={v}
+                    selectedItems={selectedItems}
+                    setSelectedItems={setSelectedItems}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className='text-center'>선택된 상품이 없습니다.</p>
+            )}
+          </div>
+        </div>
+        <div>
+          <input
+            type='number'
+            className='w-[100px] h-[50px] border border-gray-300 rounded px-2'
+            placeholder='요리 시간(분)'
+            ref={timeRef}
+          />
+          <span className='ms-2'>분</span>
+        </div>
+        <textarea
+          className='w-full min-h-[450px] border border-gray-300 rounded overflow-y-auto p-3 resize-none'
+          placeholder='레시피 내용을 작성해주세요.'
+          ref={contentRef}
+        ></textarea>
+        <button className='w-full h-[50px] bg-indigo-400 hover:bg-indigo-600 rounded text-white'>
+          수정하기
+        </button>
+      </form>
+      {showModal && (
+        <MyPageRecipeCreateModal
+          setShowModal={setShowModal}
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+        />
+      )}
+    </div>
+  )
+}
+
+export default MyPageRecipeUpdateForm

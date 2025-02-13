@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import dayjs from 'dayjs'
 
-const MyPageCalendarModalItem = ({ meal }) => {
+const MyPageCalendarModalItem = ({ meal, updateData, deleteData }) => {
   const [mode, setMode] = useState('read')
 
   const nameRef = useRef()
@@ -10,6 +10,22 @@ const MyPageCalendarModalItem = ({ meal }) => {
 
   const [hour, setHour] = useState(dayjs(meal.eatTime).hour())
   const [minute, setMinute] = useState(dayjs(meal.eatTime).minute())
+
+  const handleUpdate = (e) => {
+    e.preventDefault()
+    updateData(
+      nameRef.current.value,
+      timeRef.current.value,
+      calorieRef.current.value,
+      meal.calendarNo,
+    )
+    setMode('read')
+  }
+
+  const handleDelete = (e) => {
+    e.preventDefault()
+    deleteData(meal.calendarNo)
+  }
 
   return (
     <div>
@@ -25,14 +41,16 @@ const MyPageCalendarModalItem = ({ meal }) => {
           <div>
             <h4 className='font-bold'>{meal.name}</h4>
             <div>
-              <span className='me-5'>{`${hour < 12 ? '오전' : '오후'} ${hour - 12}:${minute}`}</span>
+              <span className='me-5'>{`${hour < 12 ? '오전' : '오후'} ${hour > 13 ? hour - 12 : hour === 0 ? hour + 12 : hour}:${minute}`}</span>
               <span className='text-sm text-gray-500'>{meal.calorie} kcal</span>
             </div>
             <div className='flex gap-3'>
               <button className='p-1 text-indigo-600' onClick={() => setMode('update')}>
                 수정
               </button>
-              <button className='p-1 text-red-600'>삭제</button>
+              <button className='p-1 text-red-600' onClick={handleDelete}>
+                삭제
+              </button>
             </div>
           </div>
         </div>
@@ -57,7 +75,7 @@ const MyPageCalendarModalItem = ({ meal }) => {
               <div className='flex gap-3 mb-2'>
                 <input
                   type='time'
-                  defaultValue={`${hour}:${minute}`}
+                  defaultValue={`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`}
                   ref={timeRef}
                   className='px-2 py-1 border border-gray-300 rounded'
                 />
@@ -73,7 +91,9 @@ const MyPageCalendarModalItem = ({ meal }) => {
               </div>
               <div className='flex gap-3'>
                 <input type='file' name='' id='' accept='image/*' />
-                <button className='p-1 text-indigo-600'>수정</button>
+                <button className='p-1 text-indigo-600' onClick={handleUpdate}>
+                  수정
+                </button>
                 <button className='p-1 text-red-600' onClick={() => setMode('read')}>
                   취소
                 </button>
