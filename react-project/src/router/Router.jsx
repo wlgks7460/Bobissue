@@ -22,12 +22,15 @@ import ConsumerMyPageOrder from '../pages/consumer/mypage/MyPageOrder'
 import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
 import ConsumerMyPageRecipe from '../pages/consumer/mypage/MyPageRecipe'
 import ConsumerMyPageRecipeCreate from '../pages/consumer/mypage/MyPageRecipeCreate'
+import ConsumerMyPageRecipeUpdate from '../pages/consumer/mypage/MyPageRecipeUpdate'
 // 이용자 고객센터
 import ConsumerBoard from '../pages/consumer/board/Board'
 import ConsumerBoardFAQ from '../pages/consumer/board/BoardFAQ'
 import ConsumerBoardNotice from '../pages/consumer/board/BoardNotice'
 import ConsumerBoardNoticeDetail from '../pages/consumer/board/BoardNoticeDetail'
 import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
+// 이용자 레시피
+import ConsumerRecipe from '../pages/consumer/Recipe'
 
 // 관리자 section
 
@@ -144,6 +147,10 @@ const router = createBrowserRouter([
                 path: 'recipe/create',
                 element: <ConsumerMyPageRecipeCreate />,
               },
+              {
+                path: 'recipe/update/:recipeNo',
+                element: <ConsumerMyPageRecipeUpdate />,
+              },
             ],
           },
           {
@@ -191,6 +198,10 @@ const router = createBrowserRouter([
                 element: <ConsumerBoardQuestion />,
               },
             ],
+          },
+          {
+            path: 'recipe',
+            element: <ConsumerRecipe />,
           },
         ],
       },

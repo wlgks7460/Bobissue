@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import {
-  ShoppingBagIcon,
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  XCircleIcon,
-} from '@heroicons/react/24/solid'
+import { useNavigate } from 'react-router-dom'
+import { Bars3Icon, MagnifyingGlassIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import API from '../../../utils/API'
 import SearchBarCategory from './SearchBarCategory'
 import { useDispatch } from 'react-redux'
 import { categoryReducerActions } from '../../../redux/reducers/categorySlice'
+import IconLink from './IconLink'
 
 const SearchBar = () => {
   const navigate = useNavigate()
@@ -40,17 +38,17 @@ const SearchBar = () => {
       })
   }, [])
   return (
-    <div className='w-full border flex justify-center sticky z-10 top-0 bg-slate-100'>
+    <div className='w-full border flex justify-center sticky z-10 top-0 bg-slate-100 box-content'>
       <div className='w-[70rem] flex justify-between items-center gap-3'>
         <div
-          className='w-[150px] h-[60px] flex-none flex items-center gap-2 relative'
+          className='w-[150px] h-16 flex-none flex items-center gap-2 relative box-border'
           onMouseOver={() => setShowCategory(true)}
           onMouseOut={() => setShowCategory(false)}
         >
           <Bars3Icon className='w-6' />
           <span>카테고리</span>
           {showCategory && (
-            <div className='absolute top-[60px] flex flex-col w-[200px] min-h-[300px] border bg-slate-100 rounded-b'>
+            <div className='absolute top-16 left-0 flex flex-col w-[200px] h-[400px] border-x border-b border-gray-400 bg-slate-100 rounded-b'>
               {categories.map((v) => (
                 <SearchBarCategory key={v.categoryNo} category={v} />
               ))}
@@ -80,10 +78,9 @@ const SearchBar = () => {
             </button>
           </div>
         </div>
-        <div className='w-[150px] flex-none flex justify-end'>
-          <Link to={'/cart'}>
-            <ShoppingBagIcon className='w-7 text-indigo-600' />
-          </Link>
+        <div className='w-[150px] flex-none flex justify-end items-center gap-5'>
+          <IconLink path={'/recipe'} tootip={'레시피 보기'} Icon={RestaurantMenuIcon} />
+          <IconLink path={'/cart'} tootip={'장바구니 보기'} Icon={ShoppingBasketIcon} />
         </div>
       </div>
     </div>

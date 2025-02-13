@@ -10,6 +10,7 @@ const Navbar = () => {
 
   // 로그인 유무
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
+  const loginStatus = useSelector((state) => state.user.status)
 
   // 로그아웃
   const logout = (e) => {
@@ -31,7 +32,7 @@ const Navbar = () => {
         밥이슈
       </Link>
       {/* 로그인 상태에 따라 변화 */}
-      {isAuthenticated ? (
+      {isAuthenticated && loginStatus === 'consumer' ? (
         <div className='flex items-center gap-3'>
           <Link to={'/mypage/order'}>마이페이지</Link>
           <button onClick={logout}>로그아웃</button>

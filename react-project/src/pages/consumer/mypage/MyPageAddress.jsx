@@ -14,7 +14,6 @@ const MyPageAddress = () => {
   const getBaseAddress = () => {
     API.get('/address/base')
       .then((res) => {
-        console.log(res)
         setBaseAddress(res.data.result.data)
       })
       .catch((err) => {
