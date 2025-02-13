@@ -14,7 +14,6 @@ const SellerLoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
-  const debug_token = false
   const isAuth = false
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
@@ -29,22 +28,16 @@ const SellerLoginPage = () => {
     e.preventDefault()
     setError('') // 🔹 이전 에러 초기화
     setLoading(true) // 🔹 로딩 시작
-
-    if (debug_token) {
-      const payload = { email, password }
-      setItemWithExpiry('userId', payload.email, 600)
-      localStorage.setItem('access_token', dummy)
-      navigate('/seller')
-    } else {
+    {
       try {
-        const payload = { email, password}
+        const payload = { email, password }
         console.log(payload)
         const response = await API.post('/auths/seller-login', payload)
-        console.log(response);
+        console.log(response)
 
         if (response.status === 200 && response.data.status === 'OK') {
           const sellerData = { ...response.data.result.data, status: 'seller' }
-          localStorage.setItem('userId', payload.email)
+
           // 🔹 Redux 상태 업데이트 및 로컬스토리지에 토큰 저장
           dispatch(userReducerActions.login(sellerData))
 

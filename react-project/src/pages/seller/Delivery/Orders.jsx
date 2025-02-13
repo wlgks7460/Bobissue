@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { FaList, FaCheckCircle, FaClipboardCheck, FaTimesCircle } from 'react-icons/fa'
 import OrderPopup from './Popup/OrderPopup'
 import API from '../../../utils/API'
 
@@ -12,13 +13,49 @@ const Orders = () => {
   const [popupData, setPopupData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isOpenPopup, setIsOpenPopup] = useState(false)
 
   const dummyOrders = [
-    { orderId: '10001', productId: 2, option: '블랙', quantity: 1, status: 'orderComplete' },
-    { orderId: '10002', productId: 52, option: '청축', quantity: 1, status: 'orderConfirm' },
-    { orderId: '10003', productId: 53, option: '알루미늄', quantity: 2, status: 'orderComplete' },
-    { orderId: '10004', productId: 102, option: '화이트', quantity: 1, status: 'refundRequest' },
-    { orderId: '10005', productId: 152, option: 'LED', quantity: 1, status: 'refundComplete' },
+    {
+      orderId: '10001',
+      productId: 2,
+      option: '블랙',
+      quantity: 1,
+      status: 'orderComplete',
+      price: 15000,
+    },
+    {
+      orderId: '10002',
+      productId: 52,
+      option: '청축',
+      quantity: 1,
+      status: 'orderConfirm',
+      price: 120000,
+    },
+    {
+      orderId: '10003',
+      productId: 53,
+      option: '알루미늄',
+      quantity: 2,
+      status: 'orderComplete',
+      price: 80000,
+    },
+    {
+      orderId: '10004',
+      productId: 102,
+      option: '화이트',
+      quantity: 1,
+      status: 'refundRequest',
+      price: 45000,
+    },
+    {
+      orderId: '10005',
+      productId: 152,
+      option: 'LED',
+      quantity: 1,
+      status: 'refundComplete',
+      price: 30000,
+    },
   ]
 
   const dummyProducts = [
@@ -86,15 +123,21 @@ const Orders = () => {
     }
   }, [selectedTab, orderList])
 
-  const handleOpenPopup = async (order) => {
+  const handleOrderClick = async (orderId) => {
     if (debugMode) {
-      setPopupData(order)
+      const order = dummyOrders.find((order) => order.orderId === orderId)
+      if (order) {
+        const product = dummyProducts.find((p) => p.itemNo === order.productId)
+        setPopupData({ ...order, productName: product ? product.name : '상품 정보 없음' })
+        setIsOpenPopup(true)
+      }
     } else {
       try {
         setIsLoading(true)
-        const response = await API.get(`/orders/${order.orderId}`)
+        const response = await API.get(`/orders/${orderId}`)
         if (response.data.status === 'OK') {
           setPopupData(response.data.result)
+          setIsOpenPopup(true)
         } else {
           throw new Error(response.data.message.label)
         }
@@ -107,37 +150,16 @@ const Orders = () => {
     }
   }
 
-  const handleClosePopup = () => {
-    setPopupData(null)
-  }
-
   return (
     <div className='p-6 w-full bg-gray-50 min-h-screen'>
       <h1 className='text-2xl text-center font-bold text-gray-800 mb-6'>주문 관리</h1>
-
+      {isOpenPopup && <OrderPopup order={popupData} onClose={() => setIsOpenPopup(false)} />}
       {isLoading ? (
         <p className='text-gray-500 text-lg'>로딩 중...</p>
       ) : error ? (
         <p className='text-red-500 text-lg'>{error}</p>
       ) : (
         <>
-          <div className='flex space-x-4 justify-center text-lg font-medium my-6'>
-            {[
-              { key: 'all', label: '전체' },
-              { key: 'orderComplete', label: '주문완료' },
-              { key: 'orderConfirm', label: '주문확정' },
-              { key: 'orderCancel', label: '주문취소' },
-            ].map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => setSelectedTab(key)}
-                className={`px-4 py-2 rounded-lg transition ${selectedTab === key ? 'bg-blue-600 text-white' : 'bg-gray-300 hover:bg-gray-400'}`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
           <div className='border border-gray-300 rounded-xl bg-white'>
             <table className='w-full text-left border-collapse'>
               <thead className='bg-gray-100 text-gray-700'>
@@ -149,45 +171,28 @@ const Orders = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredOrders.map((order) => {
-                  const product = allProducts.find((p) => p.itemNo === order.productId)
-                  return (
-                    <tr key={order.orderId} className='border-b hover:bg-gray-100 transition'>
-                      <td className='p-4'>{order.orderId}</td>
-                      <td
-                        className='p-4 text-blue-600 hover:underline cursor-pointer'
-                        onClick={() => handleOpenPopup(order)}
-                      >
-                        {product ? product.name : '상품 정보 없음'}
-                      </td>
-                      <td className='p-4'>
-                        {order.option} / {order.quantity}
-                      </td>
-                      <td className='p-4'>{order.status}</td>
-                    </tr>
-                  )
-                })}
+                {filteredOrders.map((order) => (
+                  <tr key={order.orderId} className='border-b hover:bg-gray-100 transition'>
+                    <td
+                      className='p-4 cursor-pointer text-blue-600 hover:underline'
+                      onClick={() => handleOrderClick(order.orderId)}
+                    >
+                      {order.orderId}
+                    </td>
+                    <td className='p-4'>
+                      {allProducts.find((p) => p.itemNo === order.productId)?.name ||
+                        '상품 정보 없음'}
+                    </td>
+                    <td className='p-4'>
+                      {order.option} / {order.quantity}
+                    </td>
+                    <td className='p-4'>{order.status}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </>
-      )}
-
-      {popupData && (
-        <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='bg-white p-6 rounded-lg shadow-lg w-[300px]'>
-            <h2 className='text-xl font-bold mb-4'>주문 상세 정보</h2>
-            <p className='text-gray-700'>주문 번호: {popupData.orderId}</p>
-            <p className='text-gray-700'>옵션: {popupData.option}</p>
-            <p className='text-gray-700'>수량: {popupData.quantity}</p>
-            <button
-              onClick={handleClosePopup}
-              className='mt-4 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-800'
-            >
-              닫기
-            </button>
-          </div>
-        </div>
       )}
     </div>
   )

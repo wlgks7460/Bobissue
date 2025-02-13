@@ -145,7 +145,7 @@ const EditProduct = () => {
       })
 
       alert('상품이 수정되었습니다!')
-      navigate('/seller/products/inquiry')
+      navigate('/seller/products/search')
     } catch (error) {
       console.error('수정 실패:', error)
       alert('수정 중 오류가 발생했습니다.')
