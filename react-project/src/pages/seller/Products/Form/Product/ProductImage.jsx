@@ -1,6 +1,8 @@
 import React from 'react'
 
-const ProductImage = ({ product, setProduct }) => {
+const ProductImage = ({ product, handleRemoveImage, setProduct }) => {
+  // console.log('ProductImage Props:', { product, handleRemoveImage, setProduct })
+
   // 이미지 업로드 핸들러
   const handleImageUpload = (event) => {
     const file = event.target.files[0]
@@ -35,18 +37,6 @@ const ProductImage = ({ product, setProduct }) => {
         images: [...prev.images, newImage],
       }))
     }
-  }
-
-  // 이미지 삭제 핸들러 (파일도 함께 삭제)
-  const handleRemoveImage = (imageIndex) => {
-    setProduct((prev) => {
-      const newImages = prev.images.filter((_, index) => index !== imageIndex)
-
-      // 메모리 누수 방지 (미리보기 URL 해제)
-      URL.revokeObjectURL(prev.images[imageIndex].imageUrl)
-
-      return { ...prev, images: newImages }
-    })
   }
 
   return (

@@ -17,6 +17,7 @@ const EditProduct = () => {
     images: [],
     description: '',
     expiredAt: '',
+    keepImagesId: [], // ✅ 유지할 이미지 ID 리스트 추가
   })
   const [originalProduct, setOriginalProduct] = useState(null) // ✅ 기존 상품 데이터 저장
   const navigate = useNavigate()
@@ -36,8 +37,14 @@ const EditProduct = () => {
           images: itemData.images || [],
           description: itemData.description || '',
           expiredAt: itemData.expiredAt || '',
+          keepImageIds: [],
         }
+        console.log(itemData.images)
+        itemData.images.forEach((img) => {
+          formattedProduct.keepImageIds.push(img.imageNo)
+        })
 
+        console.log(formattedProduct)
         setProduct(formattedProduct)
         setOriginalProduct(formattedProduct) // ✅ 기존 데이터 저장
       } catch (error) {
@@ -51,11 +58,30 @@ const EditProduct = () => {
 
   // ✅ 변경 여부 확인 함수
   const isProductChanged = () => {
-    if (!originalProduct) return true // 기존 데이터가 없으면 수정 가능
+    if (!originalProduct) return true
     return JSON.stringify(originalProduct) !== JSON.stringify(product)
   }
 
-  // ✅ 폼 제출 핸들러 (상품 수정)
+  // ✅ 이미지 삭제 핸들러 (keepImagesId에서 제거)
+  const handleRemoveImage = (imageIndex) => {
+    setProduct((prev) => {
+      const newImages = [...prev.images]
+      const removedImage = newImages[imageIndex]
+
+      if (removedImage.imageNo) {
+        // 기존 이미지라면 keepImagesId에서 제거
+        const updatedKeepImageIds = prev.keepImageIds.filter((id) => id !== removedImage.imageNo)
+        return {
+          ...prev,
+          images: newImages.filter((_, i) => i !== imageIndex),
+          keepImageIds: updatedKeepImageIds,
+        }
+      }
+
+      return { ...prev, images: newImages.filter((_, i) => i !== imageIndex) }
+    })
+  }
+
   // ✅ 폼 제출 핸들러 (상품 수정)
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -87,6 +113,8 @@ const EditProduct = () => {
     try {
       const formData = new FormData()
 
+      // ✅ 기존 이미지 중 유지할 이미지 ID 필터링
+
       // ✅ 상품 데이터 JSON 변환 후 추가
       const itemData = {
         name: product.name,
@@ -96,16 +124,21 @@ const EditProduct = () => {
         stock: parseInt(product.stock, 10),
         expiredAt: product.expiredAt,
         description: product.description,
+        keepImageIds: product.keepImageIds, // ✅ 유지할 이미지 ID 추가
       }
 
       formData.append('item', JSON.stringify(itemData))
 
-      // ✅ 이미지 파일 추가
+      // ✅ 새로운 이미지 파일 추가
       product.images.forEach((img) => {
         if (img.file) {
-          formData.append('images', img.file) // 새 이미지 업로드
+          formData.append('images', img.file) // 새 이미지만 추가
         }
       })
+
+      for (const pair of formData.entries()) {
+        console.log(`📌 FormData 확인: ${pair[0]} →`, pair[1])
+      }
 
       await API.put(`/item/${itemNo}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -124,7 +157,11 @@ const EditProduct = () => {
       <h1 className='font-bold text-[32px] mb-10'>상품 수정</h1>
       <form onSubmit={handleSubmit}>
         <ProductInfo product={product} setProduct={setProduct} />
-        <ProductImage product={product} setProduct={setProduct} />
+        <ProductImage
+          product={product}
+          setProduct={setProduct}
+          handleRemoveImage={handleRemoveImage}
+        />
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
         <button
