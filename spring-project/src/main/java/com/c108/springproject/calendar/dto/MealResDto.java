@@ -1,10 +1,15 @@
 package com.c108.springproject.calendar.dto;
 
 import com.c108.springproject.calendar.domain.Calendar;
+import com.c108.springproject.calendar.domain.MealImage;
+import com.c108.springproject.item.dto.response.ImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -15,6 +20,7 @@ public class MealResDto {
     private String name;
     private String eatTime;
     private int calorie;
+    private List<MealImageReqDto> images;
     //이미지
 
     public static MealResDto toDto(Calendar calendar) {
@@ -23,6 +29,9 @@ public class MealResDto {
                 .name(calendar.getName())
                 .calorie(calendar.getCalorie())
                 .eatTime(calendar.getEatDate())
+                .images(calendar.getImages().stream()
+                        .map(image -> MealImageReqDto.toDto(image))
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
