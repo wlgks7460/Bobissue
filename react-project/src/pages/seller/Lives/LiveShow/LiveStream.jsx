@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 
 const LiveStreamSetup = () => {
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
   const location = useLocation()
   const event = location.state?.event
   const videoRef = useRef(null)
@@ -25,6 +26,7 @@ const LiveStreamSetup = () => {
 
   // 📌 웹캠(미리보기) 설정
   useEffect(() => {
+    console.log(debug_mode)
     const setupStream = async () => {
       try {
         const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -45,11 +47,14 @@ const LiveStreamSetup = () => {
 
   // 📌 방송 시작 / 중지 핸들러
   const handleStreamToggle = () => {
-    if (!isLiveAvailable) return
+    console.log(isLiveAvailable)
+    console.log(debug_mode)
+
+    if (!isLiveAvailable && !debug_mode) {
+      return
+    }
 
     if (isStreaming) {
-      stream.getTracks().forEach((track) => track.stop()) // 모든 미디어 트랙 중지
-      setStream(null)
       setIsStreaming(false)
 
       // 📌 웹소켓 종료
@@ -82,8 +87,15 @@ const LiveStreamSetup = () => {
         setMessages((prev) => [...prev, message]) // 📌 메시지를 리스트에 추가
       }
 
+      wsRef.current.onerror = () => {
+        console.error('웹소켓 연결 실패')
+        setIsStreaming(false) // 📌 연결 실패 시 방송 중지 상태로 변경
+        wsRef.current = null
+      }
+
       wsRef.current.onclose = () => {
         console.log('웹소켓 연결 종료')
+        setIsStreaming(false) // 📌 웹소켓이 예상치 않게 종료되면 방송 중지 상태로 변경
       }
     }
   }
@@ -125,7 +137,7 @@ const LiveStreamSetup = () => {
       )}
 
       {/* 📌 방송 화면 미리보기 */}
-      <div className='relative border p-4 rounded-lg shadow-md bg-black w-full mx-auto'>
+      <div className='relative border  rounded-lg shadow-md bg-black w-full mx-auto'>
         <video ref={videoRef} autoPlay playsInline className='w-full h-[500px] bg-black'></video>
       </div>
 
@@ -134,13 +146,9 @@ const LiveStreamSetup = () => {
         <button
           onClick={handleStreamToggle}
           className={`px-4 py-2 font-bold text-white rounded ${
-            isLiveAvailable
-              ? isStreaming
-                ? 'bg-red-500 hover:bg-red-600'
-                : 'bg-green-500 hover:bg-green-600'
-              : 'bg-gray-400 cursor-not-allowed'
+            isStreaming ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
           }`}
-          disabled={!isLiveAvailable}
+          disabled={!debug_mode && !isLiveAvailable} // debug_mode가 true면 항상 활성화
         >
           {isStreaming ? '방송 중지' : '방송 시작'}
         </button>

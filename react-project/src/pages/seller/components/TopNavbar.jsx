@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { FaSignOutAlt, FaBug, FaHome } from 'react-icons/fa' // ✅ Home 아이콘 추가
 
 const TopNavbar = ({ toggleSidebar }) => {
-  const navigate = useNavigate() // 로그인 페이지로 이동하기 위한 네비게이션 함수
-  const [debugMode, setDebugMode] = useState(false) // ✅ 디버그 모드 상태
+  const navigate = useNavigate()
+  const [debugMode, setDebugMode] = useState(false)
 
-  // ✅ 컴포넌트가 마운트될 때 localStorage에서 debug_mode 값 불러오기
   useEffect(() => {
     const storedDebugMode = localStorage.getItem('debug_mode')
     if (storedDebugMode) {
-      setDebugMode(storedDebugMode === 'true') // "true"를 boolean 값으로 변환
+      setDebugMode(storedDebugMode === 'true')
     }
   }, [])
 
-  // ✅ 디버그 모드 토글 함수
   const toggleDebugMode = () => {
     const newMode = !debugMode
     setDebugMode(newMode)
-    localStorage.setItem('debug_mode', newMode) // localStorage에 저장
+    localStorage.setItem('debug_mode', newMode)
   }
 
-  // ✅ 로그아웃 함수
   const handleLogout = () => {
-    localStorage.removeItem('access_token') // 로컬스토리지에서 access_token 삭제
-    sessionStorage.removeItem('access_token') // 세션스토리지에서도 삭제 (필요한 경우)
-    navigate('/seller/login') // 로그인 페이지로 이동
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    navigate('/seller/login')
   }
 
   return (
@@ -62,29 +60,30 @@ const TopNavbar = ({ toggleSidebar }) => {
 
       {/* 네비게이션 링크 */}
       <div className='ml-auto flex items-center gap-4'>
+        {/* ✅ 홈 버튼 (아이콘) */}
         <Link
           to='/'
-          className='text-sm text-indigo-600 no-underline hover:underline focus:underline'
+          className='p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none'
         >
-          Home
+          <FaHome className='w-5 h-5' />
         </Link>
 
-        {/* ✅ 디버그 모드 토글 버튼 */}
+        {/* ✅ 디버그 모드 토글 버튼 (아이콘) */}
         <button
           onClick={toggleDebugMode}
-          className={`px-2 py-1 rounded-[15px] text-white focus:outline-none ${
+          className={`p-2 rounded-full focus:outline-none ${
             debugMode ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-500 hover:bg-gray-600'
           }`}
         >
-          {debugMode ? '디버그 ON' : '디버그 OFF'}
+          <FaBug className='text-white w-5 h-5' />
         </button>
 
-        {/* 로그아웃 버튼 */}
+        {/* ✅ 로그아웃 버튼 (아이콘) */}
         <button
           onClick={handleLogout}
-          className='bg-red-500 text-white px-2 py-1 rounded-[15px] hover:bg-red-600 focus:outline-none'
+          className='p-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none'
         >
-          로그아웃
+          <FaSignOutAlt className='w-5 h-5' />
         </button>
       </div>
     </nav>
