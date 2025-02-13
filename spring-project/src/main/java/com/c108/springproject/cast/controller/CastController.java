@@ -43,7 +43,7 @@ public class CastController {
 
     @PatchMapping("/{cast_no}/accept")
     public ResponseDto acceptCast(@PathVariable int cast_no){
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_ACCEPT_CAST, new DefaultResponse<Integer>(castService.acceptCast(cast_no)));
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_ACCEPT_CAST, new DefaultResponse<CastResDto>(castService.acceptCast(cast_no)));
     }
 
     @PatchMapping("/{cast_no}/refusal")
