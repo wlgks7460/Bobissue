@@ -253,6 +253,7 @@ public enum ResponseCode {
     NOT_STARTABLE_CAST("NOT_STARTABLE_CAST", "시작 가능한 방송이 아닙니다."),
     SUCCESS_END_CAST("SUCCESS_END_CAST", "방송 종료 완료"),
     FAILED_END_CAST("FAILED_END_CAST", "방송 종료 실패"),
+    ALREADY_REGISTER_CAST_COMPANY("ALREADY_REGISTER_CAST_COMPANY", "이미 방송 등록 완료된 회사입니다. ")
     ;
 
 
