@@ -50,9 +50,15 @@ public class CastService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getName());
         Seller seller = sellerRepository.findByEmail(authentication.getName()).orElseThrow(()-> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        if(castRepository.findByCastStatusAndCompany(CastStatus.REGISTER, seller.getCompany()).isPresent()){
+            throw new BobIssueException(ResponseCode.ALREADY_REGISTER_CAST_COMPANY);
+        }
+
         try{
             Cast new_cast = Cast.builder()
                     .seller(seller)
+                    .company(seller.getCompany())
                     .title(castReqDto.getTitle())
                     .content(castReqDto.getContent())
                     .startAt(castReqDto.getStartAt())
