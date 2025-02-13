@@ -113,7 +113,7 @@ public class CalendarService {
     @Transactional
     @PreAuthorize("hasAnyAuthority('USER')")
     public MealResDto updateMeal(long calendarNo,MealReqDto mealReqDto, List<MultipartFile> files){
-        Calendar meal = calendarRepository.findById((int) calendarNo)
+        Calendar meal = calendarRepository.findByCalendarNo(calendarNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_CALENDAL));
         try {
             meal.update(
@@ -156,7 +156,7 @@ public class CalendarService {
     @Transactional
     @PreAuthorize("hasAnyAuthority('USER')")
     public MealResDto deleteMeal(long calendarNo) {
-        Calendar meal = calendarRepository.findById((int) calendarNo)
+        Calendar meal = calendarRepository.findByCalendarNo(calendarNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_CALENDAL));
         try {
             meal.setDelYn("Y");
