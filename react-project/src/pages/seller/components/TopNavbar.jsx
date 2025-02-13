@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { FaSignOutAlt, FaBug } from 'react-icons/fa' // ✅ FontAwesome 아이콘 추가
 
 const TopNavbar = ({ toggleSidebar }) => {
   const navigate = useNavigate() // 로그인 페이지로 이동하기 위한 네비게이션 함수
@@ -69,22 +70,22 @@ const TopNavbar = ({ toggleSidebar }) => {
           Home
         </Link>
 
-        {/* ✅ 디버그 모드 토글 버튼 */}
+        {/* ✅ 디버그 모드 토글 버튼 (아이콘) */}
         <button
           onClick={toggleDebugMode}
-          className={`px-2 py-1 rounded-[15px] text-white focus:outline-none ${
+          className={`p-2 rounded-full focus:outline-none ${
             debugMode ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-500 hover:bg-gray-600'
           }`}
         >
-          {debugMode ? '디버그 ON' : '디버그 OFF'}
+          <FaBug className='text-white w-5 h-5' />
         </button>
 
-        {/* 로그아웃 버튼 */}
+        {/* ✅ 로그아웃 버튼 (아이콘) */}
         <button
           onClick={handleLogout}
-          className='bg-red-500 text-white px-2 py-1 rounded-[15px] hover:bg-red-600 focus:outline-none'
+          className='p-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none'
         >
-          로그아웃
+          <FaSignOutAlt className='w-5 h-5' />
         </button>
       </div>
     </nav>
