@@ -143,7 +143,7 @@ const Register = () => {
         {/* ✅ 등록 버튼 */}
         <button
           type='submit'
-          className={`mt-5 p-1 text-white rounded-[4px]  ${
+          className={`mt-5 p-1 text-white rounded-[12px]  ${
             loading ? 'bg-amber-600 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600'
           }`}
           disabled={loading}
