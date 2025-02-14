@@ -44,6 +44,8 @@ public class SecurityConfig {
                             "http://43.202.60.173:5173",
                             "https://www.bobissue.store",
                             "http://www.bobissue.store",
+                            "https://bobissue.store",
+                            "http://bobissue.store",
                             "http://bobissue.duckdns.org",
                             "https://bobissue.duckdns.org",
                             "http://localhost:8080"  // WebSocket 요청을 허용
