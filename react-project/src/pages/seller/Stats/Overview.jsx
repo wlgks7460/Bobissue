@@ -26,8 +26,8 @@ const Overview = () => {
               onClick={() => setSelectedTimeframe(period)}
               className={`px-4 py-1 rounded-full text-lg font-semibold transition-all duration-300 ${
                 selectedTimeframe === period
-                  ? 'bg-cyan-600 text-white scale-105'
-                  : 'bg-gray-200 text-gray-700 hover:bg-cyan-500 hover:text-white'
+                  ? 'bg-emerald-500 text-white scale-105'
+                  : 'bg-gray-200 text-gray-700 hover:bg-emerald-600 hover:text-white'
               }`}
             >
               {period === 'annual' && '연간'}
