@@ -33,7 +33,7 @@ const Overview = () => {
       {/* ✅ 정산 필터 버튼 */}
       <div className='flex justify-center space-x-6 mb-8'>
         <button
-          className={`px-6 py-3 rounded-full font-semibold transition-all ${
+          className={`px-6 py-2 rounded-full font-semibold transition-all ${
             category === 'all' ? 'bg-sky-500 text-white' : 'bg-gray-200 text-gray-700'
           }`}
           onClick={() => setCategory('all')}
@@ -41,7 +41,7 @@ const Overview = () => {
           전체
         </button>
         <button
-          className={`px-6 py-3 rounded-full font-semibold transition-all ${
+          className={`px-6 py-2 rounded-full font-semibold transition-all ${
             category === '정산' ? 'bg-lime-500 text-white' : 'bg-gray-200 text-gray-700'
           }`}
           onClick={() => setCategory('정산')}
@@ -49,7 +49,7 @@ const Overview = () => {
           정산 완료
         </button>
         <button
-          className={`px-6 py-3 rounded-full font-semibold transition-all ${
+          className={`px-6 py-2 rounded-full font-semibold transition-all ${
             category === '미정산' ? 'bg-amber-300 text-white' : 'bg-gray-200 text-gray-700'
           }`}
           onClick={() => setCategory('미정산')}
@@ -59,23 +59,23 @@ const Overview = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className='flex justify-between mb-8'>
-        <div className='bg-white rounded-lg shadow-md p-6 w-[280px]'>
+      <div className='grid grid-cols-3 mb-8 '>
+        <div className='bg-white rounded-lg border-2 border-gray-400 p-5 w-[280px]'>
           <h2 className='text-gray-600 text-sm font-semibold'>총 수익</h2>
           <p className='text-3xl font-bold text-green-500 mt-2'>₩3,200,000</p>
         </div>
-        <div className='bg-white rounded-lg shadow-md p-6 w-[280px]'>
+        <div className='bg-white rounded-lg border-2 border-gray-400 p-5 w-[280px]'>
           <h2 className='text-gray-600 text-sm font-semibold'>총 지출</h2>
           <p className='text-3xl font-bold mt-2'>₩1,200,000</p>
         </div>
-        <div className='bg-white rounded-lg shadow-md p-6 w-[280px]'>
+        <div className='bg-white rounded-lg border-2 border-gray-400 p-5 w-[280px]'>
           <h2 className='text-gray-600 text-sm font-semibold'>미정산 금액</h2>
           <p className='text-3xl font-bold mt-2'>₩500,000</p>
         </div>
       </div>
 
       {/* Transactions Table */}
-      <div className='bg-white rounded-lg shadow-md p-6'>
+      <div className='bg-white rounded-lg border-2 border-gray-400 p-5 p-6'>
         <h2 className='text-lg font-semibold text-gray-800 mb-4'>정산 내역</h2>
         <table className='table-fixed text-sm w-full'>
           <thead className='bg-gray-100 text-gray-700'>
