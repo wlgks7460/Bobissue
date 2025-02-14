@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
@@ -12,6 +13,8 @@ moment.locale('ko') // 한글 버전
 const localizer = momentLocalizer(moment)
 
 const MyPageCalendar = () => {
+  const userInfo = useSelector((state) => state.user.userInfo)
+
   const [selectedDate, setSelectedDate] = useState(null) // 클릭한 날짜
   const [modalOpen, setModalOpen] = useState(false) // 모달 상태
 
@@ -19,6 +22,39 @@ const MyPageCalendar = () => {
   const [currentMonth, setCurrentMonth] = useState(dayjs().month() + 1) // 현재 월
 
   const [events, setEvents] = useState([]) // 캘린더에 표시할 이벤트
+
+  const [tdee, setTdee] = useState() // 일일 권장 칼로리
+
+  // 숫자 , 찍기
+  const addComma = (price) => {
+    let returnString = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    return returnString
+  }
+
+  // 일일 권장 칼로리 계산 함수
+  const calculateTDEE = (weight, height, age, gender, activityLevel = 'sedentary') => {
+    let BMR
+
+    if (gender === 'M') {
+      BMR = 10 * weight + 6.25 * height - 5 * age + 5
+    } else {
+      BMR = 10 * weight + 6.25 * height - 5 * age - 161
+    }
+
+    const activityMultipliers = {
+      sedentary: 1.2,
+      light: 1.375,
+      moderate: 1.55,
+      active: 1.725,
+      veryActive: 1.9,
+    }
+
+    return Math.round(BMR * (activityMultipliers[activityLevel] || 1.2)) // 기본값 적용
+  }
+  useEffect(() => {
+    const age = dayjs().year() - dayjs(userInfo.birthday).year()
+    setTdee(calculateTDEE(userInfo.weight, userInfo.height, age, userInfo.gender))
+  }, [userInfo])
 
   // 날짜 클릭시 모달 출력
   const handleDateClick = (slotInfo) => {
@@ -96,11 +132,15 @@ const MyPageCalendar = () => {
   return (
     <div className='p-5'>
       <h2 className='text-xl text-center mb-5'>내 식단 관리</h2>
+      <div className='flex items-end gap-3'>
+        <span className='text-gray-400 text-sm'>일일 권장 칼로리</span>
+        <span>{addComma(tdee)} kcal</span>
+      </div>
       <Calendar
         localizer={localizer}
         startAccessor='start'
         endAccessor='end'
-        style={{ height: 500 }}
+        style={{ height: 600 }}
         views={['month']}
         defaultView='month'
         selectable
@@ -121,7 +161,7 @@ const MyPageCalendar = () => {
         components={{
           month: {
             header: CustomWeekdayHeader,
-            dateHeader: (props) => <MyPageCalendarItem {...props} events={events} />,
+            dateHeader: (props) => <MyPageCalendarItem {...props} events={events} tdee={tdee} />,
           },
           toolbar: CustomToolbar,
         }}

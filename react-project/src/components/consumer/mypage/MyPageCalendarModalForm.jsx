@@ -10,7 +10,7 @@ const MyPageCalendarModalForm = ({ setShowForm, createData }) => {
   // 폼 제출 핸들러
   const handleSubmit = (e) => {
     e.preventDefault()
-    createData(mealTitle, mealTime, mealCalories)
+    createData(mealTitle, mealTime, mealCalories, mealImage)
   }
 
   // 이미지 파일 선택 핸들러
@@ -78,7 +78,7 @@ const MyPageCalendarModalForm = ({ setShowForm, createData }) => {
               <img
                 src={URL.createObjectURL(mealImage)} // 파일 객체 URL을 사용하여 미리보기
                 alt='meal preview'
-                className='w-auto h-[50px] object-cover '
+                className='w-auto h-[50px] object-cover rounded'
               />
             </div>
           )}
