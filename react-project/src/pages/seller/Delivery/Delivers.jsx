@@ -65,7 +65,7 @@ const Delivers = () => {
             <button
               key={key}
               onClick={() => setSelectedTab(key)}
-              className={`px-4 py-2 mx-2 rounded-full text-lg font-semibold transition-all duration-300 transform ${
+              className={`px-3 py-1 mx-2 rounded-full text-lg font-semibold transition-all duration-300 transform ${
                 selectedTab === key
                   ? 'bg-gray-600 text-white scale-105'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-400 hover:text-white'

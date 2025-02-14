@@ -7,6 +7,8 @@ const SearchFilter = ({ onSearch }) => {
   const [companyNo, setCompanyNo] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState(dayjs().format('YYYY-MM-DD'))
+  const [searchType, setSearchType] = useState('name') // 'name' or 'category'
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleQuickDateSelect = (days) => {
     setStartDate(dayjs().subtract(days, 'day').format('YYYY-MM-DD'))
@@ -21,52 +23,32 @@ const SearchFilter = ({ onSearch }) => {
       startDate,
       endDate,
     }
-
     onSearch(filters)
   }
 
   return (
-    <div className='w-[1000px] p-6 bg-white border border-gray-300 rounded-lg'>
+    <div className=' p-6 bg-white border border-gray-300 rounded-lg'>
       {/* 카테고리 선택 */}
-      <div className='flex flex-col mb-4'>
-        <label className='text-center block text-gray-700 font-medium mb-1'>📂 상품 카테고리</label>
+      <div className='flex flex-row mb-4 w-full'>
+        {/* 검색 타입 선택 (상품명, 상품카테고리) */}
         <select
-          name='categoryNo'
-          value={categoryNo}
-          onChange={(e) => setCategoryNo(e.target.value)}
+          name='searchType'
+          value={searchType}
+          onChange={(e) => setSearchType(e.target.value)}
           className='w-[250px] p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400'
         >
-          <option value=''>분류별 찾기</option>
-          <option value='1'>상품명</option>
-          <option value='2'>상품카테고리리</option>
-          <option value='3'>카테고리 3</option>
-          <option value='4'>카테고리 4</option>
+          <option value='name'>상품명</option>
+          <option value='category'>상품카테고리</option>
         </select>
-      </div>
 
-      {/* 검색어 입력 */}
-      <div className='flex flex-wrap border-b pb-4 mb-4 gap-6'>
-        <div className='flex flex-col'>
-          <label className='text-center block text-gray-700 font-medium mb-1'>상품명</label>
-          <input
-            className='w-[250px] p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400'
-            type='text'
-            placeholder='상품명을 입력하세요'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-
-        <div className='flex flex-col'>
-          <label className='block text-gray-700 font-medium mb-1'>회사 번호</label>
-          <input
-            className='w-[250px] p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400'
-            type='number'
-            placeholder='회사 번호 입력'
-            value={companyNo}
-            onChange={(e) => setCompanyNo(e.target.value)}
-          />
-        </div>
+        {/* 검색어 입력 */}
+        <input
+          type='text'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder={searchType === 'name' ? '상품명을 입력하세요' : '카테고리 번호를 입력하세요'}
+          className='w-[250px] p-2 border border-gray-300 rounded ml-4 focus:ring-2 focus:ring-blue-400'
+        />
       </div>
 
       {/* 기간 설정 (시작일 & 종료일) */}
