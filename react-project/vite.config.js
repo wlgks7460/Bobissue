@@ -26,6 +26,10 @@ export default defineConfig(({ mode }) => {
       //     changeOrigin: true,
       //   },
       // },
+          allowedHosts: [
+      'bobissue.store', // 허용할 호스트 추가
+      'www.bobissue.store', // 다른 호스트도 필요하다면 추가
+    ]
     },
   }
 })
