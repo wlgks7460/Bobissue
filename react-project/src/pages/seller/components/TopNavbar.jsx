@@ -52,7 +52,7 @@ const TopNavbar = ({ toggleSidebar }) => {
       {/* 로고 이미지 */}
       <Link to=''>
         <img
-          src='/path/to/your/image.png'
+          src='/bobissueLogo.png'
           alt='이미지'
           className='w-12 h-12 object-cover cursor-pointer'
         />
