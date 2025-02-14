@@ -7,7 +7,7 @@ import { Client } from '@stomp/stompjs' // ✅ STOMP 사용
 import LiveChat from './LiveChat.jsx' // ✅ 채팅 컴포넌트
 
 const LiveStreamSetup = () => {
-  const debug_mode =localStorage.getItem('debug_mode')
+  
   const debug_mode = localStorage.getItem('debug_mode') === 'true'
   const location = useLocation()
   const event = location.state?.event

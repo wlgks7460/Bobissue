@@ -48,7 +48,7 @@ const UpdatePassword = () => {
   }
 
   return (
-    <div className='h-screen flex items-center justify-center bg-gradient-to-br p-6'>
+    <div className="flex flex-col justify-center items-center bg-gradient-to-br h-[60vh]">
       <div className='w-full max-w-md bg-white p-8 rounded-xl border border-blue-400 '>
         <h1 className='text-2xl font-bold text-center mb-6'>비밀번호 변경</h1>
 

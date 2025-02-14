@@ -16,7 +16,7 @@ const UpdateInfo = ({ userInfo, onClose, onSave }) => {
   }
 
   return (
-    <div className='p-6 bg-white rounded-lg w-[600px] border border-gray-300'>
+    <div className=''>
       <h2 className='text-[28px] font-bold mb-6'>개인정보 수정</h2>
       <form onSubmit={handleSubmit}>
         <div className='space-y-3 border border-gray-200 p-4 rounded-md'>
