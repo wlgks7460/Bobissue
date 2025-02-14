@@ -29,36 +29,59 @@ const MyPageCalendarModal = ({
       })
   }
   // 식단 데이터 생성
-  const createData = (mealTitle, mealTime, mealCalories) => {
+  const createData = (mealTitle, mealTime, mealCalories, file) => {
     const payload = {
       name: mealTitle,
       eatTime: mealTime.replace(':', '') + '00',
       calorie: Number(mealCalories),
     }
-    API.post(`/calendar/${year}/${month}/${day}`, payload)
-      .then((res) => {
-        const result = res.data.result.data
-        setTodayMeal([...todayMeal, result])
-        setShowForm(false)
-        getCalendarData(currentYear, currentMonth)
+
+    const formData = new FormData()
+
+    formData.append('meal', JSON.stringify(payload))
+    formData.append('images', file)
+    if (!payload.name) {
+      alert('제목을 작성해주세요.')
+    } else if (!payload.calorie) {
+      alert('칼로리를 작성해주세요.')
+    } else {
+      API.post(`/calendar/${year}/${month}/${day}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
-      .catch((err) => {
-        console.error(err)
-      })
+        .then((res) => {
+          const result = res.data.result.data
+          setTodayMeal([...todayMeal, result])
+          setShowForm(false)
+          getCalendarData(currentYear, currentMonth)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
   }
 
   // 식단 데이터 수정
-  const updateData = (mealTitle, mealTime, mealCalories, calendarNo) => {
+  const updateData = (mealTitle, mealTime, mealCalories, calendarNo, file) => {
     const payload = {
       name: mealTitle,
       eatTime: mealTime.replace(':', '') + '00',
       calorie: Number(mealCalories),
     }
-    console.log(calendarNo)
-    API.put(`/calendar/${calendarNo}`, payload)
+    const formData = new FormData()
+
+    formData.append('meal', JSON.stringify(payload))
+    if (file) {
+      formData.append('images', file)
+    }
+    API.put(`/calendar/${calendarNo}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
       .then((res) => {
         alert('수정되었습니다.')
-        console.log(res)
         getDayData()
         getCalendarData(currentYear, currentMonth)
       })
