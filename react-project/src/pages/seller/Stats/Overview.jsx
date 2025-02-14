@@ -26,9 +26,10 @@ const Overview = () => {
               onClick={() => setSelectedTimeframe(period)}
               className={`px-4 py-1 rounded-full text-lg font-semibold transition-all duration-300 ${
                 selectedTimeframe === period
-                  ? 'bg-emerald-500 text-white scale-105'
-                  : 'bg-gray-200 text-gray-700 hover:bg-emerald-600 hover:text-white'
-              }`}
+                  ? 'bg-lime-600 text-white scale-105 shadow-lg'
+                  : 'bg-gray-200 text-gray-700 hover:bg-lime-400 hover:text-white'
+              }
+`}
             >
               {period === 'annual' && '연간'}
               {period === 'monthly' && '월간'}
@@ -41,7 +42,7 @@ const Overview = () => {
 
       {/* 인기 판매 상품 순위 */}
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12'>
-        <div className='bg-white p-6 rounded-lg shadow-md'>
+        <div className='bg-white p-6 rounded-xl border-2 border-gray-300 '>
           <FaBoxOpen className='text-4xl text-blue-600 mb-4' />
           <h3 className='text-xl font-semibold text-gray-800'>인기 판매 상품 순위</h3>
           <p className='text-gray-600 mt-2'>정렬 기준: 판매량, 매출, 리뷰 평점</p>
@@ -49,7 +50,7 @@ const Overview = () => {
         </div>
 
         {/* 고객 만족도 */}
-        <div className='bg-white p-6 rounded-lg shadow-md'>
+        <div className='bg-white p-6 rounded-xl border-2 border-gray-300'>
           <FaSmile className='text-4xl text-green-600 mb-4' />
           <h3 className='text-xl font-semibold text-gray-800'>고객 만족도</h3>
           <p className='text-gray-600 mt-2'>재구매율, 평점, 주문취소, 환불</p>
@@ -57,7 +58,7 @@ const Overview = () => {
         </div>
 
         {/* 전월 대비 실적 */}
-        <div className='bg-white p-6 rounded-lg shadow-md'>
+        <div className='bg-white p-6 rounded-xl border-2 border-gray-300'>
           <FaRedoAlt className='text-4xl text-orange-600 mb-4' />
           <h3 className='text-xl font-semibold text-gray-800'>전월 대비 실적</h3>
           <p className='text-gray-600 mt-2'>판매량, 매출, 증감 추이</p>
@@ -66,7 +67,7 @@ const Overview = () => {
       </div>
 
       {/* 판매량 예측 */}
-      <div className='bg-white p-6 rounded-lg shadow-md mb-12'>
+      <div className='bg-white p-6 rounded-xl border-2 border-gray-300 mb-12'>
         <FaChartLine className='text-4xl text-yellow-600 mb-4' />
         <h3 className='text-xl font-semibold text-gray-800'>판매량 예측</h3>
         <p className='text-gray-600 mt-2'>차주 판매량 예측 및 재고 관리</p>
@@ -87,14 +88,14 @@ const Overview = () => {
       </div>
 
       {/* 카테고리별 통계 */}
-      <div className='bg-white p-6 rounded-lg shadow-md mb-12'>
+      <div className='bg-white p-6 rounded-xl border-2 border-gray-300 mb-12'>
         <FaClipboardList className='text-4xl text-purple-600 mb-4' />
         <h3 className='text-xl font-semibold text-gray-800'>카테고리별 통계</h3>
         <p className='text-gray-600 mt-2'>각 카테고리별 판매량, 매출, 트렌드</p>
       </div>
 
       {/* 라이브 커머스 효율 분석 */}
-      <div className='bg-white p-6 rounded-lg shadow-md mb-12'>
+      <div className='bg-white p-6 rounded-xl border-2 border-gray-300 mb-12'>
         <FaBroadcastTower className='text-4xl text-red-600 mb-4' />
         <h3 className='text-xl font-semibold text-gray-800'>라이브 커머스 효율 분석</h3>
         <p className='text-gray-600 mt-2'>라이브 방송 중 판매된 상품과 그 효율 분석</p>
