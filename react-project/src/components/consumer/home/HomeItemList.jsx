@@ -58,7 +58,7 @@ const HomeItemList = ({ category }) => {
             <p className='text-center'>
               <ExclamationCircleIcon className='w-20 text-gray-400' />
             </p>
-            <p className='text-center text-xl text-gray-600'>레시피가 없습니다.</p>
+            <p className='text-center text-xl text-gray-600'>상품 준비 중 입니다.</p>
           </div>
         )}
         {items.map((v) => (
