@@ -42,24 +42,26 @@ const ProductInfo = ({ product, setProduct }) => {
   }
 
   return (
-    <div className="gap-4 relative">
+    <div className='w-full max-w-md p-4 border border-cyan-400 rounded-[15px] gap-4 relative'>
       <div className='text-lg font-bold mb-2'>상품명</div>
       <input
-        type="text"
-        placeholder="상품명을 입력하세요"
+        type='text'
+        placeholder='상품명을 입력하세요'
         className='w-full p-2 border rounded mb-4'
         value={product.name}
         onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
       />
 
       {/* ✅ 카테고리 선택 */}
-      <div className="relative" ref={categoryRef}>
-        <h3 className="text-lg font-bold mb-2">카테고리 선택</h3>
+      <div className='relative' ref={categoryRef}>
+        <h3 className='text-lg font-bold mb-2'>카테고리 선택</h3>
         <div
-          className="relative border-2 rounded-[4px] border-black w-[250px] p-2 cursor-pointer"
+          className='relative border-2 rounded-[4px] border-black w-full p-2 cursor-pointer'
           onClick={() => setIsOpenCategory((prev) => !prev)}
+          aria-haspopup='true'
+          aria-expanded={isOpenCategory}
         >
-          <div className="flex justify-between items-center">
+          <div className='flex justify-between items-center'>
             {selectedCategory ? selectedCategory.name : '카테고리 선택'}
             <span>▼</span>
           </div>
@@ -67,11 +69,11 @@ const ProductInfo = ({ product, setProduct }) => {
 
         {/* ✅ 대분류 카테고리 드롭다운 */}
         {isOpenCategory && (
-          <div className="absolute left-0 top-full w-[250px] bg-white border border-gray-300 rounded-md shadow-md z-10">
+          <div className='absolute left-0 top-full w-full bg-white border border-gray-300 rounded-md shadow-md z-10 max-h-60 overflow-auto transition-all duration-200'>
             {categories.map((category) => (
               <div
                 key={category.categoryNo}
-                className="p-2 cursor-pointer hover:bg-gray-200 flex justify-between"
+                className='p-2 cursor-pointer hover:bg-gray-200 flex justify-between'
                 onClick={() => handleCategorySelect(category)}
               >
                 {category.name}
@@ -84,15 +86,13 @@ const ProductInfo = ({ product, setProduct }) => {
 
       {/* ✅ 서브 카테고리 (클릭해서 선택 가능) */}
       {hoveredCategory && (
-        <div
-          className="absolute left-[260px] top-[70px] bg-white border border-gray-300 rounded-md shadow-md p-2 w-[250px] z-20"
-        >
+        <div className='absolute left-[260px] top-[70px] bg-white border border-gray-300 rounded-md shadow-md p-2 w-[250px] z-20'>
           {categories
             .find((cat) => cat.categoryNo === hoveredCategory)
             ?.children?.map((subCategory) => (
               <div
                 key={subCategory.categoryNo}
-                className="cursor-pointer hover:bg-gray-200 p-2"
+                className='cursor-pointer hover:bg-gray-200 p-2'
                 onClick={() => handleSubCategorySelect(subCategory)}
               >
                 {subCategory.name}

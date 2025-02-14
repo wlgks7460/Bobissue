@@ -62,6 +62,12 @@ const LiveStreamSetup = () => {
         stream.getTracks().forEach((track) => track.stop());
         setStream(null);
       }
+
+      // 📌 PeerConnection 해제
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close()
+        peerConnectionRef.current = null
+      }
     } else {
       try {
         // ✅ OpenVidu 세션 생성 요청
@@ -129,6 +135,18 @@ const LiveStreamSetup = () => {
     setCameraOn((prevCameraOn) => !prevCameraOn);
   };
 
+  // 📌 컴포넌트 렌더링 시 시그널링 서버 연결
+  useEffect(() => {
+    setupStompClient()
+
+    return () => {
+      // 📌 컴포넌트 언마운트 시 연결 해제
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate()
+      }
+    }
+  }, [])
+
   return (
     <div className="p-6">
       <h1 className="font-bold text-[32px] mb-4">라이브 방송 환경 설정</h1>
@@ -143,6 +161,18 @@ const LiveStreamSetup = () => {
       {/* 📌 방송 화면 미리보기 */}
       <div className="relative border rounded-lg shadow-md bg-black w-full mx-auto">
         <video ref={videoRef} autoPlay playsInline className="w-full h-[500px] bg-black"></video>
+      </div>
+
+      {/* 📌 상대방 방송 화면 */}
+      <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto mt-4'>
+        {remoteStream && (
+          <video
+            ref={remoteVideoRef}
+            autoPlay
+            playsInline
+            className='w-full h-[500px] bg-black'
+          ></video>
+        )}
       </div>
 
       {/* 📌 컨트롤 버튼 */}
