@@ -1,5 +1,6 @@
 import React from 'react'
 import { TrashIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
+import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
 const CartSoldOut = ({ item, removeItem }) => {
   // 상품 가격 , 찍기
@@ -11,7 +12,14 @@ const CartSoldOut = ({ item, removeItem }) => {
     <div>
       {/* 상품 정보 */}
       <div className='flex gap-3'>
-        <img src='' alt='' className='w-[60px] h-[60px] rounded border border-gray-400' />
+        <img
+          src={item.itemData.images?.[0]?.imageUrl || itemDefaultImg}
+          alt=''
+          className='w-[60px] h-[60px] rounded border border-gray-400'
+          onError={(e) => {
+            e.target.src = itemDefaultImg
+          }}
+        />
         <div className='h-[60px] flex flex-col justify-evenly'>
           <p className='text-gray-500'>{item.itemData.name} (품절)</p>
           <p className='flex gap-3 text-gray-400 line-through'>

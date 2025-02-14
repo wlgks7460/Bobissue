@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
+import { OpenVidu } from 'openvidu-browser' // ✅ OpenVidu 라이브러리 추가
 import SockJS from 'sockjs-client' // ✅ SockJS 사용
 import { Client } from '@stomp/stompjs' // ✅ STOMP 사용
-import LiveChat from './LiveChat.jsx'
+import LiveChat from './LiveChat.jsx' // ✅ 채팅 컴포넌트
 
 const LiveStreamSetup = () => {
   const debug_mode =localStorage.getItem('debug_mode')
@@ -13,12 +14,13 @@ const LiveStreamSetup = () => {
   const videoRef = useRef(null)
   const stompClientRef = useRef(null) // 📌 STOMP 클라이언트 참조 추가
   const [stream, setStream] = useState(null)
+  const [session, setSession] = useState(null)
   const [isStreaming, setIsStreaming] = useState(false)
   const [micOn, setMicOn] = useState(true)
   const [cameraOn, setCameraOn] = useState(true)
   const [chatActive, setChatActive] = useState(false) // 📌 채팅 활성화 여부 추가
 
-  // 📌 현재 시간
+  // 📌 현재 시간 계산
   const now = moment()
   const startAt = event?.startAt ? moment(event.startAt, 'YYYYMMDD HHmmss') : null
   const endAt = event?.endAt ? moment(event.endAt, 'YYYYMMDD HHmmss') : null
@@ -43,69 +45,101 @@ const LiveStreamSetup = () => {
     setupStream()
   }, [cameraOn, micOn]) // 마이크 또는 카메라 상태 변경 시 다시 스트림 설정
 
-  // 📌 방송 시작 / 중지 핸들러 (SockJS + STOMP 사용)
-  const handleStreamToggle = () => {
-    console.log(`라이브 가능 여부: ${isLiveAvailable}, 디버그 모드: ${debug_mode}`)
-
-    if (!isLiveAvailable && !debug_mode) {
-      return
-    }
-
+  // 📌 방송 시작 / 중지 핸들러
+  const handleStreamToggle = async () => {
     if (isStreaming) {
+      // 방송 중지 로직
       setIsStreaming(false)
-      setChatActive(false) // 📌 방송이 종료되면 채팅도 종료
-
-      // 📌 STOMP 연결 해제
+      setChatActive(false)
+      if (session) {
+        session.disconnect()
+        setSession(null)
+      }
       if (stompClientRef.current) {
         stompClientRef.current.deactivate()
         stompClientRef.current = null
-        console.log('🎥 스트리밍 서버 연결 종료')
       }
-
-      // 📌 스트림 종료
       if (stream) {
         stream.getTracks().forEach((track) => track.stop())
         setStream(null)
       }
+
+      // 📌 PeerConnection 해제
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close()
+        peerConnectionRef.current = null
+      }
     } else {
-      navigator.mediaDevices
-        .getUserMedia({ video: cameraOn, audio: micOn })
-        .then((mediaStream) => {
-          setStream(mediaStream)
-          if (videoRef.current) {
-            videoRef.current.srcObject = mediaStream
-          }
+      try {
+        // ✅ OpenVidu 세션 생성 요청
+        // const sessionRes = await fetch("https://43.202.60.173/openvidu/api/sessions", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     Authorization: "Basic " + btoa("OPENVIDUAPP:C108bob"),
+        //   },
+        //   body: JSON.stringify({}),
+        // });
+        // const sessionData = await sessionRes.json();
+        // console.log("✅ OpenVidu 세션 생성 성공:", sessionData);
+
+        // ✅ 백엔드에서 세션 생성
+
+        // const sessionRes = await fetch('/openvidu/sessions', {
+        //   method: 'POST',
+        // })
+        // const sessionData = await sessionRes.json()
+        // const sessionId = sessionData.id
+        // console.log('✅ 세션 생성 성공:', sessionId)
+
+        const token = localStorage.getItem("access_token");
+        console.log(token);
+        const sessionRes = await fetch('http://localhost:8080/api/openvidu/sessions', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ JWT 토큰 추가
+          },
+        });
+        console.log(sessionRes);
+        const sessionData = await sessionRes.json();
+        const sessionId = sessionData.id;
+        console.log("✅ 세션 생성 성공:", sessionId);
+
+        // ✅ Connection 생성 요청 (토큰 발급)
+        const tokenRes = await fetch(
+          `https://43.202.60.173/openvidu/api/sessions/${sessionData.id}/connection`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
+            },
+            body: JSON.stringify({}),
+          },
+        )
+        const tokenData = await tokenRes.json()
+        console.log('✅ Connection 토큰 발급 성공:', tokenData.token)
+
+        // ✅ OpenVidu 클라이언트(WebRTC) 연결
+        const OV = new OpenVidu()
+        const newSession = OV.initSession()
+
+        newSession.on('streamCreated', (event) => {
+          const subscriber = newSession.subscribe(event.stream, videoRef.current)
+          console.log('📺 새로운 스트림 구독:', subscriber)
         })
-        .catch((error) => console.error('❌ 미디어 장치를 가져오는 데 실패했습니다.', error))
 
-      setIsStreaming(true)
-      setChatActive(true) // 📌 방송 시작 시 채팅도 시작
+        await newSession.connect(tokenData.token)
+        console.log('🎥 OpenVidu 연결 성공')
+        setSession(newSession)
 
-      // 📌 SockJS + STOMP를 사용하여 WebSocket 연결
-      const socket = new SockJS('http://localhost:8080/ws/live')
-      const client = new Client({
-        webSocketFactory: () => socket,
-        reconnectDelay: 5000, // 자동 재연결 (5초)
-        onConnect: () => {
-          console.log('✅ 스트리밍 서버 연결 완료')
-          stompClientRef.current = client
-
-          // 방송 시작 메시지 서버에 전송
-          client.publish({
-            destination: '/pub/live/start',
-            body: JSON.stringify({
-              streamKey: event?.id || 'defaultStreamKey',
-              broadcaster: localStorage.getItem('user_id') || 'guest',
-            }),
-          })
-        },
-        onStompError: (frame) => {
-          console.error('❌ STOMP 오류 발생:', frame)
-        },
-      })
-
-      stompClientRef.current = client
-      client.activate()
+        setIsStreaming(true)
+        setChatActive(true)
+        console.log('🎥 videoRef:', videoRef.current)
+      } catch (error) {
+        console.error('❌ OpenVidu 연결 실패:', error)
+      }
     }
   }
 
@@ -133,6 +167,18 @@ const LiveStreamSetup = () => {
       {/* 📌 방송 화면 미리보기 */}
       <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto'>
         <video ref={videoRef} autoPlay playsInline className='w-full h-[500px] bg-black'></video>
+      </div>
+
+      {/* 📌 상대방 방송 화면 */}
+      <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto mt-4'>
+        {remoteStream && (
+          <video
+            ref={remoteVideoRef}
+            autoPlay
+            playsInline
+            className='w-full h-[500px] bg-black'
+          ></video>
+        )}
       </div>
 
       {/* 📌 컨트롤 버튼 */}

@@ -16,13 +16,15 @@ const View = () => {
 
         if (response.data.status === 'OK' && response.data.result?.data) {
           const item = response.data.result.data
+          console.log(item.company)
 
           setProduct({
             itemNo: item.itemNo,
             name: item.name,
             category: `${item.category.parentName} > ${item.category.name}`,
             productImage: item.images?.[0]?.imageUrl || '',
-            company: item.companyNo?.name || '회사 정보 없음',
+            company: item.company?.name || '회사 정보 없음',
+            companyNo: item.company?.companyNo,
             price: item.price,
             salePrice: item.salePrice,
             stock: item.stock,
@@ -44,6 +46,7 @@ const View = () => {
   }, [itemNo])
 
   const handleUpdateClick = () => {
+    console.log(product)
     navigate('update', { state: product })
   }
 

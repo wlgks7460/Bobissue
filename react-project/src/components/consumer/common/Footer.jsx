@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
-    <div className='w-screen h-60 bg-slate-200 mt-10 px-20 py-5'>
+    <div className='w-full h-60 bg-slate-200 mt-10 px-20 py-5'>
       <div className='flex'>
         {/* 고객센터 */}
         <div className='w-[350px]'>
@@ -29,8 +29,8 @@ const Footer = () => {
             </Link>
           </div>
           <div className='mb-3'>
-            <span className='text-2xl me-3'>0000-0000</span>
-            <span className='text-gray-600'>월~토요일 오전9시-오후6시</span>
+            <p className='text-2xl me-3'>0000-0000</p>
+            <p className='text-gray-600'>월~토요일 오전9시-오후6시</p>
           </div>
         </div>
       </div>

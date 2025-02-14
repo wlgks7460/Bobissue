@@ -32,17 +32,21 @@ const CompanyUpdate = () => {
   const [message, setMessage] = useState(null)
 
   // ✅ 회사 정보 불러오기
-  async function fetchCompanyData() {
+  const fetchCompanyData = async () => {
     try {
+      // SELLERS/COMPANY에서 회사 정보 요청
       const response = await API.get('/sellers/company')
-      const data = response.data?.result?.data
-      console.log(data)
-      if (!data || !data.companyNo) {
-        throw new Error('회사 정보를 찾을 수 없습니다.')
+      const data = response.data.result.data
+
+      // 회사 번호 추출
+      const companyNo = data.companyNo
+      if (!companyNo) {
+        throw new Error('회사를 찾을 수 없습니다.')
       }
 
+      // 회사 정보 설정
       setCompany({
-        companyNo: data.companyNo,
+        companyNo: companyNo,
         name: data.name || '',
         license: data.license || '',
         bank: data.bank || '',
@@ -64,12 +68,12 @@ const CompanyUpdate = () => {
   // 📌 입력 필드 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target
-    setCompany({ ...company, [name]: value })
+    setCompany((prevState) => ({ ...prevState, [name]: value }))
   }
 
   // 📌 은행 선택 핸들러
   const handleBankSelect = (selectedBank) => {
-    setCompany({ ...company, bank: selectedBank })
+    setCompany((prevState) => ({ ...prevState, bank: selectedBank }))
   }
 
   // 📌 폼 제출 핸들러 (회사 정보 업데이트)
@@ -80,11 +84,19 @@ const CompanyUpdate = () => {
     console.log(company)
 
     try {
-      const response = await API.post(`/sellers/company/${company.companyNo}`, {
-        name: company.name,
-        bank: company.bank,
-        bankAccount: company.bankAccount,
-      })
+      const response = await API.put(
+        `/sellers/company/${company.companyNo}`,
+        JSON.stringify({
+          name: company.name,
+          bank: company.bank,
+          bankAccount: company.bankAccount,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
 
       if (response.status === 200) {
         setMessage('✅ 회사 정보가 성공적으로 업데이트되었습니다.')
@@ -138,11 +150,7 @@ const CompanyUpdate = () => {
                 key={bank.name}
                 type='button'
                 onClick={() => handleBankSelect(bank.name)}
-                className={`p-3 border rounded-lg flex flex-col items-center transition-all ${
-                  company.bank === bank.name
-                    ? 'bg-blue-500 text-white border-blue-600'
-                    : 'bg-gray-100 hover:bg-gray-200'
-                }`}
+                className={`p-3 border rounded-lg flex flex-col items-center transition-all ${company.bank === bank.name ? 'bg-blue-500 text-white border-blue-600' : 'bg-gray-100 hover:bg-gray-200'}`}
               >
                 <img src={bank.logo} alt={bank.name} className='w-8 h-8 mb-1' />
                 <span className='text-xs'>{bank.name}</span>
