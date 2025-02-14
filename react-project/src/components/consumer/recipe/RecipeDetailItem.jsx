@@ -11,6 +11,8 @@ const RecipeDetailItem = ({ itemNo, cnt, selectedItem, setSelectedItem }) => {
   const handleItem = () => {
     if (!itemActive) {
       setSelectedItem([...selectedItem, { item, cnt }])
+    } else {
+      setSelectedItem(selectedItem.filter((v) => v.item.itemNo !== itemNo))
     }
     setItemActive(!itemActive)
   }
