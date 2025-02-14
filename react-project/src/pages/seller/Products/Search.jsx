@@ -18,9 +18,9 @@ const Search = () => {
       try {
         const response = await API.get('/sellers/item')
 
-        console.log('📌 API 응답 데이터:', response.data)
+        console.log('📌 API 응답 데이터:', response)
 
-        if (response.data.status === 'OK' && Array.isArray(response.data.result?.data)) {
+        if (response.status === 200 && Array.isArray(response.data.result?.data)) {
           // ✅ 상품 데이터 가공 (유니크 ID 추가 및 companyNo 변경 반영)
           const cleanData = response.data.result.data.map((item, index) => ({
             ...item,

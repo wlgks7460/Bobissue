@@ -7,6 +7,7 @@ const ProductInfo = ({ product, setProduct }) => {
   const [hoveredCategory, setHoveredCategory] = useState(null)
   const [isOpenCategory, setIsOpenCategory] = useState(false)
   const categoryRef = useRef(null)
+  
 
   // ✅ 카테고리 데이터 가져오기
   useEffect(() => {
