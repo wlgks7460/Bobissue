@@ -29,26 +29,21 @@ const Register = () => {
       alert('상품 등록을 위해 로그인해주세요.')
       navigate('/seller/login')
     }
-
-    // ✅ 디버그 모드 체크 (localStorage에서 불러오기)
   }, [navigate])
 
   const handleRemoveImage = (imageIndex) => {
     setProduct((prev) => {
-      // 먼저 imageUrl을 가져와서 revokeObjectURL을 수행
       const imageUrlToRevoke = prev.images[imageIndex]?.imageUrl
-
       const newImages = prev.images.filter((_, index) => index !== imageIndex)
 
       if (imageUrlToRevoke) {
-        URL.revokeObjectURL(imageUrlToRevoke) // 🔹 여기서 해제
+        URL.revokeObjectURL(imageUrlToRevoke)
       }
 
       return { ...prev, images: newImages }
     })
   }
 
-  // ✅ 상품 등록 요청 함수
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -71,7 +66,6 @@ const Register = () => {
     try {
       const formData = new FormData()
 
-      // ✅ 상품 정보 JSON을 "items" 키로 추가
       const productData = {
         categoryNo: parseInt(product.categoryNo, 10),
         name: product.name,
@@ -84,7 +78,6 @@ const Register = () => {
 
       formData.append('item', JSON.stringify(productData))
 
-      // ✅ 이미지 파일 추가 (파일이 있는 경우만)
       if (product.images.length > 0) {
         product.images.forEach((img) => {
           if (img.file) {
@@ -93,7 +86,6 @@ const Register = () => {
         })
       }
 
-      // ✅ 디버그 모드일 경우 API 호출 없이 콘솔 출력
       if (debug_mode) {
         console.log('📌 [DEBUG MODE] 상품 등록 요청 데이터:', {
           item: productData,
@@ -103,12 +95,10 @@ const Register = () => {
         return
       }
 
-      // ✅ FormData 디버깅 (파일 포함 확인)
       for (const pair of formData.entries()) {
         console.log(`📌 FormData 확인: ${pair[0]} →`, pair[1])
       }
 
-      // ✅ 상품 등록 API 요청
       const response = await API.post('/item', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
@@ -129,7 +119,7 @@ const Register = () => {
 
   return (
     <div className='p-6'>
-      <h1 className='font-bold text-[32px] mb-10'>상품 등록</h1>
+      <h1 className='font-bold text-[32px] mb-10 text-center'>상품 등록</h1>
       <form onSubmit={handleSubmit}>
         <ProductImage
           product={product}
@@ -140,16 +130,17 @@ const Register = () => {
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
 
-        {/* ✅ 등록 버튼 */}
-        <button
-          type='submit'
-          className={`mt-5 p-1 text-white rounded-[12px]  ${
-            loading ? 'bg-amber-600 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600'
-          }`}
-          disabled={loading}
-        >
-          {loading ? '등록 중...' : '상품 등록'}
-        </button>
+        <div className='text-center mt-6'>
+          <button
+            type='submit'
+            className={`mt-5 p-3 text-white rounded-[12px] w-full md:w-auto ${
+              loading ? 'bg-amber-600 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600'
+            }`}
+            disabled={loading}
+          >
+            {loading ? '등록 중...' : '상품 등록'}
+          </button>
+        </div>
       </form>
     </div>
   )
