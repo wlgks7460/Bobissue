@@ -60,6 +60,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers( "/oauth2/**").permitAll() // OAuth2 관련 URL 허용
+                        .requestMatchers( "/openvidu/**").permitAll() // openvidu 관련 URL 허용
+                        .requestMatchers("/api/openvidu/**").permitAll() // 추가
                         .requestMatchers(
                                 "/api/users/sign-up",
                                 "/api/users/kakao/sign-up",
