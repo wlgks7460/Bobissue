@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import ItemCard from '../common/ItemCard'
 import API from '../../../utils/API'
 import { Link } from 'react-router-dom'
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 
 const HomeItemList = ({ category }) => {
   // 화면 감지 관련
@@ -48,10 +49,18 @@ const HomeItemList = ({ category }) => {
   return (
     <div className='w-[70rem]' ref={divRef}>
       <div className='flex justify-between mb-5'>
-        <p className='text-xl'>{category.name}</p>
+        <p className={`text-xl ${items.length < 1 && 'text-gray-600'}`}>{category.name}</p>
         <Link to={`/category/${category.categoryNo}`}>+ 더보기</Link>
       </div>
       <div className='grid grid-cols-4 gap-3'>
+        {items.length < 1 && (
+          <div className='flex flex-col gap-3 items-center'>
+            <p className='text-center'>
+              <ExclamationCircleIcon className='w-20 text-gray-400' />
+            </p>
+            <p className='text-center text-xl text-gray-600'>레시피가 없습니다.</p>
+          </div>
+        )}
         {items.map((v) => (
           <ItemCard key={v.itemNo} item={v} />
         ))}
