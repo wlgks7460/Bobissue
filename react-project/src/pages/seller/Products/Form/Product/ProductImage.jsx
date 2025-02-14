@@ -1,8 +1,6 @@
 import React from 'react'
 
 const ProductImage = ({ product, handleRemoveImage, setProduct }) => {
-  // console.log('ProductImage Props:', { product, handleRemoveImage, setProduct })
-
   // 이미지 업로드 핸들러
   const handleImageUpload = (event) => {
     const file = event.target.files[0]
@@ -39,13 +37,24 @@ const ProductImage = ({ product, handleRemoveImage, setProduct }) => {
     }
   }
 
+  // 이미지 삭제 확인
+  const confirmRemoveImage = (index) => {
+    const confirmDelete = window.confirm('정말 이 이미지를 삭제하시겠습니까?')
+    if (confirmDelete) {
+      handleRemoveImage(index)
+    }
+  }
+
   return (
     <div className='mt-5 mb-5'>
       <h2 className='text-[16px] font-bold'>상품 이미지</h2>
       <div className='flex gap-4 mt-3 flex-wrap'>
         {/* 기존 및 새 이미지 렌더링 */}
         {product.images.map((image, index) => (
-          <div key={index} className='relative w-48 h-48 border border-black'>
+          <div
+            key={index}
+            className='relative w-48 h-48 border border-gray-300 rounded-md overflow-hidden'
+          >
             <img
               src={image.imageUrl} // 파일을 미리보기 URL로 표시
               alt={image.originalName || `상품 이미지 ${index}`}
@@ -53,8 +62,8 @@ const ProductImage = ({ product, handleRemoveImage, setProduct }) => {
             />
             <button
               type='button'
-              className='absolute top-0 right-0 bg-red-500 text-white text-xs p-1'
-              onClick={() => handleRemoveImage(index)}
+              className='absolute top-0 right-0 bg-red-500 text-white text-xs p-1 rounded-bl-md'
+              onClick={() => confirmRemoveImage(index)}
             >
               삭제
             </button>
@@ -62,7 +71,7 @@ const ProductImage = ({ product, handleRemoveImage, setProduct }) => {
         ))}
 
         {/* 이미지 업로드 버튼 */}
-        <label className='flex items-center justify-center w-48 h-48 border-2 border-dashed border-gray-400 cursor-pointer bg-gray-100 hover:bg-gray-200'>
+        <label className='flex items-center justify-center w-48 h-48 border-2 border-dashed border-gray-400 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-md'>
           <span className='text-gray-500 text-xs'>클릭하여 업로드</span>
           <input type='file' accept='image/*' onChange={handleImageUpload} className='hidden' />
         </label>

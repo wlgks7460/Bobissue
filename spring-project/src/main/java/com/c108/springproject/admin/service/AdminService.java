@@ -3,6 +3,9 @@ package com.c108.springproject.admin.service;
 import com.c108.springproject.admin.dto.AdminResDto;
 import com.c108.springproject.admin.dto.CompanyUpdateAdminReqDto;
 import com.c108.springproject.admin.dto.SellerApprovalListDto;
+import com.c108.springproject.admin.dto.querydsl.CompanyStatisticsDto;
+import com.c108.springproject.admin.dto.querydsl.UserStatisticsDto;
+import com.c108.springproject.admin.repository.AdminQueryRepository;
 import com.c108.springproject.admin.repository.AdminRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
@@ -29,12 +32,14 @@ public class AdminService {
     private final UserRepository userRepository;
     private final SellerRepository sellerRepository;
     private final CompanyRepository companyRepository;
+    private final AdminQueryRepository adminQueryRepository;
 
-    public AdminService(AdminRepository adminRepository, UserRepository userRepository, SellerRepository sellerRepository, CompanyRepository companyRepository) {
+    public AdminService(AdminRepository adminRepository, UserRepository userRepository, SellerRepository sellerRepository, CompanyRepository companyRepository, AdminQueryRepository adminQueryRepository) {
         this.adminRepository = adminRepository;
         this.userRepository = userRepository;
         this.sellerRepository = sellerRepository;
         this.companyRepository = companyRepository;
+        this.adminQueryRepository = adminQueryRepository;
     }
 
     // 관리자 조회
@@ -166,4 +171,22 @@ public class AdminService {
             throw new BobIssueException(ResponseCode.FAILED_APPROVAL_BY_COMPANY);
         }
     }
+
+
+    // 총 매출 조회
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public Long getTotalSales() {
+        return adminQueryRepository.getTotalSales();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public UserStatisticsDto getUserStatistics() {
+        return adminQueryRepository.getUserStatistics();
+    }
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public CompanyStatisticsDto getCompanyStatistics() {
+        return adminQueryRepository.getCompanyStatistics();
+    }
+
 }
