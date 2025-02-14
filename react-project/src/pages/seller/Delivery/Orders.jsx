@@ -174,14 +174,14 @@ const Orders = () => {
       </div>
 
       {/* 주문 리스트 */}
-      <div className='border border-gray-300 rounded-xl bg-white'>
+      <div className='p-2 border border-gray-300 rounded-xl bg-white'>
         <table className='w-full text-left border-collapse'>
           <thead className='bg-gray-100 text-gray-700'>
             <tr>
-              <th className='p-4 border-b'>주문 번호</th>
-              <th className='p-4 border-b'>상품명</th>
-              <th className='p-4 border-b'>옵션 / 수량</th>
-              <th className='p-4 border-b'>주문 상태</th>
+              <th className='p-2 border-b'>주문 번호</th>
+              <th className='p-2 border-b'>상품명</th>
+              <th className='p-2 border-b'>옵션 / 수량</th>
+              <th className='p-2 border-b'>주문 상태</th>
             </tr>
           </thead>
           <tbody>
@@ -196,6 +196,7 @@ const Orders = () => {
                 <td className='p-4'>
                   {allProducts.find((p) => p.itemNo === order.productId)?.name || '상품 정보 없음'}
                 </td>
+
                 <td className='p-4'>
                   {order.option} / {order.quantity}
                 </td>

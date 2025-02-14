@@ -19,4 +19,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             "OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "OR LOWER(co.name) LIKE LOWER(CONCAT('%', :search, '%')))")
     Page<Item> searchItems(@Param("search") String search, Pageable pageable);
+
+    List<Item> findByCompanyCompanyNo(Integer companyId);
 }

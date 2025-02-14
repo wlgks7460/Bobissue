@@ -16,7 +16,8 @@ const Search = () => {
     }
     const fetchAllProducts = async () => {
       try {
-        const response = await API.get('/item')
+        const response = await API.get('/sellers/item')
+
         console.log('📌 API 응답 데이터:', response.data)
 
         if (response.data.status === 'OK' && Array.isArray(response.data.result?.data)) {

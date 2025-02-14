@@ -59,13 +59,7 @@ const ChatRoom = ({ sessionId }) => {
     }
 
     // 📌 WebSocket (채팅) 연결
-<<<<<<< HEAD
-    const socket = new SockJS('http://localhost:8080/ws/chat')
-
-    //  // ✅ WebSocket 엔드포인트
-=======
-    const socket = new SockJS('http://localhost:8080/ws/chat'); // ✅ WebSocket 엔드포인트
->>>>>>> c33dde039f5fe032a4f2d2f398a6f73f62bd849c
+    const socket = new SockJS('http://localhost:8080/ws/chat') // ✅ WebSocket 엔드포인트
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // 자동 재연결 (5초)
