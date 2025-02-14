@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import API from '@/utils/API'
 
-const notices = [
+const categories = ['필독', '일반', '정책', '기술', '홍보']
+const debug_mode = localStorage.getItem('debug_mode') === 'true'
+
+// 더미 데이터
+const dummyNotices = [
   { id: 1, category: '필독', title: '서비스 점검 안내', author: '관리자', date: '2025-01-22' },
   {
     id: 2,
@@ -17,10 +22,9 @@ const notices = [
   { id: 7, category: '경고', title: '비정상적 활동 경고', author: '관리자', date: '2025-01-10' },
 ]
 
-const categories = ['필독', '일반', '정책', '기술', '홍보']
-
 const Notices = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체')
+  const [notices, setNotices] = useState(dummyNotices)
   const navigate = useNavigate()
 
   const handleClickNavigate = (id) => {
@@ -33,6 +37,24 @@ const Notices = () => {
       ? notices
       : notices.filter((notice) => notice.category === selectedCategory)
 
+  useEffect(() => {
+    // 디버그 모드가 아닐 때 API 요청
+    if (!debug_mode) {
+      const fetchNotices = async () => {
+        try {
+          const response = await API.get('/notification')
+          setNotices(response.data.result.data) // API 응답에 맞춰서 데이터 처리
+        } catch (err) {
+          console.error('공지사항 불러오기 실패:', err)
+        }
+      }
+      fetchNotices()
+    } else {
+      // 디버그 모드일 때는 더미 데이터 사용
+      setNotices(dummyNotices)
+    }
+  }, [debug_mode]) // debug_mode가 변경될 때마다 데이터 새로 불러오기
+
   return (
     <div className='w-full max-w-[1100px] mx-auto'>
       {/* 제목 */}
@@ -43,7 +65,7 @@ const Notices = () => {
 
       {/* 카테고리 버튼 (1 | 2 | 3 | 4 | 5) */}
       <div className='mb-6 flex justify-center items-center space-x-4 text-lg font-semibold text-gray-700'>
-        {categories.map((category, index) => (
+        {categories.map((category) => (
           <span
             key={category}
             className={`cursor-pointer transition-colors ${
