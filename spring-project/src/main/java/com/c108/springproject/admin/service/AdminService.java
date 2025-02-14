@@ -3,6 +3,7 @@ package com.c108.springproject.admin.service;
 import com.c108.springproject.admin.dto.AdminResDto;
 import com.c108.springproject.admin.dto.CompanyUpdateAdminReqDto;
 import com.c108.springproject.admin.dto.SellerApprovalListDto;
+import com.c108.springproject.admin.dto.querydsl.CompanyStatisticsDto;
 import com.c108.springproject.admin.dto.querydsl.UserStatisticsDto;
 import com.c108.springproject.admin.repository.AdminQueryRepository;
 import com.c108.springproject.admin.repository.AdminRepository;
@@ -183,4 +184,9 @@ public class AdminService {
     public UserStatisticsDto getUserStatistics() {
         return adminQueryRepository.getUserStatistics();
     }
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public CompanyStatisticsDto getCompanyStatistics() {
+        return adminQueryRepository.getCompanyStatistics();
+    }
+
 }

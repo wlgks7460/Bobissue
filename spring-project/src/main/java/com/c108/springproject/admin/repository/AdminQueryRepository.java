@@ -1,5 +1,8 @@
 package com.c108.springproject.admin.repository;
 
+import com.c108.springproject.admin.dto.querydsl.CompanyMonthlySalesDto;
+import com.c108.springproject.admin.dto.querydsl.CompanySalesDto;
+import com.c108.springproject.admin.dto.querydsl.CompanyStatisticsDto;
 import com.c108.springproject.admin.dto.querydsl.UserStatisticsDto;
 import com.c108.springproject.global.querydsl.Querydsl4RepositorySupport;
 import com.c108.springproject.item.domain.QItem;
@@ -9,8 +12,10 @@ import com.c108.springproject.order.domain.QOrderDetail;
 import com.c108.springproject.seller.domain.QCompany;
 import com.c108.springproject.seller.domain.QSeller;
 import com.c108.springproject.user.domain.QUser;
+import com.querydsl.core.types.Projections;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -124,6 +129,63 @@ public class AdminQueryRepository  extends Querydsl4RepositorySupport {
                 .gender(genderDistribution)
                 .ageGroup(ageGroupDistribution)
                 .grade(gradeDistribution)
+                .build();
+    }
+
+    // 회사 통계
+    public CompanyStatisticsDto getCompanyStatistics() {
+        // 전체 회사 수
+        Long totalCompanies = getQueryFactory()
+                .select(company.count())
+                .from(company)
+                .where(company.delYn.eq("N"))
+                .fetchOne();
+
+        // 활성 회사 수
+        Long activeCompanies = getQueryFactory()
+                .select(company.count())
+                .from(company)
+                .where(
+                        company.delYn.eq("N"),
+                        company.status.eq("Y")
+                )
+                .fetchOne();
+
+        // 회사별 총 매출
+        List<CompanySalesDto> companySalesStats = getQueryFactory()
+                .select(Projections.constructor(CompanySalesDto.class,
+                        company.companyNo,
+                        company.name,
+                        orderDetail.price.multiply(orderDetail.count).sum().longValue()
+                ))
+                .from(orderDetail)
+                .join(orderDetail.item, item)
+                .join(item.company, company)
+                .where(company.delYn.eq("N"))
+                .groupBy(company.companyNo, company.name)
+                .fetch();
+
+        // 회사별 월간 매출
+        List<CompanyMonthlySalesDto> companyMonthlySales = getQueryFactory()
+                .select(Projections.constructor(CompanyMonthlySalesDto.class,
+                        company.companyNo,
+                        company.name,
+                        order.createdAt.substring(0, 6),
+                        orderDetail.price.multiply(orderDetail.count).sum().longValue()
+                ))
+                .from(orderDetail)
+                .join(orderDetail.order, order)
+                .join(orderDetail.item, item)
+                .join(item.company, company)
+                .where(company.delYn.eq("N"))
+                .groupBy(company.companyNo, company.name, order.createdAt.substring(0, 6))
+                .fetch();
+
+        return CompanyStatisticsDto.builder()
+                .totalCompanies(totalCompanies)
+                .activeCompanies(activeCompanies)
+                .companySalesStats(companySalesStats)
+                .companyMonthlySales(companyMonthlySales)
                 .build();
     }
 
