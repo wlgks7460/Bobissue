@@ -28,8 +28,12 @@ const RecipeDetailItemList = ({ materials }) => {
 
   // 선택한 재료 장바구니 담기
   const selectItemToCart = () => {
-    selectedItem.forEach((v) => itemOnCart(v.item.itemNo, v.cnt))
-    alert('선택한 재료를 장바구니에 담았습니다.')
+    if (selectedItem.length > 0) {
+      selectedItem.forEach((v) => itemOnCart(v.item.itemNo, v.cnt))
+      alert('선택한 재료를 장바구니에 담았습니다.')
+    } else {
+      alert('상품을 선택해 주세요.')
+    }
   }
 
   return (
