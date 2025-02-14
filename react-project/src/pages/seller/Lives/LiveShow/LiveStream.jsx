@@ -83,12 +83,27 @@ const LiveStreamSetup = () => {
         // console.log("✅ OpenVidu 세션 생성 성공:", sessionData);
 
         // ✅ 백엔드에서 세션 생성
-        const sessionRes = await fetch('/openvidu/sessions', {
-          method: 'POST',
-        })
-        const sessionData = await sessionRes.json()
-        const sessionId = sessionData.id
-        console.log('✅ 세션 생성 성공:', sessionId)
+
+        // const sessionRes = await fetch('/openvidu/sessions', {
+        //   method: 'POST',
+        // })
+        // const sessionData = await sessionRes.json()
+        // const sessionId = sessionData.id
+        // console.log('✅ 세션 생성 성공:', sessionId)
+
+        const token = localStorage.getItem("access_token");
+        console.log(token);
+        const sessionRes = await fetch('http://localhost:8080/api/openvidu/sessions', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ JWT 토큰 추가
+          },
+        });
+        console.log(sessionRes);
+        const sessionData = await sessionRes.json();
+        const sessionId = sessionData.id;
+        console.log("✅ 세션 생성 성공:", sessionId);
 
         // ✅ Connection 생성 요청 (토큰 발급)
         const tokenRes = await fetch(
