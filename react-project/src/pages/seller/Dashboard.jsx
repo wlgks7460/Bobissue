@@ -27,8 +27,26 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className='max-w-6xl mx-auto p-6 bg-gradient-to-r from-yellow-100 to-rose-100 min-h-screen'>
-      <h1 className='text-4xl font-bold text-gray-800 mb-8 text-center'>대시보드</h1>
+    <div className='max-w-6xl mx-auto p-6 bg-gradient-to-r bg-blue-100 min-h-screen'>
+      <div className='text-center'>
+        <h1 className='text-4xl font-bold text-gray-750 mb-8'>상품 관리, 이제 쉽게 해결하세요!</h1>
+        <p className='text-lg text-gray-600 mb-6'>
+          상품 등록, 관리, 정산을 한 곳에서! <br />
+          상품 관리를 한 번에 할 수 있는 다양한 기능을 제공해드립니다.
+        </p>
+        <div className='flex justify-center space-x-6 mb-12'>
+          <div className='bg-white p-6 rounded-md shadow-md w-[280px]'>
+            <FaBoxOpen className='text-4xl text-blue-500 mb-4' />
+            <h3 className='text-lg font-semibold text-gray-700'>상품 조회 & 관리</h3>
+            <p className='text-sm text-gray-600'>등록된 상품을 쉽게 조회하고 관리할 수 있습니다.</p>
+          </div>
+          <div className='bg-white p-6 rounded-md shadow-md w-[280px]'>
+            <FaShoppingCart className='text-4xl text-green-500 mb-4' />
+            <h3 className='text-lg font-semibold text-gray-700'>상품 등록</h3>
+            <p className='text-sm text-gray-600'>새로운 상품을 빠르게 등록하고, 관리하세요.</p>
+          </div>
+        </div>
+      </div>
 
       {/* 📌 2열 레이아웃 */}
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>

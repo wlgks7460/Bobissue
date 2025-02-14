@@ -75,8 +75,8 @@ const VenderInfo = () => {
     )
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-200 p-6'>
-      <div className='w-full max-w-2xl bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl shadow-lg'>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-br  p-6'>
+      <div className='w-full max-w-2xl bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl border border-blue-400'>
         {/* ✅ 페이지 상태에 따라 컴포넌트 렌더링 */}
         {isUpdatePage ? (
           <UpdateInfo

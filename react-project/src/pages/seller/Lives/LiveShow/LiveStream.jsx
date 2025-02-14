@@ -69,44 +69,61 @@ const LiveStreamSetup = () => {
         peerConnectionRef.current = null
       }
     } else {
-      navigator.mediaDevices
-        .getUserMedia({ video: cameraOn, audio: micOn })
-        .then((mediaStream) => {
-          setStream(mediaStream)
-          if (videoRef.current) {
-            videoRef.current.srcObject = mediaStream
-          }
+      try {
+        // ✅ OpenVidu 세션 생성 요청
+        // const sessionRes = await fetch("https://43.202.60.173/openvidu/api/sessions", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     Authorization: "Basic " + btoa("OPENVIDUAPP:C108bob"),
+        //   },
+        //   body: JSON.stringify({}),
+        // });
+        // const sessionData = await sessionRes.json();
+        // console.log("✅ OpenVidu 세션 생성 성공:", sessionData);
+
+        // ✅ 백엔드에서 세션 생성
+        const sessionRes = await fetch('/openvidu/sessions', {
+          method: 'POST',
         })
-        .catch((error) => console.error('❌ 미디어 장치를 가져오는 데 실패했습니다.', error))
+        const sessionData = await sessionRes.json()
+        const sessionId = sessionData.id
+        console.log('✅ 세션 생성 성공:', sessionId)
 
-      setIsStreaming(true)
-      setChatActive(true) // 📌 방송 시작 시 채팅도 시작
+        // ✅ Connection 생성 요청 (토큰 발급)
+        const tokenRes = await fetch(
+          `https://43.202.60.173/openvidu/api/sessions/${sessionData.id}/connection`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
+            },
+            body: JSON.stringify({}),
+          },
+        )
+        const tokenData = await tokenRes.json()
+        console.log('✅ Connection 토큰 발급 성공:', tokenData.token)
 
-      // 📌 SockJS + STOMP를 사용하여 WebSocket 연결
-      const socket = new SockJS('http://localhost:8080/ws/live')
-      const client = new Client({
-        webSocketFactory: () => socket,
-        reconnectDelay: 5000, // 자동 재연결 (5초)
-        onConnect: () => {
-          console.log('✅ 스트리밍 서버 연결 완료')
-          stompClientRef.current = client
+        // ✅ OpenVidu 클라이언트(WebRTC) 연결
+        const OV = new OpenVidu()
+        const newSession = OV.initSession()
 
-          // 방송 시작 메시지 서버에 전송
-          client.publish({
-            destination: '/pub/live/start',
-            body: JSON.stringify({
-              streamKey: event?.id || 'defaultStreamKey',
-              broadcaster: localStorage.getItem('user_id') || 'guest',
-            }),
-          })
-        },
-        onStompError: (frame) => {
-          console.error('❌ STOMP 오류 발생:', frame)
-        },
-      })
+        newSession.on('streamCreated', (event) => {
+          const subscriber = newSession.subscribe(event.stream, videoRef.current)
+          console.log('📺 새로운 스트림 구독:', subscriber)
+        })
 
-      stompClientRef.current = client
-      client.activate()
+        await newSession.connect(tokenData.token)
+        console.log('🎥 OpenVidu 연결 성공')
+        setSession(newSession)
+
+        setIsStreaming(true)
+        setChatActive(true)
+        console.log('🎥 videoRef:', videoRef.current)
+      } catch (error) {
+        console.error('❌ OpenVidu 연결 실패:', error)
+      }
     }
   }
 
