@@ -4,6 +4,7 @@ import com.c108.springproject.admin.dto.AdminResDto;
 import com.c108.springproject.admin.dto.CompanyUpdateAdminReqDto;
 import com.c108.springproject.admin.dto.SellerApprovalListDto;
 import com.c108.springproject.admin.dto.querydsl.CompanyStatisticsDto;
+import com.c108.springproject.admin.dto.querydsl.SellerStatisticsDto;
 import com.c108.springproject.admin.dto.querydsl.UserStatisticsDto;
 import com.c108.springproject.admin.repository.AdminQueryRepository;
 import com.c108.springproject.admin.repository.AdminRepository;
@@ -180,13 +181,25 @@ public class AdminService {
         return adminQueryRepository.getTotalSales();
     }
 
+    // 유저 전체 통계
+    @Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public UserStatisticsDto getUserStatistics() {
         return adminQueryRepository.getUserStatistics();
     }
+
+    // 회사 전체 통계
+    @Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public CompanyStatisticsDto getCompanyStatistics() {
         return adminQueryRepository.getCompanyStatistics();
     }
 
+    // 판매자 전체 통계
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public SellerStatisticsDto getSellerStatistics() {
+        return adminQueryRepository.getSellerStatistics();
+    }
+    
 }

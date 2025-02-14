@@ -1,9 +1,6 @@
 package com.c108.springproject.admin.repository;
 
-import com.c108.springproject.admin.dto.querydsl.CompanyMonthlySalesDto;
-import com.c108.springproject.admin.dto.querydsl.CompanySalesDto;
-import com.c108.springproject.admin.dto.querydsl.CompanyStatisticsDto;
-import com.c108.springproject.admin.dto.querydsl.UserStatisticsDto;
+import com.c108.springproject.admin.dto.querydsl.*;
 import com.c108.springproject.global.querydsl.Querydsl4RepositorySupport;
 import com.c108.springproject.item.domain.QItem;
 import com.c108.springproject.order.domain.Order;
@@ -13,6 +10,7 @@ import com.c108.springproject.seller.domain.QCompany;
 import com.c108.springproject.seller.domain.QSeller;
 import com.c108.springproject.user.domain.QUser;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -188,6 +186,77 @@ public class AdminQueryRepository  extends Querydsl4RepositorySupport {
                 .companyMonthlySales(companyMonthlySales)
                 .build();
     }
+
+    // 판매자 통계
+    public SellerStatisticsDto getSellerStatistics() {
+        // 판매자 상태별 통계
+        Map<String, Long> sellerStatusStats = getQueryFactory()
+                .select(seller.status, seller.count())
+                .from(seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.status)
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(seller.status),
+                        tuple -> tuple.get(seller.count())
+                ));
+
+        // 판매 승인 상태별 통계
+        Map<String, Long> sellerApprovalStats = getQueryFactory()
+                .select(seller.approvalStatus, seller.count())
+                .from(seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.approvalStatus)
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(seller.approvalStatus),
+                        tuple -> tuple.get(seller.count())
+                ));
+
+        // 판매자별 총 매출
+        List<SellerSalesDto> sellerSalesStats = getQueryFactory()
+                .select(Projections.constructor(SellerSalesDto.class,
+                        seller.sellerNo,
+                        seller.name,
+                        company.name,
+                        orderDetail.price.multiply(orderDetail.count).sum().longValue()
+                ))
+                .from(orderDetail)
+                .join(orderDetail.item, item)
+                .join(item.company, company)
+                .join(company.sellers, seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.sellerNo, seller.name, company.name)
+                .fetch();
+
+        // 월별 판매자 가입 추이
+        List<MonthlySellerJoinDto> monthlyJoinStats = getQueryFactory()
+                .select(Projections.constructor(MonthlySellerJoinDto.class,
+                        seller.createdAt.substring(0, 6),
+                        seller.count(),
+                        JPAExpressions
+                                .select(seller.count())
+                                .from(seller)
+                                .where(
+                                        seller.createdAt.substring(0, 6).eq(seller.createdAt.substring(0, 6)),
+                                        seller.approvalStatus.eq("Y")
+                                )
+                ))
+                .from(seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.createdAt.substring(0, 6))
+                .fetch();
+
+        return SellerStatisticsDto.builder()
+                .sellerStatusStats(sellerStatusStats)
+                .sellerApprovalStats(sellerApprovalStats)
+                .sellerSalesStats(sellerSalesStats)
+                .monthlyJoinStats(monthlyJoinStats)
+                .build();
+    }
+
 
 
 }
