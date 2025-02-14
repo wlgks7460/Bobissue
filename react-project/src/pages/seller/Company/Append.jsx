@@ -72,19 +72,18 @@ const Append = () => {
     }
 
     // API에서 현재 회사의 계정 리스트 가져오기
-    if (extraAccounts.length > 0) {
-      const companyEmail = extraAccounts[0].email.split('@')[1] // 회사 이메일 도메인으로 필터링
-      const fetchCompanyAccounts = async () => {
-        try {
-          const response = await API.get(`/sellers/company-accounts?emailDomain=${companyEmail}`)
-          setCompanyAccounts(response.data.result.data || [])
-        } catch (error) {
-          console.error('회사 계정 불러오기 실패:', error)
-        }
-      }
 
-      fetchCompanyAccounts()
+    const fetchCompanyAccounts = async () => {
+      try {
+        const response = await API.get(`/sellers/company`)
+        console.log(response.data.result.data.sellers)
+        setCompanyAccounts(response.data.result.data.sellers || [])
+      } catch (error) {
+        console.error('회사 계정 불러오기 실패:', error)
+      }
     }
+
+    fetchCompanyAccounts()
   }, [extraAccounts, debug_mode])
 
   return (
@@ -180,7 +179,7 @@ const Append = () => {
       {/* 우측: 같은 회사의 계정 리스트 */}
       <div className='w-1/2 pl-6'>
         <h3 className='text-lg font-semibold mb-4 text-gray-800'>같은 회사의 계정들</h3>
-        {companyAccounts.length === 0 ? (
+        {!companyAccounts ? (
           <p className='text-gray-500'>같은 회사의 계정이 없습니다.</p>
         ) : (
           <ul className='bg-white shadow-md rounded-lg p-4 space-y-4'>
@@ -192,6 +191,8 @@ const Append = () => {
               </li>
             ))}
           </ul>
+
+          // <div></div>
         )}
       </div>
     </div>
