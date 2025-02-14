@@ -153,47 +153,61 @@ const Orders = () => {
   return (
     <div className='p-6 w-full bg-gray-50 min-h-screen'>
       <h1 className='text-2xl text-center font-bold text-gray-800 mb-6'>주문 관리</h1>
+
+      {/* 탭 UI */}
+      <div className='flex space-x-4 justify-center text-lg font-medium my-6'>
+        {[
+          { key: 'all', label: '전체' },
+          { key: 'orderComplete', label: '주문 완료' },
+          { key: 'orderConfirm', label: '주문 확인' },
+          { key: 'refundRequest', label: '환불 요청' },
+          { key: 'refundComplete', label: '환불 완료' },
+        ].map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setSelectedTab(key)}
+            className={`px-3 py-1 text-white rounded-[15px] transition ${selectedTab === key ? 'bg-amber-500 text-white' : 'bg-rose-300 hover:bg-rose-400'}`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* 주문 리스트 */}
+      <div className='border border-gray-300 rounded-xl bg-white'>
+        <table className='w-full text-left border-collapse'>
+          <thead className='bg-gray-100 text-gray-700'>
+            <tr>
+              <th className='p-4 border-b'>주문 번호</th>
+              <th className='p-4 border-b'>상품명</th>
+              <th className='p-4 border-b'>옵션 / 수량</th>
+              <th className='p-4 border-b'>주문 상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredOrders.map((order) => (
+              <tr key={order.orderId} className='border-b hover:bg-gray-100 transition'>
+                <td
+                  className='p-4 cursor-pointer text-blue-600 hover:underline'
+                  onClick={() => handleOrderClick(order.orderId)}
+                >
+                  {order.orderId}
+                </td>
+                <td className='p-4'>
+                  {allProducts.find((p) => p.itemNo === order.productId)?.name || '상품 정보 없음'}
+                </td>
+                <td className='p-4'>
+                  {order.option} / {order.quantity}
+                </td>
+                <td className='p-4'>{order.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 상품 상세 정보 팝업 */}
       {isOpenPopup && <OrderPopup order={popupData} onClose={() => setIsOpenPopup(false)} />}
-      {isLoading ? (
-        <p className='text-gray-500 text-lg'>로딩 중...</p>
-      ) : error ? (
-        <p className='text-red-500 text-lg'>{error}</p>
-      ) : (
-        <>
-          <div className='border border-gray-300 rounded-xl bg-white'>
-            <table className='w-full text-left border-collapse'>
-              <thead className='bg-gray-100 text-gray-700'>
-                <tr>
-                  <th className='p-4 border-b'>주문 번호</th>
-                  <th className='p-4 border-b'>상품명</th>
-                  <th className='p-4 border-b'>옵션 / 수량</th>
-                  <th className='p-4 border-b'>주문 상태</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredOrders.map((order) => (
-                  <tr key={order.orderId} className='border-b hover:bg-gray-100 transition'>
-                    <td
-                      className='p-4 cursor-pointer text-blue-600 hover:underline'
-                      onClick={() => handleOrderClick(order.orderId)}
-                    >
-                      {order.orderId}
-                    </td>
-                    <td className='p-4'>
-                      {allProducts.find((p) => p.itemNo === order.productId)?.name ||
-                        '상품 정보 없음'}
-                    </td>
-                    <td className='p-4'>
-                      {order.option} / {order.quantity}
-                    </td>
-                    <td className='p-4'>{order.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
     </div>
   )
 }
