@@ -28,7 +28,7 @@ const Home = () => {
       {/* 라이브 커머스 section */}
       <HomeLiveShopping />
       {/*상품 section */}
-      <div className='flex flex-col items-center gap-10'>
+      <div className='flex flex-col items-center gap-16 my-20'>
         {categories.map((v) => (
           <HomeItemList key={v.categoryNo} category={v} />
         ))}
