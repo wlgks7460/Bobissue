@@ -284,7 +284,7 @@ const AdminSideBar = () => {
   if (!isAuthenticated) return null
 
   return (
-    <div className='fixed top-0 left-0 h-full w-64 bg-white shadow-md p-2.5 overflow-y-auto'>
+    <div className='fixed top-0 left-0 h-full w-64 bg-white shadow-md p-2.5 overflow-y-auto scrollbar-hide'>
       <div className='mb-6'>
         <img
           src='/bobissueLogo2.png'
