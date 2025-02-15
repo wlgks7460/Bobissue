@@ -16,46 +16,48 @@ const ChatRoom = ({ sessionId }) => {
   useEffect(() => {
     // 📌 OpenVidu 세션 연결 (시청자)
     const connectToSession = async () => {
-      try {
-        console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`)
+      // try {
+      //   console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`)
 
-        // ✅ Connection 토큰 요청
-        const tokenRes = await fetch(
-          `https://43.202.60.173/openvidu/api/sessions/${sessionId}/connection`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
-            },
-            body: JSON.stringify({}),
-          },
-        )
+      //   // ✅ Connection 토큰 요청
+      //   const tokenRes = await fetch(
+      //     `https://43.202.60.173/openvidu/api/sessions/${sessionId}/connection`,
+      //     {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //         Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
+      //       },
+      //       body: JSON.stringify({}),
+      //     },
+      //   )
 
-        // ✅ 응답이 정상적인지 확인
-        if (!tokenRes.ok) {
-          throw new Error(`❌ 서버 응답 오류: ${tokenRes.status} ${tokenRes.statusText}`)
-        }
+      //   // ✅ 응답이 정상적인지 확인
+      //   if (!tokenRes.ok) {
+      //     throw new Error(`❌ 서버 응답 오류: ${tokenRes.status} ${tokenRes.statusText}`)
+      //   }
 
-        // ✅ JSON 파싱
-        const tokenData = await tokenRes.json()
-        console.log('✅ 시청자 토큰 발급 성공:', tokenData.token)
+      //   // ✅ JSON 파싱
+      //   const tokenData = await tokenRes.json()
+      //   console.log('✅ 시청자 토큰 발급 성공:', tokenData.token)
 
-        // ✅ OpenVidu 초기화
-        const OV = new OpenVidu()
-        const session = OV.initSession()
-        sessionRef.current = session
+      //   // ✅ OpenVidu 초기화
+      //   const OV = new OpenVidu()
+      //   const session = OV.initSession()
+      //   sessionRef.current = session
 
-        session.on('streamCreated', (event) => {
-          const subscriber = session.subscribe(event.stream, videoRef.current)
-          console.log('📺 새로운 스트림 구독:', subscriber)
-        })
+      //   session.on('streamCreated', (event) => {
+      //     const subscriber = session.subscribe(event.stream, videoRef.current)
+      //     console.log('📺 새로운 스트림 구독:', subscriber)
+      //   })
 
-        await session.connect(tokenData.token)
-        console.log('🎥 시청자 OpenVidu 연결 성공')
-      } catch (error) {
-        console.error('❌ 시청자 OpenVidu 연결 실패:', error)
-      }
+      //   await session.connect(tokenData.token)
+      //   console.log('🎥 시청자 OpenVidu 연결 성공')
+      // } catch (error) {
+      //   console.error('❌ 시청자 OpenVidu 연결 실패:', error)
+      // }
+
+      console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`)
     }
 
     // 📌 WebSocket (채팅) 연결
