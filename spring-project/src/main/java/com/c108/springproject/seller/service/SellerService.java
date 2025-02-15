@@ -8,8 +8,10 @@ import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
+import com.c108.springproject.seller.dto.querydsl.ItemRankingDto;
 import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
 import com.c108.springproject.seller.dto.response.ExtraAccountResDto;
+import com.c108.springproject.seller.repository.SellerQueryRepository;
 import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,9 +27,11 @@ import java.util.stream.Collectors;
 public class SellerService {
 
     private final SellerRepository sellerRepository;
+    private final SellerQueryRepository sellerQueryRepository;
 
-    public SellerService(SellerRepository sellerRepository, UserRepository userRepository) {
+    public SellerService(SellerRepository sellerRepository, UserRepository userRepository, SellerQueryRepository sellerQueryRepository) {
         this.sellerRepository = sellerRepository;
+        this.sellerQueryRepository = sellerQueryRepository;
     }
 
     @Transactional
@@ -163,4 +167,19 @@ public class SellerService {
                 .collect(Collectors.toList());
     }
 
+    
+    // 아이템 통계 조회
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public List<ItemRankingDto> getItemRankings(SellerQueryRepository.SalesPeriod period) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        int companyNo = seller.getCompany().getCompanyNo();
+
+        return sellerQueryRepository.getItemRankings(companyNo, period);
+    }
 }
