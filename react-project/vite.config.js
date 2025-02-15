@@ -26,10 +26,21 @@ export default defineConfig(({ mode }) => {
       //     changeOrigin: true,
       //   },
       // },
-          allowedHosts: [
-      'bobissue.store', // 허용할 호스트 추가
-      'www.bobissue.store', // 다른 호스트도 필요하다면 추가
-    ]
+      allowedHosts: [
+        'bobissue.store', // 허용할 호스트 추가
+        'www.bobissue.store', // 다른 호스트도 필요하다면 추가
+      ],
+      // hmr: {
+      //   host: 'bobissue.store',  // WebSocket 연결 호스트 설정
+      //   protocol: 'wss',  // HTTPS 환경이면 wss로 설정
+      // }
+      host: "0.0.0.0", // 외부 접속 허용
+      port: 5173,
+      hmr: {
+        protocol: "wss", // HTTPS 환경에서는 wss 사용 필수
+        host: "bobissue.store", // 웹사이트 도메인 지정
+        port: 443, // HTTPS 포트 (80 또는 443)
+      },
     },
   }
 })

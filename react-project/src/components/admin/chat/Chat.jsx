@@ -59,7 +59,7 @@ const ChatRoom = ({ sessionId }) => {
     }
 
     // 📌 WebSocket (채팅) 연결
-    const socket = new SockJS('https://bobissue.store/ws/chat') // ✅ WebSocket 엔드포인트
+    const socket = new SockJS('https://localhost:8080/ws/chat') // ✅ WebSocket 엔드포인트
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // 자동 재연결 (5초)
