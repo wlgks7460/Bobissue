@@ -34,7 +34,13 @@ export default defineConfig(({ mode }) => {
       //   host: 'bobissue.store',  // WebSocket 연결 호스트 설정
       //   protocol: 'wss',  // HTTPS 환경이면 wss로 설정
       // }
-      hmr : false
+      host: "0.0.0.0", // 외부 접속 허용
+      port: 5173,
+      hmr: {
+        protocol: "wss", // HTTPS 환경에서는 wss 사용 필수
+        host: "bobissue.store", // 웹사이트 도메인 지정
+        port: 443, // HTTPS 포트 (80 또는 443)
+      },
     },
   }
 })
