@@ -4,7 +4,7 @@ import API from '../../utils/API'
 import CartItem from '../../components/consumer/cart/CartItem'
 import CartSoldOut from '../../components/consumer/cart/CartSoldOut'
 import { Link, useNavigate } from 'react-router-dom'
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { useSelector } from 'react-redux'
 
 const Cart = () => {

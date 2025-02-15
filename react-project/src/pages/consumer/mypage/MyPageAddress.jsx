@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import MyPageAddressForm from '../../../components/consumer/mypage/MyPageAddressForm'
 import MyPageAddressItem from '../../../components/consumer/mypage/MyPageAddressItem'
 import API from '../../../utils/API'

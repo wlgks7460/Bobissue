@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import API from '../../../utils/API'
 import { useSelector } from 'react-redux'
 import MyPageRecipeItem from '../../../components/consumer/mypage/MyPageRecipeItem'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 const MyPageRecipe = () => {
   const [recipes, setRecipes] = useState([])
@@ -43,7 +44,12 @@ const MyPageRecipe = () => {
             ))}
           </div>
         ) : (
-          <p className='text-center text-gray-500 text-lg'>등록된 레시피가 없습니다.</p>
+          <div className='flex flex-col gap-3 items-center'>
+            <p className='text-center'>
+              <ExclamationCircleIcon className='w-20 text-gray-400' />
+            </p>
+            <p className='text-center text-xl text-gray-600'>레시피가 없습니다.</p>
+          </div>
         )}
       </div>
     </div>

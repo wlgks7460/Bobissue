@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import API from '../../../utils/API'
-import HomeLiveShoppingItem from './HomeLiveShoppingItem'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/outline'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import HomeLiveShoppingItem from './HomeLiveShoppingItem'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+
+// 플러그인 등록
+dayjs.extend(isBetween)
 
 const HomeLiveShopping = () => {
   const [castData, setCastData] = useState([])
 
   // 방송 조회
   const getCast = () => {
-    API.get('/cast/registerList')
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
-  useEffect(() => {
     const tempData = [
       {
         castNo: 4,
         title: '첫 방송입니다.',
         content: '닭가슴살 초특가',
-        startAt: '20250205 080000',
-        endAt: '20250205 100000',
+        startAt: '20250216 080000',
+        endAt: '20250216 100000',
         castItemList: [
           {
             itemNo: 1,
@@ -52,8 +51,8 @@ const HomeLiveShopping = () => {
         castNo: 5,
         title: '두번 방송입니다.',
         content: '닭가슴살 도시락 초특가',
-        startAt: '20250205 080000',
-        endAt: '20250205 100000',
+        startAt: '20250216 100000',
+        endAt: '20250216 110000',
         castItemList: [
           {
             itemNo: 1,
@@ -79,19 +78,79 @@ const HomeLiveShopping = () => {
         delYN: 'N',
       },
     ]
-    // setCastData(tempData)
+    const liveEvents = tempData.filter((event) => {
+      const currentTime = dayjs()
+      const startTime = dayjs(event.startAt)
+      const endTime = dayjs(event.endAt)
+
+      // 방송 중인 이벤트
+      return currentTime.isBetween(startTime, endTime)
+    })
+    const upcomingEvents = tempData.filter((event) => {
+      const currentTime = dayjs()
+      const startTime = dayjs(event.startAt)
+
+      // 방송 예정인 이벤트
+      return currentTime.isBefore(startTime)
+    })
+
+    // 우선 현재 방송이 없으면, 가장 가까운 예정 방송을 표시
+    const events = liveEvents.length > 0 ? liveEvents : upcomingEvents
+    setCastData(events)
+  }
+
+  useEffect(() => {
     getCast()
+    const interval = setInterval(() => {
+      getCast() // 10초마다 방송 데이터를 갱신
+    }, 10000)
+
+    return () => clearInterval(interval) // cleanup interval
   }, [])
+
+  // 캐로셀 버튼
+  const PrevBtn = ({ onClick }) => (
+    <button className='absolute top-1/2 -left-20 transform -translate-y-1/2 z-10' onClick={onClick}>
+      {<ArrowLeftCircleIcon className='w-12 text-black/40' />}
+    </button>
+  )
+  const NextBtn = ({ onClick }) => (
+    <button
+      className='absolute top-1/2 -right-20 transform -translate-y-1/2 z-10'
+      onClick={onClick}
+    >
+      {<ArrowRightCircleIcon className='w-12 text-black/40' />}
+    </button>
+  )
+
+  // 캐로셀 설정
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    draggable: false,
+    fade: false,
+    arrows: true,
+    prevArrow: <PrevBtn />,
+    nextArrow: <NextBtn />,
+    initialSlide: 1,
+    pauseOnFocus: true,
+    pauseOnHover: true,
+  }
+
   return (
-    <div className='flex justify-center my-20'>
-      <div className='w-[70rem] h-96'>
+    <div className='flex justify-center mt-20 mb-32'>
+      <div className='w-[70rem]'>
         <h3 className='text-xl'>라이브 커머스</h3>
         <div className='w-full h-full flex justify-center items-center'>
           {castData.length > 0 ? (
-            <div>
-              {castData.map((v) => (
-                <HomeLiveShoppingItem key={v.castNo} cast={v} />
-              ))}
+            <div className='w-full  h-auto relative'>
+              <Slider {...settings}>
+                {castData.map((v) => (
+                  <HomeLiveShoppingItem key={v.castNo} cast={v} />
+                ))}
+              </Slider>
             </div>
           ) : (
             <div className='flex flex-col gap-3 items-center'>
