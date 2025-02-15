@@ -94,12 +94,21 @@ const LiveStreamSetup = () => {
 
         // const token = localStorage.getItem("access_token");
         // console.log(token);
-        const sessionRes = await fetch('https://www.bobissue.store/api/openvidu/sessions', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        // const sessionRes = await fetch('https://www.bobissue.store/api/openvidu/sessions', {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
+
+        const sessionRes = await API.post('/openvidu/sessions');
+  
+        if (sessionRes.status === 200) {
+          const sessionData = sessionRes.data;
+          // 세션 데이터 처리
+        } else {
+          console.error('세션 생성 실패:', sessionRes.status);
+        }
         console.log(sessionRes);
         const sessionData = await sessionRes.json();
         const sessionId = sessionData.id;
