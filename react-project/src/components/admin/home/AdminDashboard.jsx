@@ -11,7 +11,7 @@ const AdminDashBoard = () => {
   const [totalSales, setTotalSales] = useState(null)
   const [totalUsers, setTotalUsers] = useState(null)
   const [activeUsers, setActiveUsers] = useState(null)
-
+  const [totalCompanies, setCompanies] = useState(null)
   useEffect(() => {
     const fetchTotalSales = async () => {
       try {
@@ -29,7 +29,7 @@ const AdminDashBoard = () => {
 
     const fetchTotalUsers = async () => {
       try {
-        const response = await API.get('http://bobissue.duckdns.org:8082/api/admin/user-statistics')
+        const response = await API.get('/admin/user-statistics')
         const userData = response?.data?.result?.data
         if (userData) {
           setTotalUsers(userData.totalUsers)
@@ -42,8 +42,22 @@ const AdminDashBoard = () => {
       }
     }
 
+    const fetchTotalCompanies = async () => {
+      try {
+        const response = await API.get('/admin/company-statistics')
+        const companyData = response?.data?.result?.data
+        if (companyData) {
+          setCompanies(companyData.totalCompanies)
+        } else {
+          console.error('회사 데이터가 없습니다.', response)
+        }
+      } catch (error) {
+        console.error('회사 데이터 가져오기 실패:', error)
+      }
+    }
     fetchTotalSales()
     fetchTotalUsers()
+    fetchTotalCompanies()
   }, [])
 
   // 더미 데이터 생성
@@ -90,9 +104,11 @@ const AdminDashBoard = () => {
         <div className='bg-[#FFF5E1] shadow-md rounded-lg p-5 flex flex-col items-start'>
           <div className='flex items-center space-x-2 mb-2'>
             <ClipboardDocumentListIcon className='h-6 w-6 text-[#5C4033]' />
-            <h2 className='text-lg font-semibold text-gray-800'>총 주문 수(예시)</h2>
+            <h2 className='text-lg font-semibold text-gray-800'>판매자 회사 수</h2>
           </div>
-          <p className='text-2xl font-bold text-gray-900'>1,523건</p>
+          <p className='text-2xl font-bold text-gray-900'>
+            {totalCompanies != null ? `${totalCompanies}개사` : `로딩 중 ...`}
+          </p>
         </div>
 
         <div className='bg-[#FDF5E6] shadow-md rounded-lg p-5 flex flex-col items-start'>
