@@ -48,9 +48,9 @@ const UpdatePassword = () => {
   }
 
   return (
-    <div className='h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-200 p-6'>
-      <div className='w-full max-w-md bg-white p-8 rounded-xl shadow-lg'>
-        <h1 className='text-2xl font-bold text-center mb-6'>🔑 비밀번호 변경</h1>
+    <div className='h-screen flex items-center justify-center bg-gradient-to-br p-6'>
+      <div className='w-full max-w-md bg-white p-8 rounded-xl border border-blue-400 '>
+        <h1 className='text-2xl font-bold text-center mb-6'>비밀번호 변경</h1>
 
         <form onSubmit={handleSubmit} className='space-y-5'>
           {/* 새 비밀번호 입력 */}

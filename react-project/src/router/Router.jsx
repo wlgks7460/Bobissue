@@ -356,8 +356,8 @@ const router = createBrowserRouter([
           },
           //판매통계 관련
           {
-            path: 'stats/performance',
-            element: <Seller.Performance />,
+            path: 'stats/overview',
+            element: <Seller.StatOverview />,
           },
           {
             path: 'stats/products',
