@@ -37,22 +37,10 @@ export default defineConfig(({ mode }) => {
 
       host: "0.0.0.0", // 외부에서 접근 가능하게 설정
       port: 5173, // Vite 개발 서버 포트
-      strictPort: true,
-      cors: {
-        origin: "*", // CORS 허용
-        methods: ["GET", "POST"],
-      },
-      proxy: {
-        "/ws": {
-          target: "http://localhost:8080", // 백엔드 서버 주소
-          ws: true,
-          changeOrigin: true,
-        },
-      },
       hmr: {
         protocol: "wss", // HTTPS 환경에서는 wss 사용
         host: "bobissue.store", // 도메인 지정
-        port: 443, // HTTPS 포트
+        port: 5173, // HTTPS 포트
       },
     },
   }
