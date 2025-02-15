@@ -21,7 +21,6 @@ public class MealResDto {
     private String eatTime;
     private int calorie;
     private List<MealImageReqDto> images;
-    //이미지
 
     public static MealResDto toDto(Calendar calendar) {
         return MealResDto.builder()
@@ -30,7 +29,7 @@ public class MealResDto {
                 .calorie(calendar.getCalorie())
                 .eatTime(calendar.getEatDate())
                 .images(calendar.getImages().stream()
-                        .map(image -> MealImageReqDto.toDto(image))
+                        .map(MealImageReqDto::toDto)
                         .collect(Collectors.toList()))
                 .build();
     }
