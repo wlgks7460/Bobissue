@@ -127,5 +127,26 @@ public class AdminController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER_STATISTICS, new DefaultResponse<>(adminService.getSellerStatistics()));
     }
 
+    @GetMapping("/statistics/monthly-comparison")
+    public ResponseDto getTotalMonthlySalesComparison() {
+        return new ResponseDto(HttpStatus.OK,
+                ResponseCode.SUCCESS_GET_TOTAL_MONTHLY_COMPARISON,
+                new DefaultResponse<>(adminService.getTotalMonthlySalesComparison()));
+    }
+
+    @GetMapping("/statistics/category")
+    public ResponseDto getTotalCategorySalesStatistics() {
+        return new ResponseDto(HttpStatus.OK,
+                ResponseCode.SUCCESS_GET_TOTAL_CATEGORY_STATS,
+                new DefaultResponse<>(adminService.getTotalCategorySalesStatistics()));
+    }
+
+    @GetMapping("/statistics/hourly")
+    public ResponseDto getTotalHourlySalesStatistics() {
+        return new ResponseDto(HttpStatus.OK,
+                ResponseCode.SUCCESS_GET_TOTAL_HOURLY_STATS,
+                new DefaultResponse<>(adminService.getTotalHourlySalesStatistics()));
+    }
+
 
 }

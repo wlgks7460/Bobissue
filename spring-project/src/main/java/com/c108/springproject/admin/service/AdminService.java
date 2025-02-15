@@ -12,6 +12,9 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
+import com.c108.springproject.seller.dto.querydsl.CategorySalesDto;
+import com.c108.springproject.seller.dto.querydsl.HourlySalesDto;
+import com.c108.springproject.seller.dto.querydsl.MonthlySalesComparisonDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
 import com.c108.springproject.seller.dto.response.SellerResDto;
@@ -201,5 +204,26 @@ public class AdminService {
     public SellerStatisticsDto getSellerStatistics() {
         return adminQueryRepository.getSellerStatistics();
     }
-    
+
+    // 전월 대비 실적
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public MonthlySalesComparisonDto getTotalMonthlySalesComparison() {
+        return adminQueryRepository.getTotalMonthlySalesComparison();
+    }
+
+    // 카테고리 판매 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public List<CategorySalesDto> getTotalCategorySalesStatistics() {
+        return adminQueryRepository.getTotalCategorySalesStatistics();
+    }
+
+    // 시간대별 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public List<HourlySalesDto> getTotalHourlySalesStatistics() {
+        return adminQueryRepository.getTotalHourlySalesStatistics();
+    }
+
 }
