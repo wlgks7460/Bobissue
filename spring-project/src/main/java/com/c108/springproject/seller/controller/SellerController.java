@@ -9,6 +9,10 @@ import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
+import com.c108.springproject.seller.dto.querydsl.CategorySalesDto;
+import com.c108.springproject.seller.dto.querydsl.HourlySalesDto;
+import com.c108.springproject.seller.dto.querydsl.MonthlySalesComparisonDto;
+import com.c108.springproject.seller.dto.querydsl.SalesPredictionDto;
 import com.c108.springproject.seller.dto.request.CompanyReqDto;
 import com.c108.springproject.seller.dto.request.CompanyUpdateReqDto;
 import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
@@ -35,12 +39,14 @@ public class SellerController {
     private final SellerService sellerService;
     private final CompanyService companyService;
     private final MailService mailService;
+    private final SellerQueryRepository sellerQueryRepository;
 
     @Autowired
-    public SellerController(SellerService sellerService, MailService mailService, CompanyService companyService) {
+    public SellerController(SellerService sellerService, MailService mailService, CompanyService companyService, SellerQueryRepository sellerQueryRepository) {
         this.sellerService = sellerService;
         this.companyService = companyService;
         this.mailService = mailService;
+        this.sellerQueryRepository = sellerQueryRepository;
     }
 
     @PostMapping("sign-up")
@@ -141,5 +147,72 @@ public class SellerController {
                 ResponseCode.SUCCESS_GET_ITEM_RANKINGS,
                 new DefaultResponse<>(sellerService.getItemRankings(period))
         );
+
+
     }
+    @GetMapping("/customer-satisfaction")
+    public ResponseDto getCustomerSatisfaction() {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_GET_CUSTOMER_SATISFACTION,
+                new DefaultResponse<>(sellerService.getCustomerSatisfaction())
+        );
+    }
+
+    @GetMapping("/statistics/monthly-comparison")
+    public ResponseDto getMonthlySalesComparison() {
+        try {
+            MonthlySalesComparisonDto comparison = sellerService.getMonthlySalesComparison();
+            return new ResponseDto(
+                    HttpStatus.OK,
+                    ResponseCode.SUCCESS_GET_MONTHLY_COMPARISON,
+                    new DefaultResponse<>(comparison)
+            );
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_GET_MONTHLY_COMPARISON);
+        }
+    }
+
+    @GetMapping("/statistics/sales-prediction")
+    public ResponseDto getSalesPrediction() {
+        try {
+            SalesPredictionDto prediction = sellerService.getSalesPrediction();
+            return new ResponseDto(
+                    HttpStatus.OK,
+                    ResponseCode.SUCCESS_GET_SALES_PREDICTION,
+                    new DefaultResponse<>(prediction)
+            );
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_GET_SALES_PREDICTION);
+        }
+    }
+
+    @GetMapping("/statistics/category")
+    public ResponseDto getCategorySalesStatistics() {
+        try {
+            List<CategorySalesDto> categoryStats = sellerService.getCategorySalesStatistics();
+            return new ResponseDto(
+                    HttpStatus.OK,
+                    ResponseCode.SUCCESS_GET_CATEGORY_STATS,
+                    new DefaultResponse<>(categoryStats)
+            );
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_GET_CATEGORY_STATS);
+        }
+    }
+
+    @GetMapping("/statistics/hourly")
+    public ResponseDto getHourlySalesStatistics() {
+        try {
+            List<HourlySalesDto> hourlyStats = sellerService.getHourlySalesStatistics();
+            return new ResponseDto(
+                    HttpStatus.OK,
+                    ResponseCode.SUCCESS_GET_HOURLY_STATS,
+                    new DefaultResponse<>(hourlyStats)
+            );
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_GET_HOURLY_STATS);
+        }
+    }
+
 }

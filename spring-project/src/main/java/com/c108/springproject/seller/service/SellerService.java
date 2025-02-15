@@ -8,7 +8,7 @@ import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
-import com.c108.springproject.seller.dto.querydsl.ItemRankingDto;
+import com.c108.springproject.seller.dto.querydsl.*;
 import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
 import com.c108.springproject.seller.dto.response.ExtraAccountResDto;
 import com.c108.springproject.seller.repository.SellerQueryRepository;
@@ -181,5 +181,65 @@ public class SellerService {
         int companyNo = seller.getCompany().getCompanyNo();
 
         return sellerQueryRepository.getItemRankings(companyNo, period);
+    }
+
+    @Transactional()
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public CustomerSatisfactionDto getCustomerSatisfaction() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getCustomerSatisfaction(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public MonthlySalesComparisonDto getMonthlySalesComparison() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getMonthlySalesComparison(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public SalesPredictionDto getSalesPrediction() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getSalesPrediction(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public List<CategorySalesDto> getCategorySalesStatistics() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getCategorySalesStatistics(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public List<HourlySalesDto> getHourlySalesStatistics() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getHourlySalesStatistics(seller.getCompany().getCompanyNo());
     }
 }
