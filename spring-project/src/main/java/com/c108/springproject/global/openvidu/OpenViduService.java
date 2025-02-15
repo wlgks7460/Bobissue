@@ -11,7 +11,7 @@ import java.util.Map;
 @Service
 public class OpenViduService {
 
-    private static final String OPENVIDU_URL = "https://43.202.60.173/openvidu/api";
+    private static final String OPENVIDU_URL = "https://bobissue:store:8443/openvidu/api";
     private static final String OPENVIDU_USERNAME = "OPENVIDUAPP";
     private static final String OPENVIDU_SECRET = "C108bob";
     private final RestTemplate restTemplate;

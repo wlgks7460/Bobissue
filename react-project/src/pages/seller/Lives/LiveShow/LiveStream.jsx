@@ -70,7 +70,7 @@ const LiveStreamSetup = () => {
       }
     } else {
       try {
-        // ✅ OpenVidu 세션 생성 요청
+        // // ✅ OpenVidu 세션 생성 요청
         // const sessionRes = await fetch("https://43.202.60.173/openvidu/api/sessions", {
         //   method: "POST",
         //   headers: {
@@ -91,13 +91,12 @@ const LiveStreamSetup = () => {
         // const sessionId = sessionData.id
         // console.log('✅ 세션 생성 성공:', sessionId)
 
-        const token = localStorage.getItem("access_token");
-        console.log(token);
-        const sessionRes = await fetch('http://localhost:8080/api/openvidu/sessions', {
+        // const token = localStorage.getItem("access_token");
+        // console.log(token);
+        const sessionRes = await fetch('http://www.bobissue.store/api/openvidu/sessions', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ JWT 토큰 추가
           },
         });
         console.log(sessionRes);
