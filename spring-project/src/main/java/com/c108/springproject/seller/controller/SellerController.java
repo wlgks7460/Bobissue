@@ -15,6 +15,7 @@ import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
 import com.c108.springproject.seller.dto.response.ExtraAccountResDto;
+import com.c108.springproject.seller.repository.SellerQueryRepository;
 import com.c108.springproject.seller.service.CompanyService;
 import com.c108.springproject.seller.service.MailService;
 import com.c108.springproject.seller.service.SellerService;
@@ -130,5 +131,15 @@ public class SellerController {
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_FIND_COMPANY_ITEMS);
         }
+    }
+
+    @GetMapping("/item-rank")
+    public ResponseDto getItemRankings(
+            @RequestParam(required = false, defaultValue = "YEARLY") SellerQueryRepository.SalesPeriod period) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_GET_ITEM_RANKINGS,
+                new DefaultResponse<>(sellerService.getItemRankings(period))
+        );
     }
 }
