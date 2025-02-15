@@ -229,13 +229,13 @@ const SidebarItem = ({ item, isOpen, onToggle, onItemClick }) => {
           {/* subMenus가 있는 경우 */}
           {item.subMenus?.map((sub) => (
             <div key={sub.id}>
-              <div className='p-2 text-sm text-gray-700 font-medium'>{sub.title}</div>
+              <div className='p-2 text-sm font-semibold text-[#5C4033]'>{sub.title}</div>
               <div className='pl-3'>
                 {sub.items.map((menu) => (
                   <div
                     key={menu.id}
                     onClick={() => onItemClick(menu.path)}
-                    className='cursor-pointer p-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded'
+                    className='cursor-pointer p-2 text-sm text-gray-600 hover:text-[#5C4033] transition-colors duration-200'
                   >
                     {menu.title}
                   </div>
@@ -249,7 +249,7 @@ const SidebarItem = ({ item, isOpen, onToggle, onItemClick }) => {
             <div
               key={menu.id}
               onClick={() => onItemClick(menu.path)}
-              className='cursor-pointer p-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded'
+              className='cursor-pointer p-2 text-sm text-gray-600 hover:text-[#5C4033] transition-colors duration-200'
             >
               {menu.title}
             </div>
