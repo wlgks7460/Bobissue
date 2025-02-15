@@ -1,11 +1,19 @@
 package com.c108.springproject.global.openvidu;
 
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +27,7 @@ public class OpenViduService {
     private final RestTemplate restTemplate;
 
     public OpenViduService() {
+
         this.restTemplate = new RestTemplate();
     }
 
