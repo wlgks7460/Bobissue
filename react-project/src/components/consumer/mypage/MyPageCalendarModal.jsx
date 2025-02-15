@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import MyPageCalendarModalForm from './MyPageCalendarModalForm'
 import MyPageCalendarModalItem from './MyPageCalendarModalItem'
 import API from '../../../utils/API'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 const MyPageCalendarModal = ({
   setModalOpen,
@@ -131,7 +132,12 @@ const MyPageCalendarModal = ({
             <div className='h-[300px] overflow-y-auto'>
               <div className='flex flex-col gap-3'>
                 {todayMeal.length === 0 ? (
-                  <p className='text-center text-gray-500'>오늘의 식단이 없습니다.</p>
+                  <div className='h-[250px] flex flex-col gap-3 items-center justify-center'>
+                    <p className='text-center'>
+                      <ExclamationCircleIcon className='w-20 text-gray-400' />
+                    </p>
+                    <p className='text-center text-xl text-gray-600'>오늘의 식단이 없습니다.</p>
+                  </div>
                 ) : (
                   todayMeal.map((meal) => (
                     <MyPageCalendarModalItem
