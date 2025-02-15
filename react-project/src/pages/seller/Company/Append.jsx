@@ -72,11 +72,9 @@ const Append = () => {
     }
 
     // API에서 현재 회사의 계정 리스트 가져오기
-
     const fetchCompanyAccounts = async () => {
       try {
         const response = await API.get(`/sellers/company`)
-        console.log(response.data.result.data.sellers)
         setCompanyAccounts(response.data.result.data.sellers || [])
       } catch (error) {
         console.error('회사 계정 불러오기 실패:', error)
@@ -87,76 +85,80 @@ const Append = () => {
   }, [extraAccounts, debug_mode])
 
   return (
-    <div className='p-6 max-w-6xl mx-auto flex'>
+    <div className='p-6 max-w-7xl mx-auto flex flex-col gap-10'>
       {/* 좌측: 추가 계정 관리 */}
-      <div className='w-1/2 pr-6'>
-        <h2 className='text-2xl font-semibold mb-6 text-center text-gray-800'>추가 계정 관리</h2>
+      <div className='bg-white shadow-md rounded-lg p-6 space-y-8'>
+        <h2 className='text-3xl font-semibold text-center text-gray-800'>추가 계정 관리</h2>
 
-        {/* ✅ 입력 폼 */}
-        <div className='bg-white rounded-lg shadow-md p-6'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <input
-              type='email'
-              name='email'
-              value={newAccount.email}
-              onChange={handleInputChange}
-              placeholder='이메일'
-              className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
-              required
-            />
-            <input
-              type='password'
-              name='password'
-              value={newAccount.password}
-              onChange={handleInputChange}
-              placeholder='비밀번호'
-              className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
-              required
-            />
-          </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-6'>
-            <input
-              type='text'
-              name='callNumber'
-              value={newAccount.callNumber}
-              onChange={handleInputChange}
-              placeholder='전화번호'
-              className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
-              required
-            />
-            <input
-              type='text'
-              name='name'
-              value={newAccount.name}
-              onChange={handleInputChange}
-              placeholder='이름'
-              className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
-              required
-            />
-          </div>
-
-          {/* ✅ 계정 추가 버튼 */}
-          <button
-            className='w-full bg-blue-500 text-white px-4 py-2 mt-6 rounded-md hover:bg-blue-600 transition-all'
-            onClick={handleAddAccount}
-          >
-            계정 추가
-          </button>
+        {/* 입력 폼 */}
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          <input
+            type='email'
+            name='email'
+            value={newAccount.email}
+            onChange={handleInputChange}
+            placeholder='이메일'
+            className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
+            required
+          />
+          <input
+            type='password'
+            name='password'
+            value={newAccount.password}
+            onChange={handleInputChange}
+            placeholder='비밀번호'
+            className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
+            required
+          />
         </div>
 
-        {/* ✅ 추가된 계정 리스트 */}
-        <h3 className='text-lg font-semibold mb-2 mt-6 text-gray-800'>추가된 계정</h3>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-6'>
+          <input
+            type='text'
+            name='callNumber'
+            value={newAccount.callNumber}
+            onChange={handleInputChange}
+            placeholder='전화번호'
+            className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
+            required
+          />
+          <input
+            type='text'
+            name='name'
+            value={newAccount.name}
+            onChange={handleInputChange}
+            placeholder='이름'
+            className='p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
+            required
+          />
+        </div>
+
+        {/* 계정 추가 버튼 */}
+        <button
+          className='w-full bg-blue-500 text-white px-4 py-2 mt-6 rounded-md hover:bg-blue-600 transition-all'
+          onClick={handleAddAccount}
+        >
+          계정 추가
+        </button>
+      </div>
+
+      {/* 추가된 계정 리스트 */}
+      <div className='bg-white shadow-md rounded-lg p-6'>
+        <h3 className='text-xl font-semibold text-gray-800 mb-4'>추가된 계정</h3>
         {extraAccounts.length === 0 ? (
           <p className='text-gray-500'>추가된 계정이 없습니다.</p>
         ) : (
-          <ul className='bg-white shadow-md rounded-lg p-4 space-y-4'>
+          <ul className='space-y-4'>
             {extraAccounts.map((account, index) => (
-              <li key={index} className='flex justify-between items-center border-b py-2'>
+              <li
+                key={index}
+                className='flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-all'
+              >
                 <span className='text-gray-700'>
                   {account.name} ({account.email}) - {account.callNumber}
                 </span>
                 <button
-                  className='bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition'
+                  className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-all'
                   onClick={() => handleDeleteAccount(index)}
                 >
                   삭제
@@ -165,8 +167,10 @@ const Append = () => {
             ))}
           </ul>
         )}
+      </div>
 
-        {/* ✅ 계정 전송 버튼 */}
+      {/* 계정 리스트 전송 버튼 */}
+      <div className='bg-white shadow-md rounded-lg p-6'>
         <button
           className='w-full bg-green-500 text-white px-6 py-3 mt-6 rounded-md disabled:bg-gray-300 hover:bg-green-600 transition-all'
           onClick={handleSubmit}
@@ -177,22 +181,23 @@ const Append = () => {
       </div>
 
       {/* 우측: 같은 회사의 계정 리스트 */}
-      <div className='w-1/2 pl-6'>
-        <h3 className='text-lg font-semibold mb-4 text-gray-800'>같은 회사의 계정들</h3>
-        {!companyAccounts ? (
+      <div className='bg-white shadow-md rounded-lg p-6'>
+        <h3 className='text-xl font-semibold text-gray-800 mb-4'>같은 회사의 계정들</h3>
+        {companyAccounts.length === 0 ? (
           <p className='text-gray-500'>같은 회사의 계정이 없습니다.</p>
         ) : (
-          <ul className='bg-white shadow-md rounded-lg p-4 space-y-4'>
+          <ul className='space-y-4'>
             {companyAccounts.map((account, index) => (
-              <li key={index} className='flex justify-between items-center border-b py-2'>
+              <li
+                key={index}
+                className='flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition-all'
+              >
                 <span className='text-gray-700'>
                   {account.name} ({account.email}) - {account.callNumber}
                 </span>
               </li>
             ))}
           </ul>
-
-          // <div></div>
         )}
       </div>
     </div>

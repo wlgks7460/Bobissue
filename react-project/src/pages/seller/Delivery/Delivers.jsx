@@ -45,50 +45,62 @@ const Delivers = () => {
   }
 
   return (
-    <div className='p-6 w-full bg-gray-50 min-h-screen'>
-      <h1 className='text-2xl text-center font-bold text-gray-800 mb-6'>배송 관리</h1>
+    <div className='min-h-screen bg-gradient-to-r bg-blue-50 py-10 px-5 sm:px-10'>
+      <div className='max-w-7xl mx-auto'>
+        {/* 헤더 */}
+        <div className='text-center mb-10'>
+          <h1 className='text-5xl font-extrabold text-gray-900'>배송 관리</h1>
+          <p className='mt-2 text-xl text-gray-600'>배송 상태에 따라 상품을 관리하세요.</p>
+        </div>
 
-      {/* 탭 UI */}
-      <div className='flex space-x-4 justify-center text-lg font-medium my-6'>
-        {[
-          { key: 'all', label: '전체' },
-          { key: 'preparing', label: '상품준비 중' },
-          { key: 'shipping', label: '배송중' },
-          { key: 'delivered', label: '배송완료' },
-          { key: 'confirmed', label: '구매확정' },
-        ].map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => setSelectedTab(key)}
-            className={`px-3 py-1 text-white rounded-[15px] transition ${selectedTab === key ? 'bg-amber-500 text-white' : 'bg-rose-300 hover:bg-rose-400'}`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* 배송 리스트 */}
-      <div className='border border-gray-300 rounded-xl bg-white p-4'>
-        {filteredDelivers.map((deliver) => (
-          <div key={deliver.id} className='flex justify-between p-4 border-b'>
+        {/* 탭 UI */}
+        <div className='flex justify-center mb-8'>
+          {[
+            { key: 'all', label: '전체' },
+            { key: 'preparing', label: '상품준비 중' },
+            { key: 'shipping', label: '배송중' },
+            { key: 'delivered', label: '배송완료' },
+            { key: 'confirmed', label: '구매확정' },
+          ].map(({ key, label }) => (
             <button
-              onClick={() => handleOpenPopup(deliver)}
-              className='text-blue-600 hover:underline'
+              key={key}
+              onClick={() => setSelectedTab(key)}
+              className={`px-4 py-2 mx-2 rounded-full text-lg font-semibold transition-all duration-300 transform ${
+                selectedTab === key
+                  ? 'bg-gray-600 text-white scale-105'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-400 hover:text-white'
+              }`}
             >
-              {deliver.product}
+              {label}
             </button>
-            <button className='bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-700'>
-              배송 취소
-            </button>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* 배송 리스트 카드 UI */}
+        <div className='grid grid-cols-1 rounded-[20px] sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+          {filteredDelivers.length === 0 ? (
+            <div className='col-span-3 text-center text-gray-500'>해당 분류의 배송이 없습니다.</div>
+          ) : (
+            filteredDelivers.map((deliver) => (
+              <div
+                key={deliver.id}
+                className='bg-white p-4 py-6 rounded-[20px] border-2 border-gray-300 hover:scale-95 transition-all duration-200 cursor-pointer'
+                onClick={() => handleOpenPopup(deliver)}
+              >
+                <h3 className='text-xl font-semibold text-gray-800'>{deliver.product}</h3>
+                <p className='text-gray-600 mt-2'>상태: {deliver.status}</p>
+                <p className='text-gray-500 mt-4'>{deliver.details}</p>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       {/* 상품 상세 정보 팝업 */}
       {selectedProduct && (
         <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='bg-white p-6 rounded-lg shadow-lg w-[300px]'>
-            <h2 className='text-xl font-bold mb-4'>{selectedProduct.product}</h2>
+          <div className='bg-white p-6 rounded-lg shadow-lg w-[350px]'>
+            <h2 className='text-2xl font-bold mb-4'>{selectedProduct.product}</h2>
             <p className='text-gray-700'>{selectedProduct.details}</p>
             <button
               onClick={handleClosePopup}

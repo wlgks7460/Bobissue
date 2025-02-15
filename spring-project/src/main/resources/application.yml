@@ -81,6 +81,10 @@ spring:
           starttls:
             enable: true
 
+  task:
+    scheduling:
+      enabled: true
+
 jwt:
   secretKey: MzY4IHN1cGVyIHNlY3JldCBrZXkgdGhhdCBpcyBhd2Vzb21l...
   access:
@@ -88,6 +92,13 @@ jwt:
   refresh:
     expiration-hours: 24
   issuer: BobIssue
+
+
+system:
+  properties:
+    javax.net.ssl.trustStore: "/etc/ssl/certs/java/cacerts"
+    javax.net.ssl.trustStorePassword: "changeit"
+
 
 
 
