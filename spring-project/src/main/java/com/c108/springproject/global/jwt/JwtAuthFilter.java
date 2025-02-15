@@ -56,6 +56,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+            if (path.startsWith("/wss/")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             if (path.startsWith("/api/openvidu/")) {
                 filterChain.doFilter(request, response);
