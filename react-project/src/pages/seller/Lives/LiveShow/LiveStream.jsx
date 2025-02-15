@@ -105,6 +105,7 @@ const LiveStreamSetup = () => {
         const sessionRes = await API.post('/openvidu/sessions');
   
         if (sessionRes.status === 200) {
+          console.log(sessionRes);
           const sessionData = sessionRes.data;
           // 세션 데이터 처리
         } else {
