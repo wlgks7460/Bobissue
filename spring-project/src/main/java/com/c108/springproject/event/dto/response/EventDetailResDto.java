@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 public class EventDetailResDto {
 
     private int eventNo;
-    private String name;
     private String title;
     private String description;
     private String startDate;
@@ -24,12 +23,14 @@ public class EventDetailResDto {
     public static EventDetailResDto toDto(Event event) {
         return EventDetailResDto.builder()
                 .eventNo(event.getEventNo())
-                .name(event.getName())
                 .title(event.getTitle())
                 .description(event.getDescription())
                 .images(event.getImages().stream()
                         .map(EventImageReqDto::toDto)
                         .collect(Collectors.toList()))
+                .startDate(event.getStartDate())
+                .endDate(event.getEndDate())
+                .status(event.getStatus())
                 .build();
     }
 }

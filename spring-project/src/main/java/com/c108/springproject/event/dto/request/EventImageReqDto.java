@@ -1,6 +1,5 @@
 package com.c108.springproject.event.dto.request;
 
-import com.c108.springproject.event.domain.Event;
 import com.c108.springproject.event.domain.EventImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class EventImageReqDto {
-    private int imageNo;
+    private long imageNo;
     private String imageUrl;
     private String originalName;
 

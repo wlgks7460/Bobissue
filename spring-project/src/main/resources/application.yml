@@ -81,6 +81,10 @@ spring:
           starttls:
             enable: true
 
+  task:
+    scheduling:
+      enabled: true
+
 jwt:
   secretKey: MzY4IHN1cGVyIHNlY3JldCBrZXkgdGhhdCBpcyBhd2Vzb21l...
   access:

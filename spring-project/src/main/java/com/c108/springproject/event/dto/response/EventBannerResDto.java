@@ -1,5 +1,6 @@
 package com.c108.springproject.event.dto.response;
 
+import com.c108.springproject.event.domain.Event;
 import com.c108.springproject.event.domain.EventImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 public class EventBannerResDto {
     private int eventNo;
-    private String title;
-    private String description;
-    private String startDate;
-    private String endDate;
-    private String status;
     private EventImage image;
+
+    public static EventBannerResDto toDto(Event event) {
+        return EventBannerResDto.builder()
+                .eventNo(event.getEventNo())
+                .image(event.getImages().get(0))
+                .build();
+    }
 }

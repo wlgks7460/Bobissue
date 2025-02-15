@@ -11,11 +11,14 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.s3.S3Service;
 import jakarta.transaction.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,12 +36,16 @@ public class EventService {
     }
 
     // 이벤트 배너 조회
-//    @Transactional
-//    public EventBannerResDto getBanner() {
-//        return
-//    }
+    @Transactional
+    public List<EventBannerResDto> getBanner() {
+        List<Event> events = eventRepository.findByStatusAndDelYn("Y", "N");  // 활성 이벤트 조회
 
-    // 이벤트 상세 조회
+        return events.stream()
+                .map(EventBannerResDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+    // 이벤트 조회
     @Transactional
     public EventDetailResDto getEventDetail(int eventNo) {
         Event event =eventRepository.findById(eventNo).orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_EVENT));
@@ -51,27 +58,31 @@ public class EventService {
     public EventDetailResDto createEvent(EventReqDto reqDto, List<MultipartFile> files) {
         try{
             Event event = Event.builder()
-                    .name(reqDto.getName())
                     .title(reqDto.getTitle())
                     .description(reqDto.getDescription())
+                    .startDate(reqDto.getStartDate())
+                    .endDate(reqDto.getEndDate())
+                    .images(new ArrayList<>())
+                    .status("N")
                     .build();
 
             if (files != null && !files.isEmpty()) {
                 for (MultipartFile file : files) {
-                    String imageUrl = s3Service.uploadFile("calender", file);
+                    String imageUrl = s3Service.uploadFile("event", file);
 
-                    EventImage mealImage = EventImage.builder()
+                    EventImage eventImage = EventImage.builder()
                             .event(event)
                             .originalName(file.getOriginalFilename())
                             .imageUrl(imageUrl)
                             .build();
 
-                    event.getImages().add(mealImage);
+                    event.getImages().add(eventImage);
                 }
             }
-            eventRepository.save(event);
-            return EventDetailResDto.toDto(event);
+
+            return EventDetailResDto.toDto(eventRepository.save(event));
         } catch (Exception e) {
+            System.out.println("service에서 이벤트 생성 오류");
             throw new BobIssueException(ResponseCode.FAILED_CREATE_EVENT);
         }
     }
@@ -79,38 +90,21 @@ public class EventService {
     //이벤트 수정
     @Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public EventDetailResDto updateEvent(int eventNo, EventReqDto reqDto, List<MultipartFile> files) {
-        Event event = eventRepository.findById(eventNo).orElseThrow(()-> new BobIssueException(ResponseCode.NOT_FOUND_EVENT));
-        try{
-            event.builder()
-                    .name(reqDto.getName())
-                    .title(reqDto.getTitle())
-                    .description(reqDto.getDescription())
-                    .startDate(reqDto.getStartDate())
-                    .endDate(reqDto.getEndDate())
-                    .build();
-
-            List<EventImage> updatedImages = new ArrayList<>();
-
-            // 유지할 이미지 처리
-            if (reqDto.getKeepImageNos() != null && !reqDto.getKeepImageNos().isEmpty()) {
-                updatedImages.addAll(event.getImages().stream()
-                        .filter(img -> reqDto.getKeepImageNos().contains(img.getImageNo()))
-                        .collect(Collectors.toList()));
-            }
-
-            // 삭제할 이미지 처리
-            List<String> deleteUrls = event.getImages().stream()
-                    .filter(img -> reqDto.getKeepImageNos() == null ||
-                            !reqDto.getKeepImageNos().contains(img.getImageNo()))
-                    .map(EventImage::getImageUrl)
+    public EventDetailResDto updateEvent(int eventNo, EventReqDto reqDto, List<MultipartFile> files, List<Integer> keepImageNos) {
+        Event event = eventRepository.findById(eventNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.NOT_FOUND_EVENT));
+        try {
+            // 1. 유지할 이미지 처리
+            List<EventImage> updatedImages = event.getImages().stream()
+                    .filter(img -> keepImageNos != null && keepImageNos.contains((int) img.getImageNo()))
                     .collect(Collectors.toList());
 
-            if (!deleteUrls.isEmpty()) {
-                s3Service.deleteFiles(deleteUrls);
-            }
+            // 2. 삭제할 이미지 delYn="Y" 처리
+            event.getImages().stream()
+                    .filter(img -> keepImageNos == null || !keepImageNos.contains((int) img.getImageNo()))
+                    .forEach(img -> img.setDelYn("Y"));
 
-            // 2-3. 새 이미지 업로드 및 처리
+            // 3. 새 이미지 추가
             if (files != null && !files.isEmpty()) {
                 for (MultipartFile file : files) {
                     String imageUrl = s3Service.uploadFile("event", file);
@@ -123,27 +117,22 @@ public class EventService {
                 }
             }
 
-            Event updatedEvent = Event.builder()
-                    .eventNo(eventNo)
-                    .name(event.getName())
-                    .title(event.getTitle())
-                    .description(event.getDescription())
-                    .startDate(event.getStartDate())
-                    .endDate(event.getEndDate())
-                    .status(event.getStatus())
-                    .build();
+            // 4. 이벤트 정보 업데이트
+            event.setTitle(reqDto.getTitle());
+            event.setDescription(reqDto.getDescription());
+            event.setStartDate(reqDto.getStartDate());
+            event.setEndDate(reqDto.getEndDate());
 
-            updatedEvent.setCreatedUser(event.getCreatedUser());
-            updatedEvent.setCreatedAt(event.getCreatedAt());
-            String currentDate = new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date());
-            updatedEvent.setUpdatedAt(currentDate);
+            event.getImages().clear();
+            event.getImages().addAll(updatedImages);
 
-            Event savedEvent = eventRepository.save(updatedEvent);
-            return EventDetailResDto.toDto(savedEvent);
+            return EventDetailResDto.toDto(event);
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_EVENT);
         }
     }
+
+
 
     // 이벤트 삭제
     @Transactional
@@ -164,5 +153,20 @@ public class EventService {
             throw new BobIssueException(ResponseCode.FAILED_DELETE_EVENT);
         }
     }
+
+    // 날짜별 이벤트 활성화 처리
+    @Scheduled(cron = "0 0 0 * * ?")  // 매일 자정
+    @Transactional
+    public void updateEventStatus() {
+        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
+        List<Event> allEvents = eventRepository.findAll();
+
+        for (Event event : allEvents) {
+            String status = (currentDate.compareTo(event.getStartDate()) >= 0 && currentDate.compareTo(event.getEndDate()) <= 0)
+                    ? "Y" : "N";
+            event.setStatus(status);
+        }
+    }
+
 
 }
