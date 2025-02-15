@@ -49,7 +49,7 @@ const PaymentAddressModal = ({
               className='p-2 border-b cursor-pointer'
               onClick={() => selectAddress(addr)}
             >
-              {addr.name}: {addr.address}
+              [{addr.name}] {addr.address}
               <p>{addr.addressDetail}</p>
             </li>
           ))}

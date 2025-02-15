@@ -42,18 +42,18 @@ const MyPageCalendarItem = ({ label, date, events, tdee }) => {
 
   return (
     <div className='p-1 flex flex-col'>
-      <div className='w-full flex justify-start'>
+      <div className='w-full flex justify-between'>
         <button
           className={`text-center ${dayOfWeek === 'Sat' && 'text-blue-500'} ${dayOfWeek === 'Sun' && 'text-red-500'}`}
         >
           {label}
         </button>
+        {todayCal > tdee && <img src={sirenIcon} alt='사이렌 아이콘' className='w-[20px]' />}
       </div>
       {/* 칼로리 값이 있을 때만 출력 */}
       {todayCal !== null && (
         <div className='flex justify-end gap-2'>
-          {todayCal > tdee && <img src={sirenIcon} alt='사이렌 아이콘' className='w-[20px]' />}
-          <span className='text-sm text-gray-500'>{addComma(todayCal)} kcal</span>
+          <span className='text-xs text-gray-500'>{addComma(todayCal)} kcal</span>
         </div>
       )}
       {defaultData && (

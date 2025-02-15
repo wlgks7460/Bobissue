@@ -32,10 +32,10 @@ public class OpenViduService {
         HttpHeaders headers = createHeaders();
         Map<String, Object> body = Collections.singletonMap("customSessionId", "my-session");
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-
+        System.out.println("132134124");
         ResponseEntity<String> response = restTemplate.exchange(
                 OPENVIDU_URL + "/sessions", HttpMethod.POST, request, String.class);
-
+        System.out.println("세션 번 호" + response.getBody());
         return response.getBody();
     }
 
