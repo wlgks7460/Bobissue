@@ -34,12 +34,25 @@ export default defineConfig(({ mode }) => {
       //   host: 'bobissue.store',  // WebSocket 연결 호스트 설정
       //   protocol: 'wss',  // HTTPS 환경이면 wss로 설정
       // }
-      host: "0.0.0.0", // 외부 접속 허용
-      port: 5173,
+
+      host: "0.0.0.0", // 외부에서 접근 가능하게 설정
+      port: 5173, // Vite 개발 서버 포트
+      strictPort: true,
+      cors: {
+        origin: "*", // CORS 허용
+        methods: ["GET", "POST"],
+      },
+      proxy: {
+        "/ws": {
+          target: "http://localhost:8080", // 백엔드 서버 주소
+          ws: true,
+          changeOrigin: true,
+        },
+      },
       hmr: {
-        protocol: "wss", // HTTPS 환경에서는 wss 사용 필수
-        host: "bobissue.store", // 웹사이트 도메인 지정
-        port: 443, // HTTPS 포트 (80 또는 443)
+        protocol: "wss", // HTTPS 환경에서는 wss 사용
+        host: "bobissue.store", // 도메인 지정
+        port: 443, // HTTPS 포트
       },
     },
   }
