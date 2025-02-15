@@ -118,7 +118,7 @@ public class CalendarService {
         try {
             meal.update(
                     mealReqDto.getName(),
-                    meal.getEatDate() + " " + mealReqDto.getEatTime(),
+                    meal.getEatDate().substring(0,9) + mealReqDto.getEatTime(),
                     mealReqDto.getCalorie()
             );
 
