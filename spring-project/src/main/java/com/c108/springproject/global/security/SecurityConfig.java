@@ -44,9 +44,12 @@ public class SecurityConfig {
                             "http://43.202.60.173:5173",
                             "https://www.bobissue.store",
                             "http://www.bobissue.store",
+                            "https://bobissue.store",
+                            "http://bobissue.store",
                             "http://bobissue.duckdns.org",
                             "https://bobissue.duckdns.org",
-                            "http://localhost:8080"  // WebSocket 요청을 허용
+                            "http://localhost:8080",  // WebSocket 요청을 허용
+                            "http://localhost:8082"  // WebSocket 요청을 허용
 //                            "ws://**",
 //                            "wss://**"
                     ));
@@ -61,6 +64,7 @@ public class SecurityConfig {
 //                .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/wss/**").permitAll()
                         .requestMatchers( "/oauth2/**").permitAll() // OAuth2 관련 URL 허용
                         .requestMatchers( "/openvidu/**").permitAll() // openvidu 관련 URL 허용
                         .requestMatchers("/api/openvidu/**").permitAll() // 추가
