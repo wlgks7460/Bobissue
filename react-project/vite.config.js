@@ -30,10 +30,11 @@ export default defineConfig(({ mode }) => {
         'bobissue.store', // 허용할 호스트 추가
         'www.bobissue.store', // 다른 호스트도 필요하다면 추가
       ],
-      hmr: {
-        host: 'bobissue.store',  // WebSocket 연결 호스트 설정
-        protocol: 'wss',  // HTTPS 환경이면 wss로 설정
-      }
+      // hmr: {
+      //   host: 'bobissue.store',  // WebSocket 연결 호스트 설정
+      //   protocol: 'wss',  // HTTPS 환경이면 wss로 설정
+      // }
+      hmr : false
     },
   }
 })
