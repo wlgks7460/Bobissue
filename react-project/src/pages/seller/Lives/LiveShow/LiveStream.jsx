@@ -93,7 +93,7 @@ const LiveStreamSetup = () => {
 
         // const token = localStorage.getItem("access_token");
         // console.log(token);
-        const sessionRes = await fetch('http://www.bobissue.store/api/openvidu/sessions', {
+        const sessionRes = await fetch('https://www.bobissue.store/api/openvidu/sessions', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -166,8 +166,6 @@ const LiveStreamSetup = () => {
       <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto'>
         <video ref={videoRef} autoPlay playsInline className='w-full h-[500px] bg-black'></video>
       </div>
-
-
 
       {/* 📌 컨트롤 버튼 */}
       <div className='flex justify-center mt-4 space-x-4'>
