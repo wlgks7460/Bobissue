@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
+import API from '@/utils/API' // API 호출용
 import { OpenVidu } from 'openvidu-browser' // ✅ OpenVidu 라이브러리 추가
 import SockJS from 'sockjs-client' // ✅ SockJS 사용
 import { Client } from '@stomp/stompjs' // ✅ STOMP 사용
