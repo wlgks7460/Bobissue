@@ -167,17 +167,7 @@ const LiveStreamSetup = () => {
         <video ref={videoRef} autoPlay playsInline className='w-full h-[500px] bg-black'></video>
       </div>
 
-      {/* 📌 상대방 방송 화면 */}
-      <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto mt-4'>
-        {remoteStream && (
-          <video
-            ref={remoteVideoRef}
-            autoPlay
-            playsInline
-            className='w-full h-[500px] bg-black'
-          ></video>
-        )}
-      </div>
+
 
       {/* 📌 컨트롤 버튼 */}
       <div className='flex justify-center mt-4 space-x-4'>
