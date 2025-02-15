@@ -286,12 +286,12 @@ const AdminSideBar = () => {
   return (
     <div className='fixed top-0 left-0 h-full w-64 bg-white shadow-md p-2.5 overflow-y-auto'>
       <div className='mb-6'>
-        <h1
-          className='text-2xl font-bold text-blue-700 cursor-pointer'
+        <img
+          src='/bobissueLogo2.png'
+          alt='logo'
+          className='h-12 w-auto cursor-pointer'
           onClick={() => navigate('/admin')}
-        >
-          Admin Panel
-        </h1>
+        />
       </div>
 
       {menuData.map((item) => (
