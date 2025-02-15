@@ -69,6 +69,26 @@ const HomeLiveShopping = () => {
             name: '상품 이름122',
             description: '상품 설명1',
           },
+          {
+            itemNo: 52,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 53,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 54,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 55,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
         ],
         castStatus: '등록',
         createAt: '20250212 014735',

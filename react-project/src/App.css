@@ -29,3 +29,12 @@ body {
 .bobissue-logo {
   font-family: 'MoiraiOne-Regular';
 }
+
+/* 스크롤바 숨기기 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; /* Firefox */
+}

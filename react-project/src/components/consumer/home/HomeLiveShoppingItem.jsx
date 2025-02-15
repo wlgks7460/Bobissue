@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import dayjs from 'dayjs'
 
 const HomeLiveShoppingItem = ({ cast }) => {
   const [remainingTime, setRemainingTime] = useState('')
+  const scrollContainerRef = useRef(null)
 
   // 남은 시간 계산 함수
   const calculateRemainingTime = () => {
@@ -30,8 +31,29 @@ const HomeLiveShoppingItem = ({ cast }) => {
     return () => clearInterval(interval)
   }, [cast.endAt])
 
+  // 드래그 기능
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [scrollLeft, setScrollLeft] = useState(0)
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true)
+    setStartX(e.clientX)
+    setScrollLeft(scrollContainerRef.current.scrollLeft)
+  }
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return
+    const x = e.clientX - startX
+    scrollContainerRef.current.scrollLeft = scrollLeft - x
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
   return (
-    <div className='flex flex-col justify-center items-center p-6 bg-gray-100 rounded-lg'>
+    <div className='flex flex-col justify-center items-center p-6 bg-white rounded border border-[#6F4E37]'>
       <h4 className='text-xl font-semibold mb-2'>{cast.title}</h4>
       <p className='text-gray-600 mb-4'>{cast.content}</p>
 
@@ -50,14 +72,31 @@ const HomeLiveShoppingItem = ({ cast }) => {
       {/* 방송 상품 목록 */}
       <div className='w-full'>
         <h5 className='text-lg font-semibold mb-2'>방송 상품</h5>
-        <ul className='space-y-2'>
+        <div
+          ref={scrollContainerRef}
+          className='flex gap-3 overflow-x-auto no-scrollbar cursor-grab'
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp} // 마우스가 벗어났을 때도 드래그 끝내기
+        >
           {cast.castItemList.map((item) => (
-            <li key={item.itemNo} className='p-3 bg-white rounded-md shadow-md'>
-              <h6 className='font-semibold'>{item.name}</h6>
-              <p className='text-gray-500'>{item.description}</p>
-            </li>
+            <div
+              key={item.itemNo}
+              className='relative border-[#6F4E37] border rounded-md shadow-md'
+            >
+              {/* 상품 이미지 (이미지 src는 나중에 불러오기) */}
+              <div className='w-[150px] h-[150px] bg-white rounded-md'>
+                {/* 이미지 src는 나중에 연결 */}
+              </div>
+
+              {/* 툴팁: 상품 이름 */}
+              <div className='absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black/60 text-white text-xs rounded-md opacity-0 hover:opacity-100 transition-opacity'>
+                {item.name}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   )
