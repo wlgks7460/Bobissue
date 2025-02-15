@@ -44,7 +44,7 @@ const PasswordVerification = () => {
   }
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-br '>
+    <div className="flex flex-col justify-center items-center bg-gradient-to-br h-[55vh]">
       <form
         onSubmit={handleSubmit}
         className='w-full border border-blue-500 max-w-md bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-[12px]'
