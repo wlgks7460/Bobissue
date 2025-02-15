@@ -142,7 +142,7 @@ const SellerMainPage = () => {
 
           {/* Footer */}
           <footer className='w-full text-center py-4 bg-gray-100 text-gray-600 text-sm border-t border-gray-300 mt-auto'>
-            &copy; 2025 판매자 플랫폼. 모든 권리 보유.
+            &copy; 2025 BOBISSUE. all rights reserved.
           </footer>
         </div>
       )}

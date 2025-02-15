@@ -4,6 +4,7 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
+import com.c108.springproject.item.dto.response.ItemListResDto;
 import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
@@ -14,6 +15,7 @@ import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
 import com.c108.springproject.seller.dto.response.ExtraAccountResDto;
+import com.c108.springproject.seller.repository.SellerQueryRepository;
 import com.c108.springproject.seller.service.CompanyService;
 import com.c108.springproject.seller.service.MailService;
 import com.c108.springproject.seller.service.SellerService;
@@ -115,10 +117,29 @@ public class SellerController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_COMPANY, new DefaultResponse<>(company));
     }
 
-    // SellerController에 추가
     @PostMapping("/extra-accounts")
     public ResponseDto createExtraAccounts(@RequestBody List<ExtraAccountReqDto> extraAccountReqDtos) {
         List<ExtraAccountResDto> results = sellerService.createExtraAccounts(extraAccountReqDtos);
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_EXTRA_ACCOUNTS, new DefaultResponse<>(results));
+    }
+
+    @GetMapping("/item")
+    public ResponseDto getCompanyItems() {
+        try {
+            List<ItemListResDto> items = companyService.getCompanyItems();
+            return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_FIND_COMPANY_ITEMS, new DefaultResponse<>(items));
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_COMPANY_ITEMS);
+        }
+    }
+
+    @GetMapping("/item-rank")
+    public ResponseDto getItemRankings(
+            @RequestParam(required = false, defaultValue = "YEARLY") SellerQueryRepository.SalesPeriod period) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_GET_ITEM_RANKINGS,
+                new DefaultResponse<>(sellerService.getItemRankings(period))
+        );
     }
 }

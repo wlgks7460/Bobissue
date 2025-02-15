@@ -54,7 +54,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             label: '판매 통계',
             icon: <FaChartLine className='inline-block mr-2' />,
             links: [
-              { to: 'stats/performance', text: '판매 성과 조회' },
+              { to: 'stats/overview', text: '판매 개요' },
               { to: 'stats/products', text: '상품 성과 조회' },
             ],
           },

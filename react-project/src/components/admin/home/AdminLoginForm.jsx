@@ -14,6 +14,7 @@ const AdminLoginForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const isOauth = false
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
@@ -32,11 +33,12 @@ const AdminLoginForm = () => {
   }
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-50'>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#FFF5E1] to-[#F0E6D2]'>
+      {/* 로고 이미지 */}
+      <img src='/bobissueLogo.png' alt='로고' className='h-20 mb-6' />
+
       {/* 헤더 텍스트 */}
-      <h1 className='text-xl font-bold text-gray-800 mb-10'>LOGO </h1>
-      <hr />
-      <h1 className='text-2xl mb-8'>관리자 로그인</h1>
+      <h1 className='text-3xl font-bold text-[#5C4033] mb-6'>관리자 로그인</h1>
 
       {/* 오류 메시지 */}
       {error && (
@@ -46,15 +48,15 @@ const AdminLoginForm = () => {
       )}
 
       {/* 로그인 폼 */}
-      <form onSubmit={handleSubmit} className='w-full max-w-sm space-y-4'>
+      <form onSubmit={handleSubmit} className='w-full max-w-sm space-y-4 p-6 '>
         {/* 이메일 입력 */}
         <div className='relative'>
           <input
             type='text'
-            placeholder='이메일 주소'
+            placeholder='아이디'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className='w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-3 border border-[#D2B48C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#5C4033] placeholder-gray-300'
             required
           />
         </div>
@@ -66,12 +68,12 @@ const AdminLoginForm = () => {
             placeholder='비밀번호'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className='w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+            className='w-full px-4 py-3 border border-[#D2B48C] rounded-md focus:outline-none focus:ring-2 focus:ring-[#5C4033] placeholder-gray-300'
             required
           />
           <FontAwesomeIcon
             icon={showPassword ? faEyeSlash : faEye}
-            className='absolute right-4 top-3 text-gray-400 cursor-pointer'
+            className='absolute right-4 top-3 text-gray-500 cursor-pointer'
             onClick={() => setShowPassword(!showPassword)}
           />
         </div>
@@ -79,11 +81,14 @@ const AdminLoginForm = () => {
         {/* 로그인 버튼 */}
         <button
           type='submit'
-          className='w-full py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition'
+          className='w-full py-3 bg-[#5C4033] text-white font-semibold rounded-md hover:bg-[#4A3227] transition'
         >
           로그인
         </button>
       </form>
+
+      {/* 푸터 */}
+      <p className='mt-4 text-sm text-gray-600'>© 2025 BobIssue. All rights reserved.</p>
     </div>
   )
 }

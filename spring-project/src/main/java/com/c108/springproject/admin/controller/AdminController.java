@@ -101,5 +101,31 @@ public class AdminController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER_APPROVALS, new DefaultResponse<>(approvals));
     }
 
+    
+    // 통계 관련
+    // 총 판매 금액(쇼핑몰)
+    @GetMapping("/total-sales")
+    public ResponseDto getTotalSales() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_TOTAL_SALES, new DefaultResponse<>(adminService.getTotalSales()));
+    }
+
+    // 유저 전체 통계
+    @GetMapping("/user-statistics")
+    public ResponseDto getUserStatistics() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_USER_STATISTICS, new DefaultResponse<>(adminService.getUserStatistics()));
+    }
+
+    // 회사 전체 통계
+    @GetMapping("/company-statistics")
+    public ResponseDto getCompanyStatistics() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_COMPANY_STATISTICS, new DefaultResponse<>(adminService.getCompanyStatistics()));
+    }
+
+    // 판매자 전체 통계
+    @GetMapping("/seller-statistics")
+    public ResponseDto getSellerStatistics() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_SELLER_STATISTICS, new DefaultResponse<>(adminService.getSellerStatistics()));
+    }
+
 
 }

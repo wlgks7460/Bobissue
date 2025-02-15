@@ -94,4 +94,11 @@ jwt:
   issuer: BobIssue
 
 
+system:
+  properties:
+    javax.net.ssl.trustStore: "/etc/ssl/certs/java/cacerts"
+    javax.net.ssl.trustStorePassword: "changeit"
+
+
+
 

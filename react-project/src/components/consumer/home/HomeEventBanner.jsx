@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import ItemsCarousel from 'react-items-carousel'
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/outline'
 import HomeEventBannerItem from './HomeEventBannerItem'
+import bannerImg01 from '../../../assets/consumer/eventBanner/defaultBanner01.png'
+import bannerImg02 from '../../../assets/consumer/eventBanner/defaultBanner02.png'
+import bannerImg03 from '../../../assets/consumer/eventBanner/defaultBanner03.png'
 
 const HomeEventBanner = () => {
   // 이벤트 리스트
@@ -13,10 +16,9 @@ const HomeEventBanner = () => {
   useEffect(() => {
     // mount
     const res = [
-      { eventNo: 0, content: '이벤트 1', bgColor: 'bg-indigo-600' },
-      { eventNo: 1, content: '이벤트 2', bgColor: 'bg-red-400' },
-      { eventNo: 2, content: '이벤트 3', bgColor: 'bg-orange-300' },
-      { eventNo: 3, content: '이벤트 4', bgColor: 'bg-blue-400' },
+      { eventNo: 0, content: '이벤트 1', bannerImg: bannerImg01 },
+      { eventNo: 1, content: '이벤트 2', bannerImg: bannerImg02 },
+      { eventNo: 2, content: '이벤트 3', bannerImg: bannerImg03 },
     ]
     setEventes(res)
   }, [])
@@ -38,8 +40,8 @@ const HomeEventBanner = () => {
             <HomeEventBannerItem key={v.eventNo} event={v} />
           ))}
         </ItemsCarousel>
-        <div className='absolute w-[70px] left-1/2 -translate-x-1/2 bottom-5 bg-black/20 rounded-full flex justify-center items-center'>
-          <p className='text-gray-300'>{`${(((activeItemIndex % events.length) + events.length) % events.length) + 1} / ${events.length}`}</p>
+        <div className='absolute w-[70px] left-1/2 -translate-x-1/2 bottom-5 bg-black/40 rounded-full flex justify-center items-center'>
+          <p className='text-gray-200 pt-1'>{`${(((activeItemIndex % events.length) + events.length) % events.length) + 1} / ${events.length}`}</p>
         </div>
       </div>
     </>

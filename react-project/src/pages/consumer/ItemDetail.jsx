@@ -60,20 +60,8 @@ const ItemDetail = () => {
 
   useEffect(() => {
     // mount
-    const response = {
-      data: {
-        itemNo: params.itemNo,
-        name: `상품명${params.itemNo}`,
-        price: 10000,
-        salePrice: 8000,
-        description: '상품에 대한 상세 정보입니다. 아주 좋은 상품이에요.',
-        category: '카테고리1',
-        stock: 100,
-      },
-    }
     API.get(`/item/${params.itemNo}`)
       .then((res) => {
-        console.log(res)
         setItem(res.data.result.data)
         if (res.data.result.data.images.length > 0) {
           setItemImg(res.data.result.data.images[0].imageUrl)
