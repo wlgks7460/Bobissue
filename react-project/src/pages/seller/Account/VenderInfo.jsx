@@ -69,14 +69,14 @@ const VenderInfo = () => {
   // ✅ 로딩 화면 처리
   if (loading)
     return (
-      <div className='flex items-center justify-center min-h-screen bg-gray-100'>
-        <Loader2 className='animate-spin w-12 h-12 text-blue-500' />
+      <div className='flex items-center justify-center min-h-screen bg-white'>
+        <Loader2 className='animate-spin w-12 h-12 text-brown-500' />
       </div>
     )
 
   return (
-    <div className="flex flex-col justify-center items-center bg-gradient-to-br h-[75vh]">
-      <div className='w-full max-w-2xl bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl border border-blue-400'>
+    <div className='flex flex-col justify-center items-center bg-white h-[75vh]'>
+      <div className='w-full max-w-2xl bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl border border-brown-400'>
         {/* ✅ 페이지 상태에 따라 컴포넌트 렌더링 */}
         {isUpdatePage ? (
           <UpdateInfo
@@ -98,7 +98,7 @@ const VenderInfo = () => {
               {/* 개인정보 수정 버튼 */}
               <button
                 onClick={() => setIsUpdatePage(true)}
-                className='px-2 py-1 text-white bg-blue-500 rounded-[15px] hover:bg-indigo-600 transition-all'
+                className='px-2 py-1 text-white bg-brown-500 rounded-[15px] hover:bg-brown-600 transition-all'
               >
                 개인정보 수정
               </button>
@@ -106,7 +106,7 @@ const VenderInfo = () => {
               {/* 사업자 정보 수정 버튼 */}
               <button
                 onClick={() => navigate('/seller/company/update')}
-                className='px-2 py-1 text-white bg-lime-500 rounded-[15px] hover:bg-green-600 transition-all'
+                className='px-2 py-1 text-white bg-brown-400 rounded-[15px] hover:bg-brown-500 transition-all'
               >
                 회사정보수정
               </button>
@@ -115,7 +115,7 @@ const VenderInfo = () => {
         </div>
 
         {/* ✅ 오류 메시지 출력 */}
-        {error && <p className='mt-4 text-center text-red-500 animate-fade-in'>{error}</p>}
+        {error && <p className='mt-4 text-center text-brown-700 animate-fade-in'>{error}</p>}
 
         {/* ✅ 판매자 탈퇴 컴포넌트 */}
         <div className='mt-8'>
