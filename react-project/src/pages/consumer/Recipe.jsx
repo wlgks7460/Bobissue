@@ -32,7 +32,7 @@ const Recipe = () => {
               ))}
             </div>
           ) : (
-            <div className='flex flex-col gap-3 items-center'>
+            <div className='flex flex-col gap-3 items-center mt-20'>
               <p className='text-center'>
                 <ExclamationCircleIcon className='w-20 text-gray-400' />
               </p>

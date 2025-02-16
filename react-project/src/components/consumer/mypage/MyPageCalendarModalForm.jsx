@@ -86,7 +86,7 @@ const MyPageCalendarModalForm = ({ setShowForm, createData }) => {
 
         {/* 제출 버튼 */}
         <div className='flex justify-center gap-5'>
-          <button type='submit' className='text-indigo-600'>
+          <button type='submit' className='text-[#6F4E37]'>
             추가
           </button>
           <button className='text-red-600' onClick={handleCancle}>

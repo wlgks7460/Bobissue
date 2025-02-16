@@ -39,7 +39,7 @@ const SearchBar = () => {
       })
   }, [])
   return (
-    <div className='w-full border flex justify-center sticky z-10 -top-1 bg-[#F8F0E5] border-y-[#6F4E37]'>
+    <div className='w-full border flex justify-center sticky z-20 -top-1 bg-[#F8F0E5] border-y-[#6F4E37]'>
       <div className='w-[70rem] flex justify-between items-center gap-3'>
         <div
           className='w-[150px] h-16 flex-none flex items-center gap-2 relative box-border'
@@ -49,7 +49,7 @@ const SearchBar = () => {
           <DehazeIcon className='text-[#6F4E37]' sx={{ fontSize: 30 }} />
           <p className='text-base text-[#6F4E37] py-2'>카테고리</p>
           {showCategory && (
-            <div className='absolute top-16 left-0 flex flex-col w-[200px] h-[400px] border-x border-b border-gray-400 bg-[#F8F0E5] rounded-b'>
+            <div className='absolute top-16 left-0 flex flex-col w-[200px] h-[400px] border-x border-b border-[#6F4E37] bg-[#F8F0E5] rounded-b'>
               {categories.map((v) => (
                 <SearchBarCategory key={v.categoryNo} category={v} />
               ))}

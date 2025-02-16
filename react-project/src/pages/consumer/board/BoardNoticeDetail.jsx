@@ -32,11 +32,11 @@ const BoardNoticeDetail = () => {
       <div>
         <h3 className='text-xl font-semibold'>{notice.title}</h3>
         <p className='text-sm text-gray-400'>{handleCreateAt(notice.createAt)}</p>
-        <hr className='border-gray-300 my-3' />
+        <hr className='border-[#6F4E37] my-3' />
         <div className='min-h-[300px]'>{notice.content}</div>
-        <hr className='border-gray-300 my-3' />
+        <hr className='border-[#6F4E37] my-3' />
         <div className='w-full text-center'>
-          <Link to={'/board/notice'} className='text-green-900'>
+          <Link to={'/board/notice'} className='hover:text-[#6F4E37]'>
             목록으로
           </Link>
         </div>

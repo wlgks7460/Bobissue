@@ -169,9 +169,9 @@ const Payment = () => {
       <SearchBar />
       <div className='flex flex-col items-center py-10'>
         <h2 className='text-2xl font-semibold mb-6'>주문서</h2>
-        <div className='w-full max-w-3xl bg-white shadow-md p-6 rounded-lg'>
+        <div className='w-full max-w-3xl bg-white border border-[#6F4E37] shadow-md p-6 rounded-lg'>
           {/* 배송 정보 */}
-          <div className='border-b pb-6 mb-6'>
+          <div className='border-b border-[#6F4E37] pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>배송 정보</h3>
             <div className='mb-3'>
               <p>{address ? `[${postcode}] ${address}` : '배송지를 선택하세요'}</p>
@@ -187,12 +187,12 @@ const Payment = () => {
               placeholder='배송 요청 사항 (선택)'
               value={requests}
               onChange={(e) => setRequests(e.target.value)}
-              className='w-full p-2 border rounded resize-none h-20'
+              className='w-full p-2 border border-[#6F4E37] rounded resize-none h-20'
             />
           </div>
 
           {/* 포인트 사용 */}
-          <div className='border-b pb-6 mb-6'>
+          <div className='border-b border-[#6F4E37] pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>포인트 사용</h3>
             <p className='mb-2'>사용 가능 포인트: {availablePoints}P</p>
             <input
@@ -200,18 +200,18 @@ const Payment = () => {
               placeholder='사용할 포인트 입력'
               value={points}
               onChange={handlePointsChange}
-              className='w-full p-2 border rounded'
+              className='w-full p-2 border border-[#6F4E37] rounded'
               max={availablePoints}
             />
           </div>
 
           {/* 쿠폰 선택 */}
-          <div className='border-b pb-6 mb-6'>
+          <div className='border-b border-[#6F4E37] pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>쿠폰 선택</h3>
             <select
               value={selectedCoupon?.code || ''}
               onChange={handleCouponChange}
-              className='w-full p-2 border rounded'
+              className='w-full p-2 border border-[#6F4E37] rounded'
             >
               <option value=''>쿠폰을 선택하세요</option>
               {availableCoupons.map((coupon) => (
@@ -223,7 +223,7 @@ const Payment = () => {
           </div>
 
           {/* 결제 금액 */}
-          <div className='border-b pb-6 mb-6'>
+          <div className='border-b border-[#6F4E37] pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>결제 금액</h3>
             <div className='flex justify-between'>
               <span>총 상품 금액</span>
@@ -250,21 +250,21 @@ const Payment = () => {
           {/* 결제 방법 */}
           <div className='border-b pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>결제 방법</h3>
-            <div className='w-full h-[50px] grid grid-cols-3 border border-gray-400 rounded'>
+            <div className='w-full h-[50px] grid grid-cols-3 border border-[#6F4E37] rounded'>
               <button
-                className={`${paymentMethod === 'card' && 'bg-indigo-500 text-white'} rounded-s`}
+                className={`${paymentMethod === 'card' && 'bg-[#6F4E37] text-white'} rounded-s`}
                 onClick={() => setPaymentMethod('card')}
               >
                 카드
               </button>
               <button
-                className={`border-x border-gray-400 ${paymentMethod === 'trans' && 'bg-indigo-500 text-white'}`}
+                className={`border-x border-[#6F4E37] ${paymentMethod === 'trans' && 'bg-[#6F4E37] text-white'}`}
                 onClick={() => setPaymentMethod('trans')}
               >
                 계좌이체
               </button>
               <button
-                className={`${paymentMethod === 'phone' && 'bg-indigo-500 text-white'} rounded-e`}
+                className={`${paymentMethod === 'phone' && 'bg-[#6F4E37] text-white'} rounded-e`}
                 onClick={() => setPaymentMethod('phone')}
               >
                 휴대폰
@@ -274,7 +274,7 @@ const Payment = () => {
 
           {/* 결제 버튼 */}
           <button
-            className='w-full bg-[#A67B5B] text-white p-3 rounded hover:bg-[#6F4E37]'
+            className='w-full bg-[#A67B5B] hover:bg-[#6F4E37] text-white p-3 rounded '
             onClick={handlePayment}
           >
             결제하기

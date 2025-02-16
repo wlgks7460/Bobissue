@@ -55,14 +55,14 @@ const PaymentAddressModal = ({
           ))}
         </ul>
         <div className='mt-5'>
-          <h3>새 배송지 입력</h3>
+          <h3 className='mb-3'>새 배송지 입력</h3>
           <div className='flex space-x-2 mb-3'>
             <input
               type='text'
               placeholder='우편번호'
               value={newPostCode}
               readOnly
-              className='w-1/3 p-2 border rounded cursor-pointer'
+              className='w-1/3 p-2 border border-[#6F4E37] rounded cursor-pointer'
               onClick={searchAddress}
             />
             <input
@@ -70,7 +70,7 @@ const PaymentAddressModal = ({
               placeholder='주소'
               value={newAddress}
               readOnly
-              className='w-2/3 p-2 border rounded cursor-pointer'
+              className='w-2/3 p-2 border border-[#6F4E37] rounded cursor-pointer'
               onClick={searchAddress}
             />
           </div>
@@ -78,16 +78,16 @@ const PaymentAddressModal = ({
             type='text'
             placeholder='상세 주소'
             ref={newAddressDetailRef}
-            className='w-full p-2 border rounded mb-3'
+            className='w-full p-2 border border-[#6F4E37] rounded mb-3'
           />
-          <button className='w-full text-indigo-600' onClick={addAddress}>
+          <button
+            className='w-full h-[50px] text-white bg-[#A67B5B] hover:bg-[#6F4E37] rounded mt-5'
+            onClick={addAddress}
+          >
             추가
           </button>
         </div>
-        <button
-          className='w-full bg-indigo-400 hover:bg-indigo-600 text-white p-2 rounded mt-5'
-          onClick={() => setShowModal(false)}
-        >
+        <button className='w-full h-[50px] text-red-500 mt-5' onClick={() => setShowModal(false)}>
           닫기
         </button>
       </div>
