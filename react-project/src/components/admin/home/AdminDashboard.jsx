@@ -61,7 +61,7 @@ const AdminDashBoard = () => {
     fetchTotalCompanies()
   }, [])
 
-  // 더미 데이터 생성
+  // 더미 데이터 생성 - 최근 7개 고정으로 렌더링
   const dummyOrders = [
     { orderNumber: '20240101', customer: '김지한', amount: 50000, date: '2024-02-15' },
     { orderNumber: '20240102', customer: '김지원', amount: 70000, date: '2024-02-14' },
@@ -137,8 +137,13 @@ const AdminDashBoard = () => {
 
       {/* 최근 주문 내역 및 최근 회원 가입 나란히 배치 */}
       <div className='grid grid-cols-2 gap-4'>
-        <div className='bg-white hover:shadow-md rounded-lg p-4'>
-          <h2 className='text-xl font-bold text-[#5C4033] mb-3'>🛒 최근 주문 내역</h2>
+        <div className='bg-white hover:shadow-md rounded-lg p-4 relative'>
+          <h2 className='text-xl font-bold text-[#5C4033] mb-3 flex justify-between'>
+            🛒 최근 주문 내역
+            <button className='px-3 py-1 text-sm bg-[#5C4033] text-white rounded hover:bg-[#725a3e]'>
+              주문 현황 바로가기
+            </button>
+          </h2>
           <table className='w-full border border-[#D2B48C]'>
             <thead className='bg-[#FAEBD7] text-gray-700'>
               <tr>
@@ -161,8 +166,13 @@ const AdminDashBoard = () => {
           </table>
         </div>
 
-        <div className='bg-white hover:shadow-md rounded-lg p-4'>
-          <h2 className='text-xl font-bold text-[#5C4033] mb-3'>🙋‍♂️ 최근 회원 가입</h2>
+        <div className='bg-white hover:shadow-md rounded-lg p-4 relative'>
+          <h2 className='text-xl font-bold text-[#5C4033] mb-3 flex justify-between'>
+            🙋‍♂️ 최근 회원 가입
+            <button className='px-3 py-1 text-sm bg-[#5C4033] text-white rounded hover:bg-[#725a3e]'>
+              회원 정보관리 바로가기
+            </button>
+          </h2>
           <table className='w-full border border-[#D2B48C]'>
             <thead className='bg-[#FAEBD7] text-gray-700'>
               <tr>
