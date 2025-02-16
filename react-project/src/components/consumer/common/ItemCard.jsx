@@ -35,7 +35,7 @@ const HomeItem = ({ item }) => {
       <div className='w-[250px] flex flex-col gap-2'>
         {/* 상품 이미지 */}
         <div className='relative' onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-          <div className='border border-gray-400 rounded'>
+          <div className='border border-[#6F4E37] rounded'>
             <Link to={`/item/${item.itemNo}`} className='outline-none'>
               <img
                 // 이미지 경로 수정 필요

@@ -11,19 +11,19 @@ const Footer = () => {
           <div className='flex gap-3 mb-3'>
             <Link
               to={'/board/faq'}
-              className='py-1 px-2 border-b-2 border-white hover:text-indigo-600'
+              className='py-1 px-2 border-b-2 border-white hover:text-[#6F4E37]'
             >
               FAQ
             </Link>
             <Link
               to={'/board/notice'}
-              className='py-1 px-2 border-b-2 border-white hover:text-indigo-600'
+              className='py-1 px-2 border-b-2 border-white hover:text-[#6F4E37]'
             >
               공지사항
             </Link>
             <Link
               to={'board/question'}
-              className='py-1 px-2 border-b-2 border-white hover:text-indigo-600'
+              className='py-1 px-2 border-b-2 border-white hover:text-[#6F4E37]'
             >
               문의하기
             </Link>

@@ -21,8 +21,8 @@ const HomeLiveShopping = () => {
         castNo: 4,
         title: '첫 방송입니다.',
         content: '닭가슴살 초특가',
-        startAt: '20250216 080000',
-        endAt: '20250216 100000',
+        startAt: '20250218 080000',
+        endAt: '20250218 100000',
         castItemList: [
           {
             itemNo: 1,
@@ -51,8 +51,8 @@ const HomeLiveShopping = () => {
         castNo: 5,
         title: '두번 방송입니다.',
         content: '닭가슴살 도시락 초특가',
-        startAt: '20250216 100000',
-        endAt: '20250216 110000',
+        startAt: '20250218 100000',
+        endAt: '20250218 110000',
         castItemList: [
           {
             itemNo: 1,

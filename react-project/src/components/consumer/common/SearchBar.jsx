@@ -49,7 +49,7 @@ const SearchBar = () => {
           <DehazeIcon className='text-[#6F4E37]' sx={{ fontSize: 30 }} />
           <p className='text-base text-[#6F4E37] py-2'>카테고리</p>
           {showCategory && (
-            <div className='absolute top-16 left-0 flex flex-col w-[200px] h-[400px] border-x border-b border-gray-400 bg-[#F8F0E5] rounded-b'>
+            <div className='absolute top-16 left-0 flex flex-col w-[200px] h-[400px] border-x border-b border-[#6F4E37] bg-[#F8F0E5] rounded-b'>
               {categories.map((v) => (
                 <SearchBarCategory key={v.categoryNo} category={v} />
               ))}
