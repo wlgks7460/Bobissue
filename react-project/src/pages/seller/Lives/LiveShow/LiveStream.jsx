@@ -214,11 +214,11 @@ const LiveStreamSetup = () => {
         console.log("✅ 세션 ID:", sessionId);
 
         // 토큰 발급 요청
-        const tokenRes = await API.post('https://bobissue.store/api/openvidu/sessions/mySession5/token');
+        const tokenRes = await API.post(`https://bobissue.store/api/openvidu/sessions/${sessionId}/token`);
         console.log("✅ 서버에서 받은 토큰:", tokenRes);
 
         // 토큰 값 저장
-        const token = tokenRes.token; // token 값을 이 위치에서 받도록 해야 합니다.
+        const token = tokenRes.data.token; // token 값을 이 위치에서 받도록 해야 합니다.
 
         // OpenVidu 클라이언트 연결
         const OV = new OpenVidu();
