@@ -169,10 +169,12 @@ const ChatRoom = ({ sessionId }) => {
       // }
 
       try {
-        console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
+        // console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
+
+        
         
         // 토큰 발급 요청
-        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession6/token', {
+        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/token', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -185,26 +187,49 @@ const ChatRoom = ({ sessionId }) => {
           throw new Error(`❌ 서버 응답 오류: ${tokenRes.status}`);
         }
 
-        const { token } = await tokenRes.json();
+        // 서버 응답을 JSON 형식으로 처리
+const responseJson = await tokenRes.json();
+console.log('🔍 서버 응답:', responseJson);  // 응답 확인
+
+// 응답에서 token을 추출하고, 실제 token 값만 사용
+const tokenUrl = responseJson.token;  // token 필드에 WebSocket URL이 들어있음
+const token = new URL(tokenUrl).searchParams.get('token');  // URL에서 token 파라미터 추출
 
         // 토큰 값 확인
         console.log("🔑 받은 토큰123444:", tokenRes);
         console.log("🔑 받은 토큰:", token);
+
+        // WebSocket URL 설정
+const sessionId = 'mySession7';  // 사용하려는 세션 ID
+const wsUrl = `wss://bobissue.store:8443/openvidu?sessionId=${sessionId}&token=${token}`;
+console.log("🔍 WebSocket URL:", wsUrl);
+
 
         // OpenVidu 세션 초기화 및 연결
         const OV = new OpenVidu();
         const session = OV.initSession();
         sessionRef.current = session;
 
-        // 스트림이 생성될 때마다 구독 처리
-        session.on('streamCreated', (event) => {
-          const subscriber = session.subscribe(event.stream, videoRef.current); // videoRef에 구독된 스트림 연결
-          console.log('📺 새로운 스트림 구독:', subscriber);
-        });
+        // if (session && session.connection && session.connection.open) {
+        //   console.log('세션이 이미 연결되어 있습니다.');
+        //   return;
+        // }
 
-        // 세션 연결
-        await session.connect(token);
-        console.log('🎥 OpenVidu 연결 성공');
+        // // 스트림이 생성될 때마다 구독 처리
+        // session.on('streamCreated', (event) => {
+        //   const subscriber = session.subscribe(event.stream, videoRef.current); // videoRef에 구독된 스트림 연결
+        //   console.log('📺 새로운 스트림 구독:', subscriber);
+        // });
+
+// 세션 연결
+session.connect(wsUrl)
+  .then(() => {
+    console.log('🎥 OpenVidu 연결 성공');
+  })
+  .catch((error) => {
+    console.error('🎥 OpenVidu 연결 실패:', error);
+  });
+
       } catch (error) {
         console.error('❌ OpenVidu 연결 실패:', error);
       }
