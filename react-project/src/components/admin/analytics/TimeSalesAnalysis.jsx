@@ -23,7 +23,7 @@ const TimeSalesAnalysisComponent = () => {
   useEffect(() => {
     const fetchTimeSalesStats = async () => {
       try {
-        const response = await API.get('/sellers/customer-satisfaction')
+        const response = await API.get('/admin/statistics/hourly')
         if (response.data.status === 'OK') {
           setTimeData(response.data.result.data)
         } else {
@@ -58,10 +58,32 @@ const TimeSalesAnalysisComponent = () => {
     )
   }
 
+  // 최고 성과 시간대 선정
+  const topTimeSlot = timeData.reduce((prev, curr) => {
+    const prevMax = Math.max(prev.salesCount, prev.totalRevenue, prev.averageOrderAmount)
+    const currMax = Math.max(curr.salesCount, curr.totalRevenue, curr.averageOrderAmount)
+    return currMax > prevMax ? curr : prev
+  }, timeData[0])
+
   return (
     <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
       <h2 className='text-2xl font-bold mb-6'>시간대별 분석</h2>
+
+      {/* 최고 성과 시간대 */}
+      <div className='bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-lg shadow mb-6'>
+        <h3 className='text-lg font-semibold mb-4'>🏆 최고 성과 시간대</h3>
+        <p className='text-xl font-bold'>{topTimeSlot.hour}시</p>
+        <div className='flex justify-between mt-2'>
+          <div>
+            <span className='block'>판매량: {topTimeSlot.salesCount.toLocaleString()}개</span>
+            <span className='block'>총 매출: {topTimeSlot.totalRevenue.toLocaleString()}원</span>
+            <span className='block'>
+              평균 주문 금액: {Math.round(topTimeSlot.averageOrderAmount).toLocaleString()}원
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* 시간대별 데이터 표 */}
       <div className='bg-white p-4 rounded-lg shadow mb-6'>
