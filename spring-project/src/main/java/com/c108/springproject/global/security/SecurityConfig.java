@@ -42,8 +42,8 @@ public class SecurityConfig {
                     corsConfiguration.setAllowedOriginPatterns(List.of(
                             "http://localhost:5173",
                             "http://43.202.60.173:5173",
-                            "https://bobissue.store:5443",
-                            "http://bobissue.store:5443",
+//                            "https://bobissue.store:5443",
+//                            "http://bobissue.store:5443",
                             "https://www.bobissue.store",
                             "http://www.bobissue.store",
                             "https://bobissue.store",

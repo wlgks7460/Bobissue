@@ -112,31 +112,60 @@ const LiveStreamSetup = () => {
           console.log("✅ 세션 ID:", sessionId);
           
           // ✅ Connection 생성 요청 (토큰 발급)
-          const tokenRes = await fetch(
-            `https://bobissue.store/api/openvidu/sessions/mySession2/token`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
-              },
-              body: JSON.stringify({}),
-            }
-          );
+          // const tokenRes = await fetch(
+          //   `https://bobissue.store/api/openvidu/sessions/mySession3/token`,
+          //   {
+          //     method: 'POST',
+          //     headers: {
+          //       'Content-Type': 'application/json',
+          //       Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+          //     },
+          //     body: JSON.stringify({}),
+          //   }
+          // );
 
+          const tokenRes = await API.post('https://bobissue.store/api/openvidu/sessions/mySession4/token');
+          console.log("✅ 서버11에서 받은 토큰:", token);
           const tokenData = await tokenRes.json();
           const token = tokenData.token;  // 발급된 토큰을 사용
+          // 토큰 값 로그 출력
+          console.log("✅ 서버에서 받은 토큰:", token);
+          // // OpenVidu 클라이언트 연결
+          // const OV = new OpenVidu();
+          // const newSession = OV.initSession();
+
+          // newSession.on('streamCreated', (event) => {
+          //   const subscriber = newSession.subscribe(event.stream, videoRef.current);
+          //   console.log('📺 새로운 스트림 구독:', subscriber);
+          // });
+
+          // await newSession.connect(token)
 
           // OpenVidu 클라이언트 연결
           const OV = new OpenVidu();
           const newSession = OV.initSession();
 
-          newSession.on('streamCreated', (event) => {
-            const subscriber = newSession.subscribe(event.stream, videoRef.current);
-            console.log('📺 새로운 스트림 구독:', subscriber);
+          // 송출용 publisher 설정
+          const publisher = OV.initPublisher(videoRef.current, {
+            audioSource: undefined, // 오디오 소스 없이 설정
+            videoSource: undefined, // 비디오 소스 없이 설정
+            publishAudio: true, // 오디오 송출
+            publishVideo: true, // 비디오 송출
+            resolution: '640x480', // 해상도 설정
+            frameRate: 30, // 프레임 속도 설정
           });
 
-          await newSession.connect(token)
+          // 스트림을 송출하는 코드
+          newSession.on('streamCreated', (event) => {
+            // 송출을 위한 스트림 처리 (구독은 필요 없으므로 제거)
+            console.log('📺 송출 스트림:', event.stream);
+          });
+
+          // 세션 연결
+          await newSession.connect(token, { clientData: 'Publisher' });
+
+          // 송출 시작
+          newSession.publish(publisher);
 
           // const sessionRes = await API.post('http://localhost:8080/api/openvidu/sessions');
 
