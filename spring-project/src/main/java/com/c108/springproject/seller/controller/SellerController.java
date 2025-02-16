@@ -214,5 +214,21 @@ public class SellerController {
             throw new BobIssueException(ResponseCode.FAILED_GET_HOURLY_STATS);
         }
     }
+    
+    // 성별, 연령대 통계
+    @GetMapping("/statistics/demographic")
+    public ResponseDto getDemographicStats() {
+        try {
+            return new ResponseDto(
+                    HttpStatus.OK,
+                    ResponseCode.SUCCESS_GET_DEMOGRAPHIC_STATS,
+                    new DefaultResponse<>(sellerService.getDemographicStats())
+            );
+
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_GET_DEMOGRAPHIC_STATS);
+        }
+    }
+
 
 }

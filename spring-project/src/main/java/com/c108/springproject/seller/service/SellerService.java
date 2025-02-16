@@ -2,6 +2,7 @@ package com.c108.springproject.seller.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.querydsl.dto.DemographicStatsDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.dto.SellerDto;
@@ -241,5 +242,18 @@ public class SellerService {
                 .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
 
         return sellerQueryRepository.getHourlySalesStatistics(seller.getCompany().getCompanyNo());
+    }
+
+    // 성별, 연령대 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public DemographicStatsDto getDemographicStats() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getDemographicStats(seller.getCompany().getCompanyNo());
     }
 }

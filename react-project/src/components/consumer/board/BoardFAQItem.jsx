@@ -9,7 +9,7 @@ const BoardFAQItem = ({ category }) => {
         className='flex items-center gap-2 cursor-pointer'
         onClick={() => setShowQuestions(!showQuestions)}
       >
-        <PlayIcon className='w-8 text-indigo-400' />
+        <PlayIcon className='w-8 text-[#6F4E37]' />
         <span className='text-xl'>{category.category}</span>
       </h3>
       {showQuestions && (

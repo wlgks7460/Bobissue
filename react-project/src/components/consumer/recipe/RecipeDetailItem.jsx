@@ -37,7 +37,7 @@ const RecipeDetailItem = ({ itemNo, cnt, selectedItem, setSelectedItem }) => {
   return (
     <div className='flex flex-col gap-2'>
       <div
-        className={`inline-block ${itemActive ? 'border-2 border-indigo-600' : 'border border-gray-400'} rounded`}
+        className={`inline-block ${itemActive ? 'border-2 border-[#6F4E37]' : 'border border-gray-400'} rounded`}
         onClick={handleItem}
       >
         <img

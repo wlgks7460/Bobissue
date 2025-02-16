@@ -79,7 +79,7 @@ const RecipeDetailItemList = ({ materials }) => {
             )}
           </div>
           <button
-            className='w-full h-[50px] bg-indigo-400 hover:bg-indigo-600 rounded text-white'
+            className='w-full h-[50px] bg-[#A67B5B] hover:bg-[#6F4E37] rounded text-white'
             onClick={selectItemToCart}
           >
             재료 장바구니 담기

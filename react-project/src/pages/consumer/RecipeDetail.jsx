@@ -55,17 +55,17 @@ const RecipeDetail = () => {
                     <img
                       src={v.imageUrl}
                       alt=''
-                      className={`w-[150px] h-[100px] rounded ${selectedImg.imageNo === v.imageNo ? 'border-2 border-indigo-600' : 'border border-gray-400'}`}
+                      className={`w-[150px] h-[100px] rounded ${selectedImg.imageNo === v.imageNo ? 'border-2 border-[#6F4E37]' : 'border border-gray-400'}`}
                     />
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          <hr className='border border-gray-400 my-10' />
+          <hr className='border border-[#6F4E37] my-10' />
           {/* 재료 상품 */}
           <RecipeDetailItemList materials={recipeData.materials} />
-          <hr className='border border-gray-400 my-10' />
+          <hr className='border border-[#6F4E37] my-10' />
           {/* 레시피 상세 */}
           <div className='px-20'>
             <div className='text-lg'>
