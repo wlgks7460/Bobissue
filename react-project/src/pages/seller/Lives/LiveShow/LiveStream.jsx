@@ -214,7 +214,7 @@ const LiveStreamSetup = () => {
         // console.log("✅ 세션 ID:", sessionId);
 
         // 토큰 발급 요청
-        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/token', {
+        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession8/token', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
