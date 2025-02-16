@@ -2,13 +2,6 @@
 export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
-  },
-  plugins: [],
-  content: [
-    './src/**/*.{js,jsx,ts,tsx}', // Tailwind가 적용될 파일 경로 지정
-  ],
-  theme: {
     extend: {
       colors: {
         primary: '#4F46E5', // 보라 계열 (메인 포인트)
@@ -18,10 +11,8 @@ export default {
         card: '#FFFFFF', // 카드 배경
         textPrimary: '#1F2937', // 진한 글씨색
         textSecondary: '#6B7280', // 흐린 글씨색
-        
       },
     },
   },
   plugins: [],
-
-}
+};
