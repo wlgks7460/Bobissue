@@ -73,7 +73,7 @@ const MyPageCalendarModalItem = ({ meal, updateData, deleteData }) => {
               <span className='text-sm text-gray-500'>{meal.calorie} kcal</span>
             </div>
             <div className='flex gap-3'>
-              <button className='p-1 text-indigo-600' onClick={() => setMode('update')}>
+              <button className='p-1 text-[#6F4E37]' onClick={() => setMode('update')}>
                 수정
               </button>
               <button className='p-1 text-red-600' onClick={handleDelete}>
@@ -125,8 +125,13 @@ const MyPageCalendarModalItem = ({ meal, updateData, deleteData }) => {
                 </span>
               </div>
               <div className='flex gap-3'>
-                <input type='file' name='' id='' accept='image/*' onChange={handleImageChange} />
-                <button className='p-1 text-indigo-600' onClick={handleUpdate}>
+                <input
+                  type='file'
+                  className='w-[250px]'
+                  accept='image/*'
+                  onChange={handleImageChange}
+                />
+                <button className='p-1 text-[#6F4E37]' onClick={handleUpdate}>
                   수정
                 </button>
                 <button className='p-1 text-red-600' onClick={() => setMode('read')}>

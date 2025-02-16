@@ -3,7 +3,7 @@ import MyPageOrderItemProduct from './MyPageOrderItemProduct'
 
 const MyPageOrderItem = ({ orderItem }) => {
   return (
-    <div className='w-full border border-gray-300 rounded p-3'>
+    <div className='w-full border border-[#6F4E37] rounded p-3'>
       <h3 className='font-bold text-lg'>배송상태</h3>
       {/* 상품 내역 */}
       <div className='flex flex-col gap-3 my-5'>

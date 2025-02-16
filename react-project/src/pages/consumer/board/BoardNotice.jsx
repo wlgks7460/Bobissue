@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import API from '../../../utils/API'
 import { Link } from 'react-router-dom'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 const BoardNotice = () => {
   const [notice, setNotice] = useState([])
@@ -49,8 +50,15 @@ const BoardNotice = () => {
                 </tr>
               ))
             ) : (
-              <tr className='h-[35px] border-b border-gray-400'>
-                <td colSpan={'2'}>문의가 없습니다 ㅠㅠ</td>
+              <tr>
+                <td colSpan='2'>
+                  <div className='flex flex-col gap-3 items-center mt-20'>
+                    <p className='text-center'>
+                      <ExclamationCircleIcon className='w-20 text-gray-400' />
+                    </p>
+                    <p className='text-center text-xl text-gray-600'>공지사항이 없습니다.</p>
+                  </div>
+                </td>
               </tr>
             )}
           </tbody>

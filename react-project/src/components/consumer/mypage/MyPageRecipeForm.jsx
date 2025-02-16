@@ -138,13 +138,16 @@ const MyPageRecipeForm = () => {
             onChange={handleFileChange}
             ref={fileInputRef}
           />
-          <button className='hover:text-indigo-600' onClick={handleFileInput}>
+          <button className='hover:text-[#6F4E37]' onClick={handleFileInput}>
             이미지 추가하기
           </button>
           {files.length > 0 ? (
             <div className='w-full h-[100px] mt-1 p-3 border border-gray-300 rounded overflow-y-auto flex flex-wrap gap-3'>
               {files.map((v, i) => (
-                <div key={v.id} className='h-[35px] flex items-centr px-2 bg-indigo-200 rounded'>
+                <div
+                  key={v.id}
+                  className='h-[35px] flex items-centr px-2 border border-[#6F4E37] rounded'
+                >
                   <span className='flex items-center'>{v.name}</span>
                   <button
                     className='ms-3 text-gray-400'
@@ -165,7 +168,7 @@ const MyPageRecipeForm = () => {
         {/* 상품 선택 */}
         <div>
           <button
-            className='hover:text-indigo-600 mb-2'
+            className='hover:text-[#6F4E37] mb-2'
             onClick={(e) => {
               e.preventDefault()
               setShowModal(true)
@@ -204,7 +207,7 @@ const MyPageRecipeForm = () => {
           placeholder='레시피 내용을 작성해주세요.'
           ref={contentRef}
         ></textarea>
-        <button className='w-full h-[50px] bg-indigo-400 hover:bg-indigo-600 rounded text-white'>
+        <button className='w-full h-[50px] bg-[#A67B5B] hover:bg-[#6F4E37] rounded text-white'>
           작성하기
         </button>
       </form>

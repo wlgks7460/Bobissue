@@ -61,6 +61,7 @@ import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 // import SellerDetailPage from '../pages/admin/seller/SellerDetailPage'
+import SellerStatisticsPage from '../pages/admin/seller/SellerStatisticsPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -84,11 +85,18 @@ import ReportDetailPage from '../pages/admin/report/DetailPage'
 import NotificationPage from '../pages/admin/cs/NotificationPage'
 import CSCenterPage from '../pages/admin/cs/CSCenterPage'
 import NoticePage from '../pages/admin/cs/NoticePage'
+
+// (관리자) 쇼핑몰 분석
+import PerformancePage from '../pages/admin/analytics/PerformancePage'
+import CategoryPage from '../pages/admin/analytics/CategoryPage'
+import TimesalesPage from '../pages/admin/analytics/TimesalesPage'
+
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
 //채팅 - 웹소캣 관련 페이지(test용)
 import ChatRoomPage from '../pages/admin/chat/ChatPage'
+import CategoryAnalysisPage from '../pages/admin/analytics/CategoryPage'
 const router = createBrowserRouter([
   {
     // 기본 패스
@@ -490,6 +498,10 @@ const router = createBrowserRouter([
                 element: <SellerTreePage />, // 판매자 트리구조 페이지
               },
               {
+                path: 'statistics',
+                element: <SellerStatisticsPage />,
+              },
+              {
                 path: 'monitor',
                 children: [
                   {
@@ -644,6 +656,24 @@ const router = createBrowserRouter([
               {
                 path: 'notice', // 공지사항 페이지
                 element: <NoticePage />,
+              },
+            ],
+          },
+          {
+            // 쇼핑몰 분석 파트
+            path: 'analytics',
+            children: [
+              {
+                path: 'performance',
+                element: <PerformancePage />,
+              },
+              {
+                path: 'category',
+                element: <CategoryPage />,
+              },
+              {
+                path: 'timesales',
+                element: <TimesalesPage />,
               },
             ],
           },

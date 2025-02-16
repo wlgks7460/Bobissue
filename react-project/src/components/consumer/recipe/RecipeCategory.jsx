@@ -19,6 +19,7 @@ const RecipeCategory = ({ setRecipes }) => {
   const getAllRecipe = () => {
     API.get('/recipe')
       .then((res) => {
+        setSelectedCategory('all')
         setRecipes(res.data.result.data)
       })
       .catch((err) => {
@@ -30,7 +31,6 @@ const RecipeCategory = ({ setRecipes }) => {
   const getCategoryRecipe = (recipeNo) => {
     API.get(`/recipecategory/${recipeNo}`)
       .then((res) => {
-        console.log(res)
         setRecipes(res.data.result.data.recipes)
         setSelectedCategory(res.data.result.data.categoryNo)
       })
@@ -50,7 +50,7 @@ const RecipeCategory = ({ setRecipes }) => {
     <div className='w-full border border-gray-400 rounded px-5 mb-10'>
       <div className='flex flex-wrap'>
         <button
-          className={`w-[150px] text-center m-3 ${selectedCategory === 'all' && 'text-indigo-600'}`}
+          className={`w-[150px] text-center m-3 ${selectedCategory === 'all' && 'text-[#6F4E37]'}`}
           onClick={getAllRecipe}
         >
           전체 보기
@@ -58,7 +58,7 @@ const RecipeCategory = ({ setRecipes }) => {
         {categories?.map((v) => (
           <button
             key={v.categoryNo}
-            className={`w-[150px] text-center m-3 ${selectedCategory === v.categoryNo && 'text-indigo-600'}`}
+            className={`w-[150px] text-center m-3 ${selectedCategory === v.categoryNo && 'text-[#6F4E37]'}`}
             onClick={() => getCategoryRecipe(v.categoryNo)}
           >
             {v.name}

@@ -93,7 +93,7 @@ const MyPageAddressItem = ({
         <p>{`[${currentAddressItem.name}] ${currentAddressItem.address} ${currentAddressItem.addressDetail}`}</p>
         <div className='flex gap-3'>
           {currentAddressItem.addressNo !== baseAddressNo && (
-            <button className='text-sm text-indigo-600' onClick={updateBaseAddress}>
+            <button className='text-sm text-[#6F4E37]' onClick={updateBaseAddress}>
               기본 배송지로 변경
             </button>
           )}
@@ -152,7 +152,7 @@ const MyPageAddressItem = ({
               <input
                 type='submit'
                 value='변경하기'
-                className='w-[100px] bg-indigo-400 hover:bg-indigo-600 text-white rounded'
+                className='w-[100px] bg-[#A67B5B] hover:bg-[#6F4E37] text-white rounded'
               />
             </div>
           </form>
