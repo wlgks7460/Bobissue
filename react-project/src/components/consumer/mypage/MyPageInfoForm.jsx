@@ -163,7 +163,7 @@ const MyPageInfoForm = ({ userNo }) => {
         <input
           type='submit'
           value='수정하기'
-          className='w-full h-[50px] rounded bg-indigo-400 hover:bg-indigo-600 text-white cursor-pointer'
+          className='w-full h-[50px] rounded bg-[#A67B5B] hover:bg-[#6F4E37] text-white cursor-pointer'
         />
         <button
           className='w-full h-[50px] bg-red-400 hover:bg-red-600 text-white rounded'

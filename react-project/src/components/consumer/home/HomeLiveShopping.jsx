@@ -65,7 +65,7 @@ const HomeLiveShopping = () => {
             description: '상품 설명1',
           },
           {
-            itemNo: 52,
+            itemNo: 51,
             name: '상품 이름122',
             description: '상품 설명1',
           },
