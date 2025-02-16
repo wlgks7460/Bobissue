@@ -62,7 +62,7 @@ const menuData = [
         title: '판매자 기타',
         items: [
           { id: 1, title: '판매자 트리구조', path: '/admin/seller/tree' },
-          { id: 2, title: '판매자 주문통계', path: '/admin/seller/order' },
+          { id: 2, title: '판매자 통계', path: '/admin/seller/statistics' },
         ],
       },
       {

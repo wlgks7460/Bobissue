@@ -61,6 +61,7 @@ import MonitorOrders from '../pages/admin/seller/MonitorOrderPage'
 import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 // import SellerDetailPage from '../pages/admin/seller/SellerDetailPage'
+import SellerStatisticsPage from '../pages/admin/seller/SellerStatisticsPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -488,6 +489,10 @@ const router = createBrowserRouter([
               {
                 path: 'tree',
                 element: <SellerTreePage />, // 판매자 트리구조 페이지
+              },
+              {
+                path: 'statistics',
+                element: <SellerStatisticsPage />,
               },
               {
                 path: 'monitor',
