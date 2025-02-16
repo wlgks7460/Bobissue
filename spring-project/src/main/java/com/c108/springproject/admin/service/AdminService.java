@@ -10,6 +10,7 @@ import com.c108.springproject.admin.repository.AdminQueryRepository;
 import com.c108.springproject.admin.repository.AdminRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.querydsl.dto.DemographicStatsDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.dto.querydsl.CategorySalesDto;
@@ -226,4 +227,10 @@ public class AdminService {
         return adminQueryRepository.getTotalHourlySalesStatistics();
     }
 
+    // 나이 연령 상품 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public DemographicStatsDto getTotalDemographicStats() {
+        return adminQueryRepository.getTotalDemographicStats();
+    }
 }
