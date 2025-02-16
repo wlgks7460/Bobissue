@@ -79,12 +79,53 @@ const ChatRoom = ({ sessionId }) => {
       
     // }
 
+    // const connectToSession = async () => {
+    //   try {
+    //     console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
+        
+    //     // 토큰 발급 요청
+    //     const tokenRes = await fetch(`https://bobissue.store/api/openvidu/sessions/mySession3/token`, {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+    //       },
+    //       body: JSON.stringify({}),
+    //     });
+        
+    //     if (!tokenRes.ok) {
+    //       throw new Error(`❌ 서버 응답 오류: ${tokenRes.status}`);
+    //     }
+
+    //     const { token } = await tokenRes.json();
+
+
+    //     // 토큰 값 로그 출력
+    //     console.log("✅ 서버에서 받은 토큰:", token);
+        
+    //     // OpenVidu 세션 초기화 및 연결
+    //     const OV = new OpenVidu();
+    //     const session = OV.initSession();
+    //     sessionRef.current = session;
+
+    //     session.on('streamCreated', (event) => {
+    //       session.subscribe(event.stream, videoRef.current);
+    //       console.log('📺 새로운 스트림 구독');
+    //     });
+
+    //     await session.connect(token);
+    //     console.log('🎥 OpenVidu 연결 성공');
+    //   } catch (error) {
+    //     console.error('❌ OpenVidu 연결 실패:', error);
+    //   }
+    // };
+
     const connectToSession = async () => {
       try {
         console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
-        
+    
         // 토큰 발급 요청
-        const tokenRes = await fetch(`https://bobissue.store/api/openvidu/sessions/mySession2/token`, {
+        const tokenRes = await fetch(`https://bobissue.store/api/openvidu/sessions/mySession3/token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -92,23 +133,28 @@ const ChatRoom = ({ sessionId }) => {
           },
           body: JSON.stringify({}),
         });
-        
+    
         if (!tokenRes.ok) {
           throw new Error(`❌ 서버 응답 오류: ${tokenRes.status}`);
         }
-
+    
         const { token } = await tokenRes.json();
-        
+    
+        // 토큰 값 로그 출력
+        console.log("✅ 서버에서 받은 토큰:", token);
+    
         // OpenVidu 세션 초기화 및 연결
         const OV = new OpenVidu();
         const session = OV.initSession();
         sessionRef.current = session;
-
+    
+        // 스트림이 생성될 때마다 구독 처리
         session.on('streamCreated', (event) => {
-          session.subscribe(event.stream, videoRef.current);
-          console.log('📺 새로운 스트림 구독');
+          const subscriber = session.subscribe(event.stream, videoRef.current); // videoRef에 구독된 스트림 연결
+          console.log('📺 새로운 스트림 구독:', subscriber);
         });
-
+    
+        // 세션 연결
         await session.connect(token);
         console.log('🎥 OpenVidu 연결 성공');
       } catch (error) {
