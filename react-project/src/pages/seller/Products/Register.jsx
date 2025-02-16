@@ -118,12 +118,12 @@ const Register = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-brown-300">
-      <h1 className="text-3xl font-extrabold text-brown-800 text-center mb-10">📦 상품 등록</h1>
+    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-300">
+      <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-10">상품 등록</h1>
 
       {/* ✅ 디버그 모드 표시 */}
       {debug_mode && (
-        <div className="bg-yellow-100 text-yellow-700 p-3 rounded-md mb-6 text-center">
+        <div className="bg-gray-200 text-gray-700 p-3 rounded-md mb-6 text-center">
           ⚠️ <strong>디버그 모드 활성화됨</strong> - 서버 요청이 실행되지 않습니다.
         </div>
       )}
@@ -138,7 +138,7 @@ const Register = () => {
           <button
             type="submit"
             className={`px-6 py-3 text-white font-semibold rounded-lg transition w-full md:w-auto ${
-              loading ? 'bg-brown-400 cursor-not-allowed' : 'bg-brown-500 hover:bg-brown-600'
+              loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-800'
             }`}
             disabled={loading}
           >

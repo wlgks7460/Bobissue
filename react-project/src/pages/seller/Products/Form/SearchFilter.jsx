@@ -29,7 +29,7 @@ const SearchFilter = ({ onSearch }) => {
     <div className='w-[1000px] p-6 bg-white border border-gray-300 rounded-lg'>
       {/* 카테고리 선택 */}
       <div className='flex flex-col mb-4'>
-        <label className='text-center block text-gray-700 font-medium mb-1'>📂 상품 카테고리</label>
+        <label className='text-center block text-gray-700 font-medium mb-1'>상품 카테고리</label>
         <select
           name='categoryNo'
           value={categoryNo}
