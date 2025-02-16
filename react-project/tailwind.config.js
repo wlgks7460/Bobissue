@@ -11,10 +11,8 @@ export default {
         card: '#FFFFFF', // 카드 배경
         textPrimary: '#1F2937', // 진한 글씨색
         textSecondary: '#6B7280', // 흐린 글씨색
-        
       },
     },
   },
   plugins: [],
-
-}
+};
