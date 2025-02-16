@@ -202,24 +202,6 @@ const LiveStreamSetup = () => {
         //   setChatActive(true)
         //   console.log('🎥 videoRef:', videoRef.current)
 
-                // // 토큰 발급 요청
-                const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/connections', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
-                  },
-                  body: JSON.stringify({}),
-                });
-        
-                        // 서버 응답을 JSON 형식으로 처리
-const responseJson = await tokenRes.json();
-console.log('🔍 서버 응답:', responseJson);  // 응답 확인
-
-        // 응답에서 token을 추출하고, 실제 token 값만 사용
-const tokenUrl = responseJson.token;  // token 필드에 WebSocket URL이 들어있음
-const token = new URL(tokenUrl).searchParams.get('token');  // URL에서 token 파라미터 추출
-
 
               // 세션 생성 요청
       const sessionRes = await API.post('https://bobissue.store/api/openvidu/sessions');
@@ -231,19 +213,17 @@ const token = new URL(tokenUrl).searchParams.get('token');  // URL에서 token �
         // const sessionId = sessionData.id;
         // console.log("✅ 세션 ID:", sessionId);
 
-        ///!!!!!!!!!!!!!!!!!!!!!!!!
-
-        // // // 토큰 발급 요청
-        // const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/connections', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
-        //   },
-        //   body: JSON.stringify({}),
-        // });
-        // // POST /openvidu/api/sessions/{sessionId}/connection API를 사용하여 토큰 발급
-        // const tokenRes = await API.post('https://bobissue.store/api/openvidu/sessions/mySession7/connections');
+        // 토큰 발급 요청
+        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession8/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+          },
+          body: JSON.stringify({}),
+        });
+        // POST /openvidu/api/sessions/{sessionId}/connection API를 사용하여 토큰 발급
+        // const tokenRes = await API.post(`https://bobissue.store/api/openvidu/sessions/${sessionId}/connection`);
 
                 
         // 토큰 발급 요청
