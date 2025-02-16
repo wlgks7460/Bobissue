@@ -101,8 +101,9 @@ const LiveStreamSetup = () => {
         //     "Content-Type": "application/json",
         //   },
         // });
-        const sessionRes = await axios.post('http://bobissue.store/api/openvidu/sessions');
-    
+        const sessionRes = await API.post('https://bobissue.store/api/openvidu/sessions');
+  
+        console.log(sessionRes);
         if (sessionRes.status === 200) {
             const sessionData = sessionRes.data;
             console.log("✅ 세션 생성 성공:", sessionData);
