@@ -101,20 +101,32 @@ const LiveStreamSetup = () => {
         //     "Content-Type": "application/json",
         //   },
         // });
-
-        const sessionRes = await API.post('/openvidu/sessions');
-  
+        const sessionRes = await axios.post('http://bobissue.store/api/openvidu/sessions');
+    
         if (sessionRes.status === 200) {
-          console.log(sessionRes.data);
-          const sessionData = sessionRes.data;
-          // 세션 데이터 처리
+            const sessionData = sessionRes.data;
+            console.log("✅ 세션 생성 성공:", sessionData);
+            
+            const sessionId = sessionData.id;
+            console.log("✅ 세션 ID:", sessionId);
+    
+            return sessionData;  // 세션 정보 반환
         } else {
-          console.error('세션 생성 실패:', sessionRes.status);
+            console.error("❌ 세션 생성 실패:", sessionRes.status);
         }
-        console.log(sessionRes);
-        const sessionData = await sessionRes.json();
-        const sessionId = sessionData.id;
-        console.log("✅ 세션 생성 성공:", sessionId);
+        // const sessionRes = await API.post('http://localhost:8080/api/openvidu/sessions');
+  
+        // if (sessionRes.status === 200) {
+        //   console.log(sessionRes.data);
+        //   const sessionData = sessionRes.data;
+        //   // 세션 데이터 처리
+        // } else {
+        //   console.error('세션 생성 실패:', sessionRes.status);
+        // }
+        // console.log(sessionRes);
+        // const sessionData = await sessionRes.json();
+        // const sessionId = sessionData.id;
+        // console.log("✅ 세션 생성 성공:", sessionId);
 
         // ✅ Connection 생성 요청 (토큰 발급)
         const tokenRes = await fetch(
