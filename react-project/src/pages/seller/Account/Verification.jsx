@@ -10,7 +10,7 @@ const PasswordVerification = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const redirectPath = '/seller/account/vender/info'
-  const debug_mode = true
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
   // const debug_mode = localStorage.getItem('debug_mode') === 'true' // 디버그 모드
 
   // 비밀번호 인증 요청
@@ -26,6 +26,7 @@ const PasswordVerification = () => {
     }
 
     try {
+      console.log(password)
       const response = await API.post('/check-password', { password })
       console.log(response)
 
@@ -44,10 +45,10 @@ const PasswordVerification = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center bg-gradient-to-br h-[55vh]">
+    <div className='flex flex-col justify-center items-center bg-gradient-to-br h-[55vh]'>
       <form
         onSubmit={handleSubmit}
-        className='w-full border border-blue-500 max-w-md bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-[12px]'
+        className='w-full border border-brown-300 max-w-md bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-[12px]'
       >
         <h2 className='text-3xl font-bold text-gray-800 mb-6 text-center'>비밀번호 확인</h2>
 
@@ -58,7 +59,7 @@ const PasswordVerification = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder='비밀번호를 입력하세요'
             required
-            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none transition-all duration-200'
+            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brown-300 focus:ring-offset-2 focus:outline-none transition-all duration-200'
           />
           <button
             type='button'
@@ -74,7 +75,7 @@ const PasswordVerification = () => {
         <button
           type='submit'
           className={`w-full py-3 rounded-lg font-semibold text-white transition-all duration-200 ${
-            isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+            isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-brown-400 hover:bg-brownd-500'
           }`}
           disabled={isLoading}
         >

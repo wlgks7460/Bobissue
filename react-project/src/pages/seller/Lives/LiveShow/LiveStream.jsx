@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
+import API from '@/utils/API' // API 호출용
 import { OpenVidu } from 'openvidu-browser' // ✅ OpenVidu 라이브러리 추가
 import SockJS from 'sockjs-client' // ✅ SockJS 사용
 import { Client } from '@stomp/stompjs' // ✅ STOMP 사용
@@ -71,7 +72,7 @@ const LiveStreamSetup = () => {
       }
     } else {
       try {
-        // ✅ OpenVidu 세션 생성 요청
+        // // ✅ OpenVidu 세션 생성 요청
         // const sessionRes = await fetch("https://43.202.60.173/openvidu/api/sessions", {
         //   method: "POST",
         //   headers: {
@@ -92,51 +93,88 @@ const LiveStreamSetup = () => {
         // const sessionId = sessionData.id
         // console.log('✅ 세션 생성 성공:', sessionId)
 
-        const token = localStorage.getItem("access_token");
-        console.log(token);
-        const sessionRes = await fetch('http://localhost:8080/api/openvidu/sessions', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ JWT 토큰 추가
-          },
-        });
+        // const token = localStorage.getItem("access_token");
+        // console.log(token);
+        // const sessionRes = await fetch('https://www.bobissue.store/api/openvidu/sessions', {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
+        const sessionRes = await API.post('https://bobissue.store/api/openvidu/sessions');
+  
         console.log(sessionRes);
-        const sessionData = await sessionRes.json();
-        const sessionId = sessionData.id;
-        console.log("✅ 세션 생성 성공:", sessionId);
+        if (sessionRes.status === 200) {
+          const sessionData = sessionRes.data;
+          console.log("✅ 세션 생성 성공:", sessionData);
+            
+          const sessionId = sessionData.id;
+          console.log("✅ 세션 ID:", sessionId);
+          
+          // ✅ Connection 생성 요청 (토큰 발급)
+          const tokenRes = await fetch(
+            `https://bobissue.store/api/openvidu/sessions/mySession2/token`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+              },
+              body: JSON.stringify({}),
+            }
+          );
 
-        // ✅ Connection 생성 요청 (토큰 발급)
-        const tokenRes = await fetch(
-          `https://43.202.60.173/openvidu/api/sessions/${sessionData.id}/connection`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
-            },
-            body: JSON.stringify({}),
-          },
-        )
-        const tokenData = await tokenRes.json()
-        console.log('✅ Connection 토큰 발급 성공:', tokenData.token)
+          const tokenData = await tokenRes.json();
+          const token = tokenData.token;  // 발급된 토큰을 사용
 
-        // ✅ OpenVidu 클라이언트(WebRTC) 연결
-        const OV = new OpenVidu()
-        const newSession = OV.initSession()
+          // OpenVidu 클라이언트 연결
+          const OV = new OpenVidu();
+          const newSession = OV.initSession();
 
-        newSession.on('streamCreated', (event) => {
-          const subscriber = newSession.subscribe(event.stream, videoRef.current)
-          console.log('📺 새로운 스트림 구독:', subscriber)
-        })
+          newSession.on('streamCreated', (event) => {
+            const subscriber = newSession.subscribe(event.stream, videoRef.current);
+            console.log('📺 새로운 스트림 구독:', subscriber);
+          });
 
-        await newSession.connect(tokenData.token)
-        console.log('🎥 OpenVidu 연결 성공')
-        setSession(newSession)
+          await newSession.connect(token)
 
-        setIsStreaming(true)
-        setChatActive(true)
-        console.log('🎥 videoRef:', videoRef.current)
+          // const sessionRes = await API.post('http://localhost:8080/api/openvidu/sessions');
+
+
+          // // ✅ Connection 생성 요청 (토큰 발급)
+          // const tokenRes = await fetch(
+          //   `https://bobissue.store/openvidu/api/sessions/${sessionData.id}/connection`,
+          //   {
+          //     method: 'POST',
+          //     headers: {
+          //       'Content-Type': 'application/json',
+          //       Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
+          //     },
+          //     body: JSON.stringify({}),
+          //   },
+          // )
+          // const tokenData = await tokenRes.json()
+          // console.log('✅ Connection 토큰 발급 성공:', tokenData.token)
+
+          // ✅ OpenVidu 클라이언트(WebRTC) 연결
+          // const OV = new OpenVidu()
+          // const newSession = OV.initSession()
+
+          // newSession.on('streamCreated', (event) => {
+          //   const subscriber = newSession.subscribe(event.stream, videoRef.current)
+          //   console.log('📺 새로운 스트림 구독:', subscriber)
+          // })
+
+          // await newSession.connect(tokenData.token)
+          // console.log('🎥 OpenVidu 연결 성공')
+          setSession(newSession)
+
+          setIsStreaming(true)
+          setChatActive(true)
+          console.log('🎥 videoRef:', videoRef.current)
+        } else {
+          console.error('❌ 세션 생성 실패:', sessionRes.status)
+        }
       } catch (error) {
         console.error('❌ OpenVidu 연결 실패:', error)
       }
@@ -167,18 +205,6 @@ const LiveStreamSetup = () => {
       {/* 📌 방송 화면 미리보기 */}
       <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto'>
         <video ref={videoRef} autoPlay playsInline className='w-full h-[500px] bg-black'></video>
-      </div>
-
-      {/* 📌 상대방 방송 화면 */}
-      <div className='relative border rounded-lg shadow-md bg-black w-full mx-auto mt-4'>
-        {remoteStream && (
-          <video
-            ref={remoteVideoRef}
-            autoPlay
-            playsInline
-            className='w-full h-[500px] bg-black'
-          ></video>
-        )}
       </div>
 
       {/* 📌 컨트롤 버튼 */}

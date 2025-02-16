@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import SearchBar from '../../components/consumer/common/SearchBar'
 import RecipeCategory from '../../components/consumer/recipe/RecipeCategory'
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import recipeDefaultImg from '../../assets/consumer/recipeDefault.webp'
 import { Link } from 'react-router-dom'
 

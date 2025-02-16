@@ -1,118 +1,129 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import API from '@/utils/API'
+import Info from './Form/Info'
+import UpdateInfo from './Form/Update_Info'
+import Withdrawal from './Form/Withdrawal'
+import SettleAccount from './Form/SettleAccount'
+import { Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { Eye, EyeOff } from 'lucide-react' // 비밀번호 가시성 아이콘 추가
 
-const UpdatePassword = () => {
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [backendPassword] = useState('secure1234') // 가상의 현재 비밀번호
-  const [message, setMessage] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+const VenderInfo = () => {
+  const debug_mode = localStorage.getItem('debug_mode') === 'true' // ✅ 디버그 모드 활성화 여부
   const navigate = useNavigate()
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    if (newPassword === backendPassword) {
-      setMessage('❌ 새 비밀번호는 현재 비밀번호와 다르게 설정해야 합니다.')
-      return
-    }
-
-    if (newPassword !== confirmPassword) {
-      setMessage('❌ 새 비밀번호와 확인 비밀번호가 일치하지 않습니다.')
-      return
-    }
-
-    try {
-      // 비밀번호 업데이트 요청 (디버깅용 가상 응답)
-      const response = {
-        ok: true,
-        json: () => Promise.resolve({ message: '✅ 비밀번호가 성공적으로 업데이트되었습니다.' }),
-      }
-
-      if (response.ok) {
-        const data = await response.json()
-        alert(data.message)
-        setMessage('')
-        setNewPassword('')
-        setConfirmPassword('')
-        navigate('/seller/account/vender/info') // 성공 시 페이지 이동
-      } else {
-        alert('❌ 비밀번호 업데이트에 실패했습니다.')
-      }
-    } catch (error) {
-      console.error('비밀번호 업데이트 오류:', error)
-      alert('❌ 서버 오류가 발생했습니다.')
-    }
+  // ✅ 디버그 모드용 더미 데이터
+  const dummyData = {
+    sellerNo: 1,
+    name: '판매자2',
+    email: 'seller@naver.com',
+    company: {
+      name: '주식회사우리',
+      license: 'license1',
+      status: 'Y',
+      bank: '광주은행',
+      bankAccount: '007121112675',
+    },
+    callNumber: '010-1234-5678',
+    status: 'Y',
+    approvalStatus: 'Y',
   }
 
+  // ✅ 상태 관리
+  const [userInfo, setUserInfo] = useState(debug_mode ? dummyData : null)
+  const [loading, setLoading] = useState(!debug_mode)
+  const [error, setError] = useState('')
+  const [isUpdatePage, setIsUpdatePage] = useState(false)
+
+  // ✅ 사용자 정보 가져오기
+  useEffect(() => {
+    if (debug_mode) {
+      setUserInfo(dummyData)
+      setLoading(false)
+      return
+    }
+
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem('access_token')
+        if (!token) throw new Error('인증 토큰이 없습니다.')
+
+        const response = await API.get('/sellers/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        console.log(response)
+        if (response.status === 200) {
+          setUserInfo(response.data?.result?.data || dummyData)
+        } else {
+          throw new Error('서버에서 데이터를 가져오는 데 실패했습니다.')
+        }
+      } catch (err) {
+        setError(err.message)
+        setUserInfo(dummyData) // 실패 시 더미 데이터 사용 가능
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserInfo()
+  }, [isUpdatePage])
+
+  // ✅ 로딩 화면 처리
+  if (loading)
+    return (
+      <div className='flex items-center justify-center min-h-screen bg-white'>
+        <Loader2 className='animate-spin w-12 h-12 text-brown-500' />
+      </div>
+    )
+
   return (
-    <div className="flex flex-col justify-center items-center bg-gradient-to-br h-[60vh]">
-      <div className='w-full max-w-md bg-white p-8 rounded-xl border border-blue-400 '>
-        <h1 className='text-2xl font-bold text-center mb-6'>비밀번호 변경</h1>
+    <div className='flex flex-col justify-center items-center bg-white min-h-screen p-6'>
+      <div className='w-full max-w-2xl bg-white shadow-lg p-8 rounded-xl border border-brown-300'>
+        {/* ✅ 페이지 상태에 따라 컴포넌트 렌더링 */}
+        {isUpdatePage ? (
+          <UpdateInfo
+            userInfo={userInfo}
+            onSave={(updatedInfo) => {
+              setUserInfo((prev) => ({ ...prev, ...updatedInfo }))
+              setIsUpdatePage(false)
+            }}
+            onClose={() => setIsUpdatePage(false)}
+          />
+        ) : (
+          <Info userInfo={userInfo} />
+        )}
 
-        <form onSubmit={handleSubmit} className='space-y-5'>
-          {/* 새 비밀번호 입력 */}
-          <div className='relative'>
-            <label htmlFor='newPassword' className='block text-sm font-medium text-gray-700'>
-              새 비밀번호
-            </label>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              id='newPassword'
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-              className='w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 transition-all'
-            />
-            <button
-              type='button'
-              className='absolute right-3 top-10 text-gray-500 hover:text-gray-700'
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
+        {/* ✅ 버튼 그룹 */}
+        <div className='mt-6 flex justify-center space-x-4'>
+          {!isUpdatePage && (
+            <>
+              {/* 개인정보 수정 버튼 */}
+              <button
+                onClick={() => setIsUpdatePage(true)}
+                className='px-4 py-2 text-white bg-brown-500 rounded-lg hover:bg-brown-600 transition-all shadow-md'
+              >
+                개인정보 수정
+              </button>
 
-          {/* 비밀번호 확인 입력 */}
-          <div className='relative'>
-            <label htmlFor='confirmPassword' className='block text-sm font-medium text-gray-700'>
-              비밀번호 확인
-            </label>
-            <input
-              type={showConfirmPassword ? 'text' : 'password'}
-              id='confirmPassword'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className='w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 transition-all'
-            />
-            <button
-              type='button'
-              className='absolute right-3 top-10 text-gray-500 hover:text-gray-700'
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
+              {/* 사업자 정보 수정 버튼 */}
+              <button
+                onClick={() => navigate('/seller/company/update')}
+                className='px-4 py-2 text-white bg-brown-400 rounded-lg hover:bg-brown-500 transition-all shadow-md'
+              >
+                회사정보수정
+              </button>
+            </>
+          )}
+        </div>
 
-          {/* 에러 메시지 */}
-          {message && <p className='text-center text-red-500 animate-fade-in'>{message}</p>}
+        {/* ✅ 오류 메시지 출력 */}
+        {error && <p className='mt-4 text-center text-brown-700 animate-fade-in'>{error}</p>}
 
-          {/* 제출 버튼 */}
-          <div className='flex justify-center'>
-            <button
-              type='submit'
-              className='w-full py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 hover:scale-105 transition-all'
-            >
-              비밀번호 변경
-            </button>
-          </div>
-        </form>
+        {/* ✅ 판매자 탈퇴 컴포넌트 */}
+        <div className='mt-8'>
+          <Withdrawal userInfo={userInfo} />
+        </div>
       </div>
     </div>
   )
 }
 
-export default UpdatePassword
+export default VenderInfo

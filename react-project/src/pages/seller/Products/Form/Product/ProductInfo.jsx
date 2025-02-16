@@ -42,57 +42,58 @@ const ProductInfo = ({ product, setProduct }) => {
   }
 
   return (
-    <div className='w-full max-w-md p-4 border border-cyan-400 rounded-[15px] gap-4 relative'>
-      <div className='text-lg font-bold mb-2'>상품명</div>
-      <input
-        type='text'
-        placeholder='상품명을 입력하세요'
-        className='w-full p-2 border rounded mb-4'
-        value={product.name}
-        onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
-      />
+    <div className="w-full mx-auto max-w-lg p-6 border border-brown-300 rounded-lg bg-white shadow-md space-y-6">
+      {/* ✅ 상품명 입력 */}
+      <div>
+        <label className="text-lg font-bold text-brown-700">상품명</label>
+        <input
+          type="text"
+          placeholder="상품명을 입력하세요"
+          className="w-full mt-2 p-3 border border-brown-300 rounded-md focus:ring-2 focus:ring-brown-500 focus:outline-none"
+          value={product.name}
+          onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
+        />
+      </div>
 
       {/* ✅ 카테고리 선택 */}
-      <div className='relative' ref={categoryRef}>
-        <h3 className='text-lg font-bold mb-2'>카테고리 선택</h3>
+      <div className="relative">
+        <label className="text-lg font-bold text-brown-700">카테고리 선택</label>
         <div
-          className='relative border-2 rounded-[4px] border-black w-full p-2 cursor-pointer'
+          className="mt-2 border border-brown-400 bg-brown-50 rounded-md p-3 cursor-pointer flex justify-between items-center hover:bg-brown-100"
           onClick={() => setIsOpenCategory((prev) => !prev)}
-          aria-haspopup='true'
+          aria-haspopup="true"
           aria-expanded={isOpenCategory}
         >
-          <div className='flex justify-between items-center'>
-            {selectedCategory ? selectedCategory.name : '카테고리 선택'}
-            <span>▼</span>
-          </div>
+          {selectedCategory ? selectedCategory.name : '카테고리 선택'}
+          <span className="text-brown-700">▼</span>
         </div>
 
         {/* ✅ 대분류 카테고리 드롭다운 */}
         {isOpenCategory && (
-          <div className='absolute left-0 top-full w-full bg-white border border-gray-300 rounded-md shadow-md z-10 max-h-60 overflow-auto transition-all duration-200'>
+          <div className="absolute left-0 top-full w-full bg-white border border-brown-300 rounded-md shadow-lg z-10 max-h-60 overflow-auto transition-all duration-200 mt-2">
             {categories.map((category) => (
               <div
                 key={category.categoryNo}
-                className='p-2 cursor-pointer hover:bg-gray-200 flex justify-between'
+                className="p-3 cursor-pointer hover:bg-brown-100 flex justify-between"
                 onClick={() => handleCategorySelect(category)}
               >
                 {category.name}
-                {category.children?.length > 0 && <span>▶</span>}
+                {category.children?.length > 0 && <span className="text-brown-700">▶</span>}
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* ✅ 서브 카테고리 (클릭해서 선택 가능) */}
+      {/* ✅ 서브 카테고리 선택 */}
       {hoveredCategory && (
-        <div className='absolute left-[260px] top-[70px] bg-white border border-gray-300 rounded-md shadow-md p-2 w-[250px] z-20'>
+        <div className="absolute left-[270px] top-[70px] bg-white border border-brown-300 rounded-md shadow-lg p-3 w-[250px] z-20">
           {categories
             .find((cat) => cat.categoryNo === hoveredCategory)
             ?.children?.map((subCategory) => (
               <div
                 key={subCategory.categoryNo}
-                className='cursor-pointer hover:bg-gray-200 p-2'
+                className="cursor-pointer hover:bg-brown-100 p-2 rounded-md"
                 onClick={() => handleSubCategorySelect(subCategory)}
               >
                 {subCategory.name}

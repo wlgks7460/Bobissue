@@ -1,20 +1,27 @@
 package com.c108.springproject.admin.repository;
 
-import com.c108.springproject.admin.dto.querydsl.CompanyMonthlySalesDto;
-import com.c108.springproject.admin.dto.querydsl.CompanySalesDto;
-import com.c108.springproject.admin.dto.querydsl.CompanyStatisticsDto;
-import com.c108.springproject.admin.dto.querydsl.UserStatisticsDto;
+import com.c108.springproject.admin.dto.querydsl.*;
 import com.c108.springproject.global.querydsl.Querydsl4RepositorySupport;
 import com.c108.springproject.item.domain.QItem;
+import com.c108.springproject.item.domain.QItemCategory;
 import com.c108.springproject.order.domain.Order;
 import com.c108.springproject.order.domain.QOrder;
 import com.c108.springproject.order.domain.QOrderDetail;
 import com.c108.springproject.seller.domain.QCompany;
 import com.c108.springproject.seller.domain.QSeller;
+import com.c108.springproject.seller.dto.querydsl.CategorySalesDto;
+import com.c108.springproject.seller.dto.querydsl.HourlySalesDto;
+import com.c108.springproject.seller.dto.querydsl.MonthlySalesComparisonDto;
 import com.c108.springproject.user.domain.QUser;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +35,7 @@ public class AdminQueryRepository  extends Querydsl4RepositorySupport {
     QUser user = QUser.user;
     QSeller seller = QSeller.seller;
     QCompany company = QCompany.company;
+    QItemCategory itemCategory = QItemCategory.itemCategory;
 
     protected AdminQueryRepository() {
         super(Order.class);
@@ -188,6 +196,183 @@ public class AdminQueryRepository  extends Querydsl4RepositorySupport {
                 .companyMonthlySales(companyMonthlySales)
                 .build();
     }
+
+    // 판매자 통계
+    public SellerStatisticsDto getSellerStatistics() {
+        // 판매자 상태별 통계
+        Map<String, Long> sellerStatusStats = getQueryFactory()
+                .select(seller.status, seller.count())
+                .from(seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.status)
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(seller.status),
+                        tuple -> tuple.get(seller.count())
+                ));
+
+        // 판매 승인 상태별 통계
+        Map<String, Long> sellerApprovalStats = getQueryFactory()
+                .select(seller.approvalStatus, seller.count())
+                .from(seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.approvalStatus)
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(seller.approvalStatus),
+                        tuple -> tuple.get(seller.count())
+                ));
+
+        // 판매자별 총 매출
+        List<SellerSalesDto> sellerSalesStats = getQueryFactory()
+                .select(Projections.constructor(SellerSalesDto.class,
+                        seller.sellerNo,
+                        seller.name,
+                        company.name,
+                        orderDetail.price.multiply(orderDetail.count).sum().longValue()
+                ))
+                .from(orderDetail)
+                .join(orderDetail.item, item)
+                .join(item.company, company)
+                .join(company.sellers, seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.sellerNo, seller.name, company.name)
+                .fetch();
+
+        // 월별 판매자 가입 추이
+        List<MonthlySellerJoinDto> monthlyJoinStats = getQueryFactory()
+                .select(Projections.constructor(MonthlySellerJoinDto.class,
+                        seller.createdAt.substring(0, 6),
+                        seller.count(),
+                        JPAExpressions
+                                .select(seller.count())
+                                .from(seller)
+                                .where(
+                                        seller.createdAt.substring(0, 6).eq(seller.createdAt.substring(0, 6)),
+                                        seller.approvalStatus.eq("Y")
+                                )
+                ))
+                .from(seller)
+                .where(seller.delYn.eq("N"))
+                .groupBy(seller.createdAt.substring(0, 6))
+                .fetch();
+
+        return SellerStatisticsDto.builder()
+                .sellerStatusStats(sellerStatusStats)
+                .sellerApprovalStats(sellerApprovalStats)
+                .sellerSalesStats(sellerSalesStats)
+                .monthlyJoinStats(monthlyJoinStats)
+                .build();
+    }
+
+    // 전월 대비 실적 분석 (전체)
+    public MonthlySalesComparisonDto getTotalMonthlySalesComparison() {
+        // 현재 날짜 기준으로 당월, 전월 시작일 계산
+        String currentMonth = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String previousMonth = LocalDateTime.now().minusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMM"));
+
+        // 당월 판매 데이터
+        NumberExpression<Long> salesAmount = orderDetail.count();
+        NumberExpression<Long> revenueAmount = orderDetail.price.multiply(orderDetail.count).sum().longValue();
+
+        Tuple currentMonthData = getQueryFactory()
+                .select(salesAmount, revenueAmount)
+                .from(orderDetail)
+                .join(order).on(orderDetail.order.eq(order))
+                .where(
+                        order.delYn.eq("N"),
+                        order.createdAt.startsWith(currentMonth)
+                )
+                .fetchOne();
+
+        // 전월 판매 데이터
+        Tuple previousMonthData = getQueryFactory()
+                .select(salesAmount, revenueAmount)
+                .from(orderDetail)
+                .join(order).on(orderDetail.order.eq(order))
+                .where(
+                        order.delYn.eq("N"),
+                        order.createdAt.startsWith(previousMonth)
+                )
+                .fetchOne();
+
+        // DTO 생성 및 데이터 설정
+        MonthlySalesComparisonDto comparison = new MonthlySalesComparisonDto();
+
+        // 당월 데이터 설정 (null 체크 포함)
+        comparison.setCurrentMonthSales(currentMonthData != null && currentMonthData.get(salesAmount) != null
+                ? currentMonthData.get(salesAmount) : 0L);
+        comparison.setCurrentMonthRevenue(currentMonthData != null && currentMonthData.get(revenueAmount) != null
+                ? currentMonthData.get(revenueAmount) : 0L);
+
+        // 전월 데이터 설정 (null 체크 포함)
+        comparison.setPreviousMonthSales(previousMonthData != null && previousMonthData.get(salesAmount) != null
+                ? previousMonthData.get(salesAmount) : 0L);
+        comparison.setPreviousMonthRevenue(previousMonthData != null && previousMonthData.get(revenueAmount) != null
+                ? previousMonthData.get(revenueAmount) : 0L);
+
+        // 증감률 계산
+        comparison.calculateGrowthRates();
+
+        return comparison;
+    }
+
+    // 전체 카테고리별 통계
+    public List<CategorySalesDto> getTotalCategorySalesStatistics() {
+        return getQueryFactory()
+                .select(Projections.constructor(CategorySalesDto.class,
+                        itemCategory.categoryNo,
+                        itemCategory.name,
+                        orderDetail.count().coalesce(0L),
+                        orderDetail.price.multiply(orderDetail.count).sum().coalesce(0).longValue(),
+                        item.countDistinct().intValue(),
+                        item.price.avg().coalesce(0.0)
+                ))
+                .from(itemCategory)
+                .leftJoin(item).on(itemCategory.categoryNo.eq(item.category.categoryNo))
+                .leftJoin(orderDetail).on(orderDetail.item.eq(item))
+                .leftJoin(order).on(orderDetail.order.eq(order)
+                        .and(order.delYn.eq("N")))
+                .where(item.delYn.eq("N"))
+                .groupBy(itemCategory.categoryNo, itemCategory.name)
+                .fetch();
+    }
+
+    // 전체 시간대별 판매 분석
+    public List<HourlySalesDto> getTotalHourlySalesStatistics() {
+        List<HourlySalesDto> hourlyStats = new ArrayList<>();
+
+        // 각 시간대(0-23)별로 통계 계산
+        for (int hour = 0; hour < 24; hour++) {
+            final String hourStr = String.format("%02d", hour);
+
+            Tuple hourData = getQueryFactory()
+                    .select(
+                            order.count(),
+                            orderDetail.price.multiply(orderDetail.count).sum().coalesce(0).longValue()
+                    )
+                    .from(orderDetail)
+                    .join(order).on(orderDetail.order.eq(order))
+                    .where(
+                            order.delYn.eq("N"),
+                            order.createdAt.substring(9, 11).eq(hourStr)
+                    )
+                    .fetchOne();
+
+            HourlySalesDto hourlyDto = new HourlySalesDto();
+            hourlyDto.setHour(hour);
+            hourlyDto.setSalesCount(hourData.get(0, Long.class));
+            hourlyDto.setTotalRevenue(hourData.get(1, Long.class));
+            hourlyDto.calculateAverageOrderAmount();
+
+            hourlyStats.add(hourlyDto);
+        }
+
+        return hourlyStats;
+    }
+
 
 
 }

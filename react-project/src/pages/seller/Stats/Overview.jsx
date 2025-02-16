@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   FaChartLine,
   FaStar,
@@ -8,10 +8,24 @@ import {
   FaClipboardList,
   FaBroadcastTower,
 } from 'react-icons/fa'
+import API from '@/utils/API'
 
 const Overview = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('monthly')
   const [salesPrediction, setSalesPrediction] = useState('')
+
+  useEffect(() => {
+    async function fetchRankdata() {
+      try {
+        const response = await API.get('/sellers/item-rank')
+        console.log(response.data.result.data) // 응답 데이터 출력
+      } catch (error) {
+        console.error('Error fetching item rank:', error)
+      }
+    }
+
+    fetchRankdata()
+  }, []) // 의존성 배열 추가
 
   return (
     <div className='p-6 max-w-7xl mx-auto'>
