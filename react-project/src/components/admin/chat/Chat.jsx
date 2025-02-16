@@ -187,6 +187,10 @@ const ChatRoom = ({ sessionId }) => {
 
         const { token } = await tokenRes.json();
 
+        // 토큰 값 확인
+        console.log("🔑 받은 토큰123444:", tokenRes);
+        console.log("🔑 받은 토큰:", token);
+
         // OpenVidu 세션 초기화 및 연결
         const OV = new OpenVidu();
         const session = OV.initSession();
