@@ -51,11 +51,11 @@ const Orders = () => {
   )
 
   return (
-    <div className='min-h-screen flex flex-col bg-gray-50 py-10 px-5 sm:px-10'>
+    <div className='min-h-screen flex flex-col bg-white py-10 px-5 sm:px-10'>
       <div className='flex-grow max-w-7xl mx-auto'>
         <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-brown-800'>주문 관리</h1>
-          <p className='mt-2 text-lg text-brown-600'>주문 현황을 한눈에 확인하고 관리하세요.</p>
+          <h1 className='text-4xl font-bold text-gray-900'>주문 관리</h1>
+          <p className='mt-2 text-lg text-gray-700'>주문 현황을 한눈에 확인하고 관리하세요.</p>
         </div>
 
         <div className='flex justify-center gap-3 mb-6'>
@@ -66,8 +66,8 @@ const Orders = () => {
                 onClick={() => setSelectedTab(status)}
                 className={`px-5 py-2 rounded-md text-lg font-medium transition duration-300 ${
                   selectedTab === status
-                    ? 'bg-brown-300 text-white shadow-md'
-                    : 'bg-white text-brown-200 border border-brown-100 hover:bg-brown-400 hover:text-white'
+                    ? 'bg-gray-500 text-white shadow-md'
+                    : 'bg-white text-gray-500 border border-gray-300 hover:bg-gray-400 hover:text-white'
                 }`}
               >
                 {status === 'all' ? '전체' : status}
@@ -78,21 +78,21 @@ const Orders = () => {
 
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
           {displayedOrders.length === 0 ? (
-            <div className='col-span-3 text-center text-brown-500 text-lg'>
+            <div className='col-span-3 text-center text-gray-500 text-lg'>
               해당 분류의 주문이 없습니다.
             </div>
           ) : (
             displayedOrders.map((order) => (
               <div
                 key={order.orderId}
-                className='bg-white p-5 rounded-lg shadow border border-brown-100 hover:scale-105 transition duration-200 cursor-pointer'
+                className='bg-white p-5 rounded-lg shadow border border-gray-300 hover:scale-105 transition duration-200 cursor-pointer'
                 onClick={() => setPopupData(order)}
               >
-                <h3 className='text-lg font-semibold text-brown-800'>{order.orderId}</h3>
-                <p className='text-brown-700 mt-1 font-medium'>
+                <h3 className='text-lg font-semibold text-gray-900'>{order.orderId}</h3>
+                <p className='text-gray-700 mt-1 font-medium'>
                   상품명: {order.productName || '상품 정보 없음'}
                 </p>
-                <div className='mt-3 text-sm text-brown-600'>
+                <div className='mt-3 text-sm text-gray-600'>
                   옵션: {order.option} / 수량: {order.quantity}
                 </div>
               </div>
@@ -106,14 +106,14 @@ const Orders = () => {
           <button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-brown-700 border border-brown-300 hover:bg-brown-500 hover:text-white'
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
           >
             <FaAngleDoubleLeft />
           </button>
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-brown-700 border border-brown-300 hover:bg-brown-500 hover:text-white'
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
           >
             <FaAngleLeft />
           </button>
@@ -121,7 +121,11 @@ const Orders = () => {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`mx-1 px-4 py-2 rounded-md text-lg font-medium transition ${currentPage === page ? 'bg-brown-500 text-white' : 'bg-white text-brown-700 border border-brown-300 hover:bg-brown-400 hover:text-white'}`}
+              className={`mx-1 px-4 py-2 rounded-md text-lg font-medium transition ${
+                currentPage === page
+                  ? 'bg-gray-500 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-400 hover:text-white'
+              }`}
             >
               {page}
             </button>
@@ -129,14 +133,14 @@ const Orders = () => {
           <button
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-brown-700 border border-brown-300 hover:bg-brown-500 hover:text-white'
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
           >
             <FaAngleRight />
           </button>
           <button
             onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-brown-700 border border-brown-300 hover:bg-brown-500 hover:text-white'
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
           >
             <FaAngleDoubleRight />
           </button>
