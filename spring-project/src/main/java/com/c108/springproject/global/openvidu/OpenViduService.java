@@ -31,7 +31,7 @@ public class OpenViduService {
 
     public String createSession() {
         HttpHeaders headers = createHeaders();
-        Map<String, Object> body = Collections.singletonMap("customSessionId", "mySession2");  // 원하는 세션 ID 설정
+        Map<String, Object> body = Collections.singletonMap("customSessionId", "mySession3");  // 원하는 세션 ID 설정
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
@@ -59,7 +59,9 @@ public class OpenViduService {
 
         ResponseEntity<String> response = restTemplate.exchange(
                 OPENVIDU_URL + "/tokens", HttpMethod.POST, request, String.class);
-
+        // 토큰 값을 로그로 출력하여 확인
+        String token = response.getBody();
+        System.out.println("✅ 생성된 OpenVidu 토큰: " + token);
         return response.getBody();
     }
 
