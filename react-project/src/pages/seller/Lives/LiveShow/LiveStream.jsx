@@ -210,17 +210,44 @@ const LiveStreamSetup = () => {
         const sessionData = sessionRes.data;
         console.log("✅ 세션 생성 성공:", sessionData);
         
-        const sessionId = sessionData.id;
-        console.log("✅ 세션 ID:", sessionId);
+        // const sessionId = sessionData.id;
+        // console.log("✅ 세션 ID:", sessionId);
 
         // 토큰 발급 요청
-        const tokenRes = await API.post(`https://bobissue.store/api/openvidu/sessions/${sessionId}/token`);
-        console.log("✅ 서버에서 받은 토큰:", tokenRes);
+        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+          },
+          body: JSON.stringify({}),
+        });
+                
+        // 토큰 발급 요청
+        // const tokenRes = await API.post(`https://bobissue.store/api/openvidu/sessions/${sessionId}/token`);
+        // console.log("✅ 서버에서 받은 토큰:", tokenRes);
+                // 서버 응답을 JSON 형식으로 처리
+const responseJson = await tokenRes.json();
+console.log('🔍 서버 응답:', responseJson);  // 응답 확인
 
-        // 토큰 값 저장
-        const token = tokenRes.data.token; // token 값을 이 위치에서 받도록 해야 합니다.
+        // 응답에서 token을 추출하고, 실제 token 값만 사용
+const tokenUrl = responseJson.token;  // token 필드에 WebSocket URL이 들어있음
+const token = new URL(tokenUrl).searchParams.get('token');  // URL에서 token 파라미터 추출
 
+        // // 토큰 값 저장
+        // const token = tokenRes.data.token; // token 값을 이 위치에서 받도록 해야 합니다.
+
+        
+        // 토큰 값 확인
+        console.log("🔑 받은 토큰123444:", tokenRes);
+        console.log("🔑 받은 토큰:", token);
         // OpenVidu 클라이언트 연결
+
+                // WebSocket URL 설정
+        const sessionId = 'mySession7';  // 사용하려는 세션 ID
+        console.log("이것좀 보소"+sessionId)
+const wsUrl = `wss://bobissue.store:8443/openvidu?sessionId=${sessionId}&token=${token}`;
+console.log("🔍 WebSocket URL:", wsUrl);
         const OV = new OpenVidu();
         const newSession = OV.initSession();
 
@@ -241,7 +268,7 @@ const LiveStreamSetup = () => {
         });
 
         // 세션 연결
-        await newSession.connect(token, { clientData: 'Publisher' });
+        await newSession.connect(wsUrl, { clientData: 'Publisher' });
 
         // 송출 시작
         newSession.publish(publisher);
