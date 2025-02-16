@@ -187,12 +187,12 @@ const Payment = () => {
               placeholder='배송 요청 사항 (선택)'
               value={requests}
               onChange={(e) => setRequests(e.target.value)}
-              className='w-full p-2 border rounded resize-none h-20'
+              className='w-full p-2 border border-[#6F4E37] rounded resize-none h-20'
             />
           </div>
 
           {/* 포인트 사용 */}
-          <div className='border-b pb-6 mb-6'>
+          <div className='border-b border-[#6F4E37] pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>포인트 사용</h3>
             <p className='mb-2'>사용 가능 포인트: {availablePoints}P</p>
             <input
@@ -200,18 +200,18 @@ const Payment = () => {
               placeholder='사용할 포인트 입력'
               value={points}
               onChange={handlePointsChange}
-              className='w-full p-2 border rounded'
+              className='w-full p-2 border border-[#6F4E37] rounded'
               max={availablePoints}
             />
           </div>
 
           {/* 쿠폰 선택 */}
-          <div className='border-b pb-6 mb-6'>
+          <div className='border-b border-[#6F4E37] pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>쿠폰 선택</h3>
             <select
               value={selectedCoupon?.code || ''}
               onChange={handleCouponChange}
-              className='w-full p-2 border rounded'
+              className='w-full p-2 border border-[#6F4E37] rounded'
             >
               <option value=''>쿠폰을 선택하세요</option>
               {availableCoupons.map((coupon) => (
@@ -223,7 +223,7 @@ const Payment = () => {
           </div>
 
           {/* 결제 금액 */}
-          <div className='border-b pb-6 mb-6'>
+          <div className='border-b border-[#6F4E37] pb-6 mb-6'>
             <h3 className='text-lg font-semibold mb-4'>결제 금액</h3>
             <div className='flex justify-between'>
               <span>총 상품 금액</span>
