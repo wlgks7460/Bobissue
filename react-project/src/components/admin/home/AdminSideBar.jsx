@@ -6,7 +6,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 const menuData = [
   {
     id: 1,
-    title: '회원관리',
+    title: '이용자 관리',
     subMenus: [
       {
         id: 1,
@@ -62,7 +62,7 @@ const menuData = [
         title: '판매자 기타',
         items: [
           { id: 1, title: '판매자 트리구조', path: '/admin/seller/tree' },
-          { id: 2, title: '판매자 주문통계', path: '/admin/seller/order' },
+          { id: 2, title: '판매자 통계', path: '/admin/seller/statistics' },
         ],
       },
       {
@@ -151,115 +151,105 @@ const menuData = [
       },
     ],
   },
-  // ──────────────────────────────────────────────
-  // 추가할 새로운 메뉴 항목들 (페이지 미구현: 설명 문자열 포함)
   {
     id: 10,
-    title: '대시보드',
-    subMenus: [
-      {
-        id: 1,
-        title: '대시보드 분석',
-        items: [
-          { id: 1, title: '매출 분석', path: '설명: 매출 분석 페이지 추가 예정' },
-          { id: 2, title: '주문 분석', path: '설명: 주문 분석 페이지 추가 예정' },
-          { id: 3, title: '고객 분석', path: '설명: 고객 분석 페이지 추가 예정' },
-          { id: 4, title: '재고 분석', path: '설명: 재고 분석 페이지 추가 예정' },
-          { id: 5, title: '회사 통계', path: '설명: 회사 통계 페이지 추가 예정' },
-        ],
-      },
+    title: '쇼핑몰 분석',
+    items: [
+      { id: 1, title: '매출 분석', path: '/admin/analytics/performance' },
+      { id: 2, title: '카테고리 분석', path: '/admin/analytics/category' },
+      { id: 3, title: '시간대별 분석', path: '/admin/analytics/timesales' },
     ],
   },
-  {
-    id: 11,
-    title: '트렌드 분석',
-    subMenus: [
-      {
-        id: 1,
-        title: '트렌드 분석',
-        items: [
-          {
-            id: 1,
-            title: '판매 카테고리별 매출 추이',
-            path: '설명: 판매 카테고리별 매출 추이 페이지 추가 예정',
-          },
-          { id: 2, title: '상품별 판매 트렌드', path: '설명: 상품별 판매 트렌드 페이지 추가 예정' },
-          {
-            id: 3,
-            title: '주문 유형별 트렌드',
-            path: '설명: 주문 유형별 트렌드 페이지 추가 예정',
-          },
-          {
-            id: 4,
-            title: '고객 세그먼트별 구매 패턴',
-            path: '설명: 고객 세그먼트별 구매 패턴 페이지 추가 예정',
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   id: 11,
+  //   title: '트렌드 분석',
+  //   items: [
+  //     {
+  //       id: 1,
+  //       title: '판매 카테고리별 매출 추이',
+  //       path: '설명: 판매 카테고리별 매출 추이 페이지 추가 예정',
+  //     },
+  //     { id: 2, title: '상품별 판매 트렌드', path: '설명: 상품별 판매 트렌드 페이지 추가 예정' },
+  //     {
+  //       id: 3,
+  //       title: '주문 유형별 트렌드',
+  //       path: '설명: 주문 유형별 트렌드 페이지 추가 예정',
+  //     },
+  //     {
+  //       id: 4,
+  //       title: '고객 세그먼트별 구매 패턴',
+  //       path: '설명: 고객 세그먼트별 구매 패턴 페이지 추가 예정',
+  //     },
+  //   ],
+  // },
   {
     id: 12,
     title: '주문 관리',
-    subMenus: [
-      {
-        id: 1,
-        title: '주문 관리',
-        items: [
-          { id: 1, title: '주문 현황', path: '설명: 주문 현황 페이지 추가 예정' },
-          { id: 2, title: '주문 분석', path: '설명: 주문 분석 페이지 추가 예정' },
-          { id: 3, title: '상품별 환불 통계', path: '설명: 상품별 환불 통계 페이지 추가 예정' },
-        ],
-      },
+    items: [
+      { id: 1, title: '주문 현황', path: '설명: 주문 현황 페이지 추가 예정' },
+      { id: 2, title: '주문 분석', path: '설명: 주문 분석 페이지 추가 예정' },
+      { id: 3, title: '상품별 환불 통계', path: '설명: 상품별 환불 통계 페이지 추가 예정' },
     ],
   },
   {
     id: 13,
     title: '고객 관리',
-    subMenus: [
-      {
-        id: 1,
-        title: '고객 관리',
-        items: [
-          { id: 1, title: '재구매율 분석', path: '설명: 재구매율 분석 페이지 추가 예정' },
-          { id: 2, title: '유저 통계', path: '설명: 유저 통계 페이지 추가 예정' },
-        ],
-      },
+    items: [
+      { id: 1, title: '재구매율 분석', path: '설명: 재구매율 분석 페이지 추가 예정' },
+      { id: 2, title: '유저 통계', path: '설명: 유저 통계 페이지 추가 예정' },
     ],
   },
 ]
 
 const SidebarItem = ({ item, isOpen, onToggle, onItemClick }) => {
+  const hasSubMenus = item.subMenus && item.subMenus.length > 0
+  const hasItems = item.items && item.items.length > 0
+
   return (
     <div className='w-64 -ml-2'>
+      {/* 메뉴 클릭 이벤트 */}
       <div
         onClick={() => (item.path ? onItemClick(item.path) : onToggle(item.id))}
-        className={`flex items-center justify-between p-3 cursor-pointer font-semibold text-gray-800 border-b border-gray-200 hover:bg-blue-50 transition-all duration-200`}
+        className={`flex items-center justify-between p-3 cursor-pointer font-semibold text-[#5C4033] border-b border-[#D2B48C] hover:bg-[#FFF6E6] transition-all duration-200`}
       >
         <span>{item.title}</span>
-        {item.subMenus && (
+        {(hasSubMenus || hasItems) && (
           <ChevronDownIcon
             strokeWidth={2.5}
             className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           />
         )}
       </div>
-      {isOpen && item.subMenus && (
+
+      {/* 하위 메뉴 표시 */}
+      {isOpen && (hasSubMenus || hasItems) && (
         <div className='pl-5 border-l border-gray-300'>
-          {item.subMenus.map((sub) => (
+          {/* subMenus가 있는 경우 */}
+          {item.subMenus?.map((sub) => (
             <div key={sub.id}>
-              <div className='p-2 text-sm text-gray-700 font-medium'>{sub.title}</div>
+              <div className='p-2 text-sm font-semibold text-[#5C4033]'>{sub.title}</div>
               <div className='pl-3'>
                 {sub.items.map((menu) => (
                   <div
                     key={menu.id}
                     onClick={() => onItemClick(menu.path)}
-                    className='cursor-pointer p-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded'
+                    className='cursor-pointer p-2 text-sm text-gray-600 hover:text-[#5C4033] transition-colors duration-200'
                   >
                     {menu.title}
                   </div>
                 ))}
               </div>
+            </div>
+          ))}
+
+          {/* items만 있는 경우 */}
+          {item.items?.map((menu) => (
+            <div
+              key={menu.id}
+              onClick={() => onItemClick(menu.path)}
+              className='cursor-pointer p-2 text-sm text-gray-600 hover:text-[#5C4033] transition-colors duration-200'
+            >
+              {menu.title}
             </div>
           ))}
         </div>
@@ -284,14 +274,14 @@ const AdminSideBar = () => {
   if (!isAuthenticated) return null
 
   return (
-    <div className='fixed top-0 left-0 h-full w-64 bg-white shadow-md p-2.5 overflow-y-auto'>
+    <div className='fixed top-0 left-0 h-full w-64 bg-white p-2.5 overflow-y-auto scrollbar-hide border-r border-[#D2B48C]'>
       <div className='mb-6'>
-        <h1
-          className='text-2xl font-bold text-blue-700 cursor-pointer'
+        <img
+          src='/bobissueLogo2.png'
+          alt='logo'
+          className='h-12 w-auto cursor-pointer'
           onClick={() => navigate('/admin')}
-        >
-          Admin Panel
-        </h1>
+        />
       </div>
 
       {menuData.map((item) => (

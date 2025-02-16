@@ -16,7 +16,7 @@ const MyPageRecipeCreateModalCategory = ({
       <div className='flex-none w-[150px] h-[100px] overflow-y-auto flex flex-col gap-2 p-2 border-e border-gray-300'>
         {categories.map((v, i) => (
           <button
-            className={`${v.categoryNo === parentNo && 'text-indigo-600'} text-left`}
+            className={`${v.categoryNo === parentNo && 'text-[#6F4E37]'} text-left`}
             key={v.categoryNo}
             onClick={() => handleParent(i)}
           >
@@ -26,13 +26,13 @@ const MyPageRecipeCreateModalCategory = ({
       </div>
       {/* 하위 카테고리 */}
       <div className='grow w-[150px] grid grid-cols-3'>
-        <button className={`${!items.parentNo && 'text-indigo-600'}`} onClick={handleAll}>
+        <button className={`${!items.parentNo && 'text-[#6F4E37]'}`} onClick={handleAll}>
           전체보기
         </button>
         {children.map((v) => (
           <button
             key={v.categoryNo}
-            className={`${selectedCategory === v.categoryNo && 'text-indigo-600'}`}
+            className={`${selectedCategory === v.categoryNo && 'text-[#6F4E37]'}`}
             onClick={() => setSelectedCategory(v.categoryNo)}
           >
             {v.name}

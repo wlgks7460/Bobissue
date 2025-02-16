@@ -4,13 +4,18 @@ import com.c108.springproject.admin.dto.AdminResDto;
 import com.c108.springproject.admin.dto.CompanyUpdateAdminReqDto;
 import com.c108.springproject.admin.dto.SellerApprovalListDto;
 import com.c108.springproject.admin.dto.querydsl.CompanyStatisticsDto;
+import com.c108.springproject.admin.dto.querydsl.SellerStatisticsDto;
 import com.c108.springproject.admin.dto.querydsl.UserStatisticsDto;
 import com.c108.springproject.admin.repository.AdminQueryRepository;
 import com.c108.springproject.admin.repository.AdminRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.querydsl.dto.DemographicStatsDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
+import com.c108.springproject.seller.dto.querydsl.CategorySalesDto;
+import com.c108.springproject.seller.dto.querydsl.HourlySalesDto;
+import com.c108.springproject.seller.dto.querydsl.MonthlySalesComparisonDto;
 import com.c108.springproject.seller.dto.response.CompanyListResDto;
 import com.c108.springproject.seller.dto.response.CompanyResDto;
 import com.c108.springproject.seller.dto.response.SellerResDto;
@@ -180,13 +185,52 @@ public class AdminService {
         return adminQueryRepository.getTotalSales();
     }
 
+    // 유저 전체 통계
+    @Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public UserStatisticsDto getUserStatistics() {
         return adminQueryRepository.getUserStatistics();
     }
+
+    // 회사 전체 통계
+    @Transactional
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public CompanyStatisticsDto getCompanyStatistics() {
         return adminQueryRepository.getCompanyStatistics();
     }
 
+    // 판매자 전체 통계
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public SellerStatisticsDto getSellerStatistics() {
+        return adminQueryRepository.getSellerStatistics();
+    }
+
+    // 전월 대비 실적
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public MonthlySalesComparisonDto getTotalMonthlySalesComparison() {
+        return adminQueryRepository.getTotalMonthlySalesComparison();
+    }
+
+    // 카테고리 판매 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public List<CategorySalesDto> getTotalCategorySalesStatistics() {
+        return adminQueryRepository.getTotalCategorySalesStatistics();
+    }
+
+    // 시간대별 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public List<HourlySalesDto> getTotalHourlySalesStatistics() {
+        return adminQueryRepository.getTotalHourlySalesStatistics();
+    }
+
+    // 나이 연령 상품 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public DemographicStatsDto getTotalDemographicStats() {
+        return adminQueryRepository.getTotalDemographicStats();
+    }
 }

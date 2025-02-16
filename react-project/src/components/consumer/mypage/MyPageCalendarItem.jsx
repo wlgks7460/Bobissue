@@ -41,36 +41,38 @@ const MyPageCalendarItem = ({ label, date, events, tdee }) => {
   }, [])
 
   return (
-    <div className='p-1 flex flex-col'>
-      <div className='w-full flex justify-between'>
-        <button
-          className={`text-center ${dayOfWeek === 'Sat' && 'text-blue-500'} ${dayOfWeek === 'Sun' && 'text-red-500'}`}
-        >
-          {label}
-        </button>
-        {todayCal > tdee && <img src={sirenIcon} alt='사이렌 아이콘' className='w-[20px]' />}
+    <div className='h-full cursor-pointer'>
+      <div className='p-1  flex flex-col '>
+        <div className='w-full flex justify-between'>
+          <button
+            className={`text-center ${dayOfWeek === 'Sat' && todayCal !== null && 'text-blue-500'} ${dayOfWeek === 'Sun' && todayCal !== null && 'text-red-500'}`}
+          >
+            {label}
+          </button>
+          {todayCal > tdee && <img src={sirenIcon} alt='사이렌 아이콘' className='w-[20px]' />}
+        </div>
+        {/* 칼로리 값이 있을 때만 출력 */}
+        {todayCal !== null && (
+          <div className='flex justify-end gap-2'>
+            <span className='text-xs text-gray-500'>{addComma(todayCal)} kcal</span>
+          </div>
+        )}
+        {defaultData && (
+          <div className='mt-2 flex items-end gap-2'>
+            <img
+              src={defaultData.images[0]?.imageUrl || calendarDefaultImg}
+              alt=''
+              className='w-[35px] h-[35px] rounded'
+              onError={(e) => {
+                e.target.src = calendarDefaultImg
+              }}
+            />
+            {dateData.length - 1 > 0 && (
+              <span className='text-gray-400 text-sm'>+{dateData.length - 1}</span>
+            )}
+          </div>
+        )}
       </div>
-      {/* 칼로리 값이 있을 때만 출력 */}
-      {todayCal !== null && (
-        <div className='flex justify-end gap-2'>
-          <span className='text-xs text-gray-500'>{addComma(todayCal)} kcal</span>
-        </div>
-      )}
-      {defaultData && (
-        <div className='mt-2 flex items-end gap-2'>
-          <img
-            src={defaultData.images[0]?.imageUrl || calendarDefaultImg}
-            alt=''
-            className='w-[35px] h-[35px] rounded'
-            onError={(e) => {
-              e.target.src = calendarDefaultImg
-            }}
-          />
-          {dateData.length - 1 > 0 && (
-            <span className='text-gray-400 text-lg'>+{dateData.length - 1}</span>
-          )}
-        </div>
-      )}
     </div>
   )
 }

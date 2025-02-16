@@ -21,11 +21,11 @@ const ProductDate = ({ product, setProduct }) => {
   }
 
   return (
-    <div className='mt-5'>
-      <h2 className='text-[16px] font-bold mb-2'>판매 종료일</h2>
+    <div className="w-full mx-auto p-6 border border-gray-300 rounded-lg bg-white shadow-md">
+      <h2 className="text-lg font-bold text-gray-900 mb-2">📆 판매 종료일</h2>
       <input
-        className='w-[200px]  border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all'
-        type='date'
+        className="w-full sm:w-[250px] p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all"
+        type="date"
         value={formatDate(product.expiredAt)} // 날짜 변환 후 표시
         min={getTodayDate()} // 📌 오늘 날짜 이전 선택 불가
         onChange={(e) => setProduct((prev) => ({ ...prev, expiredAt: e.target.value }))} // 상태 업데이트

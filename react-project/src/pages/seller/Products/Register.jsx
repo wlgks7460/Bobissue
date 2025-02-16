@@ -9,7 +9,7 @@ import ProductDate from './Form/Product/ProductDate'
 const Register = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const debug_mode = localStorage.getItem('debug_mode') === 'true' // ✅ 디버그 모드 추가
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
   const [product, setProduct] = useState({
     name: '',
@@ -118,23 +118,27 @@ const Register = () => {
   }
 
   return (
-    <div className='p-6'>
-      <h1 className='font-bold text-[32px] mb-10 text-center'>상품 등록</h1>
-      <form onSubmit={handleSubmit}>
-        <ProductImage
-          product={product}
-          handleRemoveImage={handleRemoveImage}
-          setProduct={setProduct}
-        />
+    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-300">
+      <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-10">상품 등록</h1>
+
+      {/* ✅ 디버그 모드 표시 */}
+      {debug_mode && (
+        <div className="bg-gray-200 text-gray-700 p-3 rounded-md mb-6 text-center">
+          ⚠️ <strong>디버그 모드 활성화됨</strong> - 서버 요청이 실행되지 않습니다.
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <ProductImage product={product} handleRemoveImage={handleRemoveImage} setProduct={setProduct} />
         <ProductInfo product={product} setProduct={setProduct} />
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
 
-        <div className='text-center mt-6'>
+        <div className="text-center mt-8">
           <button
-            type='submit'
-            className={`mt-5 p-3 text-white rounded-[12px] w-full md:w-auto ${
-              loading ? 'bg-amber-600 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600'
+            type="submit"
+            className={`px-6 py-3 text-white font-semibold rounded-lg transition w-full md:w-auto ${
+              loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-800'
             }`}
             disabled={loading}
           >

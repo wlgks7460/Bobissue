@@ -108,11 +108,11 @@ const MyPageCalendar = () => {
 
     return (
       <div className='flex justify-between p-3'>
-        <button onClick={goToBack} className='text-indigo-600'>
+        <button onClick={goToBack} className='text-[#6F4E37]'>
           이전
         </button>
         <span className='text-lg font-bold'>{formattedDate}</span>
-        <button onClick={goToNext} className='text-indigo-600'>
+        <button onClick={goToNext} className='text-[#6F4E37]'>
           다음
         </button>
       </div>
