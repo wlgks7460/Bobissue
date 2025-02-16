@@ -15,50 +15,225 @@ const ChatRoom = ({ sessionId }) => {
 
   useEffect(() => {
     // 📌 OpenVidu 세션 연결 (시청자)
+    // const connectToSession = async () => {
+    //   // try {
+    //     console.log(`🔍 OpenVidu 연결 시도: 세션 ID = mySession1`)
+
+        
+    //       // ✅ Connection 생성 요청 (토큰 발급)
+    //       const tokenRes = await fetch(
+    //         `https://bobissue.store/api/openvidu/sessions/${sessionId}/token`,
+    //         {
+    //           method: 'POST',
+    //           headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+    //           },
+    //           body: JSON.stringify({}),
+    //         }
+    //   );
+      
+    //   if (!tokenRes.ok) {
+    //     throw new Error(`❌ 서버 응답 오류: ${tokenRes.status}`);
+    //   }
+
+    //   const { token } = await tokenRes.json();
+
+    //       // OpenVidu 클라이언트 연결
+    //       const OV = new OpenVidu();
+    //       const newSession = OV.initSession();
+
+    //       newSession.on('streamCreated', (event) => {
+    //         const subscriber = newSession.subscribe(event.stream, videoRef.current);
+    //         console.log('📺 새로운 스트림 구독:', subscriber);
+    //       });
+
+    //       await newSession.connect(token)
+
+    //   //   // ✅ 응답이 정상적인지 확인
+    //   //   if (!tokenRes.ok) {
+    //   //     throw new Error(`❌ 서버 응답 오류: ${tokenRes.status} ${tokenRes.statusText}`)
+    //   //   }
+
+    //   //   // ✅ JSON 파싱
+    //   //   const tokenData = await tokenRes.json()
+    //   //   console.log('✅ 시청자 토큰 발급 성공:', tokenData.token)
+
+    //   //   // ✅ OpenVidu 초기화
+    //   //   const OV = new OpenVidu()
+    //   //   const session = OV.initSession()
+    //   //   sessionRef.current = session
+
+    //   //   session.on('streamCreated', (event) => {
+    //   //     const subscriber = session.subscribe(event.stream, videoRef.current)
+    //   //     console.log('📺 새로운 스트림 구독:', subscriber)
+    //   //   })
+
+    //   //   await session.connect(tokenData.token)
+    //   //   console.log('🎥 시청자 OpenVidu 연결 성공')
+    //   // } catch (error) {
+    //   //   console.error('❌ 시청자 OpenVidu 연결 실패:', error)
+    //   // }
+
+    //   // console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`)
+      
+    // }
+
+    // const connectToSession = async () => {
+    //   try {
+    //     console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
+        
+    //     // 토큰 발급 요청
+    //     const tokenRes = await fetch(`https://bobissue.store/api/openvidu/sessions/mySession3/token`, {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+    //       },
+    //       body: JSON.stringify({}),
+    //     });
+        
+    //     if (!tokenRes.ok) {
+    //       throw new Error(`❌ 서버 응답 오류: ${tokenRes.status}`);
+    //     }
+
+    //     const { token } = await tokenRes.json();
+
+
+    //     // 토큰 값 로그 출력
+    //     console.log("✅ 서버에서 받은 토큰:", token);
+        
+    //     // OpenVidu 세션 초기화 및 연결
+    //     const OV = new OpenVidu();
+    //     const session = OV.initSession();
+    //     sessionRef.current = session;
+
+    //     session.on('streamCreated', (event) => {
+    //       session.subscribe(event.stream, videoRef.current);
+    //       console.log('📺 새로운 스트림 구독');
+    //     });
+
+    //     await session.connect(token);
+    //     console.log('🎥 OpenVidu 연결 성공');
+    //   } catch (error) {
+    //     console.error('❌ OpenVidu 연결 실패:', error);
+    //   }
+    // };
+
     const connectToSession = async () => {
       // try {
-      //   console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`)
+      //   console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
+    
+      //   // // 토큰 발급 요청
+      //   // const tokenRes = await fetch(`https://bobissue.store/api/openvidu/sessions/mySession3/token`, {
+      //   //   method: 'POST',
+      //   //   headers: {
+      //   //     'Content-Type': 'application/json',
+      //   //     Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+      //   //   },
+      //   //   body: JSON.stringify({}),
+      //   // });
+    
+      //   // if (!tokenRes.ok) {
+      //   //   throw new Error(`❌ 서버 응답 오류: ${tokenRes.status}`);
+      //   // }
+    
+      //   // const { token } = await tokenRes.json();
 
-      //   // ✅ Connection 토큰 요청
-      //   const tokenRes = await fetch(
-      //     `https://43.202.60.173/openvidu/api/sessions/${sessionId}/connection`,
-      //     {
-      //       method: 'POST',
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //         Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
-      //       },
-      //       body: JSON.stringify({}),
-      //     },
-      //   )
-
-      //   // ✅ 응답이 정상적인지 확인
-      //   if (!tokenRes.ok) {
-      //     throw new Error(`❌ 서버 응답 오류: ${tokenRes.status} ${tokenRes.statusText}`)
-      //   }
-
-      //   // ✅ JSON 파싱
-      //   const tokenData = await tokenRes.json()
-      //   console.log('✅ 시청자 토큰 발급 성공:', tokenData.token)
-
-      //   // ✅ OpenVidu 초기화
-      //   const OV = new OpenVidu()
-      //   const session = OV.initSession()
-      //   sessionRef.current = session
-
+      //   const tokenRes = await API.post('https://bobissue.store/api/openvidu/sessions/mySession4/token');
+      //   console.log("✅ 서버11에서 받은 토큰:", tokenRes);
+      //   // const tokenData = await tokenRes.json();
+      //   const token = tokenRes.token;  // 발급된 토큰을 사용
+      //   // 토큰 값 로그 출력
+      //   console.log("✅ 서버에서 받은 토큰:", token);
+    
+      //   // 토큰 값 로그 출력
+      //   // console.log("✅ 서버에서 받은 토큰:", token);
+    
+      //   // OpenVidu 세션 초기화 및 연결
+      //   const OV = new OpenVidu();
+      //   const session = OV.initSession();
+      //   sessionRef.current = session;
+    
+      //   // 스트림이 생성될 때마다 구독 처리
       //   session.on('streamCreated', (event) => {
-      //     const subscriber = session.subscribe(event.stream, videoRef.current)
-      //     console.log('📺 새로운 스트림 구독:', subscriber)
-      //   })
-
-      //   await session.connect(tokenData.token)
-      //   console.log('🎥 시청자 OpenVidu 연결 성공')
+      //     const subscriber = session.subscribe(event.stream, videoRef.current); // videoRef에 구독된 스트림 연결
+      //     console.log('📺 새로운 스트림 구독:', subscriber);
+      //   });
+    
+      //   // 세션 연결
+      //   await session.connect(token);
+      //   console.log('🎥 OpenVidu 연결 성공');
       // } catch (error) {
-      //   console.error('❌ 시청자 OpenVidu 연결 실패:', error)
+      //   console.error('❌ OpenVidu 연결 실패:', error);
       // }
 
-      console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`)
-    }
+      try {
+        // console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
+
+        
+        
+        // 토큰 발급 요청
+        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+          },
+          body: JSON.stringify({}),
+        });
+        
+        if (!tokenRes.ok) {
+          throw new Error(`❌ 서버 응답 오류: ${tokenRes.status}`);
+        }
+
+        // 서버 응답을 JSON 형식으로 처리
+const responseJson = await tokenRes.json();
+console.log('🔍 서버 응답:', responseJson);  // 응답 확인
+
+// 응답에서 token을 추출하고, 실제 token 값만 사용
+const tokenUrl = responseJson.token;  // token 필드에 WebSocket URL이 들어있음
+const token = new URL(tokenUrl).searchParams.get('token');  // URL에서 token 파라미터 추출
+
+        // 토큰 값 확인
+        console.log("🔑 받은 토큰123444:", tokenRes);
+        console.log("🔑 받은 토큰:", token);
+
+        // WebSocket URL 설정
+const sessionId = 'mySession7';  // 사용하려는 세션 ID
+const wsUrl = `wss://bobissue.store:8443/openvidu?sessionId=${sessionId}&token=${token}`;
+console.log("🔍 WebSocket URL:", wsUrl);
+
+
+        // OpenVidu 세션 초기화 및 연결
+        const OV = new OpenVidu();
+        const session = OV.initSession();
+        sessionRef.current = session;
+
+        // if (session && session.connection && session.connection.open) {
+        //   console.log('세션이 이미 연결되어 있습니다.');
+        //   return;
+        // }
+
+        // // 스트림이 생성될 때마다 구독 처리
+        // session.on('streamCreated', (event) => {
+        //   const subscriber = session.subscribe(event.stream, videoRef.current); // videoRef에 구독된 스트림 연결
+        //   console.log('📺 새로운 스트림 구독:', subscriber);
+        // });
+
+// 세션 연결
+session.connect(wsUrl)
+  .then(() => {
+    console.log('🎥 OpenVidu 연결 성공');
+  })
+  .catch((error) => {
+    console.error('🎥 OpenVidu 연결 실패:', error);
+  });
+
+      } catch (error) {
+        console.error('❌ OpenVidu 연결 실패:', error);
+      }
+    };
 
     // 📌 WebSocket (채팅) 연결
     const socket = new SockJS('https://www.bobissue.store/ws/chat') // ✅ WebSocket 엔드포인트
