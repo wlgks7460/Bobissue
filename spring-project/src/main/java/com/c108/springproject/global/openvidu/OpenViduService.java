@@ -1,19 +1,10 @@
 package com.c108.springproject.global.openvidu;
 
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,19 +29,19 @@ public class OpenViduService {
         return headers;
     }
 
-    // 1️⃣ OpenVidu 세션 생성
     public String createSession() {
         HttpHeaders headers = createHeaders();
-        Map<String, Object> body = Collections.singletonMap("customSessionId", "my-session");
+        Map<String, Object> body = Collections.singletonMap("customSessionId", "mySession");  // 원하는 세션 ID 설정
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-        System.out.println("132134124");
+
         try {
             ResponseEntity<String> response = restTemplate.exchange(
                     OPENVIDU_URL + "/sessions", HttpMethod.POST, request, String.class);
-            System.out.println("세션 번호: " + response.getBody());
+
+            System.out.println("✅ 세션 생성 성공! 응답: " + response.getBody());
             return response.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            System.out.println("오류 발생: " + e.getResponseBodyAsString());
+            System.out.println("❌ 오류 발생: " + e.getResponseBodyAsString());
             return null;
         } catch (Exception e) {
             e.printStackTrace();
