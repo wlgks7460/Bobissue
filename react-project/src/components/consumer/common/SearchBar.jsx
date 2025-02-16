@@ -39,7 +39,7 @@ const SearchBar = () => {
       })
   }, [])
   return (
-    <div className='w-full border flex justify-center sticky z-10 -top-1 bg-[#F8F0E5] border-y-[#6F4E37]'>
+    <div className='w-full border flex justify-center sticky z-20 -top-1 bg-[#F8F0E5] border-y-[#6F4E37]'>
       <div className='w-[70rem] flex justify-between items-center gap-3'>
         <div
           className='w-[150px] h-16 flex-none flex items-center gap-2 relative box-border'
