@@ -25,7 +25,7 @@ public class OpenViduController {
 
     // 2️⃣ OpenVidu 토큰 생성 API
     // ✅ 2. 토큰 발급 API
-    @PostMapping("/sessions/{sessionId}/token")
+    @PostMapping("/sessions/{sessionId}/connections")
     public String createToken(@PathVariable String sessionId) {
         String token = openViduService.createToken(sessionId);
 //        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_COUPON, new DefaultResponse<String>(token));

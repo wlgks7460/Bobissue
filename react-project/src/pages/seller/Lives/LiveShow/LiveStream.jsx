@@ -213,15 +213,18 @@ const LiveStreamSetup = () => {
         // const sessionId = sessionData.id;
         // console.log("✅ 세션 ID:", sessionId);
 
-        // 토큰 발급 요청
-        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
-          },
-          body: JSON.stringify({}),
-        });
+        // // 토큰 발급 요청
+        // const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession7/token', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+        //   },
+        //   body: JSON.stringify({}),
+        // });
+        // POST /openvidu/api/sessions/{sessionId}/connection API를 사용하여 토큰 발급
+        const tokenRes = await API.post('https://bobissue.store/api/openvidu/sessions/mySession7/connections');
+
                 
         // 토큰 발급 요청
         // const tokenRes = await API.post(`https://bobissue.store/api/openvidu/sessions/${sessionId}/token`);
