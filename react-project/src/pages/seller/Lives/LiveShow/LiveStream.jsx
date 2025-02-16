@@ -105,61 +105,76 @@ const LiveStreamSetup = () => {
   
         console.log(sessionRes);
         if (sessionRes.status === 200) {
-            const sessionData = sessionRes.data;
-            console.log("✅ 세션 생성 성공:", sessionData);
+          const sessionData = sessionRes.data;
+          console.log("✅ 세션 생성 성공:", sessionData);
             
-            const sessionId = sessionData.id;
-            console.log("✅ 세션 ID:", sessionId);
-    
-            return sessionData;  // 세션 정보 반환
+          const sessionId = sessionData.id;
+          console.log("✅ 세션 ID:", sessionId);
+          
+          // ✅ Connection 생성 요청 (토큰 발급)
+          const tokenRes = await fetch(
+            `https://bobissue.store/api/openvidu/sessions/mySession2/token`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'), // 인증 헤더
+              },
+              body: JSON.stringify({}),
+            }
+          );
+
+          const tokenData = await tokenRes.json();
+          const token = tokenData.token;  // 발급된 토큰을 사용
+
+          // OpenVidu 클라이언트 연결
+          const OV = new OpenVidu();
+          const newSession = OV.initSession();
+
+          newSession.on('streamCreated', (event) => {
+            const subscriber = newSession.subscribe(event.stream, videoRef.current);
+            console.log('📺 새로운 스트림 구독:', subscriber);
+          });
+
+          await newSession.connect(token)
+
+          // const sessionRes = await API.post('http://localhost:8080/api/openvidu/sessions');
+
+
+          // // ✅ Connection 생성 요청 (토큰 발급)
+          // const tokenRes = await fetch(
+          //   `https://bobissue.store/openvidu/api/sessions/${sessionData.id}/connection`,
+          //   {
+          //     method: 'POST',
+          //     headers: {
+          //       'Content-Type': 'application/json',
+          //       Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
+          //     },
+          //     body: JSON.stringify({}),
+          //   },
+          // )
+          // const tokenData = await tokenRes.json()
+          // console.log('✅ Connection 토큰 발급 성공:', tokenData.token)
+
+          // ✅ OpenVidu 클라이언트(WebRTC) 연결
+          // const OV = new OpenVidu()
+          // const newSession = OV.initSession()
+
+          // newSession.on('streamCreated', (event) => {
+          //   const subscriber = newSession.subscribe(event.stream, videoRef.current)
+          //   console.log('📺 새로운 스트림 구독:', subscriber)
+          // })
+
+          // await newSession.connect(tokenData.token)
+          // console.log('🎥 OpenVidu 연결 성공')
+          setSession(newSession)
+
+          setIsStreaming(true)
+          setChatActive(true)
+          console.log('🎥 videoRef:', videoRef.current)
         } else {
-            console.error("❌ 세션 생성 실패:", sessionRes.status);
+          console.error('❌ 세션 생성 실패:', sessionRes.status)
         }
-        // const sessionRes = await API.post('http://localhost:8080/api/openvidu/sessions');
-  
-        // if (sessionRes.status === 200) {
-        //   console.log(sessionRes.data);
-        //   const sessionData = sessionRes.data;
-        //   // 세션 데이터 처리
-        // } else {
-        //   console.error('세션 생성 실패:', sessionRes.status);
-        // }
-        // console.log(sessionRes);
-        // const sessionData = await sessionRes.json();
-        // const sessionId = sessionData.id;
-        // console.log("✅ 세션 생성 성공:", sessionId);
-
-        // ✅ Connection 생성 요청 (토큰 발급)
-        const tokenRes = await fetch(
-          `https://43.202.60.173/openvidu/api/sessions/${sessionData.id}/connection`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Basic ' + btoa('OPENVIDUAPP:C108bob'),
-            },
-            body: JSON.stringify({}),
-          },
-        )
-        const tokenData = await tokenRes.json()
-        console.log('✅ Connection 토큰 발급 성공:', tokenData.token)
-
-        // ✅ OpenVidu 클라이언트(WebRTC) 연결
-        const OV = new OpenVidu()
-        const newSession = OV.initSession()
-
-        newSession.on('streamCreated', (event) => {
-          const subscriber = newSession.subscribe(event.stream, videoRef.current)
-          console.log('📺 새로운 스트림 구독:', subscriber)
-        })
-
-        await newSession.connect(tokenData.token)
-        console.log('🎥 OpenVidu 연결 성공')
-        setSession(newSession)
-
-        setIsStreaming(true)
-        setChatActive(true)
-        console.log('🎥 videoRef:', videoRef.current)
       } catch (error) {
         console.error('❌ OpenVidu 연결 실패:', error)
       }
