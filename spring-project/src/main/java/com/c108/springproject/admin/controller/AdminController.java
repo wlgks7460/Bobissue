@@ -148,5 +148,14 @@ public class AdminController {
                 new DefaultResponse<>(adminService.getTotalHourlySalesStatistics()));
     }
 
+    @GetMapping("/statistics/demographic")
+    public ResponseDto getTotalDemographicStats() {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_GET_DEMOGRAPHIC_STATS,
+                new DefaultResponse<>(adminService.getTotalDemographicStats())
+        );
+    }
+
 
 }

@@ -11,12 +11,18 @@ const SearchBarCategory = ({ category }) => {
       onMouseOver={() => setShowChildren(true)}
       onMouseOut={() => setShowChildren(false)}
     >
-      <Link to={`/category/${category.categoryNo}`}>{category.name}</Link>
+      <Link to={`/category/${category.categoryNo}`} className='hover:text-[#6F4E37]'>
+        {category.name}
+      </Link>
       {showChildren && (
-        <div className='absolute top-0 left-full w-[200px] h-[400px] p-3 border-x border-b border-gray-400  bg-[#F8F0E5] rounded-b'>
+        <div className='absolute top-0 left-full w-[200px] h-[400px] p-3 border-x border-b border-[#6F4E37]  bg-[#F8F0E5] rounded-b'>
           <div className='flex flex-col gap-3'>
             {category.children.map((v) => (
-              <Link to={`/category/${category.categoryNo}/${v.categoryNo}`} key={v.categoryNo}>
+              <Link
+                to={`/category/${category.categoryNo}/${v.categoryNo}`}
+                key={v.categoryNo}
+                className='hover:text-[#6F4E37]'
+              >
                 {v.name}
               </Link>
             ))}

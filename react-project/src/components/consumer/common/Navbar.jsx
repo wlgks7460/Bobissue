@@ -36,13 +36,21 @@ const Navbar = () => {
         {/* 로그인 상태에 따라 변화 */}
         {isAuthenticated && loginStatus === 'consumer' ? (
           <div className='flex items-center gap-3'>
-            <Link to={'/mypage/order'}>마이페이지</Link>
-            <button onClick={logout}>로그아웃</button>
+            <Link to={'/mypage/order'} className='hover:text-[#6F4E37]'>
+              마이페이지
+            </Link>
+            <button className='hover:text-[#6F4E37]' onClick={logout}>
+              로그아웃
+            </button>
           </div>
         ) : (
           <div className='flex items-center gap-3'>
-            <Link to='/login'>로그인</Link>
-            <Link to='/signup'>회원가입</Link>
+            <Link to='/login' className='hover:text-[#6F4E37]'>
+              로그인
+            </Link>
+            <Link to='/signup' className='hover:text-[#6F4E37]'>
+              회원가입
+            </Link>
           </div>
         )}
       </div>

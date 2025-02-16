@@ -119,7 +119,7 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
                 <span>{addComma(item.salePrice * itemCount)}원</span>
               </div>
               <button
-                className='w-full h-[50px] rounded bg-indigo-400 hover:bg-indigo-600 text-white'
+                className='w-full h-[50px] rounded bg-[#A67B5B] hover:bg-[#6F4E37] text-white'
                 onClick={itemOnCart}
               >
                 장바구니 담기

@@ -11,7 +11,6 @@ const MyPageRecipeItem = ({ recipe, getRecipeData }) => {
     e.preventDefault()
     API.delete(`/recipe/${recipe.recipeNo}`)
       .then((res) => {
-        console.log(res)
         getRecipeData()
       })
       .catch((err) => {
@@ -23,7 +22,7 @@ const MyPageRecipeItem = ({ recipe, getRecipeData }) => {
       <img src={imgSrc} alt='' className='w-[200px] h-[200px] rounded mb-2' />
       <span className='w-[200px] text-lg text-center mb-2 turncate'>{recipe.name}</span>
       <div className='flex justify-center gap-4'>
-        <Link to={`/mypage/recipe/update/${recipe.recipeNo}`} className='text-indigo-600'>
+        <Link to={`/mypage/recipe/update/${recipe.recipeNo}`} className='text-[#6F4E37]'>
           수정
         </Link>
         <button className='text-red-600' onClick={deleteRecipe}>

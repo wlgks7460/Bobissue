@@ -109,7 +109,7 @@ const MyPageOrder = () => {
         {filteres.map((v) => (
           <button
             key={v.filterNo}
-            className={`w-[100px] text-center ${filter === v.value ? 'bg-indigo-600 text-white' : 'bg-gray-300'} m-3 p-1 rounded-full`}
+            className={`w-[100px] text-center ${filter === v.value ? 'bg-[#6F4E37] text-white' : 'bg-gray-300'} m-3 p-1 rounded-full`}
             onClick={() => handleFilter(v.value)}
           >
             {v.value}

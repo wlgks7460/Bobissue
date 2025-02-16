@@ -31,7 +31,7 @@ const MyPageRecipe = () => {
     <div className='p-5'>
       <h2 className='text-center text-xl'>내 레시피</h2>
       <div className='flex justify-end px-3 my-2'>
-        <Link to={'/mypage/recipe/create'} className='text-right hover:text-indigo-600'>
+        <Link to={'/mypage/recipe/create'} className='text-right hover:text-[#6F4E37]'>
           작성하기
         </Link>
       </div>
