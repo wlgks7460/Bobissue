@@ -58,7 +58,8 @@ public class OpenViduService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                OPENVIDU_URL + "/tokens", HttpMethod.POST, request, String.class);
+                OPENVIDU_URL + "/sessions/" + sessionId + "/connections", HttpMethod.POST, request, String.class);
+
         // 토큰 값을 로그로 출력하여 확인
         String token = response.getBody();
         System.out.println("✅ 생성된 OpenVidu 토큰: " + token);
