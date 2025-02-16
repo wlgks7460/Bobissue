@@ -1,7 +1,10 @@
 package com.c108.springproject.admin.repository;
 
 import com.c108.springproject.admin.dto.querydsl.*;
+import com.c108.springproject.global.BobIssueException;
+import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.querydsl.Querydsl4RepositorySupport;
+import com.c108.springproject.global.querydsl.dto.*;
 import com.c108.springproject.item.domain.QItem;
 import com.c108.springproject.item.domain.QItemCategory;
 import com.c108.springproject.order.domain.Order;
@@ -15,13 +18,16 @@ import com.c108.springproject.seller.dto.querydsl.MonthlySalesComparisonDto;
 import com.c108.springproject.user.domain.QUser;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.JPAExpressions;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -373,6 +379,188 @@ public class AdminQueryRepository  extends Querydsl4RepositorySupport {
         return hourlyStats;
     }
 
+    // 성별/연령 통계
+    public DemographicStatsDto getTotalDemographicStats() {
+        try {
+            // 연령대 그룹핑 표현식 (동일)
+            StringExpression ageGroup = Expressions.stringTemplate(
+                    "CASE " +
+                            "WHEN (2025 - CAST(SUBSTRING({0}, 1, 4) AS INTEGER)) <= 19 THEN '20대 미만' " +
+                            "WHEN (2025 - CAST(SUBSTRING({0}, 1, 4) AS INTEGER)) <= 29 THEN '20대' " +
+                            "WHEN (2025 - CAST(SUBSTRING({0}, 1, 4) AS INTEGER)) <= 39 THEN '30대' " +
+                            "WHEN (2025 - CAST(SUBSTRING({0}, 1, 4) AS INTEGER)) <= 49 THEN '40대' " +
+                            "ELSE '50대 이상' END",
+                    user.birthday
+            );
+
+            try {
+                // 연령대별 통계
+                Map<String, AgeGroupStatsDto> ageStats = getQueryFactory()
+                        .select(Projections.fields(AgeGroupStatsDto.class,
+                                ageGroup.as("ageGroup"),
+                                order.count().longValue().as("totalOrders"),
+                                orderDetail.price.multiply(orderDetail.count).sum().longValue().as("totalRevenue"),
+                                orderDetail.price.multiply(orderDetail.count).avg().doubleValue().as("averageOrderAmount")
+                        ))
+                        .from(orderDetail)
+                        .join(order).on(orderDetail.order.eq(order))
+                        .join(order.user, user)
+                        .join(orderDetail.item, item)
+                        .where(order.delYn.eq("N"))  // companyNo 조건 제거
+                        .groupBy(ageGroup)
+                        .fetch()
+                        .stream()
+                        .collect(Collectors.toMap(
+                                AgeGroupStatsDto::getAgeGroup,
+                                stats -> stats
+                        ));
+
+                // 연령대별 선호 카테고리 추가
+                for (String age : ageStats.keySet()) {
+                    List<CategoryPreferenceDto> topCategories = getQueryFactory()
+                            .select(Projections.fields(CategoryPreferenceDto.class,
+                                    itemCategory.categoryNo.as("categoryNo"),
+                                    itemCategory.name.as("categoryName"),
+                                    order.count().longValue().as("orderCount"),
+                                    orderDetail.price.multiply(orderDetail.count).sum().longValue().as("totalRevenue")
+                            ))
+                            .from(orderDetail)
+                            .join(order).on(orderDetail.order.eq(order))
+                            .join(order.user, user)
+                            .join(orderDetail.item, item)
+                            .join(item.category, itemCategory)
+                            .where(
+                                    order.delYn.eq("N"),
+                                    ageGroup.eq(age)
+                            )
+                            .groupBy(itemCategory.categoryNo, itemCategory.name)
+                            .orderBy(order.count().desc())
+                            .limit(5)
+                            .fetch();
+
+                    ageStats.get(age).setTopCategories(topCategories);
+                }
+
+                // 성별 통계
+                Map<String, GenderStatsDto> genderStats = getQueryFactory()
+                        .select(Projections.fields(GenderStatsDto.class,
+                                user.gender.as("gender"),
+                                order.count().longValue().as("totalOrders"),
+                                orderDetail.price.multiply(orderDetail.count).sum().longValue().as("totalRevenue"),
+                                orderDetail.price.multiply(orderDetail.count).avg().doubleValue().as("averageOrderAmount")
+                        ))
+                        .from(orderDetail)
+                        .join(order).on(orderDetail.order.eq(order))
+                        .join(order.user, user)
+                        .join(orderDetail.item, item)
+                        .where(order.delYn.eq("N"))  // companyNo 조건 제거
+                        .groupBy(user.gender)
+                        .fetch()
+                        .stream()
+                        .collect(Collectors.toMap(
+                                GenderStatsDto::getGender,
+                                stats -> stats
+                        ));
+
+                // 성별 선호 카테고리 추가
+                for (String gender : genderStats.keySet()) {
+                    List<CategoryPreferenceDto> topCategories = getQueryFactory()
+                            .select(Projections.fields(CategoryPreferenceDto.class,
+                                    itemCategory.categoryNo.as("categoryNo"),
+                                    itemCategory.name.as("categoryName"),
+                                    order.count().longValue().as("orderCount"),
+                                    orderDetail.price.multiply(orderDetail.count).sum().longValue().as("totalRevenue")
+                            ))
+                            .from(orderDetail)
+                            .join(order).on(orderDetail.order.eq(order))
+                            .join(order.user, user)
+                            .join(orderDetail.item, item)
+                            .join(item.category, itemCategory)
+                            .where(
+                                    order.delYn.eq("N"),
+                                    user.gender.eq(gender)
+                            )
+                            .groupBy(itemCategory.categoryNo, itemCategory.name)
+                            .orderBy(order.count().desc())
+                            .limit(5)
+                            .fetch();
+
+                    genderStats.get(gender).setTopCategories(topCategories);
+                }
+
+                // 연령대 + 성별 조합 통계
+                Map<String, Map<String, CombinedStatsDto>> combinedStats = new HashMap<>();
+
+                List<Tuple> combinedResults = getQueryFactory()
+                        .select(
+                                ageGroup,
+                                user.gender,
+                                order.count().longValue(),
+                                orderDetail.price.multiply(orderDetail.count).sum().longValue(),
+                                orderDetail.price.multiply(orderDetail.count).avg().doubleValue()
+                        )
+                        .from(orderDetail)
+                        .join(order).on(orderDetail.order.eq(order))
+                        .join(order.user, user)
+                        .join(orderDetail.item, item)
+                        .where(order.delYn.eq("N"))  // companyNo 조건 제거
+                        .groupBy(ageGroup, user.gender)
+                        .fetch();
+
+                for (Tuple result : combinedResults) {
+                    String age = result.get(ageGroup);
+                    String gender = result.get(user.gender);
+
+                    CombinedStatsDto stats = CombinedStatsDto.builder()
+                            .totalOrders(result.get(2, Long.class))
+                            .totalRevenue(result.get(3, Long.class))
+                            .averageOrderAmount(result.get(4, Double.class))
+                            .build();
+
+                    // 연령대 + 성별 조합별 선호 카테고리
+                    List<CategoryPreferenceDto> topCategories = getQueryFactory()
+                            .select(Projections.fields(CategoryPreferenceDto.class,
+                                    itemCategory.categoryNo.as("categoryNo"),
+                                    itemCategory.name.as("categoryName"),
+                                    order.count().longValue().as("orderCount"),
+                                    orderDetail.price.multiply(orderDetail.count).sum().longValue().as("totalRevenue")
+                            ))
+                            .from(orderDetail)
+                            .join(order).on(orderDetail.order.eq(order))
+                            .join(order.user, user)
+                            .join(orderDetail.item, item)
+                            .join(item.category, itemCategory)
+                            .where(
+                                    order.delYn.eq("N"),
+                                    ageGroup.eq(age),
+                                    user.gender.eq(gender)
+                            )
+                            .groupBy(itemCategory.categoryNo, itemCategory.name)
+                            .orderBy(order.count().desc())
+                            .limit(5)
+                            .fetch();
+
+                    stats.setTopCategories(topCategories);
+                    combinedStats.computeIfAbsent(age, k -> new HashMap<>()).put(gender, stats);
+                }
+
+                return DemographicStatsDto.builder()
+                        .ageStats(ageStats)
+                        .genderStats(genderStats)
+                        .combinedStats(combinedStats)
+                        .build();
+
+            } catch (Exception e) {
+                System.out.println("Inner Query Error: " + e.getMessage());
+                e.printStackTrace();
+                throw e;
+            }
+        } catch (Exception e) {
+            System.out.println("Outer Error: " + e.getMessage());
+            e.printStackTrace();
+            throw new BobIssueException(ResponseCode.FAILED_GET_DEMOGRAPHIC_STATS);
+        }
+    }
 
 
 }
