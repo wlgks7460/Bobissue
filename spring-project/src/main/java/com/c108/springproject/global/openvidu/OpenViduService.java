@@ -31,7 +31,7 @@ public class OpenViduService {
 
     public String createSession() {
         HttpHeaders headers = createHeaders();
-        Map<String, Object> body = Collections.singletonMap("customSessionId", "mySession");  // 원하는 세션 ID 설정
+        Map<String, Object> body = Collections.singletonMap("customSessionId", "mySession2");  // 원하는 세션 ID 설정
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
@@ -42,7 +42,7 @@ public class OpenViduService {
             return response.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             System.out.println("❌ 오류 발생: " + e.getResponseBodyAsString());
-            return null;
+            return e.getMessage();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
