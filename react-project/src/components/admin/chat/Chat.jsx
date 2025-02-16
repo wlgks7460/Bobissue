@@ -172,7 +172,7 @@ const ChatRoom = ({ sessionId }) => {
         console.log(`🔍 OpenVidu 연결 시도: 세션 ID = ${sessionId}`);
         
         // 토큰 발급 요청
-        const tokenRes = await fetch(`https://bobissue.store/api/openvidu/sessions/mySession5/token`, {
+        const tokenRes = await fetch('https://bobissue.store/api/openvidu/sessions/mySession6/token', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
