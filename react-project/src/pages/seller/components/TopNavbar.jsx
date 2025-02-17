@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt, FaBug, FaHome, FaBars } from 'react-icons/fa' // ✅ 햄버거 아이콘 포함
 
-const TopNavbar = ({ toggleSidebar, user }) => {
+const TopNavbar = ({ toggleSidebar, user,setSelect }) => {
   const navigate = useNavigate()
   const [debugMode, setDebugMode] = useState(false)
 
@@ -39,7 +39,8 @@ const TopNavbar = ({ toggleSidebar, user }) => {
         </button>
 
         {/* 로고 이미지 */}
-        <Link to='/seller'>
+        <Link to='/seller'
+        onClick={()=>setSelect(null)}>
           <img
             src='/bobissueLogo_gray.png'
             alt='로고'
@@ -68,7 +69,7 @@ const TopNavbar = ({ toggleSidebar, user }) => {
           onClick={toggleDebugMode}
           className={`p-3 rounded-lg transition ${
             debugMode
-              ? 'bg-deepCobalt hover:bg-deepCobalt/80 text-white'
+              ? 'bg-rose-500 hover:bg-rose-400 text-white'
               : 'bg-deepCobalt/40 hover:bg-deepCobalt/60 text-white'
           }`}
         >

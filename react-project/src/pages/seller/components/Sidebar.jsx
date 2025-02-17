@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useState}from 'react'
 import { Link } from 'react-router-dom'
 import {
   FaBox,
@@ -12,7 +12,8 @@ import {
   FaBuilding,
 } from 'react-icons/fa'
 
-const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
+const Sidebar = ({ isOpen, toggleMenu, menuState,setSelect ,select}) => {
+  //const [select,setSelect]=useState(null)
   return (
     <aside
       className={`fixed top-0 left-0 w-64 bg-gray-100 border-r border-gray-300 h-full overflow-y-auto shadow-md transition-transform duration-300 transform ${
@@ -106,7 +107,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             {/* 메인 메뉴 버튼 */}
             <button
               onClick={() => toggleMenu(key)}
-              className='w-full flex items-center justify-between px-4 py-3 text-gray-800 font-semibold bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 transition'
+              className='w-full flex items-center justify-between px-4 py-3 text-gray-800 font-semibold  rounded-lg hover:bg-gray-300 transition'
             >
               <span className='flex items-center gap-2'>
                 {icon} {label}
@@ -121,9 +122,18 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
                   <li key={to}>
                     <Link
                       to={to}
-                      className='block py-2 px-3 bg-gray-50 rounded-lg hover:bg-gray-300 transition'
+                      className={`block py-2 px-3 rounded-lg transition 
+                        ${select === text ? "text-rose-600" :"text-sky-800"}`}
+                      onClick={()=>{setSelect(text)
+                        console.log(select);
+                        console.log(text);
+                      }
+                      }
                     >
                       {text}
+                      
+                      
+                      
                     </Link>
                   </li>
                 ))}

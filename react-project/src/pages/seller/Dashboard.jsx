@@ -75,8 +75,8 @@ const Dashboard = () => {
     <div className='w-full mx-auto px-10 py-12 min-h-screen '>
       {/* 헤더 */}
       <header className='text-center mb-12'>
-        <h1 className='text-4xl font-extrabold text-deepCobalt'>상품 관리, 쉽고 간편하게!</h1>
-        <p className='text-lg text-steelBlue mt-3'>
+        <h1 className='text-4xl font-extrabold text-darkChrome'>상품 관리, 쉽고 간편하게!</h1>
+        <p className='text-lg text-deepCobalt mt-3'>
           상품 등록부터 정산까지 한 곳에서 관리하세요.
           <br />
           효율적인 상품 관리 시스템을 경험해보세요.
