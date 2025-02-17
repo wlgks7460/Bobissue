@@ -32,7 +32,7 @@ spring:
       host: 43.202.60.173
       port: 6379
     elasticsearch:
-      uris: https://bobissue.store:9200
+      uris: https://localhost:9200
       username: elastic
       password: cMvp=DUQcyc9NH5E*1h5
       connection-timeout: 5s
