@@ -2,7 +2,7 @@ import React from 'react'
 
 const Guide = () => {
   return (
-    <div className='p-6 bg-white border border-gray-300 rounded-md shadow-md'>
+    <div className='p-6 bg-white border border-gray-300 rounded-md min-h-screen shadow-md'>
       <h2 className='text-xl font-bold mb-4'>라이브 신청 가이드</h2>
 
       {/* 신청 가능 기간 */}
@@ -16,7 +16,7 @@ const Guide = () => {
 
       {/* 신청 절차 */}
       <section className='mb-6'>
-        <h3 className='text-lg font-semibold text-green-500'>라이브 신청 절차</h3>
+        <h3 className='text-lg font-semibold text-rose-500'>라이브 신청 절차</h3>
         <p className='text-gray-700 mt-2'>아래 절차를 따라 라이브 방송을 신청하세요.</p>
         <ul className='list-disc pl-5 text-gray-700 mt-2'>
           <li>방송 제목과 설명을 입력합니다.</li>
@@ -29,7 +29,7 @@ const Guide = () => {
 
       {/* 방송 유의사항 */}
       <section>
-        <h3 className='text-lg font-semibold text-yellow-500'>라이브 방송 유의사항</h3>
+        <h3 className='text-lg font-semibold text-amber-500'>라이브 방송 유의사항</h3>
         <p className='text-gray-700 mt-2'>방송 진행 전 아래 사항을 확인해주세요.</p>
         <ul className='list-disc pl-5 text-gray-700 mt-2'>
           <li>
