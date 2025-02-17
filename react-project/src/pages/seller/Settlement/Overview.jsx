@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import API from '@/utils/API'
+import { FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight } from 'react-icons/fa'
 
 const Overview = () => {
   const navigate = useNavigate()
   const [transactions, setTransactions] = useState([])
-  const [category, setCategory] = useState('all') // ✅ 'all', '정산', '미정산' 필터 상태
+  const [category, setCategory] = useState('all')
+  const [currentPage, setCurrentPage] = useState(1)
+  const transactionsPerPage = 10
+  const pagesPerGroup = 5
 
-  // ✅ 정산 상태 클릭 이벤트
   const handleStatusClick = (id) => {
     navigate(`/seller/settlement/view?id=${id}`)
   }
 
-  // ✅ 정산/미정산 필터링
   const filteredTransactions = transactions.filter((transaction) => {
     if (category === 'all') return true
     if (category === '정산') return transaction.status === '정산 완료'
@@ -20,65 +22,43 @@ const Overview = () => {
     return true
   })
 
+  const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage)
+  const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages)
+  const displayedTransactions = filteredTransactions.slice(
+    (currentPage - 1) * transactionsPerPage,
+    currentPage * transactionsPerPage,
+  )
+
   return (
-    <div className='p-6 bg-gray-50 min-h-screen'>
-      {/* Header */}
+    <div className='p-6 bg-white min-h-screen'>
       <div className='mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800 text-center'>정산 관리</h1>
-        <p className='text-sm text-gray-600 text-center'>
+        <h1 className='text-4xl font-bold text-gray-900 text-center'>정산 관리</h1>
+        <p className='text-lg text-gray-700 text-center'>
           최근 14일 동안의 정산 내역을 확인하고 관리하세요.
         </p>
       </div>
 
-      {/* ✅ 정산 필터 버튼 */}
       <div className='flex justify-center space-x-6 mb-8'>
-        <button
-          className={`px-6 py-2 rounded-full font-semibold transition-all ${
-            category === 'all' ? 'bg-sky-500 text-white' : 'bg-gray-200 text-gray-700'
-          }`}
-          onClick={() => setCategory('all')}
-        >
-          전체
-        </button>
-        <button
-          className={`px-6 py-2 rounded-full font-semibold transition-all ${
-            category === '정산' ? 'bg-lime-500 text-white' : 'bg-gray-200 text-gray-700'
-          }`}
-          onClick={() => setCategory('정산')}
-        >
-          정산 완료
-        </button>
-        <button
-          className={`px-6 py-2 rounded-full font-semibold transition-all ${
-            category === '미정산' ? 'bg-amber-300 text-white' : 'bg-gray-200 text-gray-700'
-          }`}
-          onClick={() => setCategory('미정산')}
-        >
-          미정산
-        </button>
+        {['all', '정산', '미정산'].map((status) => (
+          <button
+            key={status}
+            onClick={() => setCategory(status)}
+            className={`px-6 py-2 rounded-full font-semibold transition-all ${
+              category === status
+                ? 'bg-gray-500 text-white shadow-md'
+                : 'bg-gray-300 text-gray-700 border border-gray-400 hover:bg-gray-400 hover:text-white'
+            }`}
+          >
+            {status === 'all' ? '전체' : status}
+          </button>
+        ))}
       </div>
 
-      {/* Summary Cards */}
-      <div className='grid grid-cols-3 mb-8 '>
-        <div className='bg-white rounded-lg border-2 border-gray-400 p-5 w-[280px]'>
-          <h2 className='text-gray-600 text-sm font-semibold'>총 수익</h2>
-          <p className='text-3xl font-bold text-green-500 mt-2'>₩3,200,000</p>
-        </div>
-        <div className='bg-white rounded-lg border-2 border-gray-400 p-5 w-[280px]'>
-          <h2 className='text-gray-600 text-sm font-semibold'>총 지출</h2>
-          <p className='text-3xl font-bold mt-2'>₩1,200,000</p>
-        </div>
-        <div className='bg-white rounded-lg border-2 border-gray-400 p-5 w-[280px]'>
-          <h2 className='text-gray-600 text-sm font-semibold'>미정산 금액</h2>
-          <p className='text-3xl font-bold mt-2'>₩500,000</p>
-        </div>
-      </div>
-
-      {/* Transactions Table */}
-      <div className='bg-white rounded-lg border-2 border-gray-400 p-5 p-6'>
-        <h2 className='text-lg font-semibold text-gray-800 mb-4'>정산 내역</h2>
+      <div className='bg-gray-100 rounded-lg border-2 border-gray-300 p-6'>
+        <h2 className='text-lg font-semibold text-gray-700 mb-4'>정산 내역</h2>
         <table className='table-fixed text-sm w-full'>
-          <thead className='bg-gray-100 text-gray-700'>
+          <thead className='bg-gray-200 text-gray-700'>
             <tr>
               <th className='px-4 py-2 w-[180px]'>날짜</th>
               <th className='px-4 py-2 w-[200px]'>금액</th>
@@ -87,29 +67,17 @@ const Overview = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredTransactions.length > 0 ? (
-              filteredTransactions.map((transaction) => (
-                <tr key={transaction.id} className='border-b'>
+            {displayedTransactions.length > 0 ? (
+              displayedTransactions.map((transaction) => (
+                <tr key={transaction.id} className='border-b border-gray-300'>
                   <td className='px-4 py-2'>{transaction.date}</td>
                   <td className='px-4 py-2'>₩{transaction.amount.toLocaleString()}</td>
-                  <td
-                    className={`px-4 py-2 ${
-                      transaction.type === '수익' ? 'text-green-600' : 'text-red-600'
-                    }`}
-                  >
-                    {transaction.type}
-                  </td>
+                  <td className='px-4 py-2 text-gray-700'>{transaction.type}</td>
                   <td
                     className='px-4 py-2 cursor-pointer'
                     onClick={() => handleStatusClick(transaction.id)}
                   >
-                    <span
-                      className={`bg-${
-                        transaction.status === '정산 완료' ? 'green' : 'yellow'
-                      }-100 text-${
-                        transaction.status === '정산 완료' ? 'green' : 'yellow'
-                      }-600 px-2 py-1 rounded-full`}
-                    >
+                    <span className='bg-gray-200 text-gray-700 px-2 py-1 rounded-full'>
                       {transaction.status}
                     </span>
                   </td>
@@ -126,12 +94,47 @@ const Overview = () => {
         </table>
       </div>
 
-      {/* Action Button */}
-      <div className='mt-8 flex justify-end'>
-        <button className='bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg'>
-          정산 요청
-        </button>
-      </div>
+      {totalPages > 1 && (
+        <div className='flex justify-center mt-8'>
+          <button
+            onClick={() => setCurrentPage(1)}
+            disabled={currentPage === 1}
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+          >
+            <FaAngleDoubleLeft />
+          </button>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+          >
+            <FaAngleLeft />
+          </button>
+          {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`mx-1 px-4 py-2 rounded-md text-lg font-medium transition ${currentPage === page ? 'bg-gray-500 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-400 hover:text-white'}`}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+          >
+            <FaAngleRight />
+          </button>
+          <button
+            onClick={() => setCurrentPage(totalPages)}
+            disabled={currentPage === totalPages}
+            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+          >
+            <FaAngleDoubleRight />
+          </button>
+        </div>
+      )}
     </div>
   )
 }

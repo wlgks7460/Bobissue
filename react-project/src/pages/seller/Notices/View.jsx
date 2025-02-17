@@ -1,5 +1,6 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import API from '@/utils/API'
 
 // 샘플 데이터
 const notices = [
@@ -29,7 +30,17 @@ const NoticeView = () => {
   const noticeId = parseInt(queryParams.get('id'), 10)
 
   // 해당 id의 공지사항 찾기
-  const notice = notices.find((n) => n.id === noticeId)
+  useEffect(() => {
+    async function fetchNotice() {
+      try {
+        const response = await API.get(`notification/${noticeId}`)
+        console.log(response)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  })
+  //const notice = notices.find((n) => n.id === noticeId)
 
   // 공지사항이 없을 경우 처리
   if (!notice) {

@@ -41,9 +41,9 @@ const TopNavbar = ({ toggleSidebar, user }) => {
         {/* 로고 이미지 */}
         <Link to='/seller'>
           <img
-            src='/bobissueLogo.png'
+            src='/bobissueLogo_gray.png'
             alt='로고'
-            className='w-16 h-12 object-cover cursor-pointer'
+            className='w-30 h-10 object-cover cursor-pointer'
           />
         </Link>
       </div>
