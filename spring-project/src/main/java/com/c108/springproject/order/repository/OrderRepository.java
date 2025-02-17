@@ -24,4 +24,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                                         @Param("endDate") LocalDateTime endDate);
 
 
+    List<Order> findByUser_UserNo(int userNo);
 }

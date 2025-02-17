@@ -2,7 +2,14 @@ package com.c108.springproject.user.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.order.domain.Order;
+import com.c108.springproject.order.dto.response.OrderDetailResDto;
+import com.c108.springproject.order.dto.response.OrderListResDto;
 import com.c108.springproject.order.repository.OrderRepository;
+import com.c108.springproject.order.service.OrderService;
+import com.c108.springproject.question.domain.Question;
+import com.c108.springproject.question.dto.response.QuestionResDto;
+import com.c108.springproject.question.repository.QuestionRepository;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.domain.UserGrade;
 import com.c108.springproject.user.dto.SignUpReqDto;
@@ -12,11 +19,13 @@ import com.c108.springproject.item.repository.ItemQueryRepository;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
@@ -28,14 +37,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final ItemQueryRepository itemQueryRepository;
+    private final OrderService orderService;
+    private final QuestionRepository questionRepository;
 
 
     public UserService(UserRepository userRepository,
                        OrderRepository orderRepository,
-                       ItemQueryRepository itemQueryRepository) {
+                       ItemQueryRepository itemQueryRepository, OrderService orderService, QuestionRepository questionRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.itemQueryRepository = itemQueryRepository;
+        this.orderService = orderService;
+        this.questionRepository = questionRepository;
     }
 
     @Transactional
@@ -148,6 +161,63 @@ public class UserService {
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_GRADE);
         }
+    }
+
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public List<OrderListResDto> getUserOrderList(int userNo) {
+        try {
+            List<Order> orders = orderRepository.findByUser_UserNo(userNo);
+            List<OrderListResDto> orderListResDtos = new ArrayList<>();
+            for(Order order: orders) {
+                String orderStatus = orderService.getOrderStatus(order.getOrderCategoryNo()); // orderService 사용
+                String deliveryStatus = orderService.getDeliveryStatus(order.getDelCategoryNo()); // orderService 사용
+                orderListResDtos.add(OrderListResDto.toDto(order, orderStatus, deliveryStatus));
+            }
+            return orderListResDtos;
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_USER_ORDER_LIST);
+        }
+    }
+
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public OrderDetailResDto getUserOrderDetail(Long orderNo) {
+        try {
+            Order order = orderRepository.findById(orderNo)
+                    .orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
+
+            String orderStatus = orderService.getOrderStatus(order.getOrderCategoryNo());
+            String deliveryStatus = orderService.getDeliveryStatus(order.getDelCategoryNo());
+
+            return OrderDetailResDto.toDto(order, orderStatus, deliveryStatus);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_USER_ORDER);
+        }
+    }
+
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public List<QuestionResDto> getUserQuestions(int userNo) {
+        try {
+            List<Question> questions = questionRepository.findByUser_UserNo(userNo);
+            List<QuestionResDto> questionResDtos = new ArrayList<>();
+            for(Question question : questions) {
+                questionResDtos.add(QuestionResDto.toDto(question));
+            }
+            return questionResDtos;
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_QUESTION);
+        }
+    }
+
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public QuestionResDto getUserQuestionDetail(int userNo, Long questionNo) {
+        Question question = questionRepository.findByUser_UserNoAndQuestionNo(userNo, questionNo)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.QUESTION_NOT_FOUND));
+        question.readQuestion();
+        return QuestionResDto.toDto(question);
     }
 
 
