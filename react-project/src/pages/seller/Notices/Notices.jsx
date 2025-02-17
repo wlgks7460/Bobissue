@@ -6,17 +6,46 @@ const categories = ['전체', '필독', '일반', '정책', '기술', '홍보']
 const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
 const dummyNotices = [
-  { id: 1, category: '필독', title: '서비스 점검 안내', author: '관리자', date: '2025-01-22' },
   {
-    id: 2,
+    noticeNo: 1,
+    category: '필독',
+    title: '서비스 점검 안내',
+    adminNo: '관리자',
+    date: '2025-01-22',
+    reader: '판매자',
+  },
+  {
+    noticeNo: 2,
     category: '일반',
     title: '새로운 기능 업데이트 소식',
-    author: '운영팀',
+    adminNo: '운영팀',
     date: '2025-01-20',
+    reader: '이용자',
   },
-  { id: 3, category: '정책', title: '서비스 약관 변경 안내', author: '관리자', date: '2025-01-18' },
-  { id: 4, category: '기술', title: 'API 사용 가이드 변경', author: '기술팀', date: '2025-01-17' },
-  { id: 5, category: '홍보', title: '신규 프로모션 안내', author: '마케팅팀', date: '2025-01-15' },
+  {
+    noticeNo: 3,
+    category: '정책',
+    title: '서비스 약관 변경 안내',
+    adminNo: '관리자',
+    date: '2025-01-18',
+    reader: '판매자',
+  },
+  {
+    noticeNo: 4,
+    category: '기술',
+    title: 'API 사용 가이드 변경',
+    adminNo: '기술팀',
+    date: '2025-01-17',
+    reader: '판매자',
+  },
+  {
+    noticeNo: 5,
+    category: '홍보',
+    title: '신규 프로모션 안내',
+    adminNo: '마케팅팀',
+    date: '2025-01-15',
+    reader: '판매자,',
+  },
 ]
 
 const Notices = () => {
@@ -57,7 +86,6 @@ const Notices = () => {
   const startIndex = (currentPage - 1) * noticesPerPage
   const endIndex = startIndex + noticesPerPage
   const currentNotices = filteredNotices.slice(startIndex, endIndex)
-
   const totalPages = Math.ceil(filteredNotices.length / noticesPerPage)
   const currentGroup = Math.ceil(currentPage / maxPageButtons)
   const startPage = (currentGroup - 1) * maxPageButtons + 1
@@ -103,19 +131,21 @@ const Notices = () => {
             </tr>
           </thead>
           <tbody>
-            {currentNotices.map((notice) => (
-              <tr
-                key={notice.id}
-                className='border-b hover:bg-gray-100 cursor-pointer'
-                onClick={() => handleClickNavigate(notice.id)}
-              >
-                <td className='px-4 py-3 text-center'>{notice.id}</td>
-                <td className='px-4 py-3 text-center font-semibold'>{notice.category}</td>
-                <td className='px-4 py-3'>{notice.title}</td>
-                <td className='px-4 py-3 text-center'>{notice.author}</td>
-                <td className='px-4 py-3 text-center'>{notice.date}</td>
-              </tr>
-            ))}
+            {currentNotices
+              .filter((notice) => notice.reader === '판매자')
+              .map((notice) => (
+                <tr
+                  key={notice.noticeNo}
+                  className='border-b hover:bg-gray-100 cursor-pointer'
+                  onClick={() => handleClickNavigate(notice.noticeNo)}
+                >
+                  <td className='px-4 py-3 text-center'>{notice.noticeNo}</td>
+                  <td className='px-4 py-3 text-center font-semibold'>{notice.category}</td>
+                  <td className='px-4 py-3'>{notice.title}</td>
+                  <td className='px-4 py-3 text-center'>{notice.adminNo}</td>
+                  <td className='px-4 py-3 text-center'>{notice.date}</td>
+                </tr>
+              ))}
             {currentNotices.length === 0 && (
               <tr>
                 <td colSpan='5' className='text-center py-6 text-gray-500'>

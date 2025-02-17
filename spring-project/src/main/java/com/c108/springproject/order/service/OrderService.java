@@ -157,13 +157,13 @@ public class OrderService {
         return OrderDetailResDto.toDto(order, orderStatus, deliveryStatus);
     }
 
-    private String getOrderStatus(int orderStatusNo) {
+    public String getOrderStatus(int orderStatusNo) {
         return orderStatusRepository.findByOrderStatusNo(orderStatusNo)
                 .map(OrderStatus::getName)
                 .orElse("조회 실패");
     }
 
-    private String getDeliveryStatus(int delCategoryNo) {
+    public String getDeliveryStatus(int delCategoryNo) {
         return deliveryStatusRepository.findByDelCategoryNo(delCategoryNo)
                 .map(DeliveryStatus::getName)
                 .orElse("조회 실패");

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { FaSignOutAlt, FaBug, FaHome, FaBars } from 'react-icons/fa' // ✅ 햄버거 아이콘 변경
+import { FaSignOutAlt, FaBug, FaHome, FaBars } from 'react-icons/fa' // ✅ 햄버거 아이콘 포함
 
 const TopNavbar = ({ toggleSidebar, user }) => {
   const navigate = useNavigate()
@@ -26,13 +26,13 @@ const TopNavbar = ({ toggleSidebar, user }) => {
   }
 
   return (
-    <nav className='flex items-center justify-between bg-gray-100 px-6 py-3 border-b border-gray-300 shadow-md relative z-50'>
+    <nav className='flex items-center justify-between bg-white px-6 py-3 border-b border-gray-300 shadow-md relative z-50'>
       {/* 왼쪽 영역 (햄버거 메뉴 + 로고) */}
       <div className='flex items-center gap-4'>
         {/* ☰ 햄버거 버튼 */}
         <button
           onClick={toggleSidebar}
-          className='text-gray-800 p-2 rounded-lg hover:bg-gray-300 focus:outline-none transition'
+          className='text-deepCobalt p-2 rounded-lg hover:bg-deepCobalt/20 focus:outline-none transition'
           aria-label='Toggle Sidebar'
         >
           <FaBars className='w-6 h-6' />
@@ -51,12 +51,14 @@ const TopNavbar = ({ toggleSidebar, user }) => {
       {/* 네비게이션 버튼 그룹 */}
       <div className='ml-auto flex items-center gap-4'>
         {/* 👤 유저 인사 메시지 */}
-        <span className='text-gray-800 font-semibold'>{user?.name || '판매자'}님 안녕하세요!</span>
+        <span className='text-deepCobalt font-semibold'>
+          {user?.name || '판매자'}님 안녕하세요!
+        </span>
 
         {/* 🏠 홈 버튼 */}
         <Link
           to='/'
-          className='p-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition flex items-center'
+          className='p-3 bg-deepCobalt/10 text-deepCobalt rounded-lg hover:bg-deepCobalt/20 transition flex items-center'
         >
           <FaHome className='w-5 h-5' />
         </Link>
@@ -66,8 +68,8 @@ const TopNavbar = ({ toggleSidebar, user }) => {
           onClick={toggleDebugMode}
           className={`p-3 rounded-lg transition ${
             debugMode
-              ? 'bg-gray-600 hover:bg-gray-700 text-white'
-              : 'bg-gray-400 hover:bg-gray-500 text-white'
+              ? 'bg-deepCobalt hover:bg-deepCobalt/80 text-white'
+              : 'bg-deepCobalt/40 hover:bg-deepCobalt/60 text-white'
           }`}
         >
           <FaBug className='w-5 h-5' />
@@ -76,7 +78,7 @@ const TopNavbar = ({ toggleSidebar, user }) => {
         {/* 🚪 로그아웃 버튼 */}
         <button
           onClick={handleLogout}
-          className='p-3 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition'
+          className='p-3 bg-deepCobalt text-white rounded-lg hover:bg-deepCobalt/80 transition'
         >
           <FaSignOutAlt className='w-5 h-5' />
         </button>
