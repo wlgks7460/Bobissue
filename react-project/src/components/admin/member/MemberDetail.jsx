@@ -100,19 +100,19 @@ const MemberDetail = () => {
           <table className='w-full border border-gray-300 table-auto'>
             <thead className='bg-[#FFF3E0] text-[#3E2723]'>
               <tr>
-                <th className='border px-4 py-2'>이름</th>
-                <th className='border px-4 py-2'>우편번호</th>
-                <th className='border px-4 py-2'>주소</th>
-                <th className='border px-4 py-2'>상세 주소</th>
+                <th className='border px-4 py-2 text-center'>이름</th>
+                <th className='border px-4 py-2 text-center'>우편번호</th>
+                <th className='border px-4 py-2 text-center'>주소</th>
+                <th className='border px-4 py-2 text-center'>상세 주소</th>
               </tr>
             </thead>
             <tbody>
               {addressList.map((addr) => (
                 <tr key={addr.addressNo} className='hover:bg-[#F5F5F5]'>
-                  <td className='border px-4 py-2'>{addr.name}</td>
-                  <td className='border px-4 py-2'>{addr.postalCode}</td>
-                  <td className='border px-4 py-2'>{addr.address}</td>
-                  <td className='border px-4 py-2'>{addr.addressDetail}</td>
+                  <td className='border px-4 py-2 text-center'>{addr.name}</td>
+                  <td className='border px-4 py-2 text-center'>{addr.postalCode}</td>
+                  <td className='border px-4 py-2 text-center'>{addr.address}</td>
+                  <td className='border px-4 py-2 text-center'>{addr.addressDetail}</td>
                 </tr>
               ))}
             </tbody>
