@@ -31,6 +31,18 @@ spring:
     redis:
       host: 43.202.60.173
       port: 6379
+    elasticsearch:
+      uris: http://localhost:9200
+      connection-timeout: 5s
+      socket-timeout: 10s
+
+  elasticsearch:
+    connection-timeout: 5s
+    socket-timeout: 10s
+
+  config:
+    import: optional:classpath:elasticsearch-config.yml
+
 
 
   security:
