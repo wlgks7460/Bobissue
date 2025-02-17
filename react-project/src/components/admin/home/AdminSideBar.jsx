@@ -148,16 +148,9 @@ const menuData = [
   {
     id: 7,
     title: 'CS 관리',
-    subMenus: [
-      {
-        id: 1,
-        title: 'CS 관리',
-        items: [
-          { id: 701, title: '알림 관리', path: '/admin/cs/notification' },
-          { id: 702, title: '문의현황', path: '/admin/cs/cscenter' },
-          { id: 703, title: '공지사항', path: '/admin/cs/notice' },
-        ],
-      },
+    items: [
+      { id: 701, title: '문의현황', path: '/admin/cs/cscenter' },
+      { id: 702, title: '공지사항', path: '/admin/cs/notice' },
     ],
   },
   {
