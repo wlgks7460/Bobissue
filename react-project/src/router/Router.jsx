@@ -36,6 +36,8 @@ import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
 // 이용자 레시피
 import ConsumerRecipe from '../pages/consumer/Recipe'
 import ConsumerRecipeDetail from '../pages/consumer/RecipeDetail'
+// 이용자 라이브커머스
+import ConsumerLive from '../pages/consumer/Live'
 
 // 관리자 section
 
@@ -235,6 +237,10 @@ const router = createBrowserRouter([
           {
             path: 'recipe/:recipeNo',
             element: <ConsumerRecipeDetail />,
+          },
+          {
+            path: 'liveShopping',
+            element: <ConsumerLive />,
           },
         ],
       },
