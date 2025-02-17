@@ -36,22 +36,82 @@ const Demographics = () => {
   const filteredData = () => {
     if (!data) return null
 
+    // ✅ 연령 + 성별 전체 선택 시 `combinedStats` 전체 반환
+    if (selectedAge === 'ALL_AGE_GROUPS' && selectedGender === 'A') {
+      return Object.entries(data.combinedStats).flatMap(([ageGroup, genderData]) =>
+        Object.entries(genderData).map(([gender, stats]) => ({
+          ageGroup,
+          gender,
+          ...stats,
+        })),
+      )
+    }
+
     // ✅ 연령 + 성별 선택 시 `combinedStats` 사용
-    if (selectedAge && selectedGender) {
-      return data.combinedStats[selectedAge]?.[selectedGender] || null
+    if (
+      selectedAge &&
+      selectedGender &&
+      selectedAge !== 'ALL_AGE_GROUPS' &&
+      selectedGender !== 'A'
+    ) {
+      return data.combinedStats[selectedAge]?.[selectedGender]
+        ? [
+            {
+              ...data.combinedStats[selectedAge][selectedGender],
+              ageGroup: selectedAge,
+              gender: selectedGender,
+            },
+          ]
+        : []
+    }
+
+    // ✅ 연령 전체 선택 시 `ageStats` 사용
+    if (selectedAge === 'ALL_AGE_GROUPS') {
+      if (selectedGender === 'M' || selectedGender === 'F') {
+        // ✅ 특정 성별(`M` 또는 `F`)만 선택한 경우 → `combinedStats`에서 해당 성별만 필터링
+        return Object.entries(data.combinedStats)
+          .map(([ageGroup, genderData]) => ({
+            ageGroup,
+            ...genderData[selectedGender], // 선택된 성별만 가져오기
+          }))
+          .filter((entry) => entry.totalOrders > 0) // 주문 수가 0 이상인 데이터만 반환
+      } else {
+        // ✅ 성별이 'A' (전체)일 경우 → `ageStats`에서 모든 연령대 데이터 가져오기
+        return Object.values(data.ageStats).map((ageGroup) => ({
+          ageGroup: ageGroup.ageGroup,
+          ...ageGroup,
+        }))
+      }
+    }
+
+    // ✅ 성별 전체 선택 시 `genderStats` 사용 (남성 + 여성 합산)
+    if (selectedGender === 'A') {
+      return ['M', 'F'].map((gender) => ({
+        gender,
+        ...(data.genderStats[gender] || {
+          totalOrders: 0,
+          totalRevenue: 0,
+          averageOrderAmount: 0,
+          topCategories: [],
+        }),
+      }))
     }
 
     // ✅ 연령만 선택 시 `ageStats` 사용
     if (selectedAge) {
-      return data.ageStats[selectedAge] || null
+      return data.ageStats[selectedAge]
+        ? [{ ...data.ageStats[selectedAge], ageGroup: selectedAge }]
+        : []
     }
 
     // ✅ 성별만 선택 시 `genderStats` 사용
     if (selectedGender) {
-      return data.genderStats[selectedGender] || null
+      return data.genderStats[selectedGender]
+        ? [{ ...data.genderStats[selectedGender], gender: selectedGender }]
+        : []
     }
 
-    return null
+    return []
   }
 
   const displayData = filteredData()
@@ -79,7 +139,7 @@ const Demographics = () => {
 
       {/* ✅ 연령 필터 */}
       <div className='flex space-x-4 mt-4'>
-        {['20대 미만', '20대', '30대', '40대', '50대 이상'].map((age) => (
+        {['ALL_AGE_GROUPS', '20대 미만', '20대', '30대', '40대', '50대 이상'].map((age) => (
           <button
             key={age}
             onClick={() => setSelectedAge(age === selectedAge ? null : age)}
@@ -89,7 +149,7 @@ const Demographics = () => {
                 : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
             }`}
           >
-            {age}
+            {age === 'ALL_AGE_GROUPS' ? '전체' : age}
           </button>
         ))}
       </div>
@@ -97,6 +157,7 @@ const Demographics = () => {
       {/* ✅ 성별 필터 */}
       <div className='flex space-x-4 mt-4'>
         {[
+          { value: 'A', label: '전체' },
           { value: 'M', label: '남성' },
           { value: 'F', label: '여성' },
         ].map(({ value, label }) => (
@@ -115,29 +176,45 @@ const Demographics = () => {
       </div>
 
       {/* ✅ 데이터 출력 */}
-      {displayData ? (
+      {displayData?.length > 0 ? (
         <div className='mt-6 p-4 bg-gray-100 rounded-md'>
           <h2 className='text-lg font-semibold text-deepCobalt'>선택된 데이터</h2>
-          <p className='mt-2 text-sm text-gray-700'>
-            <strong>총 주문 수:</strong> {displayData.totalOrders}
-          </p>
-          <p className='text-sm text-gray-700'>
-            <strong>총 매출:</strong> {displayData.totalRevenue.toLocaleString()}원
-          </p>
-          <p className='text-sm text-gray-700'>
-            <strong>평균 주문 금액:</strong> {displayData.averageOrderAmount.toLocaleString()}원
-          </p>
-
-          {/* ✅ 카테고리별 주문 수 */}
-          <h3 className='mt-4 text-md font-medium text-deepCobalt'>상위 카테고리</h3>
-          <ul className='list-disc pl-5 text-sm text-gray-700'>
-            {displayData.topCategories.map((category) => (
-              <li key={category.categoryNo}>
-                {category.categoryName} - 주문 수: {category.orderCount}, 매출:{' '}
-                {category.totalRevenue.toLocaleString()}원
-              </li>
-            ))}
-          </ul>
+          {displayData.map((item, index) => (
+            <div key={index} className='border-b pb-3 mb-3 last:border-none'>
+              {item.ageGroup && (
+                <p className='text-sm text-gray-700'>
+                  <strong>연령:</strong> {item.ageGroup}
+                </p>
+              )}
+              {item.gender && (
+                <p className='text-sm text-gray-700'>
+                  <strong>성별:</strong> {item.gender === 'M' ? '남성' : '여성'}
+                </p>
+              )}
+              <p className='text-sm text-gray-700'>
+                <strong>총 주문 수:</strong> {item.totalOrders}
+              </p>
+              <p className='text-sm text-gray-700'>
+                <strong>총 매출:</strong> {item.totalRevenue.toLocaleString()}원
+              </p>
+              <p className='text-sm text-gray-700'>
+                <strong>평균 주문 금액:</strong> {item.averageOrderAmount.toLocaleString()}원
+              </p>
+              {item.topCategories.length > 0 && (
+                <div>
+                  <h3 className='mt-2 text-md font-medium text-deepCobalt'>상위 카테고리</h3>
+                  <ul className='list-disc pl-5 text-sm text-gray-700'>
+                    {item.topCategories.map((category) => (
+                      <li key={category.categoryNo}>
+                        {category.categoryName} - 주문 수: {category.orderCount}, 매출:{' '}
+                        {category.totalRevenue.toLocaleString()}원
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       ) : (
         <p className='text-gray-500 mt-4'>필터를 선택하여 데이터를 확인하세요.</p>
