@@ -20,49 +20,31 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseDto createOrder(@RequestBody OrderCreateReqDto orderCreateReqDto) {
-        return new ResponseDto(
-                HttpStatus.CREATED,
-                ResponseCode.SUCCESS_CREATE_ORDER,  // 성공 코드는 ResponseCode에 추가 필요
-                new DefaultResponse<>(orderService.createOrder(orderCreateReqDto))
-        );
+        return new ResponseDto( HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ORDER, new DefaultResponse<>(orderService.createOrder(orderCreateReqDto)));
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseDto getAllOrders() {
-        return new ResponseDto(
-                HttpStatus.OK,
-                ResponseCode.SUCCESS_FIND_ALL_ORDERS,
-                new DefaultResponse<>(orderService.findAllOrders())
-        );
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ORDERS, new DefaultResponse<>(orderService.findAllOrders()));
     }
 
     @GetMapping("/{orderNo}")
     public ResponseDto getOrder(@PathVariable Long orderNo) {
-        return new ResponseDto(
-                HttpStatus.OK,
-                ResponseCode.SUCCESS_FIND_ORDER,
-                new DefaultResponse<>(orderService.findOrder(orderNo))
-        );
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ORDER, new DefaultResponse<>(orderService.findOrder(orderNo)));
     }
     @PutMapping("/{orderNo}")
     public ResponseDto updateOrder(@PathVariable Long orderNo, @RequestBody OrderUpdateReqDto orderUpdateReqDto) {
-        return new ResponseDto(
-                HttpStatus.OK,
-                ResponseCode.SUCCESS_UPDATE_ORDER,
-                new DefaultResponse<>(orderService.updateOrder(orderNo, orderUpdateReqDto))
-        );
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_UPDATE_ORDER, new DefaultResponse<>(orderService.updateOrder(orderNo, orderUpdateReqDto)));
     }
 
-    @GetMapping("/cancel")
-    public ResponseDto getCancelOrders() {
-        return new ResponseDto(
-                HttpStatus.OK,
-                ResponseCode.SUCCESS_FIND_CANCEL_ORDERS,
-                new DefaultResponse<>(orderService.findCancelOrders())
-        );
+    @GetMapping("/cancel/{orderNo}")
+    public ResponseDto getCancelOrders(@PathVariable Long orderNo) {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_CANCEL_ORDERS, new DefaultResponse<>(orderService.findCancelOrders(orderNo)));
     }
+
+
 
 
 }

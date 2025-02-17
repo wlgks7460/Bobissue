@@ -30,4 +30,5 @@ public class Admin  {
     @Column(nullable = false, length = 15)
     private String updatedAt;
 
+
 }

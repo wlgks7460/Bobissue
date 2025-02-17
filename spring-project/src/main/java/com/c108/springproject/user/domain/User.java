@@ -43,6 +43,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
 
+    @Setter
     @Column(nullable = false)
     private int point;
 
