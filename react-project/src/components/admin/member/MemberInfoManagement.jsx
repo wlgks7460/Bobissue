@@ -114,7 +114,7 @@ const MemberInfoManagement = () => {
   return (
     <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
-      <h1 className='text-2xl font-bold mb-6'>회원정보관리</h1>
+      <h1 className='text-2xl font-bold mb-6'>회원 정보관리</h1>
 
       {/* 검색 영역 */}
       <section className='mb-6'>
