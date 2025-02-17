@@ -94,7 +94,7 @@ import NoticePage from '../pages/admin/cs/NoticePage'
 import PerformancePage from '../pages/admin/analytics/PerformancePage'
 import CategoryPage from '../pages/admin/analytics/CategoryPage'
 import TimesalesPage from '../pages/admin/analytics/TimesalesPage'
-
+import UsersAnalysisPage from '../pages/admin/analytics/UsersPage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
@@ -694,6 +694,10 @@ const router = createBrowserRouter([
               {
                 path: 'timesales',
                 element: <TimesalesPage />,
+              },
+              {
+                path: 'users',
+                element: <UsersAnalysisPage />,
               },
             ],
           },
