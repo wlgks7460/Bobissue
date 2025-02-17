@@ -4,6 +4,8 @@ import Sidebar from './components/Sidebar'
 import { Outlet, useNavigate } from 'react-router-dom'
 import API from '@/utils/API' // API 호출 모듈
 
+const debug_mode = true
+
 const SellerMainPage = () => {
   const navigate = useNavigate()
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
