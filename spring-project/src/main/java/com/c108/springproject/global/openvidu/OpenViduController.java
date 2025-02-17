@@ -30,10 +30,10 @@ public class OpenViduController {
     public ResponseEntity<String> initializeSession(
             @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
-
+        System.out.println("들어옴");
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openVidu.createSession(properties);
-
+        System.out.println("받아서 나감");
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }
 

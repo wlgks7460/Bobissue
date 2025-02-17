@@ -49,8 +49,11 @@ const LiveStreamSetup = () => {
 
   // 방송 시작 (joinSession)
   const joinSession = async () => {
+
     const OV = new OpenVidu();
+
     const mySession = OV.initSession();
+    
     setSession(mySession);
 
     mySession.on('streamCreated', (event) => {
