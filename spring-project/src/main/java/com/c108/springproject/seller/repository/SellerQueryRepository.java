@@ -66,6 +66,14 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
             case YEARLY -> LocalDateTime.now().minusYears(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         };
 
+        String endDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        System.out.println("Start Date: " + startDate);
+        System.out.println("Period: " + period);
+        System.out.println("Query parameters - startDate: " + startDate);
+        System.out.println("Actual SQL comparison date: " + startDate.substring(0, 8));
+        System.out.println("Query parameters - endDate: " + endDate);
+
         // 기본 판매 데이터 조회
         List<ItemRankingDto> rankings = getQueryFactory()
                 .select(Projections.constructor(ItemRankingDto.class,
@@ -77,14 +85,19 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
                 .from(item)
                 .leftJoin(orderDetail).on(orderDetail.item.eq(item))
                 .leftJoin(order).on(orderDetail.order.eq(order)
-                        .and(order.createdAt.goe(startDate))
+                        .and(order.createdAt.substring(0, 8).goe(startDate))  // 시작일 이상
+                        .and(order.createdAt.substring(0, 8).loe(endDate))   // 종료일 이하
                         .and(order.delYn.eq("N")))
                 .where(
+                        order.createdAt.substring(0, 8).goe(startDate),
+                        order.createdAt.substring(0, 8).loe(endDate),
                         item.company.companyNo.eq(companyNo),
                         item.delYn.eq("N")
                 )
                 .groupBy(item.itemNo, item.name)
                 .fetch();
+        System.out.println(rankings.toString());
+
 
         // 각 상품별 추가 통계 데이터 조회
         for (ItemRankingDto ranking : rankings) {
@@ -94,6 +107,8 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
                     .from(orderDetail)
                     .join(order).on(orderDetail.order.eq(order))
                     .where(
+                            order.createdAt.substring(0, 8).goe(startDate),
+                            order.createdAt.substring(0, 8).loe(endDate),
                             orderDetail.item.itemNo.eq(ranking.getItemNo()),
                             order.orderCategoryNo.eq(4),
                             order.delYn.eq("N")
@@ -106,6 +121,8 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
                     .from(orderDetail)
                     .join(order).on(orderDetail.order.eq(order))
                     .where(
+                            order.createdAt.substring(0, 8).goe(startDate),
+                            order.createdAt.substring(0, 8).loe(endDate),
                             orderDetail.item.itemNo.eq(ranking.getItemNo()),
                             order.orderCategoryNo.eq(5),
                             order.delYn.eq("N")
@@ -120,6 +137,8 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
                                     .from(order)
                                     .join(orderDetail).on(orderDetail.order.eq(order))
                                     .where(
+                                            order.createdAt.substring(0, 8).goe(startDate),
+                                            order.createdAt.substring(0, 8).loe(endDate),
                                             orderDetail.item.itemNo.eq(ranking.getItemNo()),
                                             order.delYn.eq("N")
                                     )
@@ -127,6 +146,8 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
                     .from(order)
                     .join(orderDetail).on(orderDetail.order.eq(order))
                     .where(
+                            order.createdAt.substring(0, 8).goe(startDate),
+                            order.createdAt.substring(0, 8).loe(endDate),
                             orderDetail.item.itemNo.eq(ranking.getItemNo()),
                             order.delYn.eq("N")
                     )
@@ -138,7 +159,6 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
             // 통계 데이터 설정
             ranking.setStatistics(cancelCount, refundCount, reOrderCount, avgRating);
         }
-
         return rankings;
     }
 
@@ -612,5 +632,7 @@ public class SellerQueryRepository extends Querydsl4RepositorySupport {
             throw new BobIssueException(ResponseCode.FAILED_GET_DEMOGRAPHIC_STATS);
         }
     }
+
+    // TOP10 상품
 
 }

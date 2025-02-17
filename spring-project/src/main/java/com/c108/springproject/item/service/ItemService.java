@@ -11,7 +11,9 @@ import com.c108.springproject.item.dto.response.*;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
 //import com.c108.springproject.item.repository.ItemElasticRepository;
 import com.c108.springproject.item.repository.ItemLikeRepository;
+import com.c108.springproject.item.repository.ItemQueryRepository;
 import com.c108.springproject.item.repository.ItemRepository;
+import com.c108.springproject.item.repository.querydsl.ItemRepurchaseDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
@@ -44,9 +46,10 @@ public class ItemService {
     private final SellerRepository sellerRepository;
     private final ItemLikeRepository itemLikeRepository;
     private final UserRepository userRepository;
+    private final ItemQueryRepository itemQueryRepository;
 //    private final ItemElasticRepository itemElasticRepository;
 
-    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, ItemCategoryRepository itemCategoryRepository, S3Service s3Service, SellerRepository sellerRepository, ItemLikeRepository itemLikeRepository, UserRepository userRepository
+    public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, ItemCategoryRepository itemCategoryRepository, S3Service s3Service, SellerRepository sellerRepository, ItemLikeRepository itemLikeRepository, UserRepository userRepository, ItemQueryRepository itemQueryRepository
 //            ,
 //                       ItemElasticRepository itemElasticRepository
                        ) {
@@ -59,6 +62,7 @@ public class ItemService {
         this.itemLikeRepository = itemLikeRepository;
         this.userRepository = userRepository;
 //        this.itemElasticRepository = itemElasticRepository;
+        this.itemQueryRepository = itemQueryRepository;
     }
 
     // 상품 생성
@@ -394,6 +398,16 @@ public class ItemService {
                 .page(itemsPage.getNumber())
                 .size(itemsPage.getTotalPages())
                 .build();
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public List<ItemRepurchaseDto> getTopRepurchaseItems() {
+        try {
+            return itemQueryRepository.getTopRepurchaseItems();
+
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_TOP_REPURCHASE_ITEM);
+        }
     }
 
 //    // 엘라스틱 서치
