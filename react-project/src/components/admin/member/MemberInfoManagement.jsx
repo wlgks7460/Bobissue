@@ -16,12 +16,14 @@ const MemberInfoManagement = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
+  // 페이지 로드 시 사용자 목록 가져오기 및 스크롤 이벤트 등록
   useEffect(() => {
     fetchUsers()
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // 사용자 목록 가져오기
   const fetchUsers = async () => {
     setIsLoading(true)
     try {
@@ -35,6 +37,7 @@ const MemberInfoManagement = () => {
     }
   }
 
+  // 무한 스크롤 이벤트 핸들러
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop >=
@@ -44,6 +47,7 @@ const MemberInfoManagement = () => {
     }
   }
 
+  // 추가 데이터 로드 (무한 스크롤)
   const loadMoreData = () => {
     if (visibleUsers.length >= allUsers.length) return
     setIsLoading(true)
@@ -59,6 +63,7 @@ const MemberInfoManagement = () => {
     }, 500)
   }
 
+  // 검색 기능 구현
   const handleSearch = () => {
     if (!searchKeyword.trim()) {
       alert('검색어를 입력하세요.')
@@ -78,14 +83,17 @@ const MemberInfoManagement = () => {
     setCurrentPage(1)
   }
 
+  // Enter 키로 검색 가능하게 설정
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') handleSearch()
   }
 
+  // 상세 페이지로 이동
   const handleNavigateToDetail = (userNo) => {
     navigate(`/admin/members/${userNo}`)
   }
 
+  // 회원 상태 변경 (활성/비활성)
   const handleToggleStatus = async (userNo, currentStatus) => {
     try {
       const newStatus = currentStatus === 'Y' ? 'N' : 'Y'
@@ -107,16 +115,18 @@ const MemberInfoManagement = () => {
     <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
       <h1 className='text-2xl font-bold mb-6'>회원정보관리</h1>
+
+      {/* 검색 영역 */}
       <section className='mb-6'>
         <h2 className='text-lg font-semibold mb-4'>
-          🏆 총 회원수: <span className='text-blue-500 font-bold'>{allUsers.length}명 </span>
+          🏆 총 회원수: <span className='text-[#6D4C41] font-bold'>{allUsers.length}명 </span>
         </h2>
         <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
         <div className='flex items-center space-x-4'>
           <select
             value={searchType}
             onChange={(e) => setSearchType(e.target.value)}
-            className='border border-gray-300 rounded-md px-3 py-2'
+            className='border border-[#A1887F] rounded-md px-3 py-2'
           >
             <option value='user-no'>회원번호</option>
             <option value='name'>회원명</option>
@@ -127,37 +137,39 @@ const MemberInfoManagement = () => {
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
             onKeyDown={handleKeyPress}
-            className='w-64 border border-gray-300 rounded-md px-3 py-2'
+            className='w-64 border border-[#A1887F] rounded-md px-3 py-2'
             placeholder='검색어를 입력하세요'
           />
           <button
             onClick={handleSearch}
-            className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md'
+            className='bg-[#6D4C41] hover:bg-[#5D4037] text-white px-4 py-2 rounded-md shadow-md'
           >
             조회
           </button>
         </div>
       </section>
+
+      {/* 조회 결과 영역 */}
       <h2 className='text-lg font-semibold mb-4'>| 조회결과</h2>
 
       {isLoading && <div className='text-center'>로딩 중...</div>}
       <section>
         {visibleUsers.length > 0 ? (
-          <table className='table-auto w-full border'>
+          <table className='table-auto w-full border border-[#D7CCC8] rounded-md overflow-hidden'>
             <thead>
-              <tr className='bg-gray-100'>
+              <tr className='bg-[#FFF3E0] text-[#3E2723]'>
                 <th className='border px-4 py-2'>회원번호</th>
                 <th className='border px-4 py-2'>회원명</th>
                 <th className='border px-4 py-2'>생년월일</th>
                 <th className='border px-4 py-2'>이메일</th>
                 <th className='border px-4 py-2'>성별</th>
-                <th className='border px-4 py-2'>회원 상태</th>
+                <th className='border px-4 py-2'>회원 상태(변경)</th>
                 <th className='border px-4 py-2'>상세</th>
               </tr>
             </thead>
             <tbody>
               {visibleUsers.map((user) => (
-                <tr key={user.userNo} className='hover:bg-gray-50'>
+                <tr key={user.userNo}>
                   <td className='border px-4 py-2 text-center'>{user.userNo}</td>
                   <td className='border px-4 py-2 text-center'>{user.name}</td>
                   <td className='border px-4 py-2 text-center'>{user.birthday}</td>
@@ -165,10 +177,14 @@ const MemberInfoManagement = () => {
                   <td className='border px-4 py-2 text-center'>{user.gender}</td>
                   <td className='border px-4 py-2 text-center'>
                     <button
-                      onClick={() => handleToggleStatus(user.userNo, user.status)}
-                      className={`px-4 py-2 rounded-md ${
-                        user.status === 'Y' ? 'bg-green-500' : 'bg-gray-500'
-                      } text-white`}
+                      onClick={() => {
+                        if (window.confirm(`${user.name} 회원의 상태를 변경하시겠습니까?`)) {
+                          handleToggleStatus(user.userNo, user.status)
+                        }
+                      }}
+                      className={`px-4 py-2 text-lg font-bold transition duration-300 hover:shadow-md rounded-full ${
+                        user.status === 'Y' ? 'text-green-600' : 'text-red-600'
+                      }`}
                     >
                       {user.status === 'Y' ? '활성' : '비활성'}
                     </button>
@@ -176,7 +192,7 @@ const MemberInfoManagement = () => {
                   <td className='border px-4 py-2 text-center'>
                     <button
                       onClick={() => handleNavigateToDetail(user.userNo)}
-                      className='text-blue-500 hover:text-blue-700'
+                      className='text-[#6D4C41] hover:text-[#3E2723]'
                     >
                       <Search size={20} />
                     </button>
@@ -186,7 +202,7 @@ const MemberInfoManagement = () => {
             </tbody>
           </table>
         ) : (
-          !isLoading && <div className='text-center text-gray-500'>회원 정보가 없습니다.</div>
+          !isLoading && <div className='text-center text-[#3E2723]'>회원 정보가 없습니다.</div>
         )}
       </section>
     </div>
