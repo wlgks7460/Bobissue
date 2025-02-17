@@ -69,11 +69,11 @@ const Login = () => {
           <input
             type='submit'
             value='로그인'
-            className='w-[350px] h-[50px] border border-gray-400 rounded bg-indigo-400 hover:bg-indigo-600 text-white cursor-pointer'
+            className='w-[350px] h-[50px] border border-gray-400 rounded bg-[#A67B5B] hover:bg-[#6F4E37] text-white cursor-pointer'
           />
         </form>
         <button
-          className='w-[350px] h-[50px] border border-gray-400 rounded mb-5 cursor-pointer'
+          className='w-[350px] h-[50px] border border-[#6F4E37] rounded mb-5 cursor-pointer'
           onClick={() => navigate('/signup')}
         >
           회원가입

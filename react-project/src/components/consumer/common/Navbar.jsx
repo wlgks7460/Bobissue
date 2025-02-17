@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { userReducerActions } from '../../../redux/reducers/userSlice'
 import API from '../../../utils/API'
+import LongLogo from '../../../assets/bobissueLongLogo.png'
 
 const Navbar = () => {
   const dispatch = useDispatch()
@@ -27,22 +28,32 @@ const Navbar = () => {
   }
 
   return (
-    <div className='w-full py-3 px-2 flex justify-between border-b'>
-      <Link to='' className='text-3xl bobissue-logo'>
-        밥이슈
-      </Link>
-      {/* 로그인 상태에 따라 변화 */}
-      {isAuthenticated && loginStatus === 'consumer' ? (
-        <div className='flex items-center gap-3'>
-          <Link to={'/mypage/order'}>마이페이지</Link>
-          <button onClick={logout}>로그아웃</button>
-        </div>
-      ) : (
-        <div className='flex items-center gap-3'>
-          <Link to='/login'>로그인</Link>
-          <Link to='/signup'>회원가입</Link>
-        </div>
-      )}
+    <div className='w-full border-b flex justify-center'>
+      <div className='w-[70rem] py-3 flex justify-between'>
+        <Link to='' className='bobissue-logo'>
+          <img src={LongLogo} alt='' className='h-[35px]' />
+        </Link>
+        {/* 로그인 상태에 따라 변화 */}
+        {isAuthenticated && loginStatus === 'consumer' ? (
+          <div className='flex items-center gap-3'>
+            <Link to={'/mypage/order'} className='hover:text-[#6F4E37]'>
+              마이페이지
+            </Link>
+            <button className='hover:text-[#6F4E37]' onClick={logout}>
+              로그아웃
+            </button>
+          </div>
+        ) : (
+          <div className='flex items-center gap-3'>
+            <Link to='/login' className='hover:text-[#6F4E37]'>
+              로그인
+            </Link>
+            <Link to='/signup' className='hover:text-[#6F4E37]'>
+              회원가입
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

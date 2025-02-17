@@ -132,13 +132,9 @@ const EditProduct = () => {
       // ✅ 새로운 이미지 파일 추가
       product.images.forEach((img) => {
         if (img.file) {
-          formData.append('images', img.file) // 새 이미지만 추가
+          formData.append('images', img.file) // 새 이미지 업로드
         }
       })
-
-      for (const pair of formData.entries()) {
-        console.log(`📌 FormData 확인: ${pair[0]} →`, pair[1])
-      }
 
       await API.put(`/item/${itemNo}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },

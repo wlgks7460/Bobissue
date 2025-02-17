@@ -3,10 +3,15 @@ import SearchBar from '../../components/consumer/common/SearchBar'
 import API from '../../utils/API'
 import CartItem from '../../components/consumer/cart/CartItem'
 import CartSoldOut from '../../components/consumer/cart/CartSoldOut'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { useSelector } from 'react-redux'
 
 const Cart = () => {
   const navigate = useNavigate()
+
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
+  const loginStatus = useSelector((state) => state.user.status)
 
   const [items, setItems] = useState([]) // 구매 가능 상품
   const [soldOut, setSoldOut] = useState([]) // 품절 상품
@@ -57,13 +62,33 @@ const Cart = () => {
   // 상품 삭제 함수
   const removeItem = (itemNo) => {
     const updatedItems = items.filter((item) => item.itemData.itemNo !== itemNo)
+    const updatedSoldOut = soldOut.filter((item) => item.itemData.itemNo !== itemNo)
     setItems(updatedItems)
+    setSoldOut(updatedSoldOut)
     updateTotalPrice(updatedItems)
 
     // localStorage 업데이트
     const cartData = JSON.parse(localStorage.getItem('cart')) || []
     const updatedCartData = cartData.filter((item) => item.itemNo !== itemNo)
     localStorage.setItem('cart', JSON.stringify(updatedCartData))
+  }
+  // 상품 전체 삭제
+  const removeAll = () => {
+    setItems([])
+    setSoldOut([])
+    localStorage.removeItem('cart')
+  }
+
+  // 결제 페이지 이동
+  const goPayment = (e) => {
+    e.preventDefault()
+    if (soldOut.length > 0) {
+      alert('구매 불가 상품을 제거해주세요.')
+    } else if (items.length < 1) {
+      alert('장바구니가 비었습니다.')
+    } else {
+      navigate('/payment')
+    }
   }
 
   // 데이터 불러오기
@@ -111,11 +136,24 @@ const Cart = () => {
         <h2 className='text-center text-2xl mb-10'>장바구니</h2>
         <div className='w-[60rem] flex gap-5 justify-between'>
           {/* 상품 관련 */}
-          <div className='grow'>
-            {items.length === 0 && soldOut.length === 0 ? '상품이 없습니다.' : ''}
+          <div className='grow flex flex-col gap-5'>
+            {/* 장바구니에서 상품 삭제 */}
+            <div className='w-full border border-[#6F4E37] rounded p-3'>
+              <button className='text-gray-600 hover:text-[#6F4E37]' onClick={removeAll}>
+                전체 삭제
+              </button>
+            </div>
+            {items.length === 0 && soldOut.length === 0 && (
+              <div className='flex flex-col gap-3 items-center mt-10'>
+                <p className='text-center'>
+                  <ExclamationCircleIcon className='w-20 text-gray-400' />
+                </p>
+                <p className='text-center text-xl text-gray-600'>장바구니가 비었습니다.</p>
+              </div>
+            )}
             {/* 구매 가능 */}
             {items.length > 0 && (
-              <div className='w-full border border-gray-400 rounded p-3'>
+              <div className='w-full border border-[#6F4E37] rounded p-3'>
                 <h3 className='text-lg mb-5'>구매 가능 상품</h3>
                 {items.map((v) => (
                   <CartItem
@@ -129,16 +167,16 @@ const Cart = () => {
             )}
             {/* 구매 불가 */}
             {soldOut.length > 0 && (
-              <div>
+              <div className='w-full border border-[#6F4E37] rounded p-3'>
                 <h3 className='text-lg mb-5'>구매 불가 상품</h3>
                 {soldOut.map((v) => (
-                  <CartSoldOut key={v.itemData.itemNo} item={v} />
+                  <CartSoldOut key={v.itemData.itemNo} item={v} removeItem={removeItem} />
                 ))}
               </div>
             )}
           </div>
           {/* 결제 관련 */}
-          <div className='w-[350px] border border-gray-400 rounded p-3'>
+          <div className='w-[350px] h-[300px] border border-[#6F4E37] rounded p-3'>
             <h3 className='text-lg mb-5'>결제 금액</h3>
             <div className='flex flex-col gap-3 mb-5'>
               <div className='flex justify-between'>
@@ -154,13 +192,20 @@ const Cart = () => {
             <div className='flex justify-between mb-5'>
               <span>총 금액</span> <span>{addComma(totalSalePrice + deliveryFee)}원</span>
             </div>
-            <button
-              className='w-full h-[50px] rounded bg-indigo-400 text-white hover:bg-indigo-600'
-              onClick={() => navigate('/payment')}
-              disabled={soldOut.length > 0 || items.length < 1}
-            >
-              구매하기
-            </button>
+            {!isAuthenticated && loginStatus !== 'consumer' ? (
+              <Link to={'/login'}>
+                <button className='w-full h-[50px] rounded text-white bg-[#A67B5B] hover:bg-[#6F4E37]'>
+                  로그인
+                </button>
+              </Link>
+            ) : (
+              <button
+                className='w-full h-[50px] rounded text-white bg-[#A67B5B] hover:bg-[#6F4E37]'
+                onClick={goPayment}
+              >
+                구매하기
+              </button>
+            )}
           </div>
         </div>
       </div>

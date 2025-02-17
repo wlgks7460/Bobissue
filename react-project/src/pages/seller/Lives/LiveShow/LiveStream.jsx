@@ -1,23 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
+import API from '@/utils/API' // API 호출용
+import { OpenVidu } from 'openvidu-browser' // ✅ OpenVidu 라이브러리 추가
 import SockJS from 'sockjs-client' // ✅ SockJS 사용
 import { Client } from '@stomp/stompjs' // ✅ STOMP 사용
-import LiveChat from './LiveChat.jsx'
+import LiveChat from './LiveChat.jsx' // ✅ 채팅 컴포넌트
 
 const LiveStreamSetup = () => {
+  
   const debug_mode = localStorage.getItem('debug_mode') === 'true'
   const location = useLocation()
   const event = location.state?.event
   const videoRef = useRef(null)
   const stompClientRef = useRef(null) // 📌 STOMP 클라이언트 참조 추가
   const [stream, setStream] = useState(null)
+  const [session, setSession] = useState(null)
   const [isStreaming, setIsStreaming] = useState(false)
   const [micOn, setMicOn] = useState(true)
   const [cameraOn, setCameraOn] = useState(true)
   const [chatActive, setChatActive] = useState(false) // 📌 채팅 활성화 여부 추가
 
-  // 📌 현재 시간
+  // 📌 현재 시간 계산
   const now = moment()
   const startAt = event?.startAt ? moment(event.startAt, 'YYYYMMDD HHmmss') : null
   const endAt = event?.endAt ? moment(event.endAt, 'YYYYMMDD HHmmss') : null
@@ -42,71 +46,86 @@ const LiveStreamSetup = () => {
     setupStream()
   }, [cameraOn, micOn]) // 마이크 또는 카메라 상태 변경 시 다시 스트림 설정
 
-  // 📌 방송 시작 / 중지 핸들러 (SockJS + STOMP 사용)
-  const handleStreamToggle = () => {
-    console.log(`라이브 가능 여부: ${isLiveAvailable}, 디버그 모드: ${debug_mode}`)
-
-    if (!isLiveAvailable && !debug_mode) {
-      return
-    }
-
+  // 📌 방송 시작 / 중지 핸들러
+  const handleStreamToggle = async () => {
     if (isStreaming) {
+      // 방송 중지 로직
       setIsStreaming(false)
-      setChatActive(false) // 📌 방송이 종료되면 채팅도 종료
-
-      // 📌 STOMP 연결 해제
+      setChatActive(false)
+      if (session) {
+        session.disconnect()
+        setSession(null)
+      }
       if (stompClientRef.current) {
         stompClientRef.current.deactivate()
         stompClientRef.current = null
-        console.log('🎥 스트리밍 서버 연결 종료')
       }
-
-      // 📌 스트림 종료
       if (stream) {
         stream.getTracks().forEach((track) => track.stop())
         setStream(null)
       }
+
+      // 📌 PeerConnection 해제
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close()
+        peerConnectionRef.current = null
+      }
     } else {
-      navigator.mediaDevices
-        .getUserMedia({ video: cameraOn, audio: micOn })
-        .then((mediaStream) => {
-          setStream(mediaStream)
-          if (videoRef.current) {
-            videoRef.current.srcObject = mediaStream
-          }
-        })
-        .catch((error) => console.error('❌ 미디어 장치를 가져오는 데 실패했습니다.', error))
+      try {
+          // Initialize OpenVidu session
+          const OV = new OpenVidu();
+          const mySession = OV.initSession();
 
-      setIsStreaming(true)
-      setChatActive(true) // 📌 방송 시작 시 채팅도 시작
+                // Set up event listeners
+      mySession.on('streamCreated', (event) => {
+        const subscriber = mySession.subscribe(event.stream, undefined);
+        setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+      });
 
-      // 📌 SockJS + STOMP를 사용하여 WebSocket 연결
-      const socket = new SockJS('http://localhost:8080/ws/live')
-      const client = new Client({
-        webSocketFactory: () => socket,
-        reconnectDelay: 5000, // 자동 재연결 (5초)
-        onConnect: () => {
-          console.log('✅ 스트리밍 서버 연결 완료')
-          stompClientRef.current = client
+      mySession.on('streamDestroyed', (event) => {
+        setSubscribers((prevSubscribers) =>
+          prevSubscribers.filter((sub) => sub !== event.stream.streamManager)
+        );
+      });
 
-          // 방송 시작 메시지 서버에 전송
-          client.publish({
-            destination: '/pub/live/start',
-            body: JSON.stringify({
-              streamKey: event?.id || 'defaultStreamKey',
-              broadcaster: localStorage.getItem('user_id') || 'guest',
-            }),
-          })
-        },
-        onStompError: (frame) => {
-          console.error('❌ STOMP 오류 발생:', frame)
-        },
-      })
+      mySession.on('exception', (exception) => {
+        console.warn(exception);
+      });
 
-      stompClientRef.current = client
-      client.activate()
+
+            // Get token from your server
+            const token = await getToken(); // Implement this function to get the token from your server
+
+            // Connect to the session
+            await mySession.connect(token, { clientData: 'Broadcaster' });
+      
+            // Initialize publisher
+            const publisher = await OV.initPublisherAsync(undefined, {
+              audioSource: undefined,
+              videoSource: undefined,
+              publishAudio: micOn,
+              publishVideo: cameraOn,
+              resolution: '640x480',
+              frameRate: 30,
+              insertMode: 'APPEND',
+              mirror: false,
+            });
+      
+            // Publish the stream
+            await mySession.publish(publisher);
+      
+            // Update state
+            setSession(mySession);
+            setIsStreaming(true);
+            setChatActive(true);
+
+
+      } catch (error) {
+        console.error('❌ OpenVidu 연결 실패:', error)
+      }
     }
   }
+
 
   // 📌 마이크 토글 핸들러
   const handleMicToggle = () => {

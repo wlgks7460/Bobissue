@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { FaSignOutAlt, FaBug, FaHome } from 'react-icons/fa' // ✅ Home 아이콘 추가
+import { FaSignOutAlt, FaBug, FaHome, FaBars } from 'react-icons/fa' // ✅ 햄버거 아이콘 변경
 
-const TopNavbar = ({ toggleSidebar }) => {
+const TopNavbar = ({ toggleSidebar, user }) => {
   const navigate = useNavigate()
   const [debugMode, setDebugMode] = useState(false)
 
@@ -26,62 +26,59 @@ const TopNavbar = ({ toggleSidebar }) => {
   }
 
   return (
-    <nav className='flex items-center justify-between bg-gray-100 px-4 py-3 border-b-2 relative z-50'>
-      {/* 햄버거 버튼 */}
-      <button
-        onClick={toggleSidebar}
-        className='text-gray-600 p-2 rounded-md hover:bg-gray-200 focus:outline-none'
-        aria-label='Toggle Sidebar'
-      >
-        <svg
-          fill='none'
-          strokeWidth={1.5}
-          stroke='currentColor'
-          viewBox='0 0 24 24'
-          xmlns='http://www.w3.org/2000/svg'
-          className='w-6 h-6'
+    <nav className='flex items-center justify-between bg-gray-100 px-6 py-3 border-b border-gray-300 shadow-md relative z-50'>
+      {/* 왼쪽 영역 (햄버거 메뉴 + 로고) */}
+      <div className='flex items-center gap-4'>
+        {/* ☰ 햄버거 버튼 */}
+        <button
+          onClick={toggleSidebar}
+          className='text-gray-800 p-2 rounded-lg hover:bg-gray-300 focus:outline-none transition'
+          aria-label='Toggle Sidebar'
         >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
+          <FaBars className='w-6 h-6' />
+        </button>
+
+        {/* 로고 이미지 */}
+        <Link to='/seller'>
+          <img
+            src='/bobissueLogo.png'
+            alt='로고'
+            className='w-16 h-12 object-cover cursor-pointer'
           />
-        </svg>
-      </button>
+        </Link>
+      </div>
 
-      {/* 로고 이미지 */}
-      <Link to=''>
-        <img
-          src='/path/to/your/image.png'
-          alt='이미지'
-          className='w-12 h-12 object-cover cursor-pointer'
-        />
-      </Link>
-
-      {/* 네비게이션 링크 */}
+      {/* 네비게이션 버튼 그룹 */}
       <div className='ml-auto flex items-center gap-4'>
-        {/* ✅ 홈 버튼 (아이콘) */}
+        {/* 👤 유저 인사 메시지 */}
+        <span className='text-gray-800 font-semibold'>
+          {user?.name || '판매자'}님 안녕하세요!
+        </span>
+
+        {/* 🏠 홈 버튼 */}
         <Link
           to='/'
-          className='p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none'
+          className='p-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition flex items-center'
         >
           <FaHome className='w-5 h-5' />
         </Link>
 
-        {/* ✅ 디버그 모드 토글 버튼 (아이콘) */}
+        {/* 🐞 디버그 모드 토글 버튼 */}
         <button
           onClick={toggleDebugMode}
-          className={`p-2 rounded-full focus:outline-none ${
-            debugMode ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-500 hover:bg-gray-600'
+          className={`p-3 rounded-lg transition ${
+            debugMode
+              ? 'bg-gray-600 hover:bg-gray-700 text-white'
+              : 'bg-gray-400 hover:bg-gray-500 text-white'
           }`}
         >
-          <FaBug className='text-white w-5 h-5' />
+          <FaBug className='w-5 h-5' />
         </button>
 
-        {/* ✅ 로그아웃 버튼 (아이콘) */}
+        {/* 🚪 로그아웃 버튼 */}
         <button
           onClick={handleLogout}
-          className='p-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none'
+          className='p-3 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition'
         >
           <FaSignOutAlt className='w-5 h-5' />
         </button>

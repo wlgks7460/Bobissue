@@ -2,14 +2,17 @@ package com.c108.springproject.seller.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.querydsl.dto.DemographicStatsDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.dto.SellerDto;
 import com.c108.springproject.seller.dto.SellerProfiltResDto;
 import com.c108.springproject.seller.dto.SellerUpdateReq;
 import com.c108.springproject.seller.dto.SignUpReqDto;
+import com.c108.springproject.seller.dto.querydsl.*;
 import com.c108.springproject.seller.dto.request.ExtraAccountReqDto;
 import com.c108.springproject.seller.dto.response.ExtraAccountResDto;
+import com.c108.springproject.seller.repository.SellerQueryRepository;
 import com.c108.springproject.seller.repository.SellerRepository;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,9 +28,11 @@ import java.util.stream.Collectors;
 public class SellerService {
 
     private final SellerRepository sellerRepository;
+    private final SellerQueryRepository sellerQueryRepository;
 
-    public SellerService(SellerRepository sellerRepository, UserRepository userRepository) {
+    public SellerService(SellerRepository sellerRepository, UserRepository userRepository, SellerQueryRepository sellerQueryRepository) {
         this.sellerRepository = sellerRepository;
+        this.sellerQueryRepository = sellerQueryRepository;
     }
 
     @Transactional
@@ -163,4 +168,92 @@ public class SellerService {
                 .collect(Collectors.toList());
     }
 
+    
+    // 아이템 통계 조회
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public List<ItemRankingDto> getItemRankings(SellerQueryRepository.SalesPeriod period) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        int companyNo = seller.getCompany().getCompanyNo();
+
+        return sellerQueryRepository.getItemRankings(companyNo, period);
+    }
+
+    @Transactional()
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public CustomerSatisfactionDto getCustomerSatisfaction() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getCustomerSatisfaction(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public MonthlySalesComparisonDto getMonthlySalesComparison() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getMonthlySalesComparison(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public SalesPredictionDto getSalesPrediction() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getSalesPrediction(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public List<CategorySalesDto> getCategorySalesStatistics() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getCategorySalesStatistics(seller.getCompany().getCompanyNo());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public List<HourlySalesDto> getHourlySalesStatistics() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getHourlySalesStatistics(seller.getCompany().getCompanyNo());
+    }
+
+    // 성별, 연령대 통계
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyAuthority('SELLER')")
+    public DemographicStatsDto getDemographicStats() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Seller seller = sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+
+        return sellerQueryRepository.getDemographicStats(seller.getCompany().getCompanyNo());
+    }
 }

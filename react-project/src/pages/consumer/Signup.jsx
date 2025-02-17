@@ -220,7 +220,7 @@ const Signup = () => {
                   id='male'
                   name='gender'
                   value='M'
-                  className='w-5 h-5 me-5 accent-indigo-600'
+                  className='w-5 h-5 me-5 accent-[#6F4E37]'
                   onChange={handleGender}
                   defaultChecked
                 />
@@ -232,7 +232,7 @@ const Signup = () => {
                   id='female'
                   name='gender'
                   value='F'
-                  className='w-5 h-5 me-5 accent-indigo-600'
+                  className='w-5 h-5 me-5 accent-[#6F4E37]'
                   onChange={handleGender}
                 />
                 <label htmlFor='female'>여</label>
@@ -281,7 +281,7 @@ const Signup = () => {
                   emailAgreement &&
                   smsAgreement &&
                   ageAgreement ? (
-                    <SolidCheckCircleIcon className='w-8 text-indigo-600' />
+                    <SolidCheckCircleIcon className='w-8 text-[#6F4E37]' />
                   ) : (
                     <OutlineCheckCircleIcon className='w-8 text-gray-600' />
                   )}
@@ -302,7 +302,7 @@ const Signup = () => {
                   }}
                 >
                   {termsAgreement ? (
-                    <SolidCheckCircleIcon className='w-8 text-indigo-600' />
+                    <SolidCheckCircleIcon className='w-8 text-[#6F4E37]' />
                   ) : (
                     <OutlineCheckCircleIcon className='w-8 text-gray-600' />
                   )}
@@ -312,7 +312,7 @@ const Signup = () => {
                     이용약관 동의 <span className='text-gray-500'>(필수)</span>
                   </p>
                   <button
-                    className='text-indigo-600'
+                    className='text-[#6F4E37]'
                     onClick={(e) => {
                       e.preventDefault()
                       setTermsBlock(!termsBlock)
@@ -340,7 +340,7 @@ const Signup = () => {
                   }}
                 >
                   {personalDataAgreement ? (
-                    <SolidCheckCircleIcon className='w-8 text-indigo-600' />
+                    <SolidCheckCircleIcon className='w-8 text-[#6F4E37]' />
                   ) : (
                     <OutlineCheckCircleIcon className='w-8 text-gray-600' />
                   )}
@@ -350,7 +350,7 @@ const Signup = () => {
                     개인정보 수집·이용 동의 <span className='text-gray-500'>(필수)</span>
                   </p>
                   <button
-                    className='text-indigo-600'
+                    className='text-[#6F4E37]'
                     onClick={(e) => {
                       e.preventDefault()
                       setPersonalDataBlock(!personalDataBlock)
@@ -378,7 +378,7 @@ const Signup = () => {
                   }}
                 >
                   {emailAgreement ? (
-                    <SolidCheckCircleIcon className='w-8 text-indigo-600' />
+                    <SolidCheckCircleIcon className='w-8 text-[#6F4E37]' />
                   ) : (
                     <OutlineCheckCircleIcon className='w-8 text-gray-600' />
                   )}
@@ -397,7 +397,7 @@ const Signup = () => {
                   }}
                 >
                   {smsAgreement ? (
-                    <SolidCheckCircleIcon className='w-8 text-indigo-600' />
+                    <SolidCheckCircleIcon className='w-8 text-[#6F4E37]' />
                   ) : (
                     <OutlineCheckCircleIcon className='w-8 text-gray-600' />
                   )}
@@ -416,7 +416,7 @@ const Signup = () => {
                   }}
                 >
                   {ageAgreement ? (
-                    <SolidCheckCircleIcon className='w-8 text-indigo-600' />
+                    <SolidCheckCircleIcon className='w-8 text-[#6F4E37]' />
                   ) : (
                     <OutlineCheckCircleIcon className='w-8 text-gray-600' />
                   )}
@@ -433,7 +433,7 @@ const Signup = () => {
           <input
             type='submit'
             value='회원가입'
-            className='w-full h-[50px] border border-gray-400 rounded bg-indigo-400 hover:bg-indigo-600 text-white cursor-pointer'
+            className='w-full h-[50px] rounded bg-[#A67B5B] hover:bg-[#6F4E37] text-white cursor-pointer'
           />
         </form>
       </div>

@@ -19,7 +19,7 @@ const AdminHome = () => {
         </div>
 
         {/* 콘텐츠 영역 */}
-        <main className='pt-16 bg-white h-full p-6 overflow-y-auto'>
+        <main className='pt-16 bg-white h-full p-6 overflow-y-auto mt-8'>
           <AdminDashBoard />
         </main>
       </div>

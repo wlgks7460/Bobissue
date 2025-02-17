@@ -2,6 +2,9 @@ package com.c108.springproject.seller.service;
 
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.item.domain.Item;
+import com.c108.springproject.item.dto.response.ItemListResDto;
+import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.dto.request.CompanyReqDto;
@@ -24,10 +27,12 @@ import java.util.stream.Collectors;
 public class CompanyService {
     private final CompanyRepository companyRepository;
     private final SellerRepository sellerRepository;
+    private final ItemRepository itemRepository;
 
-    public CompanyService(CompanyRepository companyRepository, SellerRepository sellerRepository) {
+    public CompanyService(CompanyRepository companyRepository, SellerRepository sellerRepository, ItemRepository itemRepository) {
         this.companyRepository = companyRepository;
         this.sellerRepository = sellerRepository;
+        this.itemRepository = itemRepository;
     }
 
 
@@ -97,6 +102,22 @@ public class CompanyService {
         Company company = companyRepository.findById(companyNo)
                 .orElseThrow(() -> new BobIssueException(ResponseCode.COMPANY_NOT_FOUND));
         return CompanyResDto.toDto(company, sellerResDtos);
+    }
+    
+    
+    // 회사 상품 조회
+    @Transactional
+    public List<ItemListResDto> getCompanyItems() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+        Seller seller = sellerRepository.findByEmail(email).orElseThrow(() -> new BobIssueException(ResponseCode.SELLER_NOT_FOUND));
+        int companyNo = seller.getCompany().getCompanyNo();
+
+        return itemRepository.findByCompanyCompanyNo(companyNo).stream()
+                .map(ItemListResDto::toDto)
+                .collect(Collectors.toList());
+
     }
 
 

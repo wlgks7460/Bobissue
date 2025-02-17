@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import {
+  FaShoppingCart,
+  FaBoxOpen,
+  FaChartLine,
+  FaUsers,
+  FaRegHandshake,
+  FaQuestionCircle,
+} from 'react-icons/fa'
 
 const Dashboard = () => {
   const [hasPendingProduct, setHasPendingProduct] = useState(false)
@@ -19,106 +27,111 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <div className='mx-auto p-6 bg-gray-100 min-h-screen'>
-      <h1 className='text-3xl font-bold text-gray-800 mb-6'>대시보드</h1>
+    <div className='max-w-7xl mx-auto px-10 py-12 bg-white min-h-screen'>
+      {/* 헤더 */}
+      <header className='text-center mb-12'>
+        <h1 className='text-4xl font-extrabold text-gray-900'>상품 관리, 쉽고 간편하게!</h1>
+        <p className='text-lg text-gray-700 mt-3'>
+          상품 등록부터 정산까지 한 곳에서 관리하세요.
+          <br />
+          효율적인 상품 관리 시스템을 경험해보세요.
+        </p>
+      </header>
 
-      {/* 상단 기능 메뉴 */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6'>
-        {[
-          {
-            title: '상품 관리',
-            description: '등록된 상품을 확인하고 관리하세요.',
-            link: 'products/search',
-            color: 'bg-amber-500',
-          },
-          {
-            title: '주문 관리',
-            description: '진행 중인 주문을 확인하세요.',
-            link: 'delivery/orders',
-            color: 'bg-green-500',
-          },
-          {
-            title: '판매 통계',
-            description: '판매 데이터를 확인하세요.',
-            link: 'stats/performance',
-            color: 'bg-lime-500',
-          },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'
-          >
-            <h3 className='text-lg font-semibold'>{item.title}</h3>
-            <p className='text-sm text-gray-600'>{item.description}</p>
-            <Link to={item.link} className='mt-4'>
-              <button
-                className={`${item.color} text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition`}
-              >
-                {item.title} 보기
-              </button>
-            </Link>
-          </div>
-        ))}
+      {/* 대시보드 카드 레이아웃 */}
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12'>
+        <DashboardItem
+          title='상품 조회 & 관리'
+          description='등록된 상품을 확인하고 관리하세요.'
+          link='products/search'
+          color='bg-gray-50'
+          hoverColor='hover:bg-gray-200'
+          icon={<FaBoxOpen className='text-gray-600' />}
+        />
+        <DashboardItem
+          title='상품 등록'
+          description={hasPendingProduct ? '이어서 등록하세요.' : '새로운 상품을 등록하세요.'}
+          link='products/register'
+          color='bg-gray-200'
+          hoverColor='hover:bg-gray-400'
+          icon={<FaShoppingCart className='text-gray-700' />}
+        />
+        <DashboardItem
+          title='라이브 신청'
+          description='라이브 커머스를 신청하세요.'
+          link='lives/apply'
+          color='bg-gray-50'
+          hoverColor='hover:bg-gray-200'
+          icon={<FaRegHandshake className='text-gray-600' />}
+        />
+        <DashboardItem
+          title='주문 관리'
+          description='진행 중인 주문을 확인하세요.'
+          link='delivery/orders'
+          color='bg-gray-200'
+          hoverColor='hover:bg-gray-400'
+          icon={<FaShoppingCart className='text-gray-700' />}
+        />
+        <DashboardItem
+          title='판매 통계'
+          description='판매 데이터를 확인하세요.'
+          link='stats/overview'
+          color='bg-gray-50'
+          hoverColor='hover:bg-gray-200'
+          icon={<FaChartLine className='text-gray-600' />}
+        />
+        <DashboardItem
+          title='고객 문의'
+          description='고객의 질문과 요청을 확인하세요.'
+          link='inquiries/list'
+          color='bg-gray-200'
+          hoverColor='hover:bg-gray-400'
+          icon={<FaQuestionCircle className='text-gray-700' />}
+        />
+        <DashboardItem
+          title='정산 관리'
+          description='정산 내역을 확인하고 관리하세요.'
+          link='settlement/overview'
+          color='bg-gray-50'
+          hoverColor='hover:bg-gray-200'
+          icon={<FaUsers className='text-gray-600' />}
+        />
       </div>
 
-      {/* 상품 등록 및 라이브 신청 */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6'>
-        <div className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'>
-          <h3 className='text-lg font-semibold'>
-            {hasPendingProduct ? '이어서 상품 등록하기' : '새로운 상품을 등록하세요'}
-          </h3>
-          <Link to='products/register' className='mt-4'>
-            <button className='bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
-              {hasPendingProduct ? '이어서 등록하기' : '상품 등록하기'}
-            </button>
-          </Link>
-        </div>
-
-        <div className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'>
-          <h3 className='text-lg font-semibold'>라이브 커머스를 신청하세요</h3>
-          <Link to='lives/apply' className='mt-4'>
-            <button className='bg-orange-500 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
-              라이브 신청하기
-            </button>
-          </Link>
-        </div>
-      </div>
-
-      {/* 추가 정보 섹션 */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
-        {[
-          {
-            title: '공지사항',
-            description: '새로운 업데이트 및 판매자 공지를 확인하세요.',
-            link: 'notices',
-          },
-          {
-            title: '고객 문의',
-            description: '고객의 질문과 요청을 확인하세요.',
-            link: 'inquiries/list',
-          },
-          {
-            title: '정산 관리',
-            description: '정산 내역을 확인하고 관리하세요.',
-            link: 'settlement/overview',
-          },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className='bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-300 flex flex-col justify-between h-full'
-          >
-            <h3 className='text-lg font-semibold'>{item.title}</h3>
-            <p className='text-sm text-gray-600'>{item.description}</p>
-            <Link to={item.link} className='mt-4'>
-              <button className='bg-amber-400 text-white px-4 py-2 rounded-full text-sm hover:scale-105 transition'>
-                {item.title} 보기
-              </button>
-            </Link>
-          </div>
-        ))}
-      </div>
+      {/* 📢 판매자 광고 배너 */}
+      <SellerAdBanner />
     </div>
   )
 }
+
+// 📌 개별 대시보드 아이템 (버튼 스타일 개선)
+const DashboardItem = ({ title, description, link, color, hoverColor, icon }) => (
+  <Link to={link} className='block transform transition-transform hover:scale-105'>
+    <div
+      className={`flex flex-col items-center justify-center p-8 rounded-xl text-gray-900 ${color} ${hoverColor} shadow-md hover:shadow-lg transition`}
+    >
+      <div className='text-5xl mb-4'>{icon}</div>
+      <h3 className='font-bold text-xl text-center'>{title}</h3>
+      <p className='text-sm text-center text-gray-600'>{description}</p>
+    </div>
+  </Link>
+)
+
+// 📢 판매자를 위한 광고 배너 컴포넌트
+const SellerAdBanner = () => (
+  <div className='bg-gray-100 text-gray-800 p-10 rounded-xl shadow-lg text-center max-w-4xl mx-auto'>
+    <h2 className='text-3xl font-bold mb-4'>🚀 판매자를 위한 특별한 혜택!</h2>
+    <p className='text-lg text-gray-700'>
+      지금 가입하고 광고 프로모션을 무료로 경험하세요.
+      <br />더 많은 고객에게 상품을 홍보하고, 매출을 극대화하세요!
+    </p>
+    <Link
+      to='/seller/ads'
+      className='mt-6 inline-block px-6 py-3 bg-gray-300 text-gray-900 font-semibold rounded-lg hover:bg-gray-400 transition'
+    >
+      광고 프로모션 알아보기
+    </Link>
+  </div>
+)
 
 export default Dashboard

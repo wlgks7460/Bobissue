@@ -9,7 +9,7 @@ import ProductDate from './Form/Product/ProductDate'
 const Register = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const debug_mode = localStorage.getItem('debug_mode') === 'true' // ✅ 디버그 모드 추가
+  const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
   const [product, setProduct] = useState({
     name: '',
@@ -29,26 +29,21 @@ const Register = () => {
       alert('상품 등록을 위해 로그인해주세요.')
       navigate('/seller/login')
     }
-
-    // ✅ 디버그 모드 체크 (localStorage에서 불러오기)
   }, [navigate])
 
   const handleRemoveImage = (imageIndex) => {
     setProduct((prev) => {
-      // 먼저 imageUrl을 가져와서 revokeObjectURL을 수행
       const imageUrlToRevoke = prev.images[imageIndex]?.imageUrl
-
       const newImages = prev.images.filter((_, index) => index !== imageIndex)
 
       if (imageUrlToRevoke) {
-        URL.revokeObjectURL(imageUrlToRevoke) // 🔹 여기서 해제
+        URL.revokeObjectURL(imageUrlToRevoke)
       }
 
       return { ...prev, images: newImages }
     })
   }
 
-  // ✅ 상품 등록 요청 함수
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -71,7 +66,6 @@ const Register = () => {
     try {
       const formData = new FormData()
 
-      // ✅ 상품 정보 JSON을 "items" 키로 추가
       const productData = {
         categoryNo: parseInt(product.categoryNo, 10),
         name: product.name,
@@ -84,7 +78,6 @@ const Register = () => {
 
       formData.append('item', JSON.stringify(productData))
 
-      // ✅ 이미지 파일 추가 (파일이 있는 경우만)
       if (product.images.length > 0) {
         product.images.forEach((img) => {
           if (img.file) {
@@ -93,7 +86,6 @@ const Register = () => {
         })
       }
 
-      // ✅ 디버그 모드일 경우 API 호출 없이 콘솔 출력
       if (debug_mode) {
         console.log('📌 [DEBUG MODE] 상품 등록 요청 데이터:', {
           item: productData,
@@ -103,12 +95,10 @@ const Register = () => {
         return
       }
 
-      // ✅ FormData 디버깅 (파일 포함 확인)
       for (const pair of formData.entries()) {
         console.log(`📌 FormData 확인: ${pair[0]} →`, pair[1])
       }
 
-      // ✅ 상품 등록 API 요청
       const response = await API.post('/item', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
@@ -128,28 +118,33 @@ const Register = () => {
   }
 
   return (
-    <div className='p-6'>
-      <h1 className='font-bold text-[32px] mb-10'>상품 등록</h1>
-      <form onSubmit={handleSubmit}>
-        <ProductImage
-          product={product}
-          handleRemoveImage={handleRemoveImage}
-          setProduct={setProduct}
-        />
+    <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-300">
+      <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-10">상품 등록</h1>
+
+      {/* ✅ 디버그 모드 표시 */}
+      {debug_mode && (
+        <div className="bg-gray-200 text-gray-700 p-3 rounded-md mb-6 text-center">
+          ⚠️ <strong>디버그 모드 활성화됨</strong> - 서버 요청이 실행되지 않습니다.
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <ProductImage product={product} handleRemoveImage={handleRemoveImage} setProduct={setProduct} />
         <ProductInfo product={product} setProduct={setProduct} />
         <ProductDetails product={product} setProduct={setProduct} />
         <ProductDate product={product} setProduct={setProduct} />
 
-        {/* ✅ 등록 버튼 */}
-        <button
-          type='submit'
-          className={`mt-5 p-1 text-white rounded-[4px]  ${
-            loading ? 'bg-amber-600 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600'
-          }`}
-          disabled={loading}
-        >
-          {loading ? '등록 중...' : '상품 등록'}
-        </button>
+        <div className="text-center mt-8">
+          <button
+            type="submit"
+            className={`px-6 py-3 text-white font-semibold rounded-lg transition w-full md:w-auto ${
+              loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-800'
+            }`}
+            disabled={loading}
+          >
+            {loading ? '등록 중...' : '상품 등록'}
+          </button>
+        </div>
       </form>
     </div>
   )

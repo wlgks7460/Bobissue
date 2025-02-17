@@ -1,12 +1,185 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/outline'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import HomeLiveShoppingItem from './HomeLiveShoppingItem'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+
+// 플러그인 등록
+dayjs.extend(isBetween)
 
 const HomeLiveShopping = () => {
+  const [castData, setCastData] = useState([])
+
+  // 방송 조회
+  const getCast = () => {
+    const tempData = [
+      {
+        castNo: 4,
+        title: '첫 방송입니다.',
+        content: '닭가슴살 초특가',
+        startAt: '20250218 080000',
+        endAt: '20250218 100000',
+        castItemList: [
+          {
+            itemNo: 1,
+            name: '상품 이름1',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 2,
+            name: '상품 이름2',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 52,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+        ],
+        castStatus: '등록',
+        createAt: '20250212 014213',
+        createdUser: 'SELLER seller@naver.com',
+        updatedAt: '20250212 014213',
+        updatedUser: 'SELLER seller@naver.com',
+        delYN: 'N',
+      },
+      {
+        castNo: 5,
+        title: '두번 방송입니다.',
+        content: '닭가슴살 도시락 초특가',
+        startAt: '20250218 100000',
+        endAt: '20250218 110000',
+        castItemList: [
+          {
+            itemNo: 1,
+            name: '상품 이름1',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 2,
+            name: '상품 이름2',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 51,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 52,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 53,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 54,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+          {
+            itemNo: 55,
+            name: '상품 이름122',
+            description: '상품 설명1',
+          },
+        ],
+        castStatus: '등록',
+        createAt: '20250212 014735',
+        createdUser: 'SELLER seller@naver.com',
+        updatedAt: '20250212 014735',
+        updatedUser: 'SELLER seller@naver.com',
+        delYN: 'N',
+      },
+    ]
+    const liveEvents = tempData.filter((event) => {
+      const currentTime = dayjs()
+      const startTime = dayjs(event.startAt)
+      const endTime = dayjs(event.endAt)
+
+      // 방송 중인 이벤트
+      return currentTime.isBetween(startTime, endTime)
+    })
+    const upcomingEvents = tempData.filter((event) => {
+      const currentTime = dayjs()
+      const startTime = dayjs(event.startAt)
+
+      // 방송 예정인 이벤트
+      return currentTime.isBefore(startTime)
+    })
+
+    // 우선 현재 방송이 없으면, 가장 가까운 예정 방송을 표시
+    const events = liveEvents.length > 0 ? liveEvents : upcomingEvents
+    setCastData(events)
+  }
+
+  useEffect(() => {
+    getCast()
+    const interval = setInterval(() => {
+      getCast() // 10초마다 방송 데이터를 갱신
+    }, 10000)
+
+    return () => clearInterval(interval) // cleanup interval
+  }, [])
+
+  // 캐로셀 버튼
+  const PrevBtn = ({ onClick }) => (
+    <button className='absolute top-1/2 -left-20 transform -translate-y-1/2 z-10' onClick={onClick}>
+      {<ArrowLeftCircleIcon className='w-12 text-black/40' />}
+    </button>
+  )
+  const NextBtn = ({ onClick }) => (
+    <button
+      className='absolute top-1/2 -right-20 transform -translate-y-1/2 z-10'
+      onClick={onClick}
+    >
+      {<ArrowRightCircleIcon className='w-12 text-black/40' />}
+    </button>
+  )
+
+  // 캐로셀 설정
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    draggable: false,
+    fade: false,
+    arrows: true,
+    prevArrow: <PrevBtn />,
+    nextArrow: <NextBtn />,
+    initialSlide: 1,
+    pauseOnFocus: true,
+    pauseOnHover: true,
+  }
+
   return (
-    <div className='flex justify-center'>
-      <div className='w-[70rem] h-96'>
-        <p className='text-xl'>라이브 커머스</p>
-        <div className='w-full h-auto flex justify-center'>
-          <div className='w-[30rem] h-72 bg-orange-500'></div>
+    <div className='flex justify-center mt-20 mb-32'>
+      <div className='w-[70rem]'>
+        <h3 className='text-xl'>라이브 커머스</h3>
+        <div className='w-full h-full flex justify-center items-center'>
+          {castData.length > 0 ? (
+            <div className='w-full  h-auto relative'>
+              <Slider {...settings}>
+                {castData.map((v) => (
+                  <HomeLiveShoppingItem key={v.castNo} cast={v} />
+                ))}
+              </Slider>
+            </div>
+          ) : (
+            <div className='flex flex-col gap-3 items-center'>
+              <p className='text-center'>
+                <ExclamationCircleIcon className='w-20 text-gray-400' />
+              </p>
+              <p className='text-center text-xl text-gray-600'>오늘은 방송이 없어요.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

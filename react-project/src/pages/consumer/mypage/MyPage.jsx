@@ -31,8 +31,8 @@ const MyPage = () => {
         <div className='w-[70rem] flex justify-between gap-10 my-10'>
           <MypageSidebar userInfo={userInfo} />
           {/* 마이페이지 컨테이너 */}
-          <div className='grow h-auto border border-gray-300 rounded'>
-            <Outlet context={{ userNo: userInfo.userNo }} />
+          <div className='grow h-auto border border-[#6F4E37] rounded'>
+            <Outlet />
           </div>
         </div>
       </div>

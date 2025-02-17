@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import SearchBar from '../../components/consumer/common/SearchBar'
 import RecipeCategory from '../../components/consumer/recipe/RecipeCategory'
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import recipeDefaultImg from '../../assets/consumer/recipeDefault.webp'
 import { Link } from 'react-router-dom'
 
@@ -32,7 +32,7 @@ const Recipe = () => {
               ))}
             </div>
           ) : (
-            <div className='flex flex-col gap-3 items-center'>
+            <div className='flex flex-col gap-3 items-center mt-20'>
               <p className='text-center'>
                 <ExclamationCircleIcon className='w-20 text-gray-400' />
               </p>

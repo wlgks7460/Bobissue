@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import API from '@/utils/API'
 
 const ProductInfo = ({ product, setProduct }) => {
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
-  const [hoveredCategory, setHoveredCategory] = useState(null)
+  const [subCategories, setSubCategories] = useState([])
   const [isOpenCategory, setIsOpenCategory] = useState(false)
-  const categoryRef = useRef(null)
 
   // ✅ 카테고리 데이터 가져오기
   useEffect(() => {
@@ -23,14 +22,9 @@ const ProductInfo = ({ product, setProduct }) => {
 
   // ✅ 대분류 카테고리 선택 핸들러
   const handleCategorySelect = (category) => {
-    if (category.children?.length > 0) {
-      setHoveredCategory(category.categoryNo)
-    } else {
-      setSelectedCategory(category)
-      setProduct((prev) => ({ ...prev, categoryNo: category.categoryNo }))
-      setIsOpenCategory(false) // ✅ 선택 후 드롭다운 닫기
-      setHoveredCategory(null)
-    }
+    setSelectedCategory(category)
+    setSubCategories(category.children || []) // 하위 카테고리 설정
+    setIsOpenCategory(true)
   }
 
   // ✅ 서브 카테고리 선택 핸들러
@@ -38,68 +32,74 @@ const ProductInfo = ({ product, setProduct }) => {
     setSelectedCategory(subCategory)
     setProduct((prev) => ({ ...prev, categoryNo: subCategory.categoryNo }))
     setIsOpenCategory(false) // ✅ 선택 후 드롭다운 닫기
-    setHoveredCategory(null)
   }
 
   return (
-    <div className="gap-4 relative">
-      <div className='text-lg font-bold mb-2'>상품명</div>
-      <input
-        type="text"
-        placeholder="상품명을 입력하세요"
-        className='w-full p-2 border rounded mb-4'
-        value={product.name}
-        onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
-      />
+    <div className="w-full mx-auto p-6 border border-gray-300 rounded-lg bg-white shadow-md space-y-6">
+      {/* ✅ 상품명 입력 */}
+      <div className="w-full">
+        <label className="text-lg font-bold text-gray-700">상품명</label>
+        <input
+          type="text"
+          placeholder="상품명을 입력하세요"
+          className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none"
+          value={product.name}
+          onChange={(e) => setProduct((prev) => ({ ...prev, name: e.target.value }))}
+        />
+      </div>
 
       {/* ✅ 카테고리 선택 */}
-      <div className="relative" ref={categoryRef}>
-        <h3 className="text-lg font-bold mb-2">카테고리 선택</h3>
+      <div className="relative w-full">
+        <label className="text-lg font-bold text-gray-700">카테고리 선택</label>
         <div
-          className="relative border-2 rounded-[4px] border-black w-[250px] p-2 cursor-pointer"
+          className="w-full mt-2 border border-gray-400 bg-gray-50 rounded-md p-3 cursor-pointer flex justify-between items-center hover:bg-gray-200"
           onClick={() => setIsOpenCategory((prev) => !prev)}
+          aria-haspopup="true"
+          aria-expanded={isOpenCategory}
         >
-          <div className="flex justify-between items-center">
-            {selectedCategory ? selectedCategory.name : '카테고리 선택'}
-            <span>▼</span>
-          </div>
+          {selectedCategory ? selectedCategory.name : '카테고리 선택'}
+          <span className="text-gray-700">▼</span>
         </div>
 
-        {/* ✅ 대분류 카테고리 드롭다운 */}
+        {/* ✅ 카테고리 선택창 (대분류 + 하위 카테고리) */}
         {isOpenCategory && (
-          <div className="absolute left-0 top-full w-[250px] bg-white border border-gray-300 rounded-md shadow-md z-10">
-            {categories.map((category) => (
-              <div
-                key={category.categoryNo}
-                className="p-2 cursor-pointer hover:bg-gray-200 flex justify-between"
-                onClick={() => handleCategorySelect(category)}
-              >
-                {category.name}
-                {category.children?.length > 0 && <span>▶</span>}
+          <div className="absolute left-0 top-full w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 mt-2">
+            <div className="grid grid-cols-2 divide-x divide-gray-300">
+              {/* 대분류 카테고리 목록 */}
+              <div className="max-h-60 overflow-auto">
+                {categories.map((category) => (
+                  <div
+                    key={category.categoryNo}
+                    className={`p-3 cursor-pointer hover:bg-gray-200 ${
+                      selectedCategory?.categoryNo === category.categoryNo ? 'bg-gray-300' : ''
+                    }`}
+                    onClick={() => handleCategorySelect(category)}
+                  >
+                    {category.name}
+                  </div>
+                ))}
               </div>
-            ))}
+
+              {/* 하위 카테고리 목록 (왼쪽에 표시) */}
+              <div className="max-h-60 overflow-auto bg-gray-50">
+                {subCategories.length > 0 ? (
+                  subCategories.map((subCategory) => (
+                    <div
+                      key={subCategory.categoryNo}
+                      className="p-3 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSubCategorySelect(subCategory)}
+                    >
+                      {subCategory.name}
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-3 text-gray-500">하위 카테고리 없음</div>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
-
-      {/* ✅ 서브 카테고리 (클릭해서 선택 가능) */}
-      {hoveredCategory && (
-        <div
-          className="absolute left-[260px] top-[70px] bg-white border border-gray-300 rounded-md shadow-md p-2 w-[250px] z-20"
-        >
-          {categories
-            .find((cat) => cat.categoryNo === hoveredCategory)
-            ?.children?.map((subCategory) => (
-              <div
-                key={subCategory.categoryNo}
-                className="cursor-pointer hover:bg-gray-200 p-2"
-                onClick={() => handleSubCategorySelect(subCategory)}
-              >
-                {subCategory.name}
-              </div>
-            ))}
-        </div>
-      )}
     </div>
   )
 }

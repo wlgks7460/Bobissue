@@ -13,7 +13,7 @@ const CartSoldOut = ({ item, removeItem }) => {
       {/* 상품 정보 */}
       <div className='flex gap-3'>
         <img
-          src={item.itemData.images?.[0].imageUrl || itemDefaultImg}
+          src={item.itemData.images?.[0]?.imageUrl || itemDefaultImg}
           alt=''
           className='w-[60px] h-[60px] rounded border border-gray-400'
           onError={(e) => {

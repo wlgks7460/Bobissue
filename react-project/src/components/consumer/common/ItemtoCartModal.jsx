@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
+import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
 const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
   // 상품 수량
@@ -61,9 +62,12 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
               {/* 상품 카드 */}
               <div className='flex gap-3'>
                 <img
-                  src={item.images[0].imageUrl}
+                  src={item.images?.[0]?.imageUrl || itemDefaultImg}
                   alt={`${item.name} 이미지`}
                   className='w-[100px] h-[100px] flex-none bg-gray-400 rounded'
+                  onError={(e) => {
+                    e.target.src = itemDefaultImg
+                  }}
                 />
                 {/* 상품 정보 */}
                 <div className=' grow flex flex-col justify-between'>
@@ -115,7 +119,7 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
                 <span>{addComma(item.salePrice * itemCount)}원</span>
               </div>
               <button
-                className='w-full h-[50px] rounded bg-indigo-400 hover:bg-indigo-600 text-white'
+                className='w-full h-[50px] rounded bg-[#A67B5B] hover:bg-[#6F4E37] text-white'
                 onClick={itemOnCart}
               >
                 장바구니 담기

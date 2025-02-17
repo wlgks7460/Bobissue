@@ -91,7 +91,7 @@ const MyPageAddressForm = ({ addresses, setAddresses }) => {
         <input
           type='submit'
           value='추가하기'
-          className='w-[100px] bg-indigo-400 hover:bg-indigo-600 text-white rounded'
+          className='w-[100px] bg-[#A67B5B] hover:bg-[#6F4E37] text-white rounded'
         />
       </div>
     </form>
