@@ -61,7 +61,7 @@ const AdminDashBoard = () => {
     fetchTotalCompanies()
   }, [])
 
-  // 더미 데이터 생성 - 최근 7개 고정으로 렌더링
+  // 더미 데이터 생성 - 최근 5개 고정으로 렌더링
   const dummyOrders = [
     { orderNumber: '20240102', customer: '김지원', amount: 70000, date: '2024-02-14' },
     { orderNumber: '20240103', customer: '이다은', amount: 65000, date: '2024-02-13' },

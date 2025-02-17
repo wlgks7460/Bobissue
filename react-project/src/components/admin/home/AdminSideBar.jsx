@@ -12,27 +12,27 @@ const menuData = [
         id: 1,
         title: '회원관리',
         items: [
-          { id: 1, title: '회원 정보관리', path: '/admin/members/info' },
-          { id: 2, title: '회원 레벨관리', path: '/admin/members/level' },
-          { id: 3, title: '회원 등록하기', path: '/admin/members/register' },
-          { id: 4, title: '회원 엑셀일괄등록', path: '/admin/members/excel' },
-          { id: 5, title: '회원 메일발송', path: '/admin/members/email' },
+          { id: 101, title: '회원 정보관리', path: '/admin/members/info' },
+          { id: 102, title: '회원 레벨관리', path: '/admin/members/level' },
+          { id: 103, title: '회원 등록하기', path: '/admin/members/register' },
+          { id: 104, title: '회원 엑셀일괄등록', path: '/admin/members/excel' },
+          { id: 105, title: '회원 메일발송', path: '/admin/members/email' },
         ],
       },
       {
         id: 2,
         title: '포인트 관리',
         items: [
-          { id: 1, title: '포인트 관리', path: '/admin/points/info' },
-          { id: 2, title: '포인트 엑셀일괄 등록', path: '/admin/points/excel' },
+          { id: 106, title: '포인트 관리', path: '/admin/points/info' },
+          { id: 107, title: '포인트 엑셀일괄 등록', path: '/admin/points/excel' },
         ],
       },
       {
         id: 3,
         title: '가입 통계',
         items: [
-          { id: 1, title: '일별 가입 통계 분석', path: '/admin/statistics/daily' },
-          { id: 2, title: '월별 가입 통계 분석', path: '/admin/statistics/monthly' },
+          { id: 108, title: '일별 가입 통계 분석', path: '/admin/statistics/daily' },
+          { id: 109, title: '월별 가입 통계 분석', path: '/admin/statistics/monthly' },
         ],
       },
     ],
@@ -45,41 +45,44 @@ const menuData = [
         id: 4,
         title: '판매자 관리',
         items: [
-          { id: 1, title: '판매자 전체목록', path: '/admin/seller/info' },
-          { id: 2, title: '판매권한 승인', path: '/admin/seller/register' },
+          { id: 201, title: '판매자 전체목록', path: '/admin/seller/info' },
+          { id: 202, title: '판매권한 승인', path: '/admin/seller/register' },
         ],
       },
       {
         id: 5,
         title: '판매자 수수료',
         items: [
-          { id: 1, title: '판매자 수수료내역', path: '/admin/fee/info' },
-          { id: 2, title: '판매자 수수료정산', path: '/admin/fee/request' },
+          { id: 203, title: '판매자 수수료내역', path: '/admin/fee/info' },
+          { id: 204, title: '판매자 수수료정산', path: '/admin/fee/request' },
         ],
       },
       {
         id: 6,
         title: '판매자 기타',
         items: [
-          { id: 1, title: '판매자 트리구조', path: '/admin/seller/tree' },
-          { id: 2, title: '판매자 통계', path: '/admin/seller/statistics' },
+          { id: 205, title: '판매자 트리구조', path: '/admin/seller/tree' },
+          { id: 206, title: '판매자 통계', path: '/admin/seller/statistics' },
         ],
       },
       {
-        id: 12,
+        id: 7,
         title: '모니터링',
         items: [
-          { id: 1, title: '주문현황', path: '/admin/seller/monitor/orders' },
-          { id: 2, title: '상품현황', path: '/admin/seller/monitor/products' },
+          { id: 207, title: '주문현황', path: '/admin/seller/monitor/orders' },
+          { id: 208, title: '상품현황', path: '/admin/seller/monitor/products' },
         ],
       },
     ],
   },
   {
     id: 3,
-    title: '카테고리 관리',
-    // 하위 메뉴가 없는 경우 바로 링크 연결
-    path: '/admin/category',
+    title: '주문 관리',
+    items: [
+      { id: 301, title: '주문 현황', path: '설명: 주문 현황 페이지 추가 예정' },
+      { id: 302, title: '주문 분석', path: '설명: 주문 분석 페이지 추가 예정' },
+      { id: 303, title: '상품별 환불 통계', path: '설명: 상품별 환불 통계 페이지 추가 예정' },
+    ],
   },
   {
     id: 4,
@@ -89,114 +92,82 @@ const menuData = [
         id: 7,
         title: '라이브커머스 관리',
         items: [
-          { id: 1, title: '라이브커머스 신청관리', path: '/admin/live/register' },
-          { id: 2, title: '라이브커머스 일정관리', path: '/admin/live/calender' },
-          { id: 3, title: '라이브커머스 공지관리', path: '/admin/live/notice' },
-          { id: 4, title: '라이브커머스 성과분석', path: '#' },
+          { id: 401, title: '라이브커머스 신청관리', path: '/admin/live/register' },
+          { id: 402, title: '라이브커머스 일정관리', path: '/admin/live/calender' },
+          { id: 403, title: '라이브커머스 공지관리', path: '/admin/live/notice' },
+          { id: 404, title: '라이브커머스 성과분석', path: '#' },
         ],
       },
       {
         id: 8,
         title: '라이브커머스 운영',
         items: [
-          { id: 1, title: '진행중 라이브', path: '/admin/live/onair' },
-          { id: 2, title: '종료된 라이브', path: '/admin/live/end' },
-          { id: 3, title: '시청자 관리', path: '/admin/live/viewer' },
+          { id: 405, title: '진행중 라이브', path: '/admin/live/onair' },
+          { id: 406, title: '종료된 라이브', path: '/admin/live/end' },
+          { id: 407, title: '시청자 관리', path: '/admin/live/viewer' },
         ],
       },
     ],
   },
   {
-    id: 8, // 기존 id와 겹치지 않도록 주의
+    id: 5,
+    title: '카테고리 관리',
+    // 하위 메뉴가 없는 경우 바로 링크 연결
+    path: '/admin/category',
+  },
+  {
+    id: 6, // 기존 id와 겹치지 않도록 주의
     title: '컨텐츠 관리',
     subMenus: [
       {
         id: 9,
         title: '쿠폰 관리',
         items: [
-          { id: 1, title: '쿠폰 현황 조회', path: '/admin/coupon/info' },
-          { id: 2, title: '쿠폰 발급', path: '/admin/coupon/issue' },
+          { id: 601, title: '쿠폰 현황 조회', path: '/admin/coupon/info' },
+          { id: 602, title: '쿠폰 발급', path: '/admin/coupon/issue' },
         ],
       },
       {
         id: 10,
         title: '화면 관리',
         items: [
-          { id: 1, title: '이벤트 배너 조회', path: '/admin/screen/info' },
-          { id: 2, title: '이벤트 배너 등록', path: '/admin/screen/register' },
+          { id: 603, title: '이벤트 배너 조회', path: '/admin/screen/info' },
+          { id: 604, title: '이벤트 배너 등록', path: '/admin/screen/register' },
         ],
       },
       {
         id: 11,
         title: '신고 관리',
         items: [
-          { id: 1, title: '신고 내역 조회', path: '/admin/report/info' },
-          { id: 2, title: '신고 상세 조회 / 처리', path: '/admin/report/detail' },
+          { id: 605, title: '신고 내역 조회', path: '/admin/report/info' },
+          { id: 606, title: '신고 상세 조회 / 처리', path: '/admin/report/detail' },
         ],
       },
     ],
   },
   {
-    id: 9,
+    id: 7,
     title: 'CS 관리',
     subMenus: [
       {
         id: 1,
         title: 'CS 관리',
         items: [
-          { id: 1, title: '알림 관리', path: '/admin/cs/notification' },
-          { id: 2, title: '문의현황', path: '/admin/cs/cscenter' },
-          { id: 3, title: '공지사항', path: '/admin/cs/notice' },
+          { id: 701, title: '알림 관리', path: '/admin/cs/notification' },
+          { id: 702, title: '문의현황', path: '/admin/cs/cscenter' },
+          { id: 703, title: '공지사항', path: '/admin/cs/notice' },
         ],
       },
     ],
   },
   {
-    id: 10,
+    id: 8,
     title: '쇼핑몰 분석',
     items: [
-      { id: 1, title: '매출 분석', path: '/admin/analytics/performance' },
-      { id: 2, title: '카테고리 분석', path: '/admin/analytics/category' },
-      { id: 3, title: '시간대별 분석', path: '/admin/analytics/timesales' },
-    ],
-  },
-  // {
-  //   id: 11,
-  //   title: '트렌드 분석',
-  //   items: [
-  //     {
-  //       id: 1,
-  //       title: '판매 카테고리별 매출 추이',
-  //       path: '설명: 판매 카테고리별 매출 추이 페이지 추가 예정',
-  //     },
-  //     { id: 2, title: '상품별 판매 트렌드', path: '설명: 상품별 판매 트렌드 페이지 추가 예정' },
-  //     {
-  //       id: 3,
-  //       title: '주문 유형별 트렌드',
-  //       path: '설명: 주문 유형별 트렌드 페이지 추가 예정',
-  //     },
-  //     {
-  //       id: 4,
-  //       title: '고객 세그먼트별 구매 패턴',
-  //       path: '설명: 고객 세그먼트별 구매 패턴 페이지 추가 예정',
-  //     },
-  //   ],
-  // },
-  {
-    id: 12,
-    title: '주문 관리',
-    items: [
-      { id: 1, title: '주문 현황', path: '설명: 주문 현황 페이지 추가 예정' },
-      { id: 2, title: '주문 분석', path: '설명: 주문 분석 페이지 추가 예정' },
-      { id: 3, title: '상품별 환불 통계', path: '설명: 상품별 환불 통계 페이지 추가 예정' },
-    ],
-  },
-  {
-    id: 13,
-    title: '고객 관리',
-    items: [
-      { id: 1, title: '재구매율 분석', path: '설명: 재구매율 분석 페이지 추가 예정' },
-      { id: 2, title: '유저 통계', path: '설명: 유저 통계 페이지 추가 예정' },
+      { id: 801, title: '매출 분석', path: '/admin/analytics/performance' },
+      { id: 802, title: '카테고리 분석', path: '/admin/analytics/category' },
+      { id: 803, title: '시간대별 분석', path: '/admin/analytics/timesales' },
+      { id: 804, title: '유저 통계', path: '/admin/analytics/users' },
     ],
   },
 ]
