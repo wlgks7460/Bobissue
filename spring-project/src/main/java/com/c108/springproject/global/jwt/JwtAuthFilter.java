@@ -61,11 +61,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return;
             }
 
-            if (path.startsWith("/api/openvidu/")) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
             log.info("Filter is running");
             if (token != null && !token.equalsIgnoreCase("null")) {
                 User user = parseUserSpecification(token);
