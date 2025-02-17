@@ -100,7 +100,8 @@ public class SecurityConfig {
                                 "/api/question",
                                 "/api/question/{questionNo}",
                                 "/api/event/{eventNo}",
-                                "/api/event/banner"
+                                "/api/event/banner",
+                                "/api/address"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

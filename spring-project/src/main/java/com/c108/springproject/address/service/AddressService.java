@@ -44,16 +44,17 @@ public class AddressService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public List<Address> findAllAddress(int userNo) {
         try{
-            List<Address> addressList = addressRepository.findAllByUserUserNoAndDelYn(userNo, "N");
-            return addressList;
+            return  addressRepository.findAllByUserUserNoAndDelYn(userNo, "N");
         }catch (Exception e){
             throw new BobIssueException(ResponseCode.FAILED_FIND_ALL_ADDRESS);
         }
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER', 'SELLER', 'ADMIN')")
     public AddressResDto findAddressByNo(int addressNo) {
         Address address = addressRepository.findByAddressNoAndDelYn(addressNo, "N").orElseThrow(() -> new BobIssueException(ResponseCode.FAILED_FIND_ADDRESS));
         return AddressResDto.toDto(address);
