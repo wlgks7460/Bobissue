@@ -33,14 +33,13 @@ spring:
       port: 6379
     elasticsearch:
       uris: https://localhost:9200
-      username: elastic
-      password: cMvp=DUQcyc9NH5E*1h5
-      connection-timeout: 5s
-      socket-timeout: 10s
-      ssl:
-        enabled: true
-        trust-store: classpath:truststore.jks
-        trust-store-password: truststore-password
+      authentication:
+        username: elastic
+        password: cMvp=DUQcyc9NH5E*1h5
+      # ssl:
+      #   enabled: true
+      #   trust-store: classpath:truststore.jks
+      #   trust-store-password: truststore-password
 
   config:
     import: optional:classpath:elasticsearch-config.yml
