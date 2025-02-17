@@ -27,49 +27,49 @@ const SellerMainPage = () => {
   })
 
   // ✅ 1. 로그인 상태 확인
-  useEffect(() => {
-    const savedToken = localStorage.getItem('access_token')
-    if (!savedToken) {
-      navigate('/seller/login')
-    } else {
-      setToken(savedToken)
-    }
-  }, [navigate])
+  // useEffect(() => {
+  //   const savedToken = localStorage.getItem('access_token')
+  //   if (!savedToken) {
+  //     navigate('/seller/login')
+  //   } else {
+  //     setToken(savedToken)
+  //   }
+  // }, [navigate])
 
   // ✅ 2. 회사 등록 여부 확인 (로그인이 된 상태에서만 실행)
-  useEffect(() => {
-    if (!token) return
+  // useEffect(() => {
+  //   if (!token) return
 
-    const fetchCompanyData = async () => {
-      try {
-        const response = await API.get('/sellers/company')
-        setRegistration(response.data.result.data?.companyNo || false)
-      } catch (error) {
-        console.error('회사 등록 여부 확인 실패:', error)
-        setRegistration(false)
-      }
-    }
+  //   const fetchCompanyData = async () => {
+  //     try {
+  //       const response = await API.get('/sellers/company')
+  //       setRegistration(response.data.result.data?.companyNo || false)
+  //     } catch (error) {
+  //       console.error('회사 등록 여부 확인 실패:', error)
+  //       setRegistration(false)
+  //     }
+  //   }
 
-    fetchCompanyData()
-  }, [token])
+  //   fetchCompanyData()
+  // }, [token])
 
   // ✅ 3. 유저 정보 가져오기
-  useEffect(() => {
-    if (!token) return
+  // useEffect(() => {
+  //   if (!token) return
 
-    const fetchUserStatus = async () => {
-      try {
-        const response = await API.get('/sellers/profile')
-        console.log(response)
-        setUser(response?.data?.result?.data || null) // ✅ 전체 유저 객체 저장
-        setStatus(response.data?.result?.data.approvalStatus || 'N')
-      } catch (err) {
-        console.error(err)
-      }
-    }
+  //   const fetchUserStatus = async () => {
+  //     try {
+  //       const response = await API.get('/sellers/profile')
+  //       console.log(response)
+  //       setUser(response?.data?.result?.data || null) // ✅ 전체 유저 객체 저장
+  //       setStatus(response.data?.result?.data.approvalStatus || 'N')
+  //     } catch (err) {
+  //       console.error(err)
+  //     }
+  //   }
 
-    fetchUserStatus()
-  }, [token])
+  //   fetchUserStatus()
+  // }, [token])
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {
@@ -91,34 +91,66 @@ const SellerMainPage = () => {
   }
 
   // ✅ 로그인 상태 확인 중에는 로딩 화면 표시
-  if (token === null) {
-    return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
-  }
+  // if (token === null) {
+  //   return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
+  // }
 
   return (
     <div>
-      {/* ✅ 회사 등록 여부 확인 중 */}
-      {registration === null || status !== 'Y' ? (
-        <div className='flex flex-col items-center justify-center min-h-screen'>
-          <p className='text-lg font-medium'>회사 정보 확인 중...</p>
-          <button
-            onClick={handleLogout}
-            className='mt-4 px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow hover:bg-red-600 transition'
-          >
-            로그아웃
-          </button>
-        </div>
-      ) : !registration ? (
-        <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 p-8'>
-          <h1 className='text-2xl font-semibold text-gray-800'>회사 등록 필요</h1>
-          <p className='text-gray-600 mt-2'>판매자로 활동하기 위해 회사를 등록하세요.</p>
-          <button
-            onClick={() => navigate('/seller/company/register')}
-            className='mt-6 px-6 py-3 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition'
-          >
-            회사 등록하기
-          </button>
-        </div>
+      {!debug_mode ? (
+        registration === null || status !== 'Y' ? (
+          <div className='flex flex-col items-center justify-center min-h-screen'>
+            <p className='text-lg font-medium'>회사 정보 확인 중...</p>
+            <button
+              onClick={handleLogout}
+              className='mt-4 px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow hover:bg-red-600 transition'
+            >
+              로그아웃
+            </button>
+          </div>
+        ) : !registration ? (
+          <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 p-8'>
+            <h1 className='text-2xl font-semibold text-gray-800'>회사 등록 필요</h1>
+            <p className='text-gray-600 mt-2'>판매자로 활동하기 위해 회사를 등록하세요.</p>
+            <button
+              onClick={() => navigate('/seller/company/register')}
+              className='mt-6 px-6 py-3 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition'
+            >
+              회사 등록하기
+            </button>
+          </div>
+        ) : (
+          <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
+            {/* Top Navbar */}
+            <div className='fixed top-0 z-50 w-full h-16 bg-gray-100 border-b border-gray-300'>
+              <TopNavbar toggleSidebar={toggleSidebar} user={user} />
+            </div>
+
+            <div className='flex flex-1 mt-16 min-h-[calc(100vh-64px)]'>
+              {/* Sidebar */}
+              <div
+                className={`fixed left-0 top-16 h-[calc(100%-64px)] z-40 transition-transform duration-300 ease-in-out bg-white border-r border-gray-300
+                ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}`}
+              >
+                <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} menuState={menuState} />
+              </div>
+
+              {/* Main Content */}
+              <main
+                className={`flex-1 p-2 transition-all relative duration-300 mt-2 min-h-[calc(80vh-32px)] ${
+                  sidebarOpen ? 'ml-64' : 'ml-0'
+                }`}
+              >
+                <Outlet />
+              </main>
+            </div>
+
+            {/* Footer */}
+            <footer className='w-full text-center py-4 bg-gray-100 text-gray-600 text-sm border-t border-gray-300 mt-auto'>
+              &copy; 2025 BOBISSUE. all rights reserved.
+            </footer>
+          </div>
+        )
       ) : (
         <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
           {/* Top Navbar */}

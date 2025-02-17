@@ -8,15 +8,17 @@ const notices = [
     id: 1,
     title: '서비스 점검 안내',
     content: '서비스 점검이 예정되어 있습니다.',
-    author: '관리자',
+    adminNo: '관리자',
     date: '2025-01-22',
+    reader: '판매자',
   },
   {
     id: 2,
     title: '새로운 기능 업데이트 소식',
     content: '새로운 기능이 추가되었습니다.',
-    author: '운영팀',
+    adminNo: '운영팀',
     date: '2025-01-20',
+    reader: '판매자',
   },
   // 추가적인 공지사항 데이터...
 ]
@@ -64,7 +66,7 @@ const NoticeView = () => {
       <div className='bg-white shadow-md rounded-md p-6'>
         <h1 className='text-3xl font-bold text-gray-800 mb-4'>{notice.title}</h1>
         <div className='text-sm text-gray-500 mb-4'>
-          작성자: {notice.author} | 작성일: {notice.date}
+          작성자: {notice.adminNo} | 작성일: {notice.date}
         </div>
         <p className='text-gray-700 mb-6'>{notice.content}</p>
         <button
