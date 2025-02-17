@@ -42,7 +42,7 @@ public class AddressController {
         return new ResponseDto(HttpStatus.CREATED, ResponseCode.SUCCESS_CREATE_ADDRESS, new DefaultResponse<Integer>(addressService.createAddress(addressReqDto).getAddressNo()));
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseDto findAllAddress(@RequestBody AddressListReqDto addressListReqDto) {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ADDRESS, new DefaultResponse<List<Address>>(addressService.findAllAddress(addressListReqDto.getUserNo())));
     }
