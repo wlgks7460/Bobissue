@@ -32,7 +32,7 @@ const MyPage = () => {
           <MypageSidebar userInfo={userInfo} />
           {/* 마이페이지 컨테이너 */}
           <div className='grow h-auto border border-[#6F4E37] rounded'>
-            <Outlet context={{ userNo: userInfo.userNo }} />
+            <Outlet />
           </div>
         </div>
       </div>
