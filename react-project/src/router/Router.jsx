@@ -95,6 +95,7 @@ import PerformancePage from '../pages/admin/analytics/PerformancePage'
 import CategoryPage from '../pages/admin/analytics/CategoryPage'
 import TimesalesPage from '../pages/admin/analytics/TimesalesPage'
 import UsersAnalysisPage from '../pages/admin/analytics/UsersPage'
+import RepurchaseAnalysisPage from '../pages/admin/analytics/RepurchasePage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
@@ -698,6 +699,10 @@ const router = createBrowserRouter([
               {
                 path: 'users',
                 element: <UsersAnalysisPage />,
+              },
+              {
+                path: 'repurchase',
+                element: <RepurchaseAnalysisPage />,
               },
             ],
           },
