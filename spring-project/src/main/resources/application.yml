@@ -31,6 +31,28 @@ spring:
     redis:
       host: 43.202.60.173
       port: 6379
+#    elasticsearch:
+#      uris: https://bobissue.store:9200
+#      authentication:
+#        username: elastic
+#        password: cMvp=DUQcyc9NH5E*1h5
+      # ssl:
+      #   enabled: true
+      #   trust-store: classpath:truststore.jks
+      #   trust-store-password: truststore-password
+
+  elasticsearch:
+    rest:
+      uris: http://bobissue.store:9200
+      read-timeout: 5s
+    cluster-name: docker-cluster
+    cluster-nodes: bobissue.store:9200
+    http.cors.enabled: true
+    http.cors.allow-origin: "*"
+
+  config:
+    import: optional:classpath:elasticsearch-config.yml
+
 
 
   security:

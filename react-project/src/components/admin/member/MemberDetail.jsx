@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import API from '../../../utils/API'
 import Breadcrumb from '../common/Breadcrumb'
-import { FaEdit, FaTrash } from 'react-icons/fa'
+
 const MemberDetail = () => {
   const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원상세정보' }]
   const { userNo } = useParams()
-  const navigate = useNavigate()
   const [user, setUser] = useState(null)
+  const [addressList, setAddressList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isEditing, setIsEditing] = useState(false)
-  const [formData, setFormData] = useState({})
 
-  const formatDate = (dateString, forInput = false) => {
+  const formatDate = (dateString) => {
     if (!dateString) return ''
     const cleanedDate = dateString.replace(/[^0-9]/g, '')
-
     if (cleanedDate.length !== 8) return dateString
-
     const year = cleanedDate.slice(0, 4)
     const month = cleanedDate.slice(4, 6)
     const day = cleanedDate.slice(6, 8)
-
-    return forInput ? `${year}-${month}-${day}` : `${year}년 ${month}월 ${day}일`
+    return `${year}년 ${month}월 ${day}일`
   }
 
   useEffect(() => {
@@ -30,14 +25,10 @@ const MemberDetail = () => {
       try {
         const response = await API.get(`/users/${userNo}`)
         const userData = response.data.result.data
+        setUser(userData)
 
-        const formattedData = {
-          ...userData,
-          birthday: formatDate(userData.birthday, true),
-        }
-
-        setUser(formattedData)
-        setFormData(formattedData)
+        const addressResponse = await API.post('/address/list', { userNo: userData.userNo })
+        setAddressList(addressResponse.data.result.data)
       } catch (error) {
         console.error('회원 상세 정보 조회 오류:', error.response || error.message)
         alert('회원 상세 정보를 가져오는 데 실패했습니다.')
@@ -45,51 +36,11 @@ const MemberDetail = () => {
         setIsLoading(false)
       }
     }
-
     fetchUserDetail()
   }, [userNo])
 
-  const handleEditToggle = () => {
-    setIsEditing(!isEditing)
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
-
-  const handleSave = async () => {
-    try {
-      const updatedData = {
-        ...formData,
-        birthday: formData.birthday.replace(/-/g, ''), // YYYY-MM-DD → YYYYMMDD 변환
-      }
-
-      await API.put(`/users/${userNo}`, updatedData)
-      alert('회원 정보가 수정되었습니다.')
-      setUser(updatedData)
-      setIsEditing(false)
-    } catch (error) {
-      console.error('회원 수정 오류:', error.response || error.message)
-      alert('회원 수정에 실패했습니다.')
-    }
-  }
-
-  const handleDelete = async () => {
-    if (window.confirm('정말로 이 회원을 삭제하시겠습니까?')) {
-      try {
-        await API.delete(`/users/${userNo}`)
-        alert('회원 삭제가 완료되었습니다.')
-        navigate('/admin/members/info')
-      } catch (error) {
-        console.error('회원 삭제 오류:', error.response || error.message)
-        alert('회원 삭제에 실패했습니다.')
-      }
-    }
-  }
-
   if (isLoading) {
-    return <div className='p-6 text-center'>회원 정보를 불러오는 중...</div>
+    return <div className='p-6 text-center text-gray-600'>회원 정보를 불러오는 중...</div>
   }
 
   if (!user) {
@@ -97,143 +48,77 @@ const MemberDetail = () => {
   }
 
   return (
-    <div className='p-6 flex '>
-      <div className='max-w-xl w-full'>
-        {/* Breadcrumb */}
-        <Breadcrumb paths={breadcrumbPaths} />
-        <h1 className='text-2xl font-bold mb-6'>회원 상세 정보</h1>
+    <div className='p-6 flex flex-col'>
+      <Breadcrumb paths={breadcrumbPaths} />
+      <h1 className='text-2xl font-bold mb-6'>회원 상세 정보</h1>
 
-        {/* 정보 테이블 */}
-        <table className='table-auto w-full border border-gray-300'>
-          <tbody>
-            <tr>
-              <th className='border px-4 py-2 text-left bg-gray-100 w-1/3'>회원번호</th>
-              <td className='border px-4 py-2'>{user.userNo}</td>
-            </tr>
-            <tr>
-              <th className='border px-4 py-2 text-left bg-gray-100'>이름</th>
-              <td className='border px-4 py-2'>
-                {isEditing ? (
-                  <input
-                    type='text'
-                    name='name'
-                    value={formData.name}
-                    onChange={handleChange}
-                    className='w-full border border-gray-300 rounded-md px-3 py-2'
-                  />
-                ) : (
-                  user.name
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className='border px-4 py-2 text-left bg-gray-100'>이메일</th>
-              <td className='border px-4 py-2'>
-                {isEditing ? (
-                  <input
-                    type='email'
-                    name='email'
-                    value={formData.email}
-                    onChange={handleChange}
-                    className='w-full border border-gray-300 rounded-md px-3 py-2'
-                  />
-                ) : (
-                  user.email
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className='border px-4 py-2 text-left bg-gray-100'>전화번호</th>
-              <td className='border px-4 py-2'>
-                {isEditing ? (
-                  <input
-                    type='text'
-                    name='phoneNumber'
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    className='w-full border border-gray-300 rounded-md px-3 py-2'
-                  />
-                ) : (
-                  user.phoneNumber
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className='border px-4 py-2 text-left bg-gray-100'>성별</th>
-              <td className='border px-4 py-2'>
-                {isEditing ? (
-                  <select
-                    name='gender'
-                    value={formData.gender || ''}
-                    onChange={handleChange}
-                    className='w-full border border-gray-300 rounded-md px-3 py-2'
-                  >
-                    <option value=''>성별 선택</option>
-                    <option value='M'>남성</option>
-                    <option value='F'>여성</option>
-                  </select>
-                ) : user.gender === 'M' ? (
-                  '남성'
-                ) : (
-                  '여성'
-                )}
-              </td>
-            </tr>
-            <tr>
-              <th className='border px-4 py-2 text-left bg-gray-100'>생년월일</th>
-              <td className='border px-4 py-2'>
-                {isEditing ? (
-                  <input
-                    type='date'
-                    name='birthday'
-                    value={formData.birthday || ''}
-                    onChange={handleChange}
-                    className='w-full border border-gray-300 rounded-md px-3 py-2'
-                  />
-                ) : (
-                  formatDate(user.birthday)
-                )}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <table className='w-full max-w-xl table-auto border-collapse border border-[#4E342E] text-[#3E2723]'>
+        <tbody>
+          <tr className='bg-[#EFEBE9]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>회원번호</th>
+            <td className='border border-[#6D4C41] px-4 py-3'>{user.userNo}</td>
+          </tr>
+          <tr className='bg-[#F5F5F5]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>이름</th>
+            <td className='border border-[#6D4C41] px-4 py-3'>{user.name}</td>
+          </tr>
+          <tr className='bg-[#EFEBE9]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>이메일</th>
+            <td className='border border-[#6D4C41] px-4 py-3'>{user.email}</td>
+          </tr>
+          <tr className='bg-[#F5F5F5]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>전화번호</th>
+            <td className='border border-[#6D4C41] px-4 py-3'>{user.phoneNumber}</td>
+          </tr>
+          <tr className='bg-[#EFEBE9]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>성별</th>
+            <td className='border border-[#6D4C41] px-4 py-3'>
+              {user.gender === 'M' ? '남성' : '여성'}
+            </td>
+          </tr>
+          <tr className='bg-[#F5F5F5]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>생년월일</th>
+            <td className='border border-[#6D4C41] px-4 py-3'>{formatDate(user.birthday)}</td>
+          </tr>
+          <tr className='bg-[#EFEBE9]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>회원 등급</th>
+            <td className='border border-[#6D4C41] px-4 py-3'>{user.grade}</td>
+          </tr>
+          <tr className='bg-[#F5F5F5]'>
+            <th className='border border-[#6D4C41] px-4 py-3 text-left'>계정 상태</th>
+            <td className={`border border-[#6D4C41] px-4 py-3`}>
+              {user.status === 'Y' ? '활성' : '비활성'}
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        {/* 버튼 */}
-        <div className='mt-6 flex space-x-4'>
-          {isEditing ? (
-            <>
-              <button
-                onClick={handleSave}
-                className='flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition'
-              >
-                <FaEdit />
-                저장
-              </button>
-              <button
-                onClick={handleDelete}
-                className='flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition'
-              >
-                <FaTrash />
-                회원 삭제
-              </button>
-              <button
-                onClick={handleEditToggle}
-                className='flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition'
-              >
-                취소
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={handleEditToggle}
-              className='flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition'
-            >
-              <FaEdit />
-              회원정보 수정
-            </button>
-          )}
+      {/* 주소 정보 렌더링 */}
+      {addressList.length > 0 && (
+        <div className='mt-6'>
+          <h2 className='text-lg font-bold mb-4'>🏡 주소 목록</h2>
+          <table className='w-full border border-gray-300 table-auto'>
+            <thead className='bg-[#FFF3E0] text-[#3E2723]'>
+              <tr>
+                <th className='border px-4 py-2 text-center'>이름</th>
+                <th className='border px-4 py-2 text-center'>우편번호</th>
+                <th className='border px-4 py-2 text-center'>주소</th>
+                <th className='border px-4 py-2 text-center'>상세 주소</th>
+              </tr>
+            </thead>
+            <tbody>
+              {addressList.map((addr) => (
+                <tr key={addr.addressNo} className='hover:bg-[#F5F5F5]'>
+                  <td className='border px-4 py-2 text-center'>{addr.name}</td>
+                  <td className='border px-4 py-2 text-center'>{addr.postalCode}</td>
+                  <td className='border px-4 py-2 text-center'>{addr.address}</td>
+                  <td className='border px-4 py-2 text-center'>{addr.addressDetail}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
+      )}
     </div>
   )
 }

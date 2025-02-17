@@ -164,9 +164,20 @@ public class ItemController {
         }
     }
 
-    @GetMapping("/search")
-    public ResponseDto searchItems(@RequestBody SearchReqDto reqDto) {
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<SearchResDto>(itemService.searchItems(reqDto)));
+//    @GetMapping("/search")
+//    public ResponseDto searchItems(@RequestBody SearchReqDto reqDto) {
+//        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<SearchResDto>(itemService.elasticSearchItems(reqDto)));
+//    }
+
+    @GetMapping("/dataToElastic")
+    public ResponseDto searchItems(){
+        itemService.syncAllItemsToElastic();
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_ITEM,  null);
     }
 
+    // 통계
+    @GetMapping("/top-repurchase")
+    public ResponseDto getTopRepurchaseItems() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_TOP_REPURCHASE_ITEM, new DefaultResponse<>(itemService.getTopRepurchaseItems()));
+    }
 }

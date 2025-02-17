@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class OpenViduService {
 
-    private static final String OPENVIDU_URL = "https://bobissue.store/openvidu/api";
+    private static final String OPENVIDU_URL = "https://bobissue.store:8443/openvidu/api";
     private static final String OPENVIDU_USERNAME = "OPENVIDUAPP";
     private static final String OPENVIDU_SECRET = "C108bob";
     private final RestTemplate restTemplate;
@@ -31,7 +31,7 @@ public class OpenViduService {
 
     public String createSession() {
         HttpHeaders headers = createHeaders();
-        Map<String, Object> body = Collections.singletonMap("customSessionId", "mySession8");  // 원하는 세션 ID 설정
+        Map<String, Object> body = Collections.singletonMap("customSessionId", "mySession9");  // 원하는 세션 ID 설정
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {

@@ -23,6 +23,10 @@ import ConsumerMyPageCalendar from '../pages/consumer/mypage/MyPageCalendar'
 import ConsumerMyPageRecipe from '../pages/consumer/mypage/MyPageRecipe'
 import ConsumerMyPageRecipeCreate from '../pages/consumer/mypage/MyPageRecipeCreate'
 import ConsumerMyPageRecipeUpdate from '../pages/consumer/mypage/MyPageRecipeUpdate'
+import ConsumerMyPageReview from '../pages/consumer/mypage/MyPageReview'
+import ConsumerMyPageReviewCreate from '../pages/consumer/mypage/MyPageReviewCreate'
+import ConsumerMyPageCancelRefund from '../pages/consumer/mypage/MyPageCancelRefund'
+import ConsumerMyPageQuestion from '../pages/consumer/mypage/MyPageQuestion'
 // 이용자 고객센터
 import ConsumerBoard from '../pages/consumer/board/Board'
 import ConsumerBoardFAQ from '../pages/consumer/board/BoardFAQ'
@@ -90,7 +94,7 @@ import NoticePage from '../pages/admin/cs/NoticePage'
 import PerformancePage from '../pages/admin/analytics/PerformancePage'
 import CategoryPage from '../pages/admin/analytics/CategoryPage'
 import TimesalesPage from '../pages/admin/analytics/TimesalesPage'
-
+import UsersAnalysisPage from '../pages/admin/analytics/UsersPage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
@@ -159,6 +163,22 @@ const router = createBrowserRouter([
               {
                 path: 'recipe/update/:recipeNo',
                 element: <ConsumerMyPageRecipeUpdate />,
+              },
+              {
+                path: 'review',
+                element: <ConsumerMyPageReview />,
+              },
+              {
+                path: 'review/:itemNo',
+                element: <ConsumerMyPageReviewCreate />,
+              },
+              {
+                path: 'cancelRefund',
+                element: <ConsumerMyPageCancelRefund />,
+              },
+              {
+                path: 'question',
+                element: <ConsumerMyPageQuestion />,
               },
             ],
           },
@@ -674,6 +694,10 @@ const router = createBrowserRouter([
               {
                 path: 'timesales',
                 element: <TimesalesPage />,
+              },
+              {
+                path: 'users',
+                element: <UsersAnalysisPage />,
               },
             ],
           },

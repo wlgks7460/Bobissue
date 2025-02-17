@@ -1,11 +1,12 @@
 // ./Form/Overview.js
-import React, { useState } from 'react';
-import ItemRank from './Form/ItemRank';
-import CustomerSatisfaction from './Form/CustomerSatisfaction';
-import MonthlyComparison from './Form/MonthlyComparison';
-import SalesPrediction from './Form/SalesPrediction';
-import CategoryStatistics from './Form/CategoryStatistics';
-import HourlyStatistics from './Form/HourlyStatistics';
+import React, { useState } from 'react'
+import ItemRank from './Form/ItemRank'
+import CustomerSatisfaction from './Form/CustomerSatisfaction'
+import MonthlyComparison from './Form/MonthlyComparison'
+import SalesPrediction from './Form/SalesPrediction'
+import CategoryStatistics from './Form/CategoryStatistics'
+import HourlyStatistics from './Form/HourlyStatistics'
+import Demographics from './Form/Demographics'
 
 const components = {
   '상품 순위': ItemRank,
@@ -14,10 +15,11 @@ const components = {
   '판매 예측': SalesPrediction,
   '카테고리 통계': CategoryStatistics,
   '시간대별 통계': HourlyStatistics,
-};
+  '성별/연령대별 판매 통계': Demographics,
+}
 
 const Overview = () => {
-  const [selectedComponent, setSelectedComponent] = useState('상품 순위');
+  const [selectedComponent, setSelectedComponent] = useState('상품 순위')
 
   return (
     <div className='p-6 max-w-7xl mx-auto bg-gray-100 border border-gray-300 rounded-lg shadow-md flex min-h-screen'>
@@ -30,7 +32,9 @@ const Overview = () => {
               <button
                 onClick={() => setSelectedComponent(key)}
                 className={`w-full text-left px-4 py-2 rounded-lg font-semibold transition ${
-                  selectedComponent === key ? 'bg-gray-400 text-white' : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+                  selectedComponent === key
+                    ? 'bg-gray-400 text-white'
+                    : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
                 }`}
               >
                 {key}
@@ -45,7 +49,7 @@ const Overview = () => {
         {selectedComponent && React.createElement(components[selectedComponent])}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Overview;
+export default Overview
