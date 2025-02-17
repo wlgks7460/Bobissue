@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useOutletContext } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import MyPageAddressForm from '../../../components/consumer/mypage/MyPageAddressForm'
 import MyPageAddressItem from '../../../components/consumer/mypage/MyPageAddressItem'
 import API from '../../../utils/API'
+import { useSelector } from 'react-redux'
 
 const MyPageAddress = () => {
-  const { userNo } = useOutletContext()
+  const userNo = useSelector((state) => state.user.userInfo.userNo)
   const [addresses, setAddresses] = useState([]) // 배송지 리스트
   const [baseAddress, setBaseAddress] = useState({}) // 기본 배송지
 
@@ -23,20 +23,26 @@ const MyPageAddress = () => {
 
   // 배송지 리스트 조회
   const getAddresses = () => {
-    API.get('/address/list')
-      .then((res) => {
-        setAddresses(res.data.result.data)
-        if (res.data.result.data.length > 0) {
-          getBaseAddress()
-        }
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    const payload = {
+      userNo: Number(userNo),
+    }
+    if (payload.userNo) {
+      console.log(payload.userNo)
+      API.post('/address/list', payload)
+        .then((res) => {
+          setAddresses(res.data.result.data)
+          if (res.data.result.data.length > 0) {
+            getBaseAddress()
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
   }
   useEffect(() => {
     getAddresses()
-  }, [])
+  }, [userNo])
   return (
     <div className='p-5'>
       <h3 className='text-center text-xl'>배송지 관리</h3>

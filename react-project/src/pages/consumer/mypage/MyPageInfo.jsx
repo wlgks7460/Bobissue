@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import MyPageInfoForm from '../../../components/consumer/mypage/MyPageInfoForm'
-import { useOutletContext } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const MyPageInfo = () => {
-  const { userNo } = useOutletContext()
+  const userNo = useSelector((state) => state.user.userInfo.userNo)
   return (
     <div className='p-5'>
       <h2 className='text-center text-xl'>개인정보 수정</h2>
