@@ -28,7 +28,7 @@ const Demographics = () => {
 
   useEffect(() => {
     fetchDemographic()
-  }, [params, selectedAge, selectedGender]) // ✅ `selectedAge`, `selectedGender` 변경 시 API 요청
+  }, [params])
 
   console.log('📊 Processed Data:', data)
 
@@ -36,8 +36,9 @@ const Demographics = () => {
   const filteredData = () => {
     if (!data) return null
 
-    // ✅ 연령 전체(`ALL_AGE_GROUPS`) + 성별 전체(`A`) 선택 시 `combinedStats` 전체 데이터 합산
+    // ✅ 연령 + 성별 전체 선택 시 `combinedStats` 전체 반환
     if (selectedAge === 'ALL_AGE_GROUPS' && selectedGender === 'A') {
+      // ✅ 모든 연령 + 모든 성별 데이터 합산
       return Object.entries(data.combinedStats).reduce(
         (acc, [ageGroup, genderData]) => {
           Object.entries(genderData).forEach(([gender, stats]) => {
@@ -85,6 +86,7 @@ const Demographics = () => {
     // ✅ 연령 전체 선택 시 `ageStats` 사용
     if (selectedAge === 'ALL_AGE_GROUPS') {
       if (selectedGender === 'M' || selectedGender === 'F') {
+        // ✅ 특정 성별(`M` 또는 `F`)만 선택한 경우 → `combinedStats`에서 해당 성별만 필터링
         return Object.entries(data.combinedStats)
           .map(([ageGroup, genderData]) => ({
             ageGroup,
@@ -92,6 +94,7 @@ const Demographics = () => {
           }))
           .filter((entry) => entry.totalOrders > 0) // 주문 수가 0 이상인 데이터만 반환
       } else {
+        // ✅ 성별이 'A' (전체)일 경우 → `ageStats`에서 모든 연령대 데이터 가져오기
         return Object.values(data.ageStats).map((ageGroup) => ({
           ageGroup: ageGroup.ageGroup,
           ...ageGroup,
@@ -189,6 +192,51 @@ const Demographics = () => {
           </button>
         ))}
       </div>
+
+      {/* ✅ 데이터 출력 */}
+      {displayData?.length > 0 ? (
+        <div className='mt-6 p-4 bg-gray-100 rounded-md'>
+          <h2 className='text-lg font-semibold text-deepCobalt'>선택된 데이터</h2>
+          {displayData.map((item, index) => (
+            <div key={index} className='border-b pb-3 mb-3 last:border-none'>
+              {item.ageGroup && (
+                <p className='text-sm text-gray-700'>
+                  <strong>연령:</strong> {item.ageGroup}
+                </p>
+              )}
+              {item.gender && (
+                <p className='text-sm text-gray-700'>
+                  <strong>성별:</strong> {item.gender === 'M' ? '남성' : '여성'}
+                </p>
+              )}
+              <p className='text-sm text-gray-700'>
+                <strong>총 주문 수:</strong> {item.totalOrders}
+              </p>
+              <p className='text-sm text-gray-700'>
+                <strong>총 매출:</strong> {item.totalRevenue.toLocaleString()}원
+              </p>
+              <p className='text-sm text-gray-700'>
+                <strong>평균 주문 금액:</strong> {item.averageOrderAmount.toLocaleString()}원
+              </p>
+              {item.topCategories.length > 0 && (
+                <div>
+                  <h3 className='mt-2 text-md font-medium text-deepCobalt'>상위 카테고리</h3>
+                  <ul className='list-disc pl-5 text-sm text-gray-700'>
+                    {item.topCategories.map((category) => (
+                      <li key={category.categoryNo}>
+                        {category.categoryName} - 주문 수: {category.orderCount}, 매출:{' '}
+                        {category.totalRevenue.toLocaleString()}원
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className='text-gray-500 mt-4'>필터를 선택하여 데이터를 확인하세요.</p>
+      )}
     </div>
   )
 }
