@@ -15,7 +15,7 @@ import {
 const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
   return (
     <aside
-      className={`fixed top-0 left-0 w-64 bg-white border-r border-frozenSilver h-full overflow-y-auto shadow-md transition-transform duration-300 transform ${
+      className={`fixed top-0 left-0 w-64 bg-white border-r border-latteBeige h-full overflow-y-auto shadow-md transition-transform duration-300 transform ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
           {
             key: 'product',
             label: '상품 관리',
-            icon: <FaBox className='text-white' />,
+            icon: <FaBox className='text-espressoBlack' />,
             links: [
               { to: 'products/register', text: '상품 등록하기' },
               { to: 'products/search', text: '상품 조회하기' },
@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
           {
             key: 'delivery',
             label: '주문/배송 관리',
-            icon: <FaShippingFast className='text-white' />,
+            icon: <FaShippingFast className='text-espressoBlack' />,
             links: [
               { to: 'delivery/orders', text: '주문 정보 조회' },
               { to: 'delivery/delivers', text: '배송 관리' },
@@ -43,7 +43,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
           {
             key: 'settlement',
             label: '정산',
-            icon: <FaChartBar className='text-white' />,
+            icon: <FaChartBar className='text-espressoBlack' />,
             links: [
               { to: 'settlement/overview', text: '정산 조회' },
               { to: 'settlement/details', text: '정산 상세' },
@@ -52,16 +52,13 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
           {
             key: 'salesStats',
             label: '판매 통계',
-            icon: <FaChartLine className='text-white' />,
-            links: [
-              { to: 'stats/overview', text: '판매 개요' },
-              { to: 'stats/products', text: '상품 성과 조회' },
-            ],
+            icon: <FaChartLine className='text-espressoBlack' />,
+            links: [{ to: 'stats/overview', text: '판매 개요' }],
           },
           {
             key: 'sellerInfo',
             label: '판매자 정보 관리',
-            icon: <FaUserCog className='text-white' />,
+            icon: <FaUserCog className='text-espressoBlack' />,
             links: [
               { to: 'account/verification', text: '판매자 정보 조회' },
               { to: 'account/update-password', text: '판매자 비밀번호 수정' },
@@ -70,7 +67,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
           {
             key: 'inquiry',
             label: '문의 응대',
-            icon: <FaComments className='text-white' />,
+            icon: <FaComments className='text-espressoBlack' />,
             links: [
               { to: 'inquiries/list', text: '문의 조회' },
               { to: 'inquiries/replylist', text: '문의 답장' },
@@ -79,7 +76,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
           {
             key: 'liveCommerce',
             label: '라이브 커머스',
-            icon: <FaVideo className='text-white' />,
+            icon: <FaVideo className='text-espressoBlack' />,
             links: [
               { to: 'lives/home', text: '라이브 홈' },
               { to: 'lives/apply', text: '라이브 신청하기' },
@@ -88,17 +85,17 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
           {
             key: 'company',
             label: '내 회사 관리',
-            icon: <FaBuilding className='text-white' />,
+            icon: <FaBuilding className='text-espressoBlack' />,
             links: [
               { to: 'company/append', text: '계정 추가하기' },
               { to: 'company/search', text: '계정 관리하기' },
-              { to: 'company/update', text: '회사 정보수정' },
+              { to: 'company/update', text: '회사 정보 수정' },
             ],
           },
           {
             key: 'notices',
             label: '공지사항',
-            icon: <FaBullhorn className='text-white' />,
+            icon: <FaBullhorn className='text-espressoBlack' />,
             links: [{ to: 'notices', text: '공지사항 조회' }],
           },
         ].map(({ key, label, icon, links }) => (
@@ -106,7 +103,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
             {/* 메인 메뉴 버튼 */}
             <button
               onClick={() => toggleMenu(key)}
-              className='w-full flex items-center justify-between px-4 py-3 text-white font-semibold bg-deepCobalt rounded-lg shadow-sm hover:bg-steelBlue transition'
+              className='w-full flex items-center justify-between px-4 py-3 text-white font-semibold bg-mochaBrown rounded-lg shadow-sm hover:bg-coffeeBrown transition'
             >
               <span className='flex items-center gap-2'>
                 {icon} {label}
@@ -116,12 +113,12 @@ const Sidebar = ({ isOpen, toggleMenu, menuState }) => {
 
             {/* 서브 메뉴 */}
             {menuState[key] && (
-              <ul className='pl-6 text-sm text-darkGraphite space-y-1 mt-1'>
+              <ul className='pl-6 text-sm text-espressoBlack space-y-1 mt-1'>
                 {links.map(({ to, text }) => (
                   <li key={to}>
                     <Link
                       to={to}
-                      className='block py-2 px-3 bg-white rounded-lg hover:bg-frozenSilver hover:text-deepCobalt transition'
+                      className='block py-2 px-3 bg-latteBeige rounded-lg hover:bg-caramelTan hover:text-white transition'
                     >
                       {text}
                     </Link>

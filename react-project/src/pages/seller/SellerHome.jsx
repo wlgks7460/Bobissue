@@ -5,7 +5,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import API from '@/utils/API' // API 호출 모듈
 
 const SellerMainPage = () => {
-  const [debug_mode, setDebug_mode] = useState(false)
+  const debug_mode = true
   const navigate = useNavigate()
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
