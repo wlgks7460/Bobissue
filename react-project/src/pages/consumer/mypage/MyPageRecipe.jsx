@@ -35,7 +35,7 @@ const MyPageRecipe = () => {
           작성하기
         </Link>
       </div>
-      <hr className='border-gray-300 mb-10' />
+      <hr className='border-[#6F4E37] mb-10' />
       <div>
         {recipes.length > 0 ? (
           <div className='grid grid-cols-3 gap-y-10'>

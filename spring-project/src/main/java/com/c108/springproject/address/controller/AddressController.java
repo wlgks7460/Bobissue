@@ -1,6 +1,7 @@
 package com.c108.springproject.address.controller;
 
 import com.c108.springproject.address.domain.Address;
+import com.c108.springproject.address.dto.AddressListReqDto;
 import com.c108.springproject.address.dto.AddressReqDto;
 import com.c108.springproject.address.dto.AddressResDto;
 import com.c108.springproject.address.service.AddressService;
@@ -42,13 +43,8 @@ public class AddressController {
     }
 
     @GetMapping("/list")
-    public ResponseDto findAllAddress() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        int userNo = userService.findByEmail(email).getUserNo();
-
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ADDRESS, new DefaultResponse<List<Address>>(addressService.findAllAddress(userNo)));
+    public ResponseDto findAllAddress(@RequestBody AddressListReqDto addressListReqDto) {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ADDRESS, new DefaultResponse<List<Address>>(addressService.findAllAddress(addressListReqDto.getUserNo())));
     }
 
     @GetMapping("/{address_no}")

@@ -84,7 +84,6 @@ const MyPageRecipeForm = () => {
         },
       })
         .then((res) => {
-          console.log(res)
           alert('작성되었습니다.')
           navigate('/mypage/recipe')
         })

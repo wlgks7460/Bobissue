@@ -8,6 +8,8 @@ import com.c108.springproject.user.domain.UserGrade;
 import com.c108.springproject.user.dto.SignUpReqDto;
 import com.c108.springproject.user.dto.UserUpdateReqDto;
 import com.c108.springproject.user.dto.UserResDto;
+import com.c108.springproject.item.repository.querydsl.ItemRepurchaseDto;
+import com.c108.springproject.item.repository.ItemQueryRepository;
 import com.c108.springproject.user.repository.UserRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,13 +28,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final ItemQueryRepository itemQueryRepository;
 
 
     public UserService(UserRepository userRepository,
-                       OrderRepository orderRepository
-                       ) {
+                       OrderRepository orderRepository,
+                       ItemQueryRepository itemQueryRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
+        this.itemQueryRepository = itemQueryRepository;
     }
 
     @Transactional
@@ -146,5 +150,6 @@ public class UserService {
             throw new BobIssueException(ResponseCode.FAILED_UPDATE_GRADE);
         }
     }
+
 
 }
