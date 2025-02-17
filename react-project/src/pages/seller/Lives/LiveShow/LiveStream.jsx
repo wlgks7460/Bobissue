@@ -202,6 +202,23 @@ const LiveStreamSetup = () => {
         //   setChatActive(true)
         //   console.log('🎥 videoRef:', videoRef.current)
 
+        console.log("!!!!!!!!!!!!!!!!!!")
+        const socket = new WebSocket('wss://bobissue.store:8443?sessionId=mySession8&token=tok_ScqIRK2LCfCZw08q');
+
+        socket.onopen = () => {
+          console.log('WebSocket 연결 성공');
+        };
+        
+        socket.onerror = (error) => {
+          console.log('WebSocket 오류:', error);
+        };
+        
+        socket.onmessage = (event) => {
+          console.log('서버로부터 메시지:', event.data);
+        };
+        console.log("!!!!!!!!!!!!!!!!!!")
+
+
 
               // 세션 생성 요청
       const sessionRes = await API.post('https://bobissue.store/api/openvidu/sessions');
@@ -247,12 +264,16 @@ const token = new URL(tokenUrl).searchParams.get('token');  // URL에서 token �
         // OpenVidu 클라이언트 연결
 
                 // WebSocket URL 설정
-        const sessionId = 'mySession7';  // 사용하려는 세션 ID
+        const sessionId = 'mySession8';  // 사용하려는 세션 ID
         console.log("이것좀 보소"+sessionId)
 const wsUrl = `wss://bobissue.store:8443/openvidu?sessionId=${sessionId}&token=${token}`;
 console.log("🔍 WebSocket URL:", wsUrl);
         const OV = new OpenVidu();
         const newSession = OV.initSession();
+
+        newSession.on('error', (error) => {
+          console.error('WebSocket 연결 실패:', error);
+        });
 
         // 송출용 publisher 설정
         const publisher = OV.initPublisher(videoRef.current, {
@@ -271,7 +292,9 @@ console.log("🔍 WebSocket URL:", wsUrl);
         });
 
         // 세션 연결
-        await newSession.connect(wsUrl, { clientData: 'Publisher' });
+        // await newSession.connect('wss://bobissue.store:8443?sessionId=mySession8&token=tok_ScqIRK2LCfCZw08q', { clientData: 'Publisher' });
+        // await newSession.connect(wsUrl, { clientData: 'Publisher' });
+        await newSession.connect("tok_CsDrbgA9XhpFG2tS", { clientData: 'Publisher' });
 
         // 송출 시작
         newSession.publish(publisher);
