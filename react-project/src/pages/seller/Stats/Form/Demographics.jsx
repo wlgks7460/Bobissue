@@ -89,7 +89,7 @@ const Demographics = () => {
 
   console.log(Data)
   return
-  ;<div>{Data}</div>
+  ;<div></div>
 }
 
 export default Demographics
