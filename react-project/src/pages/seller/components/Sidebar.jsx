@@ -74,7 +74,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState,setSelect ,select}) => {
             icon: <FaComments className='text-gray-600' />,
             links: [
               { to: 'inquiries/list', text: '문의 조회' },
-              { to: 'inquiries/replylist', text: '문의 답장' },
+              // { to: 'inquiries/replylist', text: '문의 답장' },
             ],
           },
           {

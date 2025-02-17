@@ -80,6 +80,7 @@ const LiveHome = () => {
         </h3>
         <div className='bg-white border border-coffee-300 rounded-lg shadow-md p-4'>
           <Calendar
+            
             localizer={localizer}
             events={events}
             startAccessor='start'
@@ -102,7 +103,7 @@ const LiveHome = () => {
             }}
             components={{
               event: ({ event }) => (
-                <div className='bg-white border border-coffee-300 p-2 rounded-lg shadow-sm text-sm font-semibold text-coffee-900'>
+                <div className='border border-deepCobalt p-2 rounded-lg shadow-sm text-sm font-semibold text-coffee-900'>
                   {event.title}
                 </div>
               ),
@@ -118,7 +119,7 @@ const LiveHome = () => {
           <div className='bg-white p-6 rounded-lg shadow-lg w-[400px] relative'>
             <button
               onClick={closeModal}
-              className='absolute top-2 right-2 text-coffee-500 hover:text-coffee-700'
+              className='absolute top-2 right-2 text-coffee-500 hover:text-platinumSilver'
             >
               <FaTimes size={20} />
             </button>
@@ -145,7 +146,7 @@ const LiveHome = () => {
               </button>
               <Link
                 to='/seller/lives/livestream'
-                className='px-4 py-2 bg-caramel-500 text-white rounded hover:bg-caramel-600 flex items-center'
+                className='px-4 py-2 bg-deepCobalt text-white rounded hover:bg-frozenWhite flex items-center'
                 state={{ event: selectedEvent }}
               >
                 <FaVideo className='mr-2' />

@@ -99,7 +99,7 @@ const LiveApply = () => {
                 onClick={() => handleItemSelection(item.itemNo)}
                 className={`px-4 py-2 rounded-md text-sm transition ${
                   selectedItems.includes(item.itemNo)
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-steelBlue text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-blue-100'
                 }`}
               >

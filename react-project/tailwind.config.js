@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // 기존 색상
+        // 기존 색상 유지
         primary: '#4F46E5',
         secondary: '#0EA5E9',
         accent: '#F59E0B',
@@ -12,45 +12,61 @@ export default {
         card: '#FFFFFF',
         textPrimary: '#1F2937',
         textSecondary: '#6B7280',
-        silverLight: '#F8F9FA',
-        silverMedium: '#D1D5DB',
-        silverDark: '#A0A4A8',
-        accentSilver: '#73787D',
-        buttonSilver: '#B0B4B8',
-        buttonHover: '#8A8E92',
-        iceBlue: '#D6E6F2',
-        steelGray: '#62757F',
-        deepNavy: '#1B2A41',
-        neonBlue: '#009FFD',
-        coolCyan: '#0A9396',
-        darkGraphite: '#2D3436',
-        frostWhite: '#E3E6E8',
-        frozenSilver: '#BCC5D3',
-        steelBlue: '#7A9E9F',
-        deepCobalt: '#2D4F6F',
-        neonAqua: '#00C8FF',
-        graphiteBlack: '#1E252B',
-        frostyCyan: '#0A95A6',
-        darkChrome: '#5A5F63',
-        richGold: '#D4AF37',
-        darkEmerald: '#006D5B',
-        moneyGreen: '#4CAF50',
-        luxuryNavy: '#1F3B4D',
-        graphiteBlack: '#1E252B',
-        platinumSilver: '#C0C0C0',
-        darkChrome: '#5A5F63',
-        neonMint: '#00FFAF',
+
+        // 🟢 자연 (Nature) 테마
+        forestGreen: '#228B22',
+        mossGreen: '#8A9A5B',
+        pineGreen: '#01796F',
+        oliveDrab: '#6B8E23',
+        earthBrown: '#7C4A1D',
+        deepWood: '#3E2723',
+
+        // 🟠 석양 (Sunset) 테마
+        sunsetOrange: '#FF4500',
+        duskPurple: '#5D3A9B',
+        warmRed: '#D72638',
+        twilightBlue: '#2A2B4A',
+        amberGlow: '#FFBF00',
+
+        // 🔵 오션 (Ocean) 테마
+        deepSea: '#003366',
+        oceanBlue: '#0077B6',
+        turquoise: '#40E0D0',
+        aquaWave: '#00CED1',
+        coralReef: '#FF7F50',
+
+        // 🎨 파스텔 (Pastel) 테마
+        pastelPink: '#FEC5E5',
+        pastelBlue: '#AEEEEE',
+        pastelLavender: '#D8BFD8',
+        pastelYellow: '#FFFACD',
+        pastelMint: '#98FB98',
+
+        // 💡 네온 (Neon) 테마
+        neonPink: '#FF10F0',
+        neonYellow: '#FFFF33',
+        neonOrange: '#FF6600',
+        neonPurple: '#9400D3',
+        neonGreen: '#39FF14',
+
+        // 🖤 다크 (Dark) 테마
+        charcoal: '#36454F',
+        gunmetal: '#2C3539',
+        nightSky: '#191970',
+        obsidian: '#080808',
+        darkSlate: '#2F4F4F',
 
         // ✅ 추가된 커피 계열 색상
-        mochaBrown: '#6F4E37', // 따뜻한 모카 브라운 (메인 버튼, 배경)
-        coffeeBrown: '#5C4033', // 진한 커피색 (호버 효과)
-        latteBeige: '#E6C7A6', // 부드러운 라떼 베이지 (서브 메뉴 배경)
-        espressoBlack: '#3B2F2F', // 에스프레소 블랙 (진한 브라운 폰트)
-        caramelTan: '#C69C6D', // 카라멜 톤 (강조 색상)
-        warmBeige: '#F5E6CA', // 밝고 따뜻한 베이지 (배경)
-        roastedCocoa: '#4B2E2F', // 다크 초콜릿 색상 (포인트)
-        hazelnutBrown: '#8B5A2B', // 고급스러운 헤이즐넛 브라운 (UI 요소)
+        mochaBrown: '#6F4E37',
+        coffeeBrown: '#5C4033',
+        latteBeige: '#E6C7A6',
+        espressoBlack: '#3B2F2F',
+        caramelTan: '#C69C6D',
+        warmBeige: '#F5E6CA',
+        roastedCocoa: '#4B2E2F',
+        hazelnutBrown: '#8B5A2B',
 
+        // 🎨 Cobalt 계열
         cobalt: {
           50: '#eef2ff',
           100: '#dbeafe',
@@ -67,4 +83,4 @@ export default {
     },
   },
   plugins: [require('tailwind-scrollbar-hide')], // 스크롤바 숨기기 플러그인
-}
+};
