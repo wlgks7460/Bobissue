@@ -168,6 +168,7 @@ const menuData = [
       { id: 802, title: '카테고리 분석', path: '/admin/analytics/category' },
       { id: 803, title: '시간대별 분석', path: '/admin/analytics/timesales' },
       { id: 804, title: '유저 통계', path: '/admin/analytics/users' },
+      { id: 805, title: '재구매율 분석', path: '/admin/analytics/repurchase' },
     ],
   },
 ]
