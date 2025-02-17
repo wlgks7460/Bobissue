@@ -41,7 +41,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
         {/* 로고 이미지 */}
         <Link to='/seller' onClick={() => setSelect(null)}>
           <img
-            src='/bobissueLogo_gray.png'
+            src='/bobissueLogo2.png'
             alt='로고'
             className='w-30 h-10 object-cover cursor-pointer'
           />

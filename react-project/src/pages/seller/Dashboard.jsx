@@ -72,7 +72,7 @@ const Dashboard = () => {
   ]
 
   return (
-    <div className='w-full mx-auto px-10 py-12 min-h-screen bg-warmBeige'>
+    <div className='w-full mx-auto px-8 py-10 min-h-screen bg-warmBeige/20'>
       {/* 헤더 */}
       <header className='text-center mb-12'>
         <h1 className='text-4xl font-extrabold text-espressoBlack'>상품 관리, 쉽고 간편하게</h1>

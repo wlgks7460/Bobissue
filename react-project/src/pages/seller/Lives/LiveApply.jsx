@@ -64,32 +64,32 @@ const LiveApply = () => {
   };
 
   return (
-    <div className='p-6 min-h-screen flex flex-col md:flex-row gap-6 bg-gray-100'>
+    <div className='p-6 min-h-screen flex flex-col md:flex-row gap-6 bg-warmBeige/20'>
       {/* 왼쪽: 라이브 신청 폼 */}
-      <div className='w-full md:w-1/2 p-6 bg-white border border-gray-300 rounded-lg shadow-md'>
-        <h2 className='text-3xl font-semibold mb-6 flex items-center text-gray-800'>
+      <div className='w-full md:w-1/2 p-6 bg-white border border-latteBeige rounded-lg shadow-md'>
+        <h2 className='text-3xl font-semibold mb-6 flex items-center text-espressoBlack'>
           라이브 방송 신청
         </h2>
 
-        <label className='block text-lg font-medium text-gray-700 mb-2'>방송 제목</label>
+        <label className='block text-lg font-medium text-darkGraphite mb-2'>방송 제목</label>
         <input
           type='text'
-          className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400'
+          className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-caramelTan'
           placeholder='방송 제목을 입력하세요'
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <label className='block text-lg font-medium text-gray-700 mt-4'>방송 설명</label>
+        <label className='block text-lg font-medium text-darkGraphite mt-4'>방송 설명</label>
         <textarea
-          className='border p-3 w-full rounded-md h-32 focus:outline-none focus:ring-2 focus:ring-blue-400'
+          className='border p-3 w-full rounded-md h-32 focus:outline-none focus:ring-2 focus:ring-caramelTan'
           placeholder='방송 내용을 입력하세요'
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
 
-        <label className='block text-lg font-medium text-gray-700 mt-4 flex items-center'>
-          상품 선택
+        <label className='block text-lg font-medium text-darkGraphite mt-4 flex items-center'>
+          <FaBoxOpen className='mr-2 text-caramelTan' /> 상품 선택
         </label>
         <div className='grid grid-cols-2 gap-2 mt-2'>
           {items.length > 0 ? (
@@ -99,32 +99,32 @@ const LiveApply = () => {
                 onClick={() => handleItemSelection(item.itemNo)}
                 className={`px-4 py-2 rounded-md text-sm transition ${
                   selectedItems.includes(item.itemNo)
-                    ? 'bg-steelBlue text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-blue-100'
+                    ? 'bg-caramelTan text-white'
+                    : 'bg-latteBeige text-darkGraphite hover:bg-mochaBrown/80'
                 }`}
               >
                 {item.name}
               </button>
             ))
           ) : (
-            <p className='text-gray-500 text-sm'>상품이 없습니다.</p>
+            <p className='text-darkGraphite text-sm'>상품이 없습니다.</p>
           )}
         </div>
 
-        <label className='block text-lg font-medium text-gray-700 mt-4 flex items-center'>
-        방송 날짜
+        <label className='block text-lg font-medium text-darkGraphite mt-4 flex items-center'>
+          <FaCalendarAlt className='mr-2 text-caramelTan' /> 방송 날짜
         </label>
         <DatePicker
           selected={selectedDate}
           onChange={(date) => setSelectedDate(date)}
           minDate={moment().add(1, 'months').startOf('month').toDate()}
           maxDate={moment().add(1, 'months').endOf('month').toDate()}
-          className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400'
+          className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-caramelTan'
           placeholderText='날짜 선택'
         />
 
-        <label className='block text-lg font-medium text-gray-700 mt-4 flex items-center'>
-           방송 시간 선택
+        <label className='block text-lg font-medium text-darkGraphite mt-4 flex items-center'>
+          <FaClock className='mr-2 text-caramelTan' /> 방송 시간 선택
         </label>
         <div className='grid grid-cols-4 gap-2 mt-2'>
           {availableTimes.map((time) => (
@@ -133,8 +133,8 @@ const LiveApply = () => {
               onClick={() => handleTimeSelection(time)}
               className={`px-4 py-2 rounded-md text-sm transition ${
                 selectedTimes.includes(time)
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-blue-100'
+                  ? 'bg-coffeeBrown text-white'
+                  : 'bg-latteBeige text-darkGraphite hover:bg-mochaBrown/80'
               }`}
             >
               {time}
@@ -143,7 +143,7 @@ const LiveApply = () => {
         </div>
 
         <button
-          className='mt-6 w-full py-3 bg-rose-500 text-white font-semibold rounded-md hover:bg-green-600 transition'
+          className='mt-6 w-full py-3 bg-coffeeBrown text-white font-semibold rounded-md hover:bg-mochaBrown transition'
           onClick={handleLiveApply}
         >
           <FaVideo className='mr-2 inline-block' /> 라이브 신청하기
@@ -151,7 +151,7 @@ const LiveApply = () => {
       </div>
 
       {/* 오른쪽: 가이드 */}
-      <div className='w-full md:w-1/2 p-6 bg-white border border-gray-300 rounded-lg shadow-md'>
+      <div className='w-full md:w-1/2 p-6 bg-white border border-latteBeige rounded-lg shadow-md'>
         <Guide />
       </div>
     </div>

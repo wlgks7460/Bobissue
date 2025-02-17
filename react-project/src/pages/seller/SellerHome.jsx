@@ -103,7 +103,7 @@ const SellerMainPage = () => {
   // }
 
   return (
-    <div>
+    <div className=''>
       {/* <button
         className='flex items-center justify-center mt-[80px]'
         onClick={() => setDebug_mode(!debug_mode)}
@@ -182,7 +182,7 @@ const SellerMainPage = () => {
 
             {/* Main Content */}
             <main
-              className={`w-full z-1 flex-1 p-2 transition-all relative duration-300 mt-2 min-h-[calc(80vh-32px)] ${
+              className={`w-full z-1 flex-1 p-2 transition-all relative duration-300 mt-[8px] min-h-[calc(80vh-30px)] ${
                 sidebarOpen ? 'ml-64' : 'ml-0'
               }`}
             >
