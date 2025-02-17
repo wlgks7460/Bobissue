@@ -47,20 +47,6 @@ API.interceptors.response.use(
         console.log(err.response)
         const { data, status } = err.response
         const loginStatus = store.getState().user.status
-<<<<<<< HEAD
-        if (status === 401) {
-          // console.warn('인증 실패: 로그아웃')
-          // store.dispatch(userReducerActions.logout())
-          // alert('인증이 만료되었습니다.')
-          if (loginStatus === 'seller') {
-            // window.location.href = '/seller'
-          } else if (loginStatus === 'admin') {
-            window.location.href = '/admin'
-          } else if (loginStatus === 'consumer') {
-            window.location.href = '/login'
-          }
-        }
-=======
         // if (status === 401) {
         //   console.warn('인증 실패: 로그아웃')
         //   store.dispatch(userReducerActions.logout())
@@ -73,7 +59,6 @@ API.interceptors.response.use(
         //     window.location.href = '/login'
         //   }
         // }
->>>>>>> 747f38d3270c87ccabd4bdf29049451dafbe3f00
       }
       return Promise.reject(err)
     }

@@ -92,10 +92,10 @@ const Dashboard = () => {
             description={item.description}
             link={item.link}
             icon={item.icon}
-            color={index % 2 === 0 ? 'bg-frozenSilver' : 'bg-deepCobalt'}
-            text={index % 2 === 0 ? 'text-darkGraphite' : 'text-white'}
-            hoverColor={index % 2 === 0 ? 'hover:bg-steelBlue' : 'hover:bg-darkChrome'}
-            hoverText={index % 2 === 0 ? 'hover:text-white' : 'hover:text-neonAqua'}
+            color={index % 2 === 0 ? 'bg-frozenSilver' : 'bg-darkChrome'}
+            text={index % 2 === 0 ? 'text-deepCobalt' : 'text-white'}
+            hoverColor={index % 2 === 0 ? 'hover:bg-frostWhite/80' : 'hover:bg-darkChrome/80'}
+            hoverText={index % 2 === 0 ? 'hover:text-steelBlue' : 'hover:text-neonAqua'}
           />
         ))}
       </div>
