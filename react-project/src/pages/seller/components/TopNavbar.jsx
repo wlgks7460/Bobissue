@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { FaSignOutAlt, FaBug, FaHome, FaBars } from 'react-icons/fa' // ✅ 햄버거 아이콘 포함
+import { FaSignOutAlt, FaBug, FaHome, FaBars } from 'react-icons/fa'
 
-const TopNavbar = ({ toggleSidebar, user,setSelect }) => {
+const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
   const navigate = useNavigate()
   const [debugMode, setDebugMode] = useState(false)
 
@@ -26,21 +26,20 @@ const TopNavbar = ({ toggleSidebar, user,setSelect }) => {
   }
 
   return (
-    <nav className='flex items-center justify-between bg-white px-6 py-3 border-b border-gray-300 shadow-md relative z-50'>
+    <nav className='flex items-center justify-between bg-white px-6 py-3 border-b border-caramelTan shadow-md relative z-50'>
       {/* 왼쪽 영역 (햄버거 메뉴 + 로고) */}
       <div className='flex items-center gap-4'>
         {/* ☰ 햄버거 버튼 */}
         <button
           onClick={toggleSidebar}
-          className='text-deepCobalt p-2 rounded-lg hover:bg-deepCobalt/20 focus:outline-none transition'
+          className='text-coffeeBrown p-2 rounded-lg hover:bg-caramelTan/80 focus:outline-none transition'
           aria-label='Toggle Sidebar'
         >
           <FaBars className='w-6 h-6' />
         </button>
 
         {/* 로고 이미지 */}
-        <Link to='/seller'
-        onClick={()=>setSelect(null)}>
+        <Link to='/seller' onClick={() => setSelect(null)}>
           <img
             src='/bobissueLogo_gray.png'
             alt='로고'
@@ -52,14 +51,14 @@ const TopNavbar = ({ toggleSidebar, user,setSelect }) => {
       {/* 네비게이션 버튼 그룹 */}
       <div className='ml-auto flex items-center gap-4'>
         {/* 👤 유저 인사 메시지 */}
-        <span className='text-deepCobalt font-semibold'>
+        <span className='text-coffeeBrown font-semibold'>
           {user?.name || '판매자'}님 안녕하세요!
         </span>
 
         {/* 🏠 홈 버튼 */}
         <Link
           to='/'
-          className='p-3 bg-deepCobalt/10 text-deepCobalt rounded-lg hover:bg-deepCobalt/20 transition flex items-center'
+          className='p-3 bg-caramelTan/30 text-coffeeBrown rounded-lg hover:bg-caramelTan/80 transition flex items-center'
         >
           <FaHome className='w-5 h-5' />
         </Link>
@@ -69,8 +68,8 @@ const TopNavbar = ({ toggleSidebar, user,setSelect }) => {
           onClick={toggleDebugMode}
           className={`p-3 rounded-lg transition ${
             debugMode
-              ? 'bg-rose-500 hover:bg-rose-400 text-white'
-              : 'bg-deepCobalt/40 hover:bg-deepCobalt/60 text-white'
+              ? 'bg-roastedCocoa hover:bg-mochaBrown text-white'
+              : 'bg-caramelTan/50 hover:bg-caramelTan text-coffeeBrown'
           }`}
         >
           <FaBug className='w-5 h-5' />
@@ -79,7 +78,7 @@ const TopNavbar = ({ toggleSidebar, user,setSelect }) => {
         {/* 🚪 로그아웃 버튼 */}
         <button
           onClick={handleLogout}
-          className='p-3 bg-deepCobalt text-white rounded-lg hover:bg-deepCobalt/80 transition'
+          className='p-3 bg-roastedCocoa text-warmBeige rounded-lg hover:bg-mochaBrown transition'
         >
           <FaSignOutAlt className='w-5 h-5' />
         </button>
