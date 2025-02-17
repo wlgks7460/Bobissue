@@ -4,9 +4,8 @@ import Sidebar from './components/Sidebar'
 import { Outlet, useNavigate } from 'react-router-dom'
 import API from '@/utils/API' // API 호출 모듈
 
-const debug_mode = true
-
 const SellerMainPage = () => {
+  const [debug_mode, setDebug_mode] = useState(false)
   const navigate = useNavigate()
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
@@ -27,49 +26,56 @@ const SellerMainPage = () => {
   })
 
   // ✅ 1. 로그인 상태 확인
-  // useEffect(() => {
-  //   const savedToken = localStorage.getItem('access_token')
-  //   if (!savedToken) {
-  //     navigate('/seller/login')
-  //   } else {
-  //     setToken(savedToken)
-  //   }
-  // }, [navigate])
+  useEffect(() => {
+    if (debug_mode) {
+      return
+    }
+    const savedToken = localStorage.getItem('access_token')
+    if (!savedToken) {
+      navigate('/seller/login')
+    } else {
+      setToken(savedToken)
+    }
+  }, [navigate])
 
   // ✅ 2. 회사 등록 여부 확인 (로그인이 된 상태에서만 실행)
-  // useEffect(() => {
-  //   if (!token) return
+  useEffect(() => {
+    if (debug_mode) {
+      return
+    }
+    if (!token) return
 
-  //   const fetchCompanyData = async () => {
-  //     try {
-  //       const response = await API.get('/sellers/company')
-  //       setRegistration(response.data.result.data?.companyNo || false)
-  //     } catch (error) {
-  //       console.error('회사 등록 여부 확인 실패:', error)
-  //       setRegistration(false)
-  //     }
-  //   }
+    const fetchCompanyData = async () => {
+      try {
+        const response = await API.get('/sellers/company')
+        setRegistration(response.data.result.data?.companyNo || false)
+      } catch (error) {
+        console.error('회사 등록 여부 확인 실패:', error)
+        setRegistration(false)
+      }
+    }
 
-  //   fetchCompanyData()
-  // }, [token])
+    fetchCompanyData()
+  }, [token])
 
   // ✅ 3. 유저 정보 가져오기
-  // useEffect(() => {
-  //   if (!token) return
+  useEffect(() => {
+    if (debug_mode) return
+    if (!token) return
 
-  //   const fetchUserStatus = async () => {
-  //     try {
-  //       const response = await API.get('/sellers/profile')
-  //       console.log(response)
-  //       setUser(response?.data?.result?.data || null) // ✅ 전체 유저 객체 저장
-  //       setStatus(response.data?.result?.data.approvalStatus || 'N')
-  //     } catch (err) {
-  //       console.error(err)
-  //     }
-  //   }
+    const fetchUserStatus = async () => {
+      try {
+        const response = await API.get('/sellers/profile')
+        console.log(response)
+        setUser(response?.data?.result?.data || null) // ✅ 전체 유저 객체 저장
+        setStatus(response.data?.result?.data.approvalStatus || 'N')
+      } catch (err) {
+        console.error(err)
+      }
+    }
 
-  //   fetchUserStatus()
-  // }, [token])
+    fetchUserStatus()
+  }, [token])
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {
@@ -97,6 +103,12 @@ const SellerMainPage = () => {
 
   return (
     <div>
+      {/* <button
+        className='flex items-center justify-center mt-[80px]'
+        onClick={() => setDebug_mode(!debug_mode)}
+      >
+        {debug_mode ? '로그인페이지 디버깅중' : '디버깅X'}
+      </button> */}
       {!debug_mode ? (
         registration === null || status !== 'Y' ? (
           <div className='flex flex-col items-center justify-center min-h-screen'>
@@ -169,7 +181,7 @@ const SellerMainPage = () => {
 
             {/* Main Content */}
             <main
-              className={`flex-1 p-2 transition-all relative duration-300 mt-2 min-h-[calc(80vh-32px)] ${
+              className={`w-full z-1 flex-1 p-2 transition-all relative duration-300 mt-2 min-h-[calc(80vh-32px)] ${
                 sidebarOpen ? 'ml-64' : 'ml-0'
               }`}
             >
