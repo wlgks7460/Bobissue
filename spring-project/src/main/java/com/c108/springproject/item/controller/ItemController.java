@@ -176,8 +176,22 @@ public class ItemController {
     }
 
     // 통계
+    // 재구매율 높은 상품
     @GetMapping("/top-repurchase")
     public ResponseDto getTopRepurchaseItems() {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_TOP_REPURCHASE_ITEM, new DefaultResponse<>(itemService.getTopRepurchaseItems()));
     }
+    
+    // 남성 선호
+    @GetMapping("/male-preferred")
+    public ResponseDto getMalePrefferredItems() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_MALE_PREFERRED_ITEM, new DefaultResponse<>(itemService.getMalePreferredItems()));
+    }
+
+    // 여성 선호
+    @GetMapping("/female-preferred")
+    public ResponseDto getFemalePreferredItems() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_FEMALE_PREFERRED_ITEM, new DefaultResponse<>(itemService.getFemalePreferredItems()));
+    }
+
 }

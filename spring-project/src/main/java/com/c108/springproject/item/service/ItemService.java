@@ -13,6 +13,7 @@ import com.c108.springproject.item.repository.ItemCategoryRepository;
 import com.c108.springproject.item.repository.ItemLikeRepository;
 import com.c108.springproject.item.repository.ItemQueryRepository;
 import com.c108.springproject.item.repository.ItemRepository;
+import com.c108.springproject.item.repository.querydsl.ItemGenderStatsDto;
 import com.c108.springproject.item.repository.querydsl.ItemRepurchaseDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
@@ -400,7 +401,7 @@ public class ItemService {
                 .build();
     }
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public List<ItemRepurchaseDto> getTopRepurchaseItems() {
         try {
             return itemQueryRepository.getTopRepurchaseItems();
@@ -410,6 +411,24 @@ public class ItemService {
         }
     }
 
+    @Transactional
+    public List<ItemGenderStatsDto> getMalePreferredItems() {
+        try {
+            return itemQueryRepository.getMalePreferredItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_MALE_PREFERRED_ITEM);
+        }
+    }
+
+
+    @Transactional
+    public List<ItemGenderStatsDto> getFemalePreferredItems() {
+        try {
+            return itemQueryRepository.getFemalePreferredItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_FEMALE_PREFERRED_ITEM);
+        }
+    }
 //    // 엘라스틱 서치
 //    @Transactional
 //    public SearchResDto elasticSearchItems(SearchReqDto reqDto) {
