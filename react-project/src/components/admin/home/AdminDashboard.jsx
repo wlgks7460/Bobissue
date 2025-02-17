@@ -63,21 +63,17 @@ const AdminDashBoard = () => {
 
   // 더미 데이터 생성 - 최근 7개 고정으로 렌더링
   const dummyOrders = [
-    { orderNumber: '20240101', customer: '김지한', amount: 50000, date: '2024-02-15' },
     { orderNumber: '20240102', customer: '김지원', amount: 70000, date: '2024-02-14' },
     { orderNumber: '20240103', customer: '이다은', amount: 65000, date: '2024-02-13' },
     { orderNumber: '20240101', customer: '강현호', amount: 50000, date: '2024-02-15' },
     { orderNumber: '20240102', customer: '윤경상', amount: 70000, date: '2024-02-14' },
     { orderNumber: '20240103', customer: '김경은', amount: 65000, date: '2024-02-13' },
-    { orderNumber: '20240103', customer: '손흥민', amount: 65000, date: '2024-02-13' },
   ]
 
   const dummyUsers = [
     { name: '김지한', email: 'hong@example.com', dateJoined: '2024-02-01' },
-    { name: '김철수', email: 'kim@example.com', dateJoined: '2024-01-25' },
     { name: '이다은', email: 'lee@example.com', dateJoined: '2024-01-20' },
     { name: '강현호', email: 'hong@example.com', dateJoined: '2024-02-01' },
-    { name: '김철수', email: 'kim@example.com', dateJoined: '2024-01-25' },
     { name: '윤경상', email: 'lee@example.com', dateJoined: '2024-01-20' },
     { name: '김경은', email: 'lee@example.com', dateJoined: '2024-01-20' },
   ]
