@@ -5,35 +5,40 @@ import API from '../../../utils/API'
 import { Search } from 'lucide-react'
 
 const MemberInfoManagement = () => {
+  // Breadcrumb 경로 설정
   const breadcrumbPaths = [{ name: 'Home' }, { name: '회원관리' }, { name: '회원정보관리' }]
   const navigate = useNavigate()
 
-  const [searchKeyword, setSearchKeyword] = useState('')
-  const [searchType, setSearchType] = useState('user-no')
-  const [allUsers, setAllUsers] = useState([])
-  const [visibleUsers, setVisibleUsers] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+  // 검색 관련 상태
+  const [searchKeyword, setSearchKeyword] = useState('') // 검색어
+  const [searchType, setSearchType] = useState('user-no') // 검색 유형(회원번호, 이름, 이메일)
+
+  // 사용자 목록 관련 상태
+  const [allUsers, setAllUsers] = useState([]) // 전체 사용자 리스트
+  const [visibleUsers, setVisibleUsers] = useState([]) // 화면에 보여지는 사용자 리스트
+  const [isLoading, setIsLoading] = useState(false) // 로딩 상태
+  const [currentPage, setCurrentPage] = useState(1) // 현재 페이지
+
+  const itemsPerPage = 10 // 페이지당 사용자 수
 
   // 페이지 로드 시 사용자 목록 가져오기 및 스크롤 이벤트 등록
   useEffect(() => {
-    fetchUsers()
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    fetchUsers() // 사용자 정보 불러오기
+    window.addEventListener('scroll', handleScroll) // 무한 스크롤 이벤트 등록
+    return () => window.removeEventListener('scroll', handleScroll) // 이벤트 해제
   }, [])
 
   // 사용자 목록 가져오기
   const fetchUsers = async () => {
-    setIsLoading(true)
+    setIsLoading(true) // 로딩 시작
     try {
-      const response = await API.get('/users')
-      setAllUsers(response.data.result.data)
-      setVisibleUsers(response.data.result.data.slice(0, itemsPerPage))
+      const response = await API.get('/users') // 사용자 정보 API 호출
+      setAllUsers(response.data.result.data) // 서버로부터 받은 사용자 데이터
+      setVisibleUsers(response.data.result.data.slice(0, itemsPerPage)) // 첫 페이지 데이터만 표시
     } catch (error) {
       alert('회원 조회에 실패했습니다.')
     } finally {
-      setIsLoading(false)
+      setIsLoading(false) // 로딩 종료
     }
   }
 
@@ -43,23 +48,24 @@ const MemberInfoManagement = () => {
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.offsetHeight - 100
     ) {
-      loadMoreData()
+      loadMoreData() // 추가 데이터 로딩
     }
   }
 
   // 추가 데이터 로드 (무한 스크롤)
   const loadMoreData = () => {
-    if (visibleUsers.length >= allUsers.length) return
-    setIsLoading(true)
+    if (visibleUsers.length >= allUsers.length) return // 이미 모든 데이터를 불러왔으면 중단
+
+    setIsLoading(true) // 로딩 시작
     setTimeout(() => {
       const nextPage = currentPage + 1
       const startIndex = nextPage * itemsPerPage - itemsPerPage
       const endIndex = nextPage * itemsPerPage
       const nextUsers = allUsers.slice(startIndex, endIndex)
 
-      setVisibleUsers((prev) => [...prev, ...nextUsers])
-      setCurrentPage(nextPage)
-      setIsLoading(false)
+      setVisibleUsers((prev) => [...prev, ...nextUsers]) // 기존 데이터에 추가
+      setCurrentPage(nextPage) // 현재 페이지 업데이트
+      setIsLoading(false) // 로딩 종료
     }, 500)
   }
 
@@ -69,6 +75,8 @@ const MemberInfoManagement = () => {
       alert('검색어를 입력하세요.')
       return
     }
+
+    // 검색 조건에 따라 필터링
     const filtered = allUsers.filter((user) => {
       if (searchType === 'user-no') {
         return user.userNo.toString() === searchKeyword
@@ -79,18 +87,18 @@ const MemberInfoManagement = () => {
       }
       return false
     })
-    setVisibleUsers(filtered)
+    setVisibleUsers(filtered) // 검색 결과를 화면에 표시
     setCurrentPage(1)
   }
 
   // Enter 키로 검색 가능하게 설정
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') handleSearch()
+    if (event.key === 'Enter') handleSearch() // Enter 키 입력 시 검색 실행
   }
 
   // 상세 페이지로 이동
   const handleNavigateToDetail = (userNo) => {
-    navigate(`/admin/members/${userNo}`)
+    navigate(`/admin/members/${userNo}`) // 해당 회원의 상세 페이지로 이동
   }
 
   // 회원 상태 변경 (활성/비활성)
@@ -99,6 +107,7 @@ const MemberInfoManagement = () => {
       const newStatus = currentStatus === 'Y' ? 'N' : 'Y'
       const response = await API.put(`/admin/${userNo}/user-status`, { status: newStatus })
       if (response.data.status === 'ACCEPTED') {
+        // 변경된 상태로 화면 업데이트
         setVisibleUsers((users) =>
           users.map((user) => (user.userNo === userNo ? { ...user, status: newStatus } : user)),
         )
@@ -123,6 +132,7 @@ const MemberInfoManagement = () => {
         </h2>
         <h2 className='text-lg font-semibold mb-4'>| 기본검색</h2>
         <div className='flex items-center space-x-4'>
+          {/* 검색 조건 선택 (회원번호, 이름, 이메일) */}
           <select
             value={searchType}
             onChange={(e) => setSearchType(e.target.value)}
@@ -132,6 +142,7 @@ const MemberInfoManagement = () => {
             <option value='name'>회원명</option>
             <option value='email'>이메일</option>
           </select>
+          {/* 검색어 입력창 */}
           <input
             type='text'
             value={searchKeyword}
@@ -140,6 +151,7 @@ const MemberInfoManagement = () => {
             className='w-64 border border-[#A1887F] rounded-md px-3 py-2'
             placeholder='검색어를 입력하세요'
           />
+          {/* 조회 버튼 */}
           <button
             onClick={handleSearch}
             className='bg-[#6D4C41] hover:bg-[#5D4037] text-white px-4 py-2 rounded-md shadow-md'
@@ -154,6 +166,7 @@ const MemberInfoManagement = () => {
 
       {isLoading && <div className='text-center'>로딩 중...</div>}
       <section>
+        {/* 사용자 정보 테이블 */}
         {visibleUsers.length > 0 ? (
           <table className='table-auto w-full border border-[#D7CCC8] rounded-md overflow-hidden'>
             <thead>
@@ -175,6 +188,8 @@ const MemberInfoManagement = () => {
                   <td className='border px-4 py-2 text-center'>{user.birthday}</td>
                   <td className='border px-4 py-2 text-center'>{user.email}</td>
                   <td className='border px-4 py-2 text-center'>{user.gender}</td>
+
+                  {/* 회원 상태 변경 버튼 */}
                   <td className='border px-4 py-2 text-center'>
                     <button
                       onClick={() => {
@@ -189,6 +204,8 @@ const MemberInfoManagement = () => {
                       {user.status === 'Y' ? '활성' : '비활성'}
                     </button>
                   </td>
+
+                  {/* 회원 상세 정보 버튼 */}
                   <td className='border px-4 py-2 text-center'>
                     <button
                       onClick={() => handleNavigateToDetail(user.userNo)}
