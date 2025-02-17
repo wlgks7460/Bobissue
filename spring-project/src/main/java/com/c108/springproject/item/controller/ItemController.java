@@ -191,7 +191,58 @@ public class ItemController {
     // 여성 선호
     @GetMapping("/female-preferred")
     public ResponseDto getFemalePreferredItems() {
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_FEMALE_PREFERRED_ITEM, new DefaultResponse<>(itemService.getFemalePreferredItems()));
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_FEMALE_PREFERRED_ITEM,
+                new DefaultResponse<>(itemService.getFemalePreferredItems()));
+    }
+
+    @GetMapping("/gender-preference")
+    public ResponseDto getItemsByGenderPreference() {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_GENDER_PREFERENCE,
+                new DefaultResponse<>(itemService.getItemsByGenderPreference())
+        );
+    }
+
+    @GetMapping("/best-sellers")
+    public ResponseDto getBestSellerItems() {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_BEST_SELLERS,
+                new DefaultResponse<>(itemService.getBestSellerItems())
+        );
+    }
+
+    // 카테고리 + 성별/연령대 기반 추천
+    @GetMapping("/{itemNo}/recommendations/demographic")
+    public ResponseDto getRecommendationsByCategoryAndDemographic(@PathVariable Integer itemNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_RECOMMENDATIONS_BY_DEMOGRAPHIC,
+                new DefaultResponse<>(itemService.getRecommendationsByCategoryAndDemographic(itemNo))
+        );
+    }
+
+    // 구매 이력 기반 필터링
+    @GetMapping("/{itemNo}/recommendations/collaborative")
+    public ResponseDto getRecommendationsByCollaborativeFiltering(@PathVariable Integer itemNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_RECOMMENDATIONS_BY_COLLABORATIVE,
+                new DefaultResponse<>(itemService.getRecommendationsByCollaborativeFiltering(itemNo))
+        );
+    }
+
+    // 레시피 기반 추천
+    @GetMapping("/{itemNo}/recommendations/recipe")
+    public ResponseDto getRecommendationsByRecipe(@PathVariable Integer itemNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_RECOMMENDATIONS_BY_RECIPE,
+                new DefaultResponse<>(itemService.getRecommendationsByRecipe(itemNo))
+        );
     }
 
 }

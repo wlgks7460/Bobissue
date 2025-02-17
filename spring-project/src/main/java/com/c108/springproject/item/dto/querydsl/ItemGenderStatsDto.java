@@ -1,4 +1,4 @@
-package com.c108.springproject.item.repository.querydsl;
+package com.c108.springproject.item.dto.querydsl;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

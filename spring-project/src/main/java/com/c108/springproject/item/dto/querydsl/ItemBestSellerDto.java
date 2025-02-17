@@ -1,5 +1,4 @@
-package com.c108.springproject.item.repository.querydsl;
-
+package com.c108.springproject.item.dto.querydsl;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemRepurchaseDto {
+public class ItemBestSellerDto {
     private Integer itemNo;
     private String itemName;
     private Integer price;
-    private Long uniqueUserCount;
-    private Long totalOrders;
-    private Double repurchaseRate;
+    private Long totalSales;
+    private Long totalRevenue;
+    private Double averageRating;
 }
