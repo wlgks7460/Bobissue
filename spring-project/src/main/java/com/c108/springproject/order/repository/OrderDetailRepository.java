@@ -11,5 +11,5 @@ import java.util.List;
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
     List<OrderDetail> findByItem_Company_CompanyNoAndOrder_DelCategoryNo(int companyNo, int delCategoryNo);
-
+    List<OrderDetail> findByItem_Company_CompanyNo(int companyNo);
 }

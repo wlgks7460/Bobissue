@@ -7,10 +7,7 @@ import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.dto.ResponseDto;
 import com.c108.springproject.order.dto.response.OrderDetailResDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,13 +22,13 @@ public class DeliveryController {
     }
 
     // 배송 전 주문 리스트 조회
-    @GetMapping("/{companyNo}")
-    public ResponseDto getOrders(@PathVariable int companyNo) {
-        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ORDERS, new DefaultResponse<List<CompanyOrdersResDto>>(deliveryService.getOrders(companyNo)));
+    @GetMapping("/{companyNo}/{deliveryStatus}")
+    public ResponseDto getOrders(@PathVariable int companyNo, @PathVariable int deliveryStatus) {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_ORDERS, new DefaultResponse<List<CompanyOrdersResDto>>(deliveryService.getOrders(companyNo, deliveryStatus)));
     }
 
     // 배송 상태 변경
-    @GetMapping("/{orderNo}/{deliveryStatus}")
+    @PostMapping("/{orderNo}/{deliveryStatus}")
     public ResponseDto updateDeliveryStatus(@PathVariable long orderNo, @PathVariable int deliveryStatus) {
         // 2: 상품 준비중 / 3: 배송 출발 / 4: 배송 완료
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ORDER, new DefaultResponse<OrderDetailResDto>(deliveryService.setOrder(orderNo, deliveryStatus)));
