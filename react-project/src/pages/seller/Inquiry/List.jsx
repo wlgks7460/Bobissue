@@ -50,8 +50,14 @@ const InquiryList = () => {
   }
 
   return (
-    <div className=' mx-auto h-[60vh] p-6 min-h-screen border border-frozenSilver-300 rounded-xl '>
-      <h1 className='text-2xl font-extrabold text-deepCobalt border-b pb-3 text-center'>상품 문의</h1>
+    <div className='w-full mx-auto p-6 min-h-screen bg-warmBeige/20 rounded-xl'>
+      {/* 헤더 */}
+      <h1 className='text-3xl font-extrabold text-espressoBlack border-b pb-3 text-center'>
+        상품 문의
+      </h1>
+      <p className='text-md text-hazelnutBrown text-center mt-2'>
+        문의사항을 확인하고 답변을 관리하세요.
+      </p>
 
       {/* ✅ 카테고리 버튼 */}
       <div className='flex space-x-6 justify-center text-[16px] font-medium my-6'>
@@ -61,8 +67,8 @@ const InquiryList = () => {
             onClick={() => handleCategoryClick(category)}
             className={`border-b-2 pb-1 px-3 transition ${
               typeFilter === category
-                ? 'border-rose-500 text-rose-500 font-semibold'
-                : 'border-transparent text-gray-600 hover:text-rose-400'
+                ? 'border-caramelTan text-caramelTan font-semibold'
+                : 'border-transparent text-hazelnutBrown hover:text-goldenAmber hover:border-goldenAmber'
             }`}
           >
             {category}
@@ -73,14 +79,14 @@ const InquiryList = () => {
       {/* ✅ 필터 옵션 */}
       <div className='flex gap-6 mb-6 items-center'>
         <div className='flex items-center gap-2'>
-          <label htmlFor='answerFilter' className='text-sm font-medium text-gray-700'>
+          <label htmlFor='answerFilter' className='text-sm font-medium text-hazelnutBrown'>
             답변 여부:
           </label>
           <select
             id='answerFilter'
             value={answerFilter}
             onChange={(e) => setAnswerFilter(e.target.value)}
-            className='border border-deepCobalt rounded-md p-2 text-md focus:ring-graphiteBlack focus:border-graphiteBlack'
+            className='border border-mochaBrown bg-latteBeige rounded-md p-2 text-md focus:ring-caramelTan focus:border-caramelTan'
           >
             <option value='all'>전체</option>
             <option value='unanswered'>미답변</option>
@@ -90,10 +96,10 @@ const InquiryList = () => {
       </div>
 
       {/* ✅ 문의 리스트 테이블 */}
-      <div className='overflow-x-auto'>
-        <table className='w-full text-left border-collapse mt-4 text-sm'>
-          <thead>
-            <tr className='border-b bg-frostWhite text-gray-700'>
+      <div className='overflow-x-auto bg-latteBeige/40 shadow-md border border-caramelTan rounded-lg p-4'>
+        <table className='w-full text-left border-collapse mt-4 text-sm bg-white'>
+          <thead className='bg-caramelTan text-white'>
+            <tr>
               <th className='p-3 w-20 text-center'>번호</th>
               <th className='p-3 w-28 text-center'>문의 유형</th>
               <th className='p-3 text-center'>제목</th>
@@ -106,14 +112,14 @@ const InquiryList = () => {
                 <tr
                   key={inquiry.id}
                   onClick={() => handleInquiryClick(inquiry.id)}
-                  className='border-b hover:bg-frostWhite cursor-pointer transition'
+                  className='border-b border-hazelnutBrown hover:bg-goldenAmber/20 cursor-pointer transition'
                 >
                   <td className='p-3 text-center'>{inquiry.id}</td>
-                  <td className='p-3 text-center'>{inquiry.type}</td>
+                  <td className='p-3 text-center text-hazelnutBrown font-medium'>{inquiry.type}</td>
                   <td className='p-3 text-center'>{inquiry.title}</td>
                   <td
                     className={`p-3 text-center font-semibold ${
-                      inquiry.isAnswered ? 'text-steelBlue' : 'text-neonAqua'
+                      inquiry.isAnswered ? 'text-mochaBrown' : 'text-goldenAmber'
                     }`}
                   >
                     {inquiry.isAnswered ? '답변 완료' : '미답변'}
@@ -122,7 +128,7 @@ const InquiryList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan='4' className='p-6 text-center text-gray-500'>
+                <td colSpan='4' className='p-6 text-center text-hazelnutBrown'>
                   해당하는 문의가 없습니다.
                 </td>
               </tr>

@@ -68,8 +68,8 @@ const Orders = () => {
                 onClick={() => setSelectedTab(status)}
                 className={`px-5 py-2 rounded-md text-lg font-medium transition duration-300 ${
                   selectedTab === status
-                    ? 'bg-mochaBrown text-white shadow-md'
-                    : 'bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-coffeeBrown hover:text-white'
+                    ? 'bg-caramelTan/60 text-white shadow-md border border-white'
+                    : 'bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-white hover:text-caramelTan'
                 }`}
               >
                 {status === 'all'
@@ -117,9 +117,17 @@ const Orders = () => {
                     <tr
                       key={order.orderId}
                       className='hover:bg-warmBeige transition cursor-pointer'
-                      onClick={() => setPopupData(order)}
                     >
-                      <td className='py-3 px-4'>{order.orderNo}</td>
+                      {/* 주문번호 클릭 시 팝업 오픈 */}
+                      <td
+                        className='py-3 px-4 text-blue-600 underline cursor-pointer'
+                        onClick={() => {
+                          setPopupData(order)
+                          setIsOpenPopup(true)
+                        }}
+                      >
+                        {order.orderNo}
+                      </td>
                       <td className='py-3 px-4'>{order.productName || '상품 정보 없음'}</td>
                       <td className='py-3 px-4'>{order.productDetails || '상세 정보 없음'}</td>
                       <td className='py-3 px-4'>

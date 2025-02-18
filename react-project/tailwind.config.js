@@ -90,6 +90,7 @@ export default {
         avocado: '#417D39',
         citrusYellow: '#F6D743',
         greenTea: '#BFEA7C',
+        goldenAmber: '#F6C453',
       },
     },
   },
