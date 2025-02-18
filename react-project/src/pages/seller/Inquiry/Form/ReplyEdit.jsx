@@ -42,13 +42,7 @@ const ReplyEditForm = ({ inquiryId, debug_mode }) => {
       return
     }
 
-    const payload = {
-      sellerEmail,
-      inquiryId,
-      reply,
-    }
-
-    API.put(`/questions/seller/${sellerEmail}/reply/${inquiryId}`, payload) // PUT 요청으로 수정
+    API.put(`/questions/${inquiryId}/answer`) // PUT 요청으로 수정
       .then(() => {
         alert('답변이 저장되었습니다.')
         setExistingReply(reply) // 수정된 답변 반영

@@ -6,14 +6,15 @@ import API from '../../../utils/API'
 const Orders = () => {
   const [orderList, setOrderList] = useState([])
   const [filteredOrders, setFilteredOrders] = useState([])
-  const [selectedTab, setSelectedTab] = useState('all')
-  const [popupData, setPopupData] = useState(null)
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState('all')
+  const [popupOrderNo, setPopupOrderNo] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [isOpenPopup, setIsOpenPopup] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [trackingInfo, setTrackingInfo] = useState({})
+
   const ordersPerPage = 10
-  const pagesPerGroup = 5
+  const pagesPerGroup = 5 // 한 번에 표시할 페이지 버튼 수
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -32,146 +33,188 @@ const Orders = () => {
         setIsLoading(false)
       }
     }
-
     fetchOrders()
   }, [])
 
   useEffect(() => {
-    const filtered =
-      selectedTab === 'all' ? orderList : orderList.filter((order) => order.status === selectedTab)
+    const filtered = orderList.filter(
+      (order) => selectedOrderStatus === 'all' || order.orderStatus === selectedOrderStatus,
+    )
     setFilteredOrders(filtered)
-  }, [selectedTab, orderList])
+    setCurrentPage(1)
+  }, [selectedOrderStatus, orderList])
 
+  const handleTrackingChange = (orderNo, field, value) => {
+    setTrackingInfo((prev) => ({
+      ...prev,
+      [orderNo]: { ...prev[orderNo], [field]: value },
+    }))
+  }
+
+  const handleSaveTrackingNumber = async (orderNo) => {
+    try {
+      const { trackingNumber, deliveryCompany } = trackingInfo[orderNo] || {}
+      if (!trackingNumber || !deliveryCompany) {
+        alert('송장번호와 택배사를 입력해주세요.')
+        return
+      }
+
+      await API.post(`/orders/${orderNo}/tracking`, {
+        trackingNumber,
+        deliveryCompany,
+      })
+      alert('송장번호와 택배사가 저장되었습니다.')
+    } catch (error) {
+      alert('송장번호 저장에 실패했습니다.')
+    }
+  }
+
+  // 페이지네이션 관련 계산
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage)
-  const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1
-  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages)
+  const startIndex = (currentPage - 1) * ordersPerPage
+  const displayedOrders = filteredOrders.slice(startIndex, startIndex + ordersPerPage)
 
-  const displayedOrders = filteredOrders.slice(
-    (currentPage - 1) * ordersPerPage,
-    currentPage * ordersPerPage,
-  )
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page)
+    }
+  }
 
   return (
-    <div className='min-h-screen flex flex-col bg-warmBeige/20 py-10 px-5 sm:px-10'>
-      <div className='flex-grow  mx-auto'>
-        <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-espressoBlack'>주문 관리</h1>
-          <p className='mt-2 text-lg text-hazelnutBrown'>주문 현황을 한눈에 확인하고 관리하세요.</p>
+    <div className='min-h-screen flex flex-col bg-cream/20 py-10 px-5 sm:px-10'>
+      <div className='flex-grow mx-auto'>
+        <h1 className='text-4xl font-bold text-center mb-4 text-gray-800'>주문 관리</h1>
+        <div className='flex gap-4 mb-4'>
+          <span className='font-semibold text-gray-700'>주문 상태:</span>
+          {['all', '결제 완료', '주문 확인중', '주문 완료', '취소됨'].map((status) => (
+            <button
+              key={status}
+              onClick={() => setSelectedOrderStatus(status)}
+              className={`px-4 py-1 rounded-md text-sm shadow-sm transition ${
+                selectedOrderStatus === status
+                  ? 'bg-sky-400 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+            >
+              {status === 'all' ? '전체' : status}
+            </button>
+          ))}
         </div>
 
-        {/* 필터 버튼 */}
-        <div className='flex justify-center gap-3 mb-6'>
-          {['all', 'orderComplete', 'orderConfirm', 'refundRequest', 'refundComplete'].map(
-            (status) => (
-              <button
-                key={status}
-                onClick={() => setSelectedTab(status)}
-                className={`px-5 py-2 rounded-md text-lg font-medium transition duration-300 ${
-                  selectedTab === status
-                    ? 'bg-caramelTan/60 text-white shadow-md border border-white'
-                    : 'bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-white hover:text-caramelTan'
-                }`}
-              >
-                {status === 'all'
-                  ? '전체'
-                  : status === 'orderComplete'
-                    ? '결제완료'
-                    : status === 'orderConfirm'
-                      ? '주문확정'
-                      : status === 'refundRequest'
-                        ? '환불신청'
-                        : '환불됨'}
-              </button>
-            ),
-          )}
-        </div>
-
-        {/* 주문 목록 테이블 */}
-        <div className='bg-latteBeige/40 rounded-lg w-full shadow-md border border-caramelTan p-6'>
-          <h2 className='text-xl text-center font-semibold text-espressoBlack mb-4'>주문 목록</h2>
-
-          <div className='w-full'>
-            <table className='w-full bg-white border border-roastedCocoa table-fixed'>
-              {/* 테이블 헤더 */}
-              <thead className='bg-coffeeBrown text-white'>
-                <tr>
-                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문번호</th>
-                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품명</th>
-                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품정보</th>
-                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>옵션/수량</th>
-                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문상태</th>
-                  <th className='py-3 px-4 w-1/5 text-left whitespace-nowrap'>운송장번호</th>
-                </tr>
-              </thead>
-
-              {/* 테이블 본문 */}
-              <tbody className='divide-y divide-roastedCocoa'>
-                {displayedOrders.length === 0 ? (
-                  <tr>
-                    <td colSpan='6' className='py-4 text-center text-hazelnutBrown text-lg'>
-                      해당 분류의 주문이 없습니다.
-                    </td>
-                  </tr>
-                ) : (
-                  displayedOrders.map((order) => (
-                    <tr
-                      key={order.orderId}
-                      className='hover:bg-warmBeige transition cursor-pointer'
-                    >
-                      {/* 주문번호 클릭 시 팝업 오픈 */}
-                      <td
-                        className='py-3 px-4 text-blue-600 underline cursor-pointer'
-                        onClick={() => {
-                          setPopupData(order)
-                          setIsOpenPopup(true)
-                        }}
+        <div className='bg-white p-4 shadow-lg rounded-lg'>
+          <table className='w-full border border-gray-300 text-sm'>
+            <thead className='bg-lightYellow-300 text-gray-900'>
+              <tr>
+                <th>주문번호</th>
+                <th>결제 방식</th>
+                <th>주문 상태</th>
+                <th>주문 일자</th>
+                <th>총 금액</th>
+                <th>송장번호</th>
+                <th>택배사</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedOrders.map((order) => (
+                <tr key={order.orderNo} className='hover:bg-gray-100'>
+                  <td
+                    className='cursor-pointer text-blue-600 hover:underline'
+                    onClick={() => setPopupOrderNo(order.orderNo)}
+                  >
+                    {order.orderNo}
+                  </td>
+                  <td>{order.payment}</td>
+                  <td>{order.orderStatus}</td>
+                  <td>{order.createdAt}</td>
+                  <td>{order.totalPrice.toLocaleString()} 원</td>
+                  <td>
+                    {order.orderStatus === '결제 완료' ? (
+                      <input
+                        type='text'
+                        value={trackingInfo[order.orderNo]?.trackingNumber || ''}
+                        onChange={(e) =>
+                          handleTrackingChange(order.orderNo, 'trackingNumber', e.target.value)
+                        }
+                        className='border px-2 py-1 w-24'
+                        placeholder='송장번호'
+                      />
+                    ) : (
+                      order.trackingNumber || '-'
+                    )}
+                  </td>
+                  <td>
+                    {order.orderStatus === '결제 완료' ? (
+                      <input
+                        type='text'
+                        value={trackingInfo[order.orderNo]?.deliveryCompany || ''}
+                        onChange={(e) =>
+                          handleTrackingChange(order.orderNo, 'deliveryCompany', e.target.value)
+                        }
+                        className='border px-2 py-1 w-24'
+                        placeholder='택배사'
+                      />
+                    ) : (
+                      order.deliveryCompany || '-'
+                    )}
+                  </td>
+                  <td>
+                    {order.orderStatus === '결제 완료' && (
+                      <button
+                        onClick={() => handleSaveTrackingNumber(order.orderNo)}
+                        className='bg-green-400 text-white px-2 py-1 rounded-md text-xs shadow-md hover:bg-green-500'
                       >
-                        {order.orderNo}
-                      </td>
-                      <td className='py-3 px-4'>{order.productName || '상품 정보 없음'}</td>
-                      <td className='py-3 px-4'>{order.productDetails || '상세 정보 없음'}</td>
-                      <td className='py-3 px-4'>
-                        옵션: {order.option} / 수량: {order.quantity}
-                      </td>
-                      <td className='py-3 px-4 text-center'>{order.status || '상태 없음'}</td>
-                      <td className='py-3 px-4 text-center'>{order.trackingNumber || '미등록'}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                        저장
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* 페이지네이션 UI */}
+        {totalPages > 1 && (
+          <div className='flex justify-center items-center mt-6 gap-2'>
+            <button
+              className='px-2 py-1 border rounded-md hover:bg-gray-200'
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
+            >
+              <FaAngleDoubleLeft />
+            </button>
+            <button
+              className='px-2 py-1 border rounded-md hover:bg-gray-200'
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <FaAngleLeft />
+            </button>
+            <span className='px-3 py-1 border rounded-md bg-gray-100'>
+              {currentPage} / {totalPages}
+            </span>
+            <button
+              className='px-2 py-1 border rounded-md hover:bg-gray-200'
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              <FaAngleRight />
+            </button>
+            <button
+              className='px-2 py-1 border rounded-md hover:bg-gray-200'
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+            >
+              <FaAngleDoubleRight />
+            </button>
           </div>
-        </div>
+        )}
+
+        {popupOrderNo && (
+          <OrderPopup orderNo={popupOrderNo} onClose={() => setPopupOrderNo(null)} />
+        )}
       </div>
-
-      {/* 페이지네이션 */}
-      {totalPages > 1 && (
-        <div className='flex justify-center mt-auto py-6'>
-          <button
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
-          >
-            <FaAngleDoubleLeft />
-          </button>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
-          >
-            <FaAngleLeft />
-          </button>
-          <button
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
-          >
-            <FaAngleDoubleRight />
-          </button>
-        </div>
-      )}
-
-      {isOpenPopup && <OrderPopup order={popupData} onClose={() => setIsOpenPopup(false)} />}
     </div>
   )
 }

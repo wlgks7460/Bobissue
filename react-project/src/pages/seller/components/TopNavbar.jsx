@@ -64,7 +64,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
         </Link>
 
         {/* 🐞 디버그 모드 토글 버튼 */}
-        <button
+        {/* <button
           onClick={toggleDebugMode}
           className={`p-3 rounded-lg transition ${
             debugMode
@@ -73,12 +73,12 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
           }`}
         >
           <FaBug className='w-5 h-5' />
-        </button>
+        </button> */}
 
         {/* 🚪 로그아웃 버튼 */}
         <button
           onClick={handleLogout}
-          className='p-3 bg-roastedCocoa text-warmBeige rounded-lg hover:bg-mochaBrown transition'
+          className='p-3 bg-rose-500 text-warmBeige rounded-lg hover:bg-rose-600 transition'
         >
           <FaSignOutAlt className='w-5 h-5' />
         </button>
