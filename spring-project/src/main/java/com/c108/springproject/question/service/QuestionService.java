@@ -13,7 +13,11 @@ import com.c108.springproject.question.dto.request.QuestionUpdateReqDto;
 import com.c108.springproject.question.dto.response.QuestionResDto;
 import com.c108.springproject.question.repository.QuestionRepository;
 import com.c108.springproject.review.domain.ReviewImage;
+import com.c108.springproject.review.repository.ReviewRepository;
+import com.c108.springproject.user.domain.User;
+import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,16 +31,22 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final S3Service s3Service;
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
-    public QuestionService(QuestionRepository questionRepository, S3Service s3Service, ItemRepository itemRepository) {
+    public QuestionService(QuestionRepository questionRepository, S3Service s3Service, ItemRepository itemRepository, UserRepository userRepository) {
         this.questionRepository = questionRepository;
         this.s3Service = s3Service;
         this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
     public Question createQuestion(QuestionReqDto questionReqDto, List<MultipartFile> files) {
         Item item = itemRepository.findById(questionReqDto.getItemNo()).orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmailAndDelYnAndStatus(email, "N", "Y")
+                .orElseThrow(() -> new BobIssueException(ResponseCode.USER_NOT_FOUND));
+
         try {
             QuestionCategory category = QuestionCategory.valueOf(questionReqDto.getCategory());
             // 문의 생성
@@ -47,6 +57,7 @@ public class QuestionService {
                     .category(category)
                     .isPrivate(questionReqDto.getIsPrivate())
                     .status("N")
+                    .user(user)
                     .build();
 
             // 이미지 생성

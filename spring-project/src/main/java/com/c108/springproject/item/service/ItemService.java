@@ -4,6 +4,7 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.s3.S3Service;
 import com.c108.springproject.item.domain.*;
+import com.c108.springproject.item.dto.querydsl.*;
 import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
 import com.c108.springproject.item.dto.request.SearchReqDto;
@@ -13,7 +14,6 @@ import com.c108.springproject.item.repository.ItemCategoryRepository;
 import com.c108.springproject.item.repository.ItemLikeRepository;
 import com.c108.springproject.item.repository.ItemQueryRepository;
 import com.c108.springproject.item.repository.ItemRepository;
-import com.c108.springproject.item.repository.querydsl.ItemRepurchaseDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
@@ -400,13 +400,82 @@ public class ItemService {
                 .build();
     }
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public List<ItemRepurchaseDto> getTopRepurchaseItems() {
         try {
             return itemQueryRepository.getTopRepurchaseItems();
 
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_FIND_TOP_REPURCHASE_ITEM);
+        }
+    }
+
+    @Transactional
+    public List<ItemGenderStatsDto> getMalePreferredItems() {
+        try {
+            return itemQueryRepository.getMalePreferredItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_MALE_PREFERRED_ITEM);
+        }
+    }
+
+    @Transactional
+    public List<ItemGenderStatsDto> getFemalePreferredItems() {
+        try {
+            return itemQueryRepository.getFemalePreferredItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_FEMALE_PREFERRED_ITEM);
+        }
+    }
+
+    // 전체 성별 구매 통계
+    @Transactional
+    public List<ItemGenderStatsDto> getItemsByGenderPreference() {
+        try {
+            return itemQueryRepository.getItemsByGenderPreference();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_GENDER_PREFERENCE_ITEMS);
+        }
+    }
+
+    // 많이 팔린 제품 TOP 10
+    @Transactional
+    public List<ItemBestSellerDto> getBestSellerItems() {
+        try {
+            return itemQueryRepository.getBestSellerItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_BEST_SELLER_ITEMS);
+        }
+    }
+
+    // 추천 관련 서비스
+    // 카테고리 + 성별/연령대 기반 추천
+    @Transactional
+    public List<ItemRecommendationDto> getRecommendationsByCategoryAndDemographic(Integer itemNo) {
+        try {
+            return itemQueryRepository.getRecommendationsByCategoryAndDemographic(itemNo);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_RECOMMENDATIONS_BY_DEMOGRAPHIC);
+        }
+    }
+
+    // 구매 이력 기반
+    @Transactional
+    public List<ItemRecommendationDto> getRecommendationsByCollaborativeFiltering(Integer itemNo) {
+        try {
+            return itemQueryRepository.getRecommendationsByCollaborativeFiltering(itemNo);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_RECOMMENDATIONS_BY_COLLABORATIVE);
+        }
+    }
+
+    // 레시피 기반 추천
+    @Transactional
+    public List<RecipeRecommendationDto> getRecommendationsByRecipe(Integer itemNo) {
+        try {
+            return itemQueryRepository.getRecommendationsByRecipe(itemNo);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_RECOMMENDATIONS_BY_RECIPE);
         }
     }
 

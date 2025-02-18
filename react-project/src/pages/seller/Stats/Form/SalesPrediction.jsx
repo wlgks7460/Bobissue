@@ -1,22 +1,24 @@
 // ./Form/SalesPrediction.js
-import React, { useEffect, useState } from 'react';
-import API from '@/utils/API';
-import { FaChartLine } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react'
+import API from '@/utils/API'
+import { FaChartLine } from 'react-icons/fa'
 
-const SalesPrediction = () => {
-  const [data, setData] = useState(null);
+const SalesPrediction = ({ selectedPeriod }) => {
+  const [data, setData] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await API.get('/sellers/statistics/sales-prediction');
-        setData(response.data.result.data);
+        const response = await API.get('/sellers/statistics/sales-prediction', {
+          period: selectedPeriod,
+        })
+        setData(response.data.result.data)
       } catch (error) {
-        console.error('Error fetching sales prediction:', error);
+        console.error('Error fetching sales prediction:', error)
       }
     }
-    fetchData();
-  }, []);
+    fetchData()
+  }, [selectedPeriod])
 
   return (
     <div className='bg-white p-6 rounded-xl border-2 border-gray-300'>
@@ -34,7 +36,7 @@ const SalesPrediction = () => {
         <p>데이터 없음</p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SalesPrediction;
+export default SalesPrediction

@@ -68,6 +68,9 @@ import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 // import SellerDetailPage from '../pages/admin/seller/SellerDetailPage'
 import SellerStatisticsPage from '../pages/admin/seller/SellerStatisticsPage'
+// (관리자) 주문 관리
+import OrderListPage from '../pages/admin/order/OrderListPage'
+import OrderDetailPage from '../pages/admin/order/OrderDetailPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -97,6 +100,7 @@ import PerformancePage from '../pages/admin/analytics/PerformancePage'
 import CategoryPage from '../pages/admin/analytics/CategoryPage'
 import TimesalesPage from '../pages/admin/analytics/TimesalesPage'
 import UsersAnalysisPage from '../pages/admin/analytics/UsersPage'
+import RepurchaseAnalysisPage from '../pages/admin/analytics/RepurchasePage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
@@ -580,6 +584,20 @@ const router = createBrowserRouter([
             ],
           },
           {
+            //주문 관리 섹션
+            path: 'order',
+            children: [
+              {
+                path: '', // 주문 현황 페이지
+                element: <OrderListPage />,
+              },
+              {
+                path: ':orderNo',
+                element: <OrderDetailPage />,
+              },
+            ],
+          },
+          {
             // 라이브 커머스 섹션
             path: 'live',
             children: [
@@ -704,6 +722,10 @@ const router = createBrowserRouter([
               {
                 path: 'users',
                 element: <UsersAnalysisPage />,
+              },
+              {
+                path: 'repurchase',
+                element: <RepurchaseAnalysisPage />,
               },
             ],
           },

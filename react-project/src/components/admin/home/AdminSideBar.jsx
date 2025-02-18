@@ -79,7 +79,7 @@ const menuData = [
     id: 3,
     title: '주문 관리',
     items: [
-      { id: 301, title: '주문 현황', path: '설명: 주문 현황 페이지 추가 예정' },
+      { id: 301, title: '주문 현황', path: '/admin/order' },
       { id: 302, title: '주문 분석', path: '설명: 주문 분석 페이지 추가 예정' },
       { id: 303, title: '상품별 환불 통계', path: '설명: 상품별 환불 통계 페이지 추가 예정' },
     ],
@@ -148,16 +148,9 @@ const menuData = [
   {
     id: 7,
     title: 'CS 관리',
-    subMenus: [
-      {
-        id: 1,
-        title: 'CS 관리',
-        items: [
-          { id: 701, title: '알림 관리', path: '/admin/cs/notification' },
-          { id: 702, title: '문의현황', path: '/admin/cs/cscenter' },
-          { id: 703, title: '공지사항', path: '/admin/cs/notice' },
-        ],
-      },
+    items: [
+      { id: 701, title: '문의현황', path: '/admin/cs/cscenter' },
+      { id: 702, title: '공지사항', path: '/admin/cs/notice' },
     ],
   },
   {
@@ -168,6 +161,7 @@ const menuData = [
       { id: 802, title: '카테고리 분석', path: '/admin/analytics/category' },
       { id: 803, title: '시간대별 분석', path: '/admin/analytics/timesales' },
       { id: 804, title: '유저 통계', path: '/admin/analytics/users' },
+      { id: 805, title: '재구매율 분석', path: '/admin/analytics/repurchase' },
     ],
   },
 ]

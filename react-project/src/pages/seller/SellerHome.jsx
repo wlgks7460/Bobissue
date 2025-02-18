@@ -12,6 +12,7 @@ const SellerMainPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [status, setStatus] = useState('N')
   const [user, setUser] = useState(null) // ✅ 초기값 null로 변경
+  const[select,setSelect]=useState(null)
 
   const [menuState, setMenuState] = useState({
     product: false,
@@ -102,7 +103,7 @@ const SellerMainPage = () => {
   // }
 
   return (
-    <div>
+    <div className=''>
       {/* <button
         className='flex items-center justify-center mt-[80px]'
         onClick={() => setDebug_mode(!debug_mode)}
@@ -135,7 +136,7 @@ const SellerMainPage = () => {
           <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
             {/* Top Navbar */}
             <div className='fixed top-0 z-50 w-full h-16 bg-gray-100 border-b border-gray-300'>
-              <TopNavbar toggleSidebar={toggleSidebar} user={user} />
+              <TopNavbar toggleSidebar={toggleSidebar} select={select} setSelect={setSelect} user={user} />
             </div>
 
             <div className='flex flex-1 mt-16 min-h-[calc(100vh-64px)]'>
@@ -144,7 +145,7 @@ const SellerMainPage = () => {
                 className={`fixed left-0 top-16 h-[calc(100%-64px)] z-40 transition-transform duration-300 ease-in-out bg-white border-r border-gray-300
                 ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}`}
               >
-                <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} menuState={menuState} />
+                <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} select={select} setSelect={setSelect} menuState={menuState} />
               </div>
 
               {/* Main Content */}
@@ -167,7 +168,7 @@ const SellerMainPage = () => {
         <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
           {/* Top Navbar */}
           <div className='fixed top-0 z-50 w-full h-16 bg-gray-100 border-b border-gray-300'>
-            <TopNavbar toggleSidebar={toggleSidebar} user={user} />
+            <TopNavbar toggleSidebar={toggleSidebar} user={user} select={select} setSelect={setSelect}/>
           </div>
 
           <div className='flex flex-1 mt-16 min-h-[calc(100vh-64px)]'>
@@ -176,12 +177,12 @@ const SellerMainPage = () => {
               className={`fixed left-0 top-16 h-[calc(100%-64px)] z-40 transition-transform duration-300 ease-in-out bg-white border-r border-gray-300
               ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}`}
             >
-              <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} menuState={menuState} />
+              <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} select={select} setSelect={setSelect} menuState={menuState} />
             </div>
 
             {/* Main Content */}
             <main
-              className={`w-full z-1 flex-1 p-2 transition-all relative duration-300 mt-2 min-h-[calc(80vh-32px)] ${
+              className={`w-full z-1 flex-1 p-2 transition-all relative duration-300 mt-[8px] min-h-[calc(80vh-30px)] ${
                 sidebarOpen ? 'ml-64' : 'ml-0'
               }`}
             >
