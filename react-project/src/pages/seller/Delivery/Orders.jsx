@@ -53,7 +53,7 @@ const Orders = () => {
 
   return (
     <div className='min-h-screen flex flex-col bg-warmBeige/20 py-10 px-5 sm:px-10'>
-      <div className='flex-grow max-w-7xl mx-auto'>
+      <div className='flex-grow  mx-auto'>
         <div className='text-center mb-8'>
           <h1 className='text-4xl font-bold text-espressoBlack'>주문 관리</h1>
           <p className='mt-2 text-lg text-hazelnutBrown'>주문 현황을 한눈에 확인하고 관리하세요.</p>
@@ -72,32 +72,40 @@ const Orders = () => {
                     : 'bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-coffeeBrown hover:text-white'
                 }`}
               >
-                {status === 'all' ? '전체' : status}
+                {status === 'all'
+                  ? '전체'
+                  : status === 'orderComplete'
+                    ? '결제완료'
+                    : status === 'orderConfirm'
+                      ? '주문확정'
+                      : status === 'refundRequest'
+                        ? '환불신청'
+                        : '환불됨'}
               </button>
             ),
           )}
         </div>
 
         {/* 주문 목록 테이블 */}
-        <div className='bg-latteBeige/40 rounded-lg min-h-screen shadow-md border border-caramelTan p-6'>
+        <div className='bg-latteBeige/40 rounded-lg w-full shadow-md border border-caramelTan p-6'>
           <h2 className='text-xl text-center font-semibold text-espressoBlack mb-4'>주문 목록</h2>
 
-          <div className='overflow-x-auto w-full'>
-            <table className='w-full bg-white border border-roastedCocoa'>
+          <div className='w-full'>
+            <table className='w-full bg-white border border-roastedCocoa table-fixed'>
               {/* 테이블 헤더 */}
               <thead className='bg-coffeeBrown text-white'>
                 <tr>
-                  <th className='py-3 px-4 text-left'>주문번호</th>
-                  <th className='py-3 px-4 text-left'>상품명</th>
-                  <th className='py-3 px-4 text-left'>상품정보</th>
-                  <th className='py-3 px-4 text-left'>옵션/수량</th>
-                  <th className='py-3 px-4 text-left'>주문상태</th>
-                  <th className='py-3 px-4 text-left'>운송장번호</th>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문번호</th>
+                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품명</th>
+                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품정보</th>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>옵션/수량</th>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문상태</th>
+                  <th className='py-3 px-4 w-1/5 text-left whitespace-nowrap'>운송장번호</th>
                 </tr>
               </thead>
 
               {/* 테이블 본문 */}
-              <tbody className='divide-y divide-roastedCocoa min-h-screen'>
+              <tbody className='divide-y divide-roastedCocoa'>
                 {displayedOrders.length === 0 ? (
                   <tr>
                     <td colSpan='6' className='py-4 text-center text-hazelnutBrown text-lg'>
@@ -111,7 +119,7 @@ const Orders = () => {
                       className='hover:bg-warmBeige transition cursor-pointer'
                       onClick={() => setPopupData(order)}
                     >
-                      <td className='py-3 px-4'>{order.orderId}</td>
+                      <td className='py-3 px-4'>{order.orderNo}</td>
                       <td className='py-3 px-4'>{order.productName || '상품 정보 없음'}</td>
                       <td className='py-3 px-4'>{order.productDetails || '상세 정보 없음'}</td>
                       <td className='py-3 px-4'>

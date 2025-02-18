@@ -26,7 +26,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
   }
 
   return (
-    <nav className='flex items-center justify-between bg-white px-6 py-3 border-b border-caramelTan shadow-md relative z-50'>
+    <nav className='flex items-center justify-between bg-white px-6 py-3  shadow-md shadow-coffeeBrown/20 relative z-50'>
       {/* 왼쪽 영역 (햄버거 메뉴 + 로고) */}
       <div className='flex items-center gap-4'>
         {/* ☰ 햄버거 버튼 */}

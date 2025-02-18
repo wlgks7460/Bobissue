@@ -79,8 +79,19 @@ export default {
           800: '#1e40af',
           900: '#1e3a8a',
         },
+        oceanBlue: '#2A9D8F',
+        seaFoam: '#5FC3E4',
+        deepTeal: '#1E4D4F',
+
+        //싱그러운 다이어트 느낌의 색상
+        freshLime: '#A7E22E',
+        minLeaf: '#6BCEBB',
+        healthyGreen: '#2C9E4B',
+        avocado: '#417D39',
+        citrusYellow: '#F6D743',
+        greenTea: '#BFEA7C',
       },
     },
   },
   plugins: [require('tailwind-scrollbar-hide')], // 스크롤바 숨기기 플러그인
-};
+}
