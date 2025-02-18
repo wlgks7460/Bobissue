@@ -1,17 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LockClosedIcon } from '@heroicons/react/24/solid'
+import API from '../../../utils/API'
 
 const ItemDetailQuestionItem = ({ question }) => {
   const [showContent, setShowContent] = useState(false)
-  const userName = '김지원'
-  // 이용자 이름 * 변경
-  const handleUserName = (userName) => {
-    const result = userName
-      .split('')
-      .map((v, index) => (v = index !== 0 ? '*' : v))
-      .join('')
-    return result
-  }
+
   // 작성일 가공
   const handleCreateAt = (date) => {
     const result = date.split(' ')[0].replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')
@@ -25,6 +18,20 @@ const ItemDetailQuestionItem = ({ question }) => {
       alert('비밀글입니다.')
     }
   }
+  const getAnswer = () => {
+    API.get(`/question/${question.questionNo}/answer`)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  useEffect(() => {
+    if (question.status === 'Y' && showContent) {
+      getAnswer()
+    }
+  }, [showContent])
   return (
     <>
       <tr className='h-[45px] border-b border-gray-400 cursor-pointer' onClick={handleContent}>
@@ -36,15 +43,14 @@ const ItemDetailQuestionItem = ({ question }) => {
             </span>
           </td>
         ) : (
-          <td>{question.title}</td>
+          <td className='px-2'>{question.title}</td>
         )}
-        <td className='text-center'>{handleUserName(userName)}</td>
         <td className='text-center'>{handleCreateAt(question.createAt)}</td>
         <td className='text-center'>{question.status === 'N' ? '답변 대기' : '답변 완료'}</td>
       </tr>
       {showContent && (
         <tr className='border-b border-gray-400'>
-          <td colSpan={4} className='p-3'>
+          <td colSpan={3} className='p-3'>
             <p className='min-h-[150px]'>{question.content}</p>
             <p className='text-gray-400'>{handleCreateAt(question.updatedAt)}</p>
           </td>
