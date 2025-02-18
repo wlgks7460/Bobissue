@@ -52,7 +52,7 @@ const SellerListTable = () => {
       if (!window.confirm('해당 회원 상태를 변경하시겠습니까?')) {
         return
       }
-      const response = await API.put(`/admin/${seller.sellerNo}/user-status`)
+      const response = await API.put(`/admin/${seller.sellerNo}/seller-status`)
       console.log('판매자 상태 변경 응답:', response)
       const newStatus = response.data.result === 'DEACTIVE' ? 'N' : 'Y'
       setSellers((prevSellers) =>
