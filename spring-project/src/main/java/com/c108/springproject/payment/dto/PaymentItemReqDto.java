@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PaymentItemReqDto {
     private int itemNo;
-    private int cnt;
+    private int count;
 }

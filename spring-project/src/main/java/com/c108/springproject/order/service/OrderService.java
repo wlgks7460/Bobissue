@@ -174,7 +174,7 @@ public class OrderService {
             // 주문 취소 시 재고 복구
             if (request.getOrderCategoryNo() == 4) {  // 주문 취소
                 for (OrderDetail detail : order.getOrderDetails()) {
-                    detail.getItem().increaseStock(detail.getCount());
+                    detail.getItem().setStock(detail.getItem().getStock()+detail.getCount());
                 }
             }
 

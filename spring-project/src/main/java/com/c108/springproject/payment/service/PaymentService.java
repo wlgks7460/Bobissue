@@ -11,7 +11,6 @@ import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -20,6 +19,7 @@ public class PaymentService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+
     public PaymentService(ItemRepository itemRepository, UserRepository userRepository){
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
@@ -34,8 +34,8 @@ public class PaymentService {
                 Item item = itemRepository.findById(dto.getItemNo())
                         .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
 
-                if (item.getStock() < dto.getCnt()) {
-                    return false; // 재고 부족
+                if (item.getStock() < dto.getCount()) {
+                    throw new BobIssueException(ResponseCode.NOT_ENOUGH_STOCK);
                 }
             }
 
@@ -43,7 +43,7 @@ public class PaymentService {
             for (PaymentItemReqDto dto : paymentList) {
                 Item item = itemRepository.findById(dto.getItemNo())
                         .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
-                item.decreaseStock(dto.getCnt());
+                item.setStock(item.getStock()-dto.getCount());
             }
 
             return true;
@@ -61,7 +61,8 @@ public class PaymentService {
         for (PaymentItemReqDto dto : paymentList) {
             Item item = itemRepository.findById(dto.getItemNo())
                     .orElseThrow(() -> new BobIssueException(ResponseCode.ITEM_NOT_FOUND));
-            item.increaseStock(dto.getCnt());
+            item.setStock(dto.getCount()+item.getStock());
+            itemRepository.save(item);
         }
     }
 

@@ -186,11 +186,7 @@ public class UserService {
         try {
             Order order = orderRepository.findById(orderNo)
                     .orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
-
-            String orderStatus = orderService.getOrderStatus(order.getOrderCategoryNo());
-            String deliveryStatus = orderService.getDeliveryStatus(order.getDelCategoryNo());
-
-            return OrderDetailResDto.toDto(order, orderStatus, deliveryStatus);
+            return OrderDetailResDto.toDto(order);
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_FIND_USER_ORDER);
         }
