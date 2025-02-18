@@ -40,11 +40,6 @@ const SellerListTable = () => {
     setSearchType('sellerNo')
   }, [approvalFilter])
 
-  // 판매자 상세 페이지로 이동 (경로: /admin/seller/${seller.sellerNo})
-  const handleSellerClick = (seller) => {
-    navigate(`/admin/seller/${seller.sellerNo}`)
-  }
-
   // 모든 판매자(승인/미승인)에서 상태 변경 가능하도록 처리
   const handleStatusToggle = async (seller) => {
     console.log(`판매자 상태 변경 요청 전송: sellerNo = ${seller.sellerNo}`)
@@ -52,7 +47,7 @@ const SellerListTable = () => {
       if (!window.confirm('해당 회원 상태를 변경하시겠습니까?')) {
         return
       }
-      const response = await API.put(`/admin/${seller.sellerNo}/user-status`)
+      const response = await API.put(`/admin/${seller.sellerNo}/seller-status`)
       console.log('판매자 상태 변경 응답:', response)
       const newStatus = response.data.result === 'DEACTIVE' ? 'N' : 'Y'
       setSellers((prevSellers) =>

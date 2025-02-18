@@ -7,6 +7,8 @@ const SearchFilter = ({ onSearch }) => {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState(dayjs().format('YYYY-MM-DD'))
 
+  const [searchQuery, setSearchQuery] = useState('')
+
   const handleQuickDateSelect = (days) => {
     setStartDate(dayjs().subtract(days, 'day').format('YYYY-MM-DD'))
     setEndDate(dayjs().format('YYYY-MM-DD'))

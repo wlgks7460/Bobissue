@@ -42,8 +42,6 @@ public class SecurityConfig {
                     corsConfiguration.setAllowedOriginPatterns(List.of(
                             "http://localhost:5173",
                             "http://43.202.60.173:5173",
-//                            "https://bobissue.store:5443",
-//                            "http://bobissue.store:5443",
                             "https://www.bobissue.store",
                             "http://www.bobissue.store",
                             "https://bobissue.store",
@@ -67,13 +65,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //                .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/openvidu/**").permitAll() // 추가
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/wss/**").permitAll()
                         .requestMatchers( "/oauth2/**").permitAll() // OAuth2 관련 URL 허용
                         .requestMatchers( "/openvidu/**").permitAll() // openvidu 관련 URL 허용
-                        .requestMatchers("/api/openvidu/**").permitAll() // 추가
-                        .requestMatchers("https://bobissue.store:5443/api/openvidu/**").permitAll() // 추가
-                        .requestMatchers("https://bobissue.store:5443/openvidu/**").permitAll() // 추가
                         .requestMatchers(
                                 "/api/users/sign-up",
                                 "/api/users/kakao/sign-up",
@@ -100,7 +96,10 @@ public class SecurityConfig {
                                 "/api/question",
                                 "/api/question/{questionNo}",
                                 "/api/event/{eventNo}",
-                                "/api/event/banner"
+                                "/api/event/banner",
+                                "/api/address",
+                                "/api/item/{itemNo}/recommendations",
+                                "/api/item/{itemNo}/recommendations/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -76,9 +76,15 @@ const MypageSidebar = () => {
           <Link to={'/mypage/order'} className='text-left'>
             주문 내역
           </Link>
-          <Link className='text-left'>상품 후기</Link>
-          <Link className='text-left'>취소 / 환불</Link>
-          <Link className='text-left'>상품 문의</Link>
+          <Link to={'/mypage/review'} className='text-left'>
+            상품 후기
+          </Link>
+          <Link to={'/mypage/cancelRefund'} className='text-left'>
+            취소 / 환불
+          </Link>
+          <Link to={'/mypage/question'} className='text-left'>
+            상품 문의
+          </Link>
         </div>
       </div>
     </div>

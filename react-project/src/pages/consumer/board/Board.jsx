@@ -9,7 +9,7 @@ const Board = () => {
       <div className='w-full min-h-[70vh] flex justify-center'>
         <div className='w-[70rem] my-10 flex gap-10'>
           {/* 사이드바 */}
-          <div className='flex-none w-[200px] h-[300px] border border-gray-300 rounded p-3'>
+          <div className='flex-none w-[200px] h-[300px] border border-[#6F4E37] rounded p-3'>
             <h3 className='text-xl text-[#6F4E37] mb-10'>고객센터</h3>
             <div className='flex flex-col gap-5'>
               <Link to={'/board/faq'} className='hover:text-[#6F4E37]'>
@@ -24,7 +24,7 @@ const Board = () => {
             </div>
           </div>
           {/* 본문 */}
-          <div className='grow h-auto border border-gray-300 rounded'>
+          <div className='grow h-auto border border-[#6F4E37] rounded'>
             <Outlet />
           </div>
         </div>

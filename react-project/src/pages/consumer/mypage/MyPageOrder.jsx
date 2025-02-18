@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import API from '../../../utils/API'
 import MyPageOrderItem from '../../../components/consumer/mypage/MyPageOrderItem'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 const MyPageOrder = () => {
   const [orders, setOrders] = useState([]) // 전체 주문 목록
@@ -56,6 +57,7 @@ const MyPageOrder = () => {
     const res = [
       {
         orderNo: 1,
+        orderStatus: 1,
         payment_method: 'Credit Card',
         totalPrice: 45000,
         request: '문 앞에 두고 가주세요.',
@@ -67,6 +69,7 @@ const MyPageOrder = () => {
       },
       {
         orderNo: 2,
+        orderStatus: 2,
         payment_method: 'PayPal',
         totalPrice: 78000,
         request: '연락 후 배달 부탁드립니다.',
@@ -75,6 +78,7 @@ const MyPageOrder = () => {
       },
       {
         orderNo: 3,
+        orderStatus: 3,
         payment_method: 'Bank Transfer',
         totalPrice: 62000,
         request: '포장 단단히 부탁드립니다.',
@@ -83,6 +87,7 @@ const MyPageOrder = () => {
       },
       {
         orderNd: 4,
+        orderStatus: 3,
         payment_method: 'Cash on Delivery',
         totalPrice: 53000,
         request: '빠른 배송 부탁드립니다.',
@@ -91,6 +96,7 @@ const MyPageOrder = () => {
       },
       {
         orderNd: 5,
+        orderStatus: 3,
         payment_method: 'Credit Card',
         totalPrice: 91000,
         request: '배달 전에 문자 주세요.',
@@ -105,7 +111,7 @@ const MyPageOrder = () => {
     <div className='p-5'>
       <h2 className='text-center text-xl mb-5'>주문 내역</h2>
       {/* 주문 내역 필터 */}
-      <div className='border-b-2 border-black flex justify-center gap-5'>
+      <div className='border-b-2 border-[#6F4E37] flex justify-center gap-5 mb-10'>
         {filteres.map((v) => (
           <button
             key={v.filterNo}
@@ -117,10 +123,21 @@ const MyPageOrder = () => {
         ))}
       </div>
       {/* 주문 내역 목록 */}
-      <div className='p-5 flex flex-col gap-3'>
-        {filteredOrders.map((v) => (
-          <MyPageOrderItem key={`order-${v.orderNo}`} orderItem={v} />
-        ))}
+      <div>
+        {filteredOrders.length > 0 ? (
+          <div className='p-5 flex flex-col gap-3'>
+            {filteredOrders.map((v) => (
+              <MyPageOrderItem key={`order-${v.orderNo}`} orderItem={v} />
+            ))}
+          </div>
+        ) : (
+          <div className='flex flex-col gap-3 items-center'>
+            <p className='text-center'>
+              <ExclamationCircleIcon className='w-20 text-gray-400' />
+            </p>
+            <p className='text-center text-xl text-gray-600'>주문 내역이 없습니다.</p>
+          </div>
+        )}
       </div>
     </div>
   )
