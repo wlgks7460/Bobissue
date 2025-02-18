@@ -50,11 +50,11 @@ const LiveStreamSetup = () => {
   // 방송 시작 (joinSession)
   const joinSession = async () => {
 
-    console.log("제발되라!!!!")
-    const ws = new WebSocket("wss://bobissue.store/openvidu?sessionId=cast3");
-    ws.onopen = () => console.log("✅ WebSocket 연결 성공!");
-    ws.onerror = (error) => console.error("❌ WebSocket 연결 실패", error);
-
+    // let ws = new WebSocket("wss://bobissue.store:8443/openvidu");
+    // ws.onopen = () => console.log("WebSocket 연결 성공!");
+    // ws.onerror = (err) => console.error("WebSocket 오류 발생:", err);
+    // ws.onmessage = (msg) => console.log("서버 메시지:", msg.data);
+    
     const OV = new OpenVidu();
 
     const mySession = OV.initSession();
@@ -76,9 +76,11 @@ const LiveStreamSetup = () => {
 
     // 배포된 OpenVidu 서버에서 토큰 가져오기
     try {
-      // const token = await getToken(); // getToken()을 사용하여 토큰을 받아옴
-      console.log("접속 드가자")
-      await mySession.connect("wss://bobissue.store/openvidu?sessionId=cast1&token=tok_Et8YBCEvkhm5DVbI", {  });
+      const token = await getToken(); // getToken()을 사용하여 토큰을 받아옴
+      console.log('📌 백엔드에서 받은 OpenVidu 토큰:', token);
+
+      console.log(token);
+      await mySession.connect(token);
 
       const publisher = await OV.initPublisherAsync(undefined, {
         audioSource: undefined,
@@ -127,26 +129,52 @@ const LiveStreamSetup = () => {
 
     // 📌 토큰 가져오기
     const getToken = async () => {
-      const sessionId = await createSession(event.id)
-      return await createToken(sessionId)
+      const sessionId = await createSession("jihancast");
+      const fullToken = await createToken(sessionId);
+    
+      console.log("📌 OpenVidu에서 받은 전체 토큰:", fullToken);
+    
+      if (!fullToken.startsWith("wss://")) {
+        console.error("❌ 잘못된 OpenVidu 토큰 형식:", fullToken);
+        throw new Error("올바른 WebSocket 토큰이 아님");
+      }
+    
+      return fullToken; // ✅ OpenVidu가 준 URL 그대로 반환
     }
   
     // 📌 세션 생성
     const createSession = async (sessionId) => {
-      const response = await axios.post('https://bobissue.store/api/openvidu/sessions', { customSessionId: "cast3" }, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      return response.data
+      try {
+        const response = await axios.post(
+          'https://bobissue.store/api/openvidu/sessions',
+          { customSessionId: "jihancast" },
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+        console.log("📌 OpenVidu 세션 생성 응답:", response);
+        console.log("📌 OpenVidu 세션 생성 응답:", response.data);
+        return response;
+      } catch (error) {
+        console.error('❌ 세션 생성 실패:', error.response?.data || error);
+        throw error;
+      }
     }
   
-    // 📌 토큰 생성
-    const createToken = async (sessionId) => {
-      const response = await axios.post('https://bobissue.store/api/openvidu/sessions/cast3/connections', {}, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      return response.data
+  // 📌 백엔드에서 OpenVidu 토큰 생성 요청
+  const createToken = async (sessionId) => {
+    try {
+      const response = await axios.post(
+        `https://bobissue.store/api/openvidu/sessions/jihancast/connections`,
+        {},
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      console.log("📌 OpenVidu 토큰 생성 응답:", response);
+      console.log("📌 OpenVidu 토큰 생성 응답:", response.data.token);
+      return response.data;
+    } catch (error) {
+      console.error('❌ 토큰 생성 실패:', error.response?.data || error);
+      throw error;
     }
-  
+  };
 
   // 📌 마이크 토글 핸들러
   const handleMicToggle = () => {
