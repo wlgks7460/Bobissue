@@ -3,16 +3,25 @@ import { FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight } from
 import OrderPopup from './Popup/OrderPopup'
 import API from '@/utils/API'
 
+// ✅ 상태값을 문자열로 매핑하는 객체
+const ORDER_STATUS_MAP = {
+  0: '전체',
+  1: '주문 확인중',
+  2: '상품 준비중',
+  3: '배송 출발',
+  4: '배송 완료',
+}
+
 const Orders = () => {
   const [orderList, setOrderList] = useState([])
   const [filteredOrders, setFilteredOrders] = useState([])
-  const [selectedOrderStatus, setSelectedOrderStatus] = useState('all')
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState(0) // 기본값: '전체'
   const [popupOrderNo, setPopupOrderNo] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [trackingInfo, setTrackingInfo] = useState({})
-  const [deliveryStatus, setDeliveryStatus] = useState({}) // 🚚 배송 상태 저장
+  const [deliveryStatus, setDeliveryStatus] = useState({})
 
   const ordersPerPage = 10
 
@@ -20,7 +29,7 @@ const Orders = () => {
     const fetchOrders = async () => {
       setIsLoading(true)
       try {
-        const response = await API.get('/orders')
+        const response = await API.get('/delivery/companyNo/status')
         if (response.data.status === 'OK') {
           setOrderList(response.data.result.data)
         } else {
@@ -37,7 +46,7 @@ const Orders = () => {
 
   useEffect(() => {
     const filtered = orderList.filter(
-      (order) => selectedOrderStatus === 'all' || order.orderStatus === selectedOrderStatus,
+      (order) => selectedOrderStatus === 0 || order.orderStatus === selectedOrderStatus,
     )
     setFilteredOrders(filtered)
     setCurrentPage(1)
@@ -53,17 +62,17 @@ const Orders = () => {
 
       {/* 주문 상태 필터 */}
       <div className='flex gap-4 justify-center mb-6'>
-        {['all', '결제 완료', '주문 확인중', '주문 완료', '취소됨'].map((status) => (
+        {Object.entries(ORDER_STATUS_MAP).map(([key, label]) => (
           <button
-            key={status}
-            onClick={() => setSelectedOrderStatus(status)}
+            key={key}
+            onClick={() => setSelectedOrderStatus(Number(key))}
             className={`px-4 py-2 rounded-lg text-md font-medium transition-all shadow-md ${
-              selectedOrderStatus === status
+              selectedOrderStatus === Number(key)
                 ? 'bg-espressoBlack text-warmBeige'
                 : 'bg-latteBeige text-coffeeBrown hover:bg-coffeeBrown hover:text-warmBeige'
             }`}
           >
-            {status === 'all' ? '전체' : status}
+            {label}
           </button>
         ))}
       </div>
@@ -96,7 +105,10 @@ const Orders = () => {
                     {order.orderNo}
                   </td>
                   <td className='py-3 px-4'>{order.payment}</td>
-                  <td className='py-3 px-4'>{order.orderStatus}</td>
+                  {/* ✅ 숫자 상태를 문자열로 변환 */}
+                  <td className='py-3 px-4'>
+                    {ORDER_STATUS_MAP[order.orderStatus] || '알 수 없음'}
+                  </td>
                   <td className='py-3 px-4'>{order.createdAt}</td>
                   <td className='py-3 px-4'>{order.totalPrice.toLocaleString()} 원</td>
                   <td className='py-3 px-4 text-green-500 font-semibold'>
