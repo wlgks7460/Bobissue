@@ -154,9 +154,9 @@ const Live = () => {
                     <div className='m-2'>
                       <button className='text-white' onClick={enterFullscreen}>
                         {isFullScreen ? (
-                          <FullscreenOutlinedIcon sx={{ fontSize: 30 }} />
-                        ) : (
                           <FullscreenExitOutlinedIcon sx={{ fontSize: 30 }} />
+                        ) : (
+                          <FullscreenOutlinedIcon sx={{ fontSize: 30 }} />
                         )}
                       </button>
                     </div>

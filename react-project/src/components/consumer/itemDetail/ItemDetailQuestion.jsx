@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import ItemDetailQuestionItem from './ItemDetailQuestionItem'
 import { Link } from 'react-router-dom'
 import API from '../../../utils/API'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
-const ItemDetailQuestion = () => {
+const ItemDetailQuestion = ({ itemNo }) => {
   // 문의 데이터
   const [questions, setQuestions] = useState([])
 
@@ -79,7 +80,10 @@ const ItemDetailQuestion = () => {
       <div>
         <div>
           <div className='flex justify-end mb-5'>
-            <Link className='p-3 bg-indigo-400 hover:bg-indigo-600 rounded text-white'>
+            <Link
+              to={`/board/question?item=${itemNo}`}
+              className='px-3 py-2 bg-[#A67B5B] hover:bg-[#6F4E37] rounded text-white'
+            >
               문의하기
             </Link>
           </div>
@@ -97,7 +101,12 @@ const ItemDetailQuestion = () => {
                 questions.map((v) => <ItemDetailQuestionItem key={v.questionNo} question={v} />)
               ) : (
                 <tr className='h-[35px] border-b border-gray-400'>
-                  <td colSpan={'4'}>문의가 없습니다 ㅠㅠ</td>
+                  <div className='flex flex-col gap-3 items-center mt-20'>
+                    <p className='text-center'>
+                      <ExclamationCircleIcon className='w-20 text-gray-400' />
+                    </p>
+                    <p className='text-center text-xl text-gray-600'>문의가 없습니다.</p>
+                  </div>
                 </tr>
               )}
             </tbody>

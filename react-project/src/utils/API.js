@@ -39,6 +39,7 @@ API.interceptors.response.use(
     return res
   },
   (err) => {
+    console.error(err)
     // 로그인이 되어있을 경우에만
     if (store.getState().user.isAuthenticated) {
       // refreshToken이 만료되었다면 로그아웃

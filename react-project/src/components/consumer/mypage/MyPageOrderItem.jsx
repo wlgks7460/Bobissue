@@ -1,32 +1,65 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MyPageOrderItemProduct from './MyPageOrderItemProduct'
 import { Link } from 'react-router-dom'
+import API from '../../../utils/API'
 
-const MyPageOrderItem = ({ orderItem }) => {
+const MyPageOrderItem = ({ orderNo, userNo, getOrderData }) => {
+  const [orderItem, setOrderItem] = useState({})
   const orderStatus = ['', '상품 준비 중', '배송 중', '배송 완료']
+
+  // 주문 취소
+  const cancelOrder = () => {
+    API.get(`/orders/cancel/${orderNo}`)
+      .then((res) => {
+        console.log(res)
+        if (res.data.message.code === 'SUCCESS_FIND_CANCEL_ORDERS') {
+          getOrderData()
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const getOrderDetail = () => {
+    API.get(`/users/${userNo}/orders/${orderNo}`)
+      .then((res) => {
+        setOrderItem(res.data.result.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    getOrderDetail()
+  }, [])
   return (
     <div className='w-full border border-[#6F4E37] rounded p-3'>
       <h3 className='font-bold text-lg'>{orderStatus[orderItem.orderStatus]}</h3>
       {/* 상품 내역 */}
       <div className='flex flex-col gap-3 my-5'>
-        {orderItem.orderDetail?.map((v) => (
+        {orderItem.orderItems?.map((v) => (
           <MyPageOrderItemProduct
-            key={`detail-${v.orderDetailNo}`}
+            key={`detail-${v.itemNo}`}
             itemNo={v.itemNo}
             price={v.price}
-            quantity={v.quantity}
+            count={v.count}
             orderStatus={orderItem.orderStatus}
           />
         ))}
       </div>
       <div className='flex gap-3 mb-5'>
         <span className='text-gray-400'>요청 사항</span>
-        <span>{orderItem.request}</span>
+        <span>{orderItem.requests}</span>
       </div>
       {/* 주문 취소 */}
       {orderItem.orderStatus === 1 && (
         <div>
-          <button className='w-full h-[40px] border border-[#6F4E37] hover:bg-[#6F4E37] hover:text-white rounded'>
+          <button
+            className='w-full h-[40px] border border-[#6F4E37] hover:bg-[#6F4E37] hover:text-white rounded'
+            onClick={cancelOrder}
+          >
             주문 취소
           </button>
         </div>
