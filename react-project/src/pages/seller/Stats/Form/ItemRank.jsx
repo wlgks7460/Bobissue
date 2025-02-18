@@ -1,22 +1,23 @@
 // ./Form/ItemRank.js
-import React, { useEffect, useState } from 'react';
-import API from '@/utils/API';
-import { FaBoxOpen } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react'
+import API from '@/utils/API'
+import { FaBoxOpen } from 'react-icons/fa'
 
-const ItemRank = () => {
-  const [items, setItems] = useState([]);
+const ItemRank = ({ selectedPeriod }) => {
+  const [items, setItems] = useState([])
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await API.get('/sellers/item-rank');
-        setItems(response.data.result.data);
+        const response = await API.get(`/sellers/item-rank`, { period: selectedPeriod })
+        console.log(response)
+        setItems(response.data.result.data)
       } catch (error) {
-        console.error('Error fetching item rank:', error);
+        console.error('Error fetching item rank:', error)
       }
     }
-    fetchData();
-  }, []);
+    fetchData()
+  }, [selectedPeriod])
 
   return (
     <div className='bg-gray-50 p-6 rounded-xl border border-gray-300 shadow-md'>
@@ -46,14 +47,16 @@ const ItemRank = () => {
               ))
             ) : (
               <tr>
-                <td colSpan='4' className='p-3 text-center text-gray-500'>데이터 없음</td>
+                <td colSpan='4' className='p-3 text-center text-gray-500'>
+                  데이터 없음
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ItemRank;
+export default ItemRank

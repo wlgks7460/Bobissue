@@ -47,39 +47,18 @@ API.interceptors.response.use(
         console.log(err.response)
         const { data, status } = err.response
         const loginStatus = store.getState().user.status
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 15c5b04cb4337e39b894b3084b1ea3202582e8f1
         if (status === 401) {
-          console.warn('인증 실패: 로그아웃')
-          store.dispatch(userReducerActions.logout())
-          alert('인증이 만료되었습니다.')
-          if (loginStatus === 'seller') {
-            window.location.href = '/seller'
-          } else if (loginStatus === 'admin') {
-            window.location.href = '/admin'
-          } else if (loginStatus === 'consumer') {
-            window.location.href = '/login'
-          }
+          // console.warn('인증 실패: 로그아웃')
+          // store.dispatch(userReducerActions.logout())
+          // alert('인증이 만료되었습니다.')
+          // if (loginStatus === 'seller') {
+          //   window.location.href = '/seller'
+          // } else if (loginStatus === 'admin') {
+          //   window.location.href = '/admin'
+          // } else if (loginStatus === 'consumer') {
+          //   window.location.href = '/login'
+          // }
         }
-<<<<<<< HEAD
-=======
-        // if (status === 401) {
-        //   console.warn('인증 실패: 로그아웃')
-        //   store.dispatch(userReducerActions.logout())
-        //   //alert('인증이 만료되었습니다.')
-        //   if (loginStatus === 'seller') {
-        //     window.location.href = '/seller'
-        //   } else if (loginStatus === 'admin') {
-        //     window.location.href = '/admin'
-        //   } else if (loginStatus === 'consumer') {
-        //     window.location.href = '/login'
-        //   }
-        // }
->>>>>>> 5a714261340e2b27e7392976551eb506b81836db
-=======
->>>>>>> 15c5b04cb4337e39b894b3084b1ea3202582e8f1
       }
       return Promise.reject(err)
     }
