@@ -18,7 +18,7 @@ const HomeEventBanner = () => {
   //캐로셀 버튼
   const PrevBtn = ({ onClick }) => (
     <button
-      className='absolute top-1/2 left-20 lg:left-80 transform -translate-y-1/2 z-10'
+      className='absolute top-1/2 left-20 lg:left-52 transform -translate-y-1/2 z-10'
       onClick={onClick}
     >
       {<ArrowLeftCircleIcon className='w-12 text-black/40' />}
@@ -26,7 +26,7 @@ const HomeEventBanner = () => {
   )
   const NextBtn = ({ onClick }) => (
     <button
-      className='absolute top-1/2 right-20 lg:right-80 transform -translate-y-1/2 z-10'
+      className='absolute top-1/2 right-20 lg:right-52 transform -translate-y-1/2 z-10'
       onClick={onClick}
     >
       {<ArrowRightCircleIcon className='w-12 text-black/40' />}
@@ -44,11 +44,11 @@ const HomeEventBanner = () => {
     autoplaySpeed: 3000, // 자동 캐로셀 속도
     draggable: false, // 드래그
     fade: false, // 페이드
-    arrows: true, // 화살표 버튼
-    prevArrow: <PrevBtn />,
-    nextArrow: <NextBtn />,
-    initalSlide: 1, // 시작 컨텐츠 번호
-    pauseOnFocus: true, // foucs 시 정지
+    arrows: false, // 화살표 버튼
+    // prevArrow: <PrevBtn />,
+    // nextArrow: <NextBtn />,
+    initalSlide: 0, // 시작 컨텐츠 번호
+    pauseOnFocus: false, // foucs 시 정지
     pauseOnHover: true, // hover 시 정시
     beforeChange: (oldIndex, newIndex) => setActicveItemIndex(newIndex), // 인덱스 보여주기
   }
