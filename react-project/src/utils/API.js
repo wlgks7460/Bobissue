@@ -39,24 +39,25 @@ API.interceptors.response.use(
     return res
   },
   (err) => {
+    console.error(err)
     // 로그인이 되어있을 경우에만
     if (store.getState().user.isAuthenticated) {
       // refreshToken이 만료되었다면 로그아웃
       if (err.response) {
         const { data, status } = err.response
         const loginStatus = store.getState().user.status
-        if (status === 401) {
-          console.warn('인증 실패:', err)
-          store.dispatch(userReducerActions.logout())
-          alert('인증이 만료되었습니다.')
-          if (loginStatus === 'seller') {
-            window.location.href = '/seller'
-          } else if (loginStatus === 'admin') {
-            window.location.href = '/admin'
-          } else if (loginStatus === 'consumer') {
-            window.location.href = '/login'
-          }
-        }
+        // if (status === 401) {
+        //   console.warn('인증 실패:', err)
+        //   store.dispatch(userReducerActions.logout())
+        //   alert('인증이 만료되었습니다.')
+        //   if (loginStatus === 'seller') {
+        //     window.location.href = '/seller'
+        //   } else if (loginStatus === 'admin') {
+        //     window.location.href = '/admin'
+        //   } else if (loginStatus === 'consumer') {
+        //     window.location.href = '/login'
+        //   }
+        // }
       }
       return Promise.reject(err)
     }

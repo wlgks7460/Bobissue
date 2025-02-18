@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import API from '../../utils/API'
 import PaymentAddressModal from '../../components/consumer/payment/PaymentAddressModal'
 import SearchBar from '../../components/consumer/common/SearchBar'
-import { useSelector } from 'react-redux'
 
 const Payment = () => {
   const navigate = useNavigate()
 
-  const userInfo = useSelector((state) => state.user.userInfo)
+  const [userInfo, setUserInfo] = useState({})
 
   const [deliveryFee, setDeliveryFee] = useState(3000) // 배송비
 
@@ -116,15 +115,34 @@ const Payment = () => {
     })
   }
 
-  // 배송지 불러오기
-  const getAddressData = () => {
-    API.get('/address/list')
+  // 유저 정보 불러오기
+  const getUserData = () => {
+    API.get('/users/profile')
       .then((res) => {
-        setSavedAddresses(res.data.result.data)
+        setUserInfo(res.data.result.data)
+        getAddressData(res.data.result.data.userNo)
       })
       .catch((err) => {
         console.error(err)
       })
+  }
+
+  // 배송지 불러오기
+  const getAddressData = (userNo) => {
+    const payload = {
+      userNo: userNo,
+    }
+    if (payload.userNo) {
+      API.post('/address/list', payload)
+        .then((res) => {
+          console.log(res)
+          setSavedAddresses(res.data.result.data)
+          getBaseAddressData()
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
   }
 
   // 기본 배송지 불러오기
@@ -160,8 +178,7 @@ const Payment = () => {
       updateTotalPrice(tempItems)
     }
     fetchCartItems()
-    getAddressData()
-    getBaseAddressData()
+    getUserData()
   }, [])
 
   return (

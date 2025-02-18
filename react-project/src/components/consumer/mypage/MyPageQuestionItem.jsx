@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { LockClosedIcon } from '@heroicons/react/24/solid'
 import API from '../../../utils/API'
 
-const ItemDetailQuestionItem = ({ question }) => {
+const MyPageQuestionItem = ({ question }) => {
   const [showContent, setShowContent] = useState(false)
   const [answer, setAnswer] = useState(null)
 
@@ -46,23 +46,24 @@ const ItemDetailQuestionItem = ({ question }) => {
         ) : (
           <td className='px-2'>{question.title}</td>
         )}
-        <td className='text-center'>***</td>
         <td className='text-center'>{handleCreateAt(question.createAt)}</td>
         <td className='text-center'>{question.status === 'N' ? '답변 대기' : '답변 완료'}</td>
       </tr>
       {showContent && (
         <tr className='border-b border-gray-400'>
-          <td colSpan={4} className='p-3 min-h-[150px]'>
-            <p className='flex items-end gap-5 mb-10'>
-              <span className='text-gray-400 text-lg'>Q.</span>
-              <span>{question.content}</span>
-            </p>
-            {answer && (
-              <p className='flex items-end gap-5'>
-                <span className='text-gray-400 text-lg'>A.</span>
-                <span>{answer?.content}</span>
+          <td colSpan={3} className='p-3'>
+            <div className='min-h-[150px]'>
+              <p className='flex items-end gap-5 mb-10'>
+                <span className='text-gray-400 text-lg'>Q.</span>
+                <span>{question.content}</span>
               </p>
-            )}
+              {answer && (
+                <p className='flex items-end gap-5'>
+                  <span className='text-gray-400 text-lg'>A.</span>
+                  <span>{answer?.content}</span>
+                </p>
+              )}
+            </div>
             <p className='text-gray-400'>{handleCreateAt(question.updatedAt)}</p>
           </td>
         </tr>
@@ -71,4 +72,4 @@ const ItemDetailQuestionItem = ({ question }) => {
   )
 }
 
-export default ItemDetailQuestionItem
+export default MyPageQuestionItem
