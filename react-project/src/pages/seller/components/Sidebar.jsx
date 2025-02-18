@@ -55,7 +55,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
             icon: <FaChartLine className='text-coffeeBrown' />,
             links: [
               { to: 'stats/overview', text: '판매 개요' },
-              { to: 'stats/products', text: '상품 성과 조회' },
+              // { to: 'stats/products', text: '상품 성과 조회' },
             ],
           },
           {
