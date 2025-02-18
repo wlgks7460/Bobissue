@@ -15,7 +15,7 @@ import {
 const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
   return (
     <aside
-      className={`fixed top-0 left-0 w-64 bg-latteBeige/20 border-r border-caramelTan h-full overflow-y-auto shadow-md transition-transform duration-300 transform ${
+      className={`fixed top-0 left-0 w-64 bg-latteBeige/20 border-b border-coffeeBrown h-full overflow-y-auto transition-transform duration-300 transform ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -35,20 +35,20 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
             label: '주문/배송 관리',
             icon: <FaShippingFast className='text-coffeeBrown' />,
             links: [
-              { to: 'delivery/orders', text: '주문 정보 조회' },
-              { to: 'delivery/delivers', text: '배송 관리' },
-              { to: 'delivery/returns', text: '환불 관리' },
+              { to: 'delivery/orders', text: '주문/배송 조회' },
+              //{ to: 'delivery/delivers', text: '배송 관리' },
+              // { to: 'delivery/returns', text: '환불 관리' },
             ],
           },
-          {
-            key: 'settlement',
-            label: '정산',
-            icon: <FaChartBar className='text-coffeeBrown' />,
-            links: [
-              { to: 'settlement/overview', text: '정산 조회' },
-              { to: 'settlement/details', text: '정산 상세' },
-            ],
-          },
+          // {
+          //   key: 'settlement',
+          //   label: '정산',
+          //   icon: <FaChartBar className='text-coffeeBrown' />,
+          //   links: [
+          //     { to: 'settlement/overview', text: '정산 조회' },
+          //     { to: 'settlement/details', text: '정산 상세' },
+          //   ],
+          // },
           {
             key: 'salesStats',
             label: '판매 통계',
@@ -104,7 +104,9 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
               onClick={() => toggleMenu(key)}
               className='w-full flex items-center justify-between px-4 py-3 text-coffeeBrown font-semibold rounded-lg hover:bg-caramelTan/80 transition'
             >
-              <span className='flex items-center gap-2'>{icon} {label}</span>
+              <span className='flex items-center gap-2'>
+                {icon} {label}
+              </span>
               <span className='text-xs'>{menuState[key] ? '▼' : '▶'}</span>
             </button>
 

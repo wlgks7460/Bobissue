@@ -126,7 +126,7 @@ const View = () => {
             <div className='flex space-x-4 mt-6'>
               <button
                 onClick={handleUpdateClick}
-                className='bg-deepCobalt/80 text-white px-4 py-2 rounded-lg hover:bg-deepCobalt focus:ring focus:ring-deepCobalt/50 transition-all hover:scale-105'
+                className='bg-coralReef text-white px-4 py-2 rounded-lg hover:bg-deepCobalt focus:ring focus:ring-deepCobalt/50 transition-all hover:scale-105'
               >
                 수정하기
               </button>

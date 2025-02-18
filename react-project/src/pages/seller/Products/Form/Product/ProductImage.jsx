@@ -57,9 +57,7 @@ const ProductImage = ({ product, handleRemoveImage, setProduct }) => {
       }
 
       // 🔹 이미지 중복 체크 (파일 이름으로 비교)
-      const isDuplicate = product.images.some(
-        (img) => img.file?.name === finalFile.name
-      )
+      const isDuplicate = product.images.some((img) => img.file?.name === finalFile.name)
       if (isDuplicate) {
         alert('이미 업로드된 이미지입니다.')
         return
@@ -90,7 +88,7 @@ const ProductImage = ({ product, handleRemoveImage, setProduct }) => {
   }
 
   return (
-    <div className='mt-5 mb-5'>
+    <div className='mt-5 mb-5 shadow-md shadow-coffeeBrown/20 p-3 rounded-lg bg-white'>
       <h2 className='text-[16px] font-bold'>상품 이미지</h2>
       <div className='flex gap-4 mt-3 flex-wrap'>
         {/* 기존 및 새 이미지 렌더링 */}

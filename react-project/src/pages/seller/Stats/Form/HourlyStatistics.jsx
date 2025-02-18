@@ -45,7 +45,7 @@ const HourlyStatistics = ({ selectedPeriod }) => {
   return (
     <div className='bg-gray-50 p-6 rounded-xl border border-gray-300 shadow-md'>
       <div className='flex items-center gap-3 mb-4'>
-        <FaClock className='text-4xl text-blue-500' />
+        <FaClock className='text-4xl ' />
         <h3 className='text-2xl font-semibold text-gray-800'>시간대별 판매 통계</h3>
       </div>
       <div className='bg-white p-4 rounded-lg border border-gray-200'>

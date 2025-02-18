@@ -96,18 +96,22 @@ const Notices = () => {
   }
 
   return (
-    <div className='w-full  mx-auto bg-gray-50 p-6 rounded-lg '>
+    <div className='w-full mx-auto p-6 rounded-lg bg-warmBeige/20'>
+      {/* 헤더 */}
       <div className='mb-6 text-center'>
-        <h1 className='text-3xl font-bold text-gray-800'>공지사항</h1>
-        <p className='text-md text-gray-600'>중요한 공지사항을 확인하세요.</p>
+        <h1 className='text-3xl font-bold text-espressoBlack'>공지사항</h1>
+        <p className='text-md text-coffeeBrown'>중요한 공지사항을 확인하세요.</p>
       </div>
 
-      <div className='mb-6 flex justify-center items-center space-x-4 text-lg font-semibold text-gray-700'>
+      {/* 카테고리 선택 */}
+      <div className='mb-6 flex justify-center items-center space-x-4 text-lg font-semibold'>
         {categories.map((category) => (
           <span
             key={category}
-            className={`cursor-pointer transition-colors ${
-              selectedCategory === category ? 'text-rose-600 font-bold' : 'hover:text-rose-600'
+            className={`cursor-pointer transition-colors px-3 py-1 rounded-md ${
+              selectedCategory === category
+                ? 'bg-caramelTan text-white font-bold'
+                : 'text-coffeeBrown hover:text-mochaBrown'
             }`}
             onClick={() => {
               setSelectedCategory(category)
@@ -119,9 +123,10 @@ const Notices = () => {
         ))}
       </div>
 
-      <div className='bg-white rounded-lg shadow border border-gray-300'>
-        <table className='w-full text-sm text-gray-700'>
-          <thead className='bg-gray-200'>
+      {/* 공지사항 테이블 */}
+      <div className='bg-white rounded-lg shadow border border-hazelnutBrown p-4'>
+        <table className='w-full text-sm text-espressoBlack'>
+          <thead className='bg-caramelTan text-white'>
             <tr>
               <th className='px-4 py-3 text-center'>번호</th>
               <th className='px-4 py-3 text-center'>분류</th>
@@ -136,19 +141,21 @@ const Notices = () => {
               .map((notice) => (
                 <tr
                   key={notice.noticeNo}
-                  className='border-b hover:bg-gray-100 cursor-pointer'
+                  className='border-b border-caramelTan hover:bg-cobalt-100 cursor-pointer transition'
                   onClick={() => handleClickNavigate(notice.noticeNo)}
                 >
                   <td className='px-4 py-3 text-center'>{notice.noticeNo}</td>
-                  <td className='px-4 py-3 text-center font-semibold'>{notice.category}</td>
+                  <td className='px-4 py-3 text-center font-semibold text-mochaBrown'>
+                    {notice.category}
+                  </td>
                   <td className='px-4 py-3'>{notice.title}</td>
-                  <td className='px-4 py-3 text-center'>{notice.adminNo}</td>
+                  <td className='px-4 py-3 text-center text-coffeeBrown'>{notice.adminNo}</td>
                   <td className='px-4 py-3 text-center'>{notice.date}</td>
                 </tr>
               ))}
             {currentNotices.length === 0 && (
               <tr>
-                <td colSpan='5' className='text-center py-6 text-gray-500'>
+                <td colSpan='5' className='text-center py-6 text-coffeeBrown'>
                   해당 분류의 공지사항이 없습니다.
                 </td>
               </tr>
@@ -157,12 +164,15 @@ const Notices = () => {
         </table>
       </div>
 
+      {/* 페이지네이션 */}
       <div className='mt-6 flex justify-center space-x-2'>
         {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
           <button
             key={page}
             className={`px-3 py-2 rounded-md transition ${
-              page === currentPage ? 'bg-gray-500 text-white' : 'bg-gray-200 hover:bg-gray-400'
+              page === currentPage
+                ? 'bg-earthBrown/60 text-white'
+                : 'bg-forestGreen/40 hover:bg-mossGreen text-white'
             }`}
             onClick={() => goToPage(page)}
           >

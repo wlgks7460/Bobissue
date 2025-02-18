@@ -26,7 +26,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
   }
 
   return (
-    <nav className='flex items-center justify-between bg-white px-6 py-3 border-b border-caramelTan shadow-md relative z-50'>
+    <nav className='flex items-center justify-between bg-white px-6 py-3  shadow-md shadow-coffeeBrown/20 relative z-50'>
       {/* 왼쪽 영역 (햄버거 메뉴 + 로고) */}
       <div className='flex items-center gap-4'>
         {/* ☰ 햄버거 버튼 */}
@@ -39,7 +39,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
         </button>
 
         {/* 로고 이미지 */}
-        <Link to='/seller' onClick={() => setSelect(null)}>
+        <Link to='/' onClick={() => setSelect(null)}>
           <img
             src='/bobissueLogo2.png'
             alt='로고'
@@ -57,14 +57,14 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
 
         {/* 🏠 홈 버튼 */}
         <Link
-          to='/'
+          to='/seller'
           className='p-3 bg-caramelTan/30 text-coffeeBrown rounded-lg hover:bg-caramelTan/80 transition flex items-center'
         >
           <FaHome className='w-5 h-5' />
         </Link>
 
         {/* 🐞 디버그 모드 토글 버튼 */}
-        <button
+        {/* <button
           onClick={toggleDebugMode}
           className={`p-3 rounded-lg transition ${
             debugMode
@@ -73,12 +73,12 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
           }`}
         >
           <FaBug className='w-5 h-5' />
-        </button>
+        </button> */}
 
         {/* 🚪 로그아웃 버튼 */}
         <button
           onClick={handleLogout}
-          className='p-3 bg-roastedCocoa text-warmBeige rounded-lg hover:bg-mochaBrown transition'
+          className='p-3 bg-rose-500 text-warmBeige rounded-lg hover:bg-rose-600 transition'
         >
           <FaSignOutAlt className='w-5 h-5' />
         </button>
