@@ -15,9 +15,15 @@ const Recipe = () => {
         <div className='w-[70rem] min-h-[70vh]'>
           <h2 className='text-2xl text-center my-10'>레시피</h2>
           <RecipeCategory setRecipes={setRecipes} />
+          {/* 정렬 */}
+          <div className='flex justify-between mb-10'>
+            <div>
+              <span>총 {recipes?.length}건</span>
+            </div>
+          </div>
           {/* 레시피 리스트 */}
           {recipes.length > 0 ? (
-            <div className='grid grid-cols-4'>
+            <div className='grid grid-cols-4 gap-y-10'>
               {recipes.map((v) => (
                 <div className='flex flex-col justify-center items-center' key={v.recipeNo}>
                   <Link to={`/recipe/${v.recipeNo}`}>

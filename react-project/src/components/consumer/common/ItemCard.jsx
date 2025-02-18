@@ -4,12 +4,28 @@ import { Link } from 'react-router-dom'
 import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
 const HomeItem = ({ item }) => {
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleMouseDown = () => {
+    setIsDragging(false)
+  }
+
+  const handleMouseMove = () => {
+    setIsDragging(true)
+  }
+
+  const handleClick = (e) => {
+    if (isDragging) {
+      e.preventDefault() // 드래그 상태일 때 링크 이동 방지
+    }
+  }
+
   // 이미지 컨테이너에 hovering 되어있는가
   const [isHovering, setIsHovering] = useState(false)
   // 상품 장바구니 담기 modal 상태
   const [isOpen, setIsOpen] = useState(false)
 
-  const imgUrl = item.images[0]?.imageUrl || itemDefaultImg
+  const imgUrl = item.images?.[0]?.imageUrl || itemDefaultImg
 
   // 상품 가격 , 찍기
   const addComma = (price) => {
@@ -31,12 +47,16 @@ const HomeItem = ({ item }) => {
     setIsOpen(true)
   }
   return (
-    <div className='flex justify-center'>
+    <div
+      className='flex justify-center'
+      onMouseMove={handleMouseMove}
+      onMouseDown={handleMouseDown}
+    >
       <div className='w-[250px] flex flex-col gap-2'>
         {/* 상품 이미지 */}
         <div className='relative' onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
           <div className='border border-[#6F4E37] rounded'>
-            <Link to={`/item/${item.itemNo}`} className='outline-none'>
+            <Link to={`/item/${item.itemNo}`} className='outline-none' onClick={handleClick}>
               <img
                 // 이미지 경로 수정 필요
                 src={imgUrl}

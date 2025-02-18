@@ -11,7 +11,6 @@ const MyPageQuestion = () => {
   const getUserQuestion = () => {
     API.get(`/users/${userNo}/questions`)
       .then((res) => {
-        console.log(res)
         setQuestions(res.data.result.data)
       })
       .catch((err) => {
