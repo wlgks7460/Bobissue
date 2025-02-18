@@ -90,10 +90,10 @@ const Dashboard = () => {
             description={item.description}
             link={item.link}
             icon={item.icon}
-            color={index % 2 === 0 ? 'bg-latteBeige' : 'bg-caramelTan'}
+            color={index % 2 === 0 ? 'bg-latteBeige/30' : 'bg-espressoBlack/80'}
             text={index % 2 === 0 ? 'text-coffeeBrown' : 'text-warmBeige'}
-            hoverColor={index % 2 === 0 ? 'hover:bg-mochaBrown/80' : 'hover:bg-espressoBlack/80'}
-            hoverText={index % 2 === 0 ? 'hover:text-espressoBlack' : 'hover:text-latteBeige'}
+            hoverColor={index % 2 === 0 ? 'hover:bg-warmBeige' : 'hover:bg-espressoBlack/90'}
+            hoverText={index % 2 === 0 ? 'hover:text-espressoBlack' : 'hover:text-warmBeige/90'}
           />
         ))}
       </div>

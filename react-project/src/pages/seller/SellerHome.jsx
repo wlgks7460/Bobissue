@@ -171,7 +171,7 @@ const SellerMainPage = () => {
 
             {/* Footer */}
             <footer className='w-full text-center py-4 bg-gray-100 text-gray-600 text-sm border-t border-gray-300 mt-auto'>
-              &copy; 2025 BOBISSUE. all rights reserved.
+              &copy; 2025 BOBISSUE. All rights reserved.
             </footer>
           </div>
         )
@@ -214,7 +214,7 @@ const SellerMainPage = () => {
 
           {/* Footer */}
           <footer className='w-full text-center py-4 bg-gray-100 text-gray-600 text-sm border-t border-gray-300 mt-auto'>
-            &copy; 2025 BOBISSUE. all rights reserved.
+            &copy; 2025 BOBISSUE. All rights reserved.
           </footer>
         </div>
       )}
