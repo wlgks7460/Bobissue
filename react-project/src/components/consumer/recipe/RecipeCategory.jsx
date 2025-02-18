@@ -47,7 +47,7 @@ const RecipeCategory = ({ setRecipes }) => {
     return () => {}
   }, [])
   return (
-    <div className='w-full border border-gray-400 rounded px-5 mb-10'>
+    <div className='w-full border border-gray-400 rounded px-5 mb-24'>
       <div className='flex flex-wrap'>
         <button
           className={`w-[150px] text-center m-3 ${selectedCategory === 'all' && 'text-[#6F4E37]'}`}

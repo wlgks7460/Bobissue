@@ -13,8 +13,7 @@ const Search = () => {
       <div className='flex justify-center'>
         <div className='w-[70rem] min-h-[70vh]'>
           <h2 className='text-2xl text-center my-10'>
-            <span className='text-indigo-600'>"{searchParams.get('keyword')}"</span>에 대한 검색
-            결과
+            <span className='text-[#6F4E37]'>"{searchParams.get('keyword')}"</span>에 대한 검색 결과
           </h2>
           <SearchItemList keyword={searchParams.get('keyword')} />
         </div>
