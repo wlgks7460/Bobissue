@@ -102,6 +102,30 @@ const Live = () => {
     { itemNo: 8, name: '상품9' },
   ]
 
+  const allToCart = () => {
+    let cartData = JSON.parse(localStorage.getItem('cart')) || []
+    let isDuplicate = false
+
+    const newItems = castItemList
+      .map((v) => {
+        const existingIndex = cartData.findIndex((item) => item.itemNo === v.itemNo)
+        if (existingIndex !== -1) {
+          cartData[existingIndex].count += 1
+          isDuplicate = true
+          return null
+        }
+        return { itemNo: v.itemNo, count: 1 }
+      })
+      .filter(Boolean) // null 값 제거
+
+    if (newItems.length > 0) {
+      cartData = [...cartData, ...newItems]
+      localStorage.setItem('cart', JSON.stringify(cartData))
+    }
+
+    alert(isDuplicate ? '중복 상품은 수량을 추가하였습니다.' : '장바구니에 담았습니다.')
+  }
+
   return (
     <div>
       <SearchBar />
@@ -142,10 +166,15 @@ const Live = () => {
             </div>
             {/* 상품 */}
             <div className='flex-none w-full max-w-full h-[150px] border-t border-[#6F4E37] p-3'>
-              <h3>판매 중 상품</h3>
+              <div className='flex justify-between'>
+                <h3>판매 중 상품</h3>
+                <button className='text-sm text-gray-400 hover:text-[#6F4E37]' onClick={allToCart}>
+                  전체 상품 담기
+                </button>
+              </div>
               <div
                 ref={scrollContainerRef}
-                className='flex gap-3 overflow-x-auto no-scrollbar cursor-grab flex-nowrap'
+                className='flex gap-3 overflow-x-auto no-scrollbar flex-nowrap'
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
