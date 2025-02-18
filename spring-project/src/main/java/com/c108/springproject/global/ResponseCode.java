@@ -305,6 +305,7 @@ public enum ResponseCode {
     SUCCESS_FIND_USER_ORDER_LIST("SUCCESS_FIND_USER_ORDER_LIST", "이용자 전체 주문 조회 성공"),
     FAILED_FIND_USER_ORDER("FAILED_FIND_USER_ORDER", "이용자 주문 상세 조회 실패"),
     SUCCESS_FIND_USER_ORDER("SUCCESS_FIND_USER_ORDER", "이용자 주문 상세 조회 성공"),
+    SUCCESS_FIND_ALL_EVENT("SUCCESS_FIND_ALL_EVENT", "이벤트 전체 조회 성공"),
 
     ;
 

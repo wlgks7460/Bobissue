@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
-const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
+const LiveModal = ({ setIsOpen, item }) => {
   // 상품 수량
   const [itemCount, setItemCount] = useState(1)
   // 상품 가격 , 찍기
@@ -24,9 +24,9 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
   }
   // 모달 닫기
   const closeModal = () => {
-    setIsOpen(!isOpen)
-    setIsHovering(false)
+    setIsOpen(false)
   }
+
   // 상품 장바구니 담기
   const itemOnCart = () => {
     const tempItem = {
@@ -137,4 +137,4 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
   )
 }
 
-export default HomeItemModal
+export default LiveModal

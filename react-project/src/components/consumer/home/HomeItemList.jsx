@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import ItemCard from '../common/ItemCard'
 import API from '../../../utils/API'
 import { Link } from 'react-router-dom'
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 const HomeItemList = ({ category }) => {
+  const [items, setItems] = useState([]) // 상품 데이터 리스트
   // 화면 감지 관련
   const divRef = useRef(null)
   const [hasFetched, setHasFetched] = useState(false)
@@ -24,7 +25,6 @@ const HomeItemList = ({ category }) => {
       })
   }
 
-  const [items, setItems] = useState([]) // 상품 데이터 리스트
   // 카테고리에 맞는 상품 불러오기
   useEffect(() => {
     // mount
@@ -53,18 +53,18 @@ const HomeItemList = ({ category }) => {
         <Link to={`/category/${category.categoryNo}`}>+ 더보기</Link>
       </div>
       <div className='grid grid-cols-4 gap-3'>
-        {items.length < 1 && (
-          <div className='flex flex-col gap-3 items-center'>
-            <p className='text-center'>
-              <ExclamationCircleIcon className='w-20 text-gray-400' />
-            </p>
-            <p className='text-center text-xl text-gray-600'>상품 준비 중 입니다.</p>
-          </div>
-        )}
         {items.map((v) => (
           <ItemCard key={v.itemNo} item={v} />
         ))}
       </div>
+      {items.length < 1 && (
+        <div className='flex flex-col gap-3 items-center'>
+          <p className='text-center'>
+            <ExclamationCircleIcon className='w-20 text-gray-400' />
+          </p>
+          <p className='text-center text-xl text-gray-600'>상품 준비 중 입니다.</p>
+        </div>
+      )}
     </div>
   )
 }
