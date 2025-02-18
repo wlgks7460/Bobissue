@@ -40,11 +40,6 @@ const SellerListTable = () => {
     setSearchType('sellerNo')
   }, [approvalFilter])
 
-  // 판매자 상세 페이지로 이동 (경로: /admin/seller/${seller.sellerNo})
-  const handleSellerClick = (seller) => {
-    navigate(`/admin/seller/${seller.sellerNo}`)
-  }
-
   // 모든 판매자(승인/미승인)에서 상태 변경 가능하도록 처리
   const handleStatusToggle = async (seller) => {
     console.log(`판매자 상태 변경 요청 전송: sellerNo = ${seller.sellerNo}`)
