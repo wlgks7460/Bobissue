@@ -6,6 +6,7 @@ import { CheckCircleIcon as SolidCheckCircleIcon } from '@heroicons/react/24/sol
 const BoardQuestion = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const orderNoParam = searchParams.get('order')
+  const itemNoParam = searchParams.get('item')
   const categoryParam = searchParams.get('category')
   const categories = [
     { id: 0, name: '상품' },
