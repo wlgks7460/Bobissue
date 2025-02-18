@@ -6,9 +6,9 @@ import 'moment/locale/ko'
 import dayjs from 'dayjs'
 import Breadcrumb from '../common/Breadcrumb'
 import API from '../../../utils/API'
-import LiveDetailModal from './LiveModalDetail/' //✅ 모달 컴포넌트 추가
+import LiveDetailModal from './LiveModalDetail/'
 
-moment.locale('ko') // 한글 설정
+moment.locale('ko')
 const localizer = momentLocalizer(moment)
 
 const LiveCalendar = () => {
@@ -18,11 +18,10 @@ const LiveCalendar = () => {
     { name: '라이브커머스 일정관리' },
   ]
 
-  const [selectedBroadcast, setSelectedBroadcast] = useState(null) // ✅ 선택한 방송 정보
-  const [isModalOpen, setIsModalOpen] = useState(false) // ✅ 모달 상태 추가
-  const [events, setEvents] = useState([]) // 캘린더 이벤트
+  const [selectedBroadcast, setSelectedBroadcast] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [events, setEvents] = useState([])
 
-  // ✅ "등록"과 "거절" 상태 제외하고 데이터 가져오기
   useEffect(() => {
     const fetchBroadcasts = async () => {
       try {
@@ -31,12 +30,10 @@ const LiveCalendar = () => {
 
         const allBroadcasts = response.data?.result?.data || []
 
-        // "등록"과 "거절" 상태를 제외한 방송 필터링
         const filteredBroadcasts = allBroadcasts.filter(
           (broadcast) => !['등록', '거절'].includes(broadcast.castStatus),
         )
 
-        // ✅ 캘린더 이벤트로 변환
         const formattedEvents = filteredBroadcasts.map((broadcast) => ({
           title: `${moment(broadcast.startAt, 'YYYYMMDD HHmmss').format('HH:mm')} ~ ${moment(
             broadcast.endAt,
@@ -59,13 +56,11 @@ const LiveCalendar = () => {
     fetchBroadcasts()
   }, [])
 
-  // ✅ 방송 클릭 시 모달 열기
   const handleSelectEvent = (event) => {
     setSelectedBroadcast(event.broadcast)
-    setIsModalOpen(true) // ✅ 모달 열기
+    setIsModalOpen(true)
   }
 
-  // ✅ 상태별 색상 적용
   const getStatusColor = (status) => {
     switch (status) {
       case '대기':
@@ -79,7 +74,6 @@ const LiveCalendar = () => {
     }
   }
 
-  // ✅ `eventPropGetter`를 사용하여 이벤트 스타일 적용
   const eventPropGetter = (event) => {
     return {
       style: {
@@ -102,7 +96,7 @@ const LiveCalendar = () => {
   return (
     <div className='p-6'>
       <Breadcrumb paths={breadcrumbPaths} />
-      <h2 className='text-2xl font-bold mb-5'>📅 라이브커머스 일정</h2>
+      <h2 className='text-2xl font-bold mb-10'>📅 라이브커머스 일정</h2>
 
       <Calendar
         localizer={localizer}
@@ -112,12 +106,12 @@ const LiveCalendar = () => {
         style={{ height: 1000, width: '100%' }}
         views={['month']}
         defaultView='month'
-        defaultDate={new Date()}
-        onSelectEvent={handleSelectEvent} // ✅ 모달 열기 추가
+        defaultDate={moment().add(1, 'month').toDate()}
+        onSelectEvent={handleSelectEvent}
         eventPropGetter={eventPropGetter}
         messages={{
-          next: '다음',
-          previous: '이전',
+          next: '▶',
+          previous: '◀',
           today: '오늘',
           month: '월',
           week: '주',
@@ -128,12 +122,50 @@ const LiveCalendar = () => {
           event: '이벤트',
           noEventsInRange: '등록된 방송이 없습니다.',
         }}
+        formats={{
+          // 📆 월 이름 한글로 변경
+          monthHeaderFormat: (date) =>
+            new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long' }).format(date),
+          // 🗓️ 요일도 한글로 변경
+          weekdayFormat: (date) =>
+            new Intl.DateTimeFormat('ko-KR', { weekday: 'short' }).format(date),
+        }}
+        components={{
+          toolbar: (props) => (
+            <div className='flex items-center justify-between mb-4'>
+              <button className='text-xl' onClick={() => props.onNavigate('PREV')}>
+                ◀
+              </button>
+              <span className='text-xl font-bold'>
+                {new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long' }).format(
+                  props.date,
+                )}
+              </span>
+              <button className='text-xl' onClick={() => props.onNavigate('NEXT')}>
+                ▶
+              </button>
+            </div>
+          ),
+        }}
       />
 
-      {/* ✅ 방송 상세 모달 추가 */}
       {isModalOpen && (
         <LiveDetailModal broadcast={selectedBroadcast} onClose={() => setIsModalOpen(false)} />
       )}
+
+      <style>{`
+        .rbc-date-cell {
+          text-align: left;
+          padding-left: 7px;
+          margin-top: 7px;
+        }
+
+        .rbc-month-view .rbc-header {
+          justify-content: center;
+          font-size: 1.3rem;
+          font-weight: normal;
+        }
+      `}</style>
     </div>
   )
 }
