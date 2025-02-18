@@ -68,6 +68,7 @@ import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 import SellerStatisticsPage from '../pages/admin/seller/SellerStatisticsPage'
 // (관리자) 주문 관리
 import OrderListPage from '../pages/admin/order/OrderListPage'
+import OrderDetailPage from '../pages/admin/order/OrderDetailPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -581,8 +582,12 @@ const router = createBrowserRouter([
             path: 'order',
             children: [
               {
-                path: '', // 주문 현황 페이지지
-                elemer: <orderListPage />,
+                path: '', // 주문 현황 페이지
+                element: <OrderListPage />,
+              },
+              {
+                path: ':orderNo',
+                element: <OrderDetailPage />,
               },
             ],
           },

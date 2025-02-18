@@ -4,7 +4,7 @@ import React from 'react'
 const OrderListPage = () => {
   return (
     <div className='ml-64 mt-16 p-4'>
-      <orderList />
+      <OrderList />
     </div>
   )
 }
