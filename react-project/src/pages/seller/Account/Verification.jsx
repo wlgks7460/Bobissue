@@ -12,7 +12,7 @@ const PasswordVerification = () => {
   const redirectPath = '/seller/account/vender/info'
   const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
-  // 비밀번호 인증 요청
+  // ✅ 비밀번호 인증 요청
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
@@ -44,13 +44,14 @@ const PasswordVerification = () => {
   }
 
   return (
-    <div className='flex flex-col justify-center items-center bg-white h-[55vh]'>
+    <div className='flex flex-col justify-center items-center bg-warmBeig/20 min-h-screen p-6'>
       <form
         onSubmit={handleSubmit}
-        className='w-full border border-gray-300 max-w-md bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-[12px]'
+        className='w-full border border-caramelTan max-w-md bg-white shadow-lg p-8 rounded-xl'
       >
-        <h2 className='text-3xl font-bold text-gray-800 mb-6 text-center'>비밀번호 확인</h2>
+        <h2 className='text-3xl font-bold text-espressoBlack mb-6 text-center'>비밀번호 확인</h2>
 
+        {/* ✅ 비밀번호 입력 필드 */}
         <div className='relative mb-4'>
           <input
             type={showPassword ? 'text' : 'password'}
@@ -58,23 +59,25 @@ const PasswordVerification = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder='비밀번호를 입력하세요'
             required
-            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:outline-none transition-all duration-200'
+            className='w-full px-4 py-3 border border-caramelTan rounded-lg focus:ring-2 focus:ring-caramelTan focus:ring-offset-2 focus:outline-none transition-all duration-200'
           />
           <button
             type='button'
             onClick={() => setShowPassword(!showPassword)}
-            className='absolute right-4 top-3 text-gray-500 hover:text-gray-700'
+            className='absolute right-4 top-3 text-darkGraphite hover:text-espressoBlack'
           >
             {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
           </button>
         </div>
 
-        {error && <p className='text-red-500 text-sm mb-4 text-center animate-fade-in'>{error}</p>}
+        {/* ✅ 에러 메시지 출력 */}
+        {error && <p className='text-roastedCocoa text-sm mb-4 text-center animate-fade-in'>{error}</p>}
 
+        {/* ✅ 인증 버튼 */}
         <button
           type='submit'
           className={`w-full py-3 rounded-lg font-semibold text-white transition-all duration-200 ${
-            isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-500 hover:bg-gray-600'
+            isLoading ? 'bg-caramelTan/90 cursor-not-allowed' : 'bg-coffeeBrown hover:bg-mochaBrown'
           }`}
           disabled={isLoading}
         >

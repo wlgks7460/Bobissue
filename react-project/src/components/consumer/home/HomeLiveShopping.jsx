@@ -98,24 +98,29 @@ const HomeLiveShopping = () => {
         delYN: 'N',
       },
     ]
-    const liveEvents = tempData.filter((event) => {
-      const currentTime = dayjs()
-      const startTime = dayjs(event.startAt)
-      const endTime = dayjs(event.endAt)
+    const currentTime = dayjs()
 
-      // 방송 중인 이벤트
-      return currentTime.isBetween(startTime, endTime)
+    // const liveEvents = tempData.filter((event) => {
+    //   const startTime = dayjs(event.startAt)
+    //   const endTime = dayjs(event.endAt)
+
+    //   // 방송 중인 이벤트
+    //   return currentTime.isBetween(startTime, endTime)
+    // })
+    // const upcomingEvents = tempData.filter((event) => {
+    //   const startTime = dayjs(event.startAt)
+
+    //   // 방송 예정인 이벤트
+    //   return currentTime.isBefore(startTime)
+    // })
+
+    // // 우선 현재 방송이 없으면, 가장 가까운 예정 방송을 표시
+    // const events = liveEvents.length > 0 ? liveEvents : upcomingEvents
+    // setCastData(events)
+    const events = tempData.filter((v) => {
+      const endTime = dayjs(v.endAt)
+      return endTime.isAfter(currentTime)
     })
-    const upcomingEvents = tempData.filter((event) => {
-      const currentTime = dayjs()
-      const startTime = dayjs(event.startAt)
-
-      // 방송 예정인 이벤트
-      return currentTime.isBefore(startTime)
-    })
-
-    // 우선 현재 방송이 없으면, 가장 가까운 예정 방송을 표시
-    const events = liveEvents.length > 0 ? liveEvents : upcomingEvents
     setCastData(events)
   }
 
@@ -145,7 +150,7 @@ const HomeLiveShopping = () => {
 
   // 캐로셀 설정
   const settings = {
-    infinite: true,
+    infinite: castData.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -154,7 +159,7 @@ const HomeLiveShopping = () => {
     arrows: true,
     prevArrow: <PrevBtn />,
     nextArrow: <NextBtn />,
-    initialSlide: 1,
+    initialSlide: 0,
     pauseOnFocus: true,
     pauseOnHover: true,
   }

@@ -1,4 +1,3 @@
-// ./Form/Overview.js
 import React, { useState } from 'react'
 import ItemRank from './Form/ItemRank'
 import CustomerSatisfaction from './Form/CustomerSatisfaction'
@@ -6,7 +5,7 @@ import MonthlyComparison from './Form/MonthlyComparison'
 import SalesPrediction from './Form/SalesPrediction'
 import CategoryStatistics from './Form/CategoryStatistics'
 import HourlyStatistics from './Form/HourlyStatistics'
-import Demographics from './Form/Demographics'
+import Demographics from './Form/Demographics2'
 
 const components = {
   '상품 순위': ItemRank,
@@ -18,14 +17,17 @@ const components = {
   '성별/연령대별 판매 통계': Demographics,
 }
 
+const periods = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY']
+
 const Overview = () => {
   const [selectedComponent, setSelectedComponent] = useState('상품 순위')
+  const [selectedPeriod, setSelectedPeriod] = useState('YEARLY')
 
   return (
-    <div className='p-6 max-w-7xl mx-auto bg-gray-100 border border-gray-300 rounded-lg shadow-md flex min-h-screen'>
+    <div className='p-6 max-w-7xl mx-auto bg-frostWhite border border-silverMedium rounded-lg shadow-md flex min-h-screen'>
       {/* 왼쪽 필터 메뉴 */}
-      <div className='w-1/4 bg-gray-200 p-4 rounded-lg shadow-md border border-gray-300'>
-        <h2 className='text-lg font-semibold text-gray-700 mb-4'>통계 선택</h2>
+      <div className='w-1/4 bg-silverLight p-4 rounded-lg shadow-sm border border-silverMedium'>
+        <h2 className='text-lg font-semibold text-darkGraphite mb-4'>통계 선택</h2>
         <ul className='space-y-2'>
           {Object.keys(components).map((key) => (
             <li key={key}>
@@ -33,8 +35,8 @@ const Overview = () => {
                 onClick={() => setSelectedComponent(key)}
                 className={`w-full text-left px-4 py-2 rounded-lg font-semibold transition ${
                   selectedComponent === key
-                    ? 'bg-gray-400 text-white'
-                    : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+                    ? 'bg-caramelTan/60 text-white'
+                    : 'bg-silverMedium/50 text-roastedCocoa hover:bg-caramelTan/60 hover:text-white'
                 }`}
               >
                 {key}
@@ -45,8 +47,29 @@ const Overview = () => {
       </div>
 
       {/* 오른쪽 선택된 컴포넌트 영역 */}
-      <div className='w-3/4 p-4 bg-white rounded-lg shadow-md border border-gray-300'>
-        {selectedComponent && React.createElement(components[selectedComponent])}
+      <div className='w-3/4 p-4 bg-white rounded-lg shadow-sm border border-silverMedium'>
+        {/* 기간 선택 버튼 */}
+        <div className='flex space-x-3 mb-4'>
+          {periods.map((period) => (
+            <button
+              key={period}
+              onClick={() => {
+                setSelectedPeriod(period)
+              }}
+              className={`px-4 py-2 rounded-lg font-semibold transition ${
+                selectedPeriod === period
+                  ? 'bg-caramelTan/60 text-white'
+                  : 'bg-silverMedium/50 text-roastedCocoa hover:bg-caramelTan/60 hover:text-white'
+              }`}
+            >
+              {period}
+            </button>
+          ))}
+        </div>
+
+        {/* 선택된 컴포넌트 렌더링 (props로 selectedPeriod 전달) */}
+        {selectedComponent &&
+          React.createElement(components[selectedComponent], { selectedPeriod })}
       </div>
     </div>
   )

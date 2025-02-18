@@ -50,13 +50,17 @@ const SellerLoginPage = () => {
   }
 
   return (
-    <div className='flex justify-center items-center h-screen bg-gray-100'>
-      <div className='w-full max-w-lg bg-white p-10 rounded-xl shadow-lg hover:shadow-xl'>
-        <h2 className='text-3xl font-bold text-center text-gray-900 mb-6'>판매자 로그인</h2>
-        {error && <p className='text-red-500 text-sm mb-4 text-center'>{error}</p>}
+    <div className='flex justify-center items-center h-screen bg-caramelTan/20'>
+      <div className='w-full max-w-lg bg-white p-10 rounded-xl shadow-lg hover:shadow-xl border border-caramelTan'>
+        <h2 className='text-3xl font-bold text-center text-espressoBlack mb-6'>판매자 로그인</h2>
+        
+        {/* ✅ 에러 메시지 */}
+        {error && <p className='text-roastedCocoa text-sm mb-4 text-center'>{error}</p>}
+        
         <form onSubmit={handleLogin}>
+          {/* ✅ 이메일 입력 */}
           <div className='mb-4'>
-            <label className='block text-sm font-medium text-gray-700 mb-2' htmlFor='email'>
+            <label className='block text-sm font-medium text-darkGraphite mb-2' htmlFor='email'>
               이메일
             </label>
             <input
@@ -64,13 +68,15 @@ const SellerLoginPage = () => {
               id='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='w-full px-4 py-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-gray-700'
+              className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
               placeholder='example@example.com'
               required
             />
           </div>
+
+          {/* ✅ 비밀번호 입력 */}
           <div className='mb-6'>
-            <label className='block text-sm font-medium text-gray-700 mb-2' htmlFor='password'>
+            <label className='block text-sm font-medium text-darkGraphite mb-2' htmlFor='password'>
               비밀번호
             </label>
             <input
@@ -78,32 +84,38 @@ const SellerLoginPage = () => {
               id='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className='w-full px-4 py-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-gray-700'
+              className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
               placeholder='비밀번호를 입력하세요'
               required
             />
           </div>
+
+          {/* ✅ 로그인 버튼 */}
           <button
             type='submit'
             disabled={loading}
-            className={`w-full py-2 px-4 rounded-md text-white transition-all font-semibold ${
-              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-500 hover:bg-gray-900'
+            className={`w-full py-2 px-4 rounded-md text-white font-semibold transition-all ${
+              loading ? 'bg-caramelTan/90 cursor-not-allowed' : 'bg-coffeeBrown hover:bg-mochaBrown'
             }`}
           >
             {loading ? '로그인 중...' : '로그인'}
           </button>
         </form>
+
+        {/* ✅ 비밀번호 찾기 링크 */}
         <div className='mt-6 text-center'>
-          <p className='text-sm text-gray-600'>
-            <a href='/password/reset' className='text-rose-500 hover:underline'>
+          <p className='text-sm text-darkGraphite'>
+            <a href='/password/reset' className='text-roastedCocoa hover:underline'>
               비밀번호를 잊으셨나요?
             </a>
           </p>
         </div>
+
+        {/* ✅ 회원가입 링크 */}
         <div className='mt-4 text-center'>
-          <p className='text-sm text-gray-600'>
+          <p className='text-sm text-darkGraphite'>
             회원이 아니세요?{' '}
-            <a href='/seller/signup' className='text-blue-500 font-medium hover:underline'>
+            <a href='/seller/signup' className='text-caramelTan font-medium hover:underline'>
               회원가입
             </a>
           </p>

@@ -87,4 +87,9 @@ public class EventController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_EVENT, new DefaultResponse<Integer>(eventService.deleteEvent(eventNo)));
     }
 
+    // 이벤트 리스트 조회
+    @GetMapping("")
+    public ResponseDto findAllEvents() {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ALL_EVENT, new DefaultResponse<List<EventDetailResDto>>(eventService.findAllEvents()));
+    }
 }

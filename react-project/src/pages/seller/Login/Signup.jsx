@@ -62,44 +62,52 @@ const SellerRegisterPage = () => {
   }
 
   return (
-    <div className='flex justify-center items-center h-screen bg-gray-100'>
-      <div className='w-full max-w-lg bg-white p-10 rounded-xl shadow-lg hover:shadow-xl'>
-        <h2 className='text-3xl font-bold text-center text-gray-900 mb-6'>판매자 회원가입</h2>
-        {error && <p className='text-red-500 text-sm mb-4 text-center'>{error}</p>}
+    <div className='flex justify-center items-center min-h-screen bg-caramelTan/20'>
+      <div className='w-full max-w-lg bg-white p-10 rounded-xl shadow-lg border border-caramelTan'>
+        <h2 className='text-3xl font-bold text-center text-espressoBlack mb-6'>판매자 회원가입</h2>
+
+        {/* ✅ 에러 메시지 */}
+        {error && <p className='text-roastedCocoa text-sm mb-4 text-center'>{error}</p>}
+
         <form onSubmit={handleRegister}>
           <div className='space-y-4'>
+            {/* ✅ 이름 입력 */}
             <div>
-              <label className='block text-sm font-medium mb-2 text-gray-700'>이름</label>
+              <label className='block text-sm font-medium mb-2 text-darkGraphite'>이름</label>
               <input
                 type='text'
                 name='name'
                 value={formData.name}
                 onChange={handleChange}
-                className='w-full px-4 py-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-gray-700'
+                className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
                 required
               />
             </div>
+
+            {/* ✅ 이메일 입력 */}
             <div>
-              <label className='block text-sm font-medium mb-2 text-gray-700'>이메일</label>
+              <label className='block text-sm font-medium mb-2 text-darkGraphite'>이메일</label>
               <input
                 type='email'
                 name='email'
                 value={formData.email}
                 onChange={handleChange}
-                className='w-full px-4 py-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-gray-700'
+                className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
                 required
               />
             </div>
+
+            {/* ✅ 휴대폰 번호 입력 */}
             <div className='grid grid-cols-3 gap-2'>
               <div>
-                <label className='block text-sm font-medium mb-2 text-gray-700'>휴대폰 번호</label>
+                <label className='block text-sm font-medium mb-2 text-darkGraphite'>휴대폰 번호</label>
                 <input
                   type='text'
                   name='call_number1'
                   value={formData.call_number1}
                   onChange={handleChange}
                   maxLength={3}
-                  className='w-full px-4 py-2 border border-gray-400 rounded-md text-center'
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md text-center'
                   placeholder='010'
                   required
                 />
@@ -111,7 +119,7 @@ const SellerRegisterPage = () => {
                   value={formData.call_number2}
                   onChange={handleChange}
                   maxLength={4}
-                  className='w-full px-4 py-2 border border-gray-400 rounded-md text-center'
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md text-center'
                   required
                 />
               </div>
@@ -122,50 +130,54 @@ const SellerRegisterPage = () => {
                   value={formData.call_number3}
                   onChange={handleChange}
                   maxLength={4}
-                  className='w-full px-4 py-2 border border-gray-400 rounded-md text-center'
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md text-center'
                   required
                 />
               </div>
             </div>
+
+            {/* ✅ 비밀번호 입력 */}
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div>
-                <label className='block text-sm font-medium mb-2 text-gray-700'>비밀번호</label>
+                <label className='block text-sm font-medium mb-2 text-darkGraphite'>비밀번호</label>
                 <input
                   type='password'
                   name='password'
                   value={formData.password}
                   onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-gray-700'
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
                   required
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium mb-2 text-gray-700'>
-                  비밀번호 확인
-                </label>
+                <label className='block text-sm font-medium mb-2 text-darkGraphite'>비밀번호 확인</label>
                 <input
                   type='password'
                   name='confirmPassword'
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-gray-700'
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
                   required
                 />
               </div>
             </div>
           </div>
+
+          {/* ✅ 회원가입 버튼 */}
           <button
             type='submit'
             disabled={loading}
-            className={`mt-3 w-full py-2 px-4 rounded-md text-white transition-all font-semibold ${
-              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-900'
+            className={`mt-3 w-full py-2 px-4 rounded-md text-white font-semibold transition-all ${
+              loading ? 'bg-caramelTan/90 cursor-not-allowed' : 'bg-coffeeBrown hover:bg-mochaBrown'
             }`}
           >
             {loading ? '가입 중...' : '회원가입'}
           </button>
         </form>
+
+        {/* ✅ 로그인 이동 버튼 */}
         <button
-          className='mt-4 w-full py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600'
+          className='mt-4 w-full py-2 px-4 bg-latteBeige text-darkGraphite rounded-md hover:bg-caramelTan transition-all'
           onClick={() => navigate('/seller/login')}
         >
           로그인하러 가기
