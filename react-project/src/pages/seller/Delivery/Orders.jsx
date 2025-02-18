@@ -12,6 +12,7 @@ const Orders = () => {
   const [error, setError] = useState('')
   const [isOpenPopup, setIsOpenPopup] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [trackingNumbers, setTrackingNumbers] = useState({})
   const ordersPerPage = 10
   const pagesPerGroup = 5
 
@@ -38,7 +39,10 @@ const Orders = () => {
 
   useEffect(() => {
     const filtered =
-      selectedTab === 'all' ? orderList : orderList.filter((order) => order.status === selectedTab)
+      selectedTab === 'all'
+        ? orderList
+        : orderList.filter((order) => order.orderStatus === selectedTab)
+
     setFilteredOrders(filtered)
   }, [selectedTab, orderList])
 
@@ -51,9 +55,47 @@ const Orders = () => {
     currentPage * ordersPerPage,
   )
 
+  // 송장번호 입력 핸들러
+  const handleTrackingNumberChange = (orderNo, value) => {
+    setTrackingNumbers((prev) => ({
+      ...prev,
+      [orderNo]: value,
+    }))
+  }
+
+  // 송장번호 저장 API 요청
+  const handleTrackingNumberSubmit = async (orderNo) => {
+    const trackingNumber = trackingNumbers[orderNo]
+    if (!trackingNumber) {
+      alert('송장번호를 입력해주세요.')
+      return
+    }
+
+    try {
+      const response = await API.post('/orders/tracking', {
+        orderNo,
+        trackingNumber,
+      })
+
+      if (response.data.status === 'OK') {
+        alert('송장번호가 저장되었습니다.')
+
+        // 데이터 갱신 (레디스에서 다시 불러오기)
+        const updatedOrders = orderList.map((order) =>
+          order.orderNo === orderNo ? { ...order, trackingNumber } : order,
+        )
+        setOrderList(updatedOrders)
+      } else {
+        throw new Error(response.data.message.label)
+      }
+    } catch (err) {
+      alert('송장번호 저장 중 오류가 발생했습니다.')
+    }
+  }
+
   return (
     <div className='min-h-screen flex flex-col bg-warmBeige/20 py-10 px-5 sm:px-10'>
-      <div className='flex-grow  mx-auto'>
+      <div className='flex-grow mx-auto'>
         <div className='text-center mb-8'>
           <h1 className='text-4xl font-bold text-espressoBlack'>주문 관리</h1>
           <p className='mt-2 text-lg text-hazelnutBrown'>주문 현황을 한눈에 확인하고 관리하세요.</p>
@@ -61,29 +103,19 @@ const Orders = () => {
 
         {/* 필터 버튼 */}
         <div className='flex justify-center gap-3 mb-6'>
-          {['all', 'orderComplete', 'orderConfirm', 'refundRequest', 'refundComplete'].map(
-            (status) => (
-              <button
-                key={status}
-                onClick={() => setSelectedTab(status)}
-                className={`px-5 py-2 rounded-md text-lg font-medium transition duration-300 ${
-                  selectedTab === status
-                    ? 'bg-caramelTan/60 text-white shadow-md border border-white'
-                    : 'bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-white hover:text-caramelTan'
-                }`}
-              >
-                {status === 'all'
-                  ? '전체'
-                  : status === 'orderComplete'
-                    ? '결제완료'
-                    : status === 'orderConfirm'
-                      ? '주문확정'
-                      : status === 'refundRequest'
-                        ? '환불신청'
-                        : '환불됨'}
-              </button>
-            ),
-          )}
+          {['all', '결제 완료', '주문 확인중', '주문 완료'].map((status) => (
+            <button
+              key={status}
+              onClick={() => setSelectedTab(status)}
+              className={`px-5 py-2 rounded-md text-lg font-medium transition duration-300 ${
+                selectedTab === status
+                  ? 'bg-caramelTan/60 text-white shadow-md border border-white'
+                  : 'bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-white hover:text-caramelTan'
+              }`}
+            >
+              {status}
+            </button>
+          ))}
         </div>
 
         {/* 주문 목록 테이블 */}
@@ -96,10 +128,11 @@ const Orders = () => {
               <thead className='bg-coffeeBrown text-white'>
                 <tr>
                   <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문번호</th>
-                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품명</th>
-                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품정보</th>
-                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>옵션/수량</th>
-                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문상태</th>
+                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>결제 방식</th>
+                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>주문 상태</th>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>배송 상태</th>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문 일자</th>
+                  <th className='py-3 px-4 w-1/5 text-left whitespace-nowrap'>총 금액</th>
                   <th className='py-3 px-4 w-1/5 text-left whitespace-nowrap'>운송장번호</th>
                 </tr>
               </thead>
@@ -108,33 +141,43 @@ const Orders = () => {
               <tbody className='divide-y divide-roastedCocoa'>
                 {displayedOrders.length === 0 ? (
                   <tr>
-                    <td colSpan='6' className='py-4 text-center text-hazelnutBrown text-lg'>
+                    <td colSpan='7' className='py-4 text-center text-hazelnutBrown text-lg'>
                       해당 분류의 주문이 없습니다.
                     </td>
                   </tr>
                 ) : (
                   displayedOrders.map((order) => (
                     <tr
-                      key={order.orderId}
+                      key={order.orderNo}
                       className='hover:bg-warmBeige transition cursor-pointer'
                     >
-                      {/* 주문번호 클릭 시 팝업 오픈 */}
-                      <td
-                        className='py-3 px-4 text-blue-600 underline cursor-pointer'
-                        onClick={() => {
-                          setPopupData(order)
-                          setIsOpenPopup(true)
-                        }}
-                      >
+                      <td className='py-3 px-4 text-blue-600 underline cursor-pointer'>
                         {order.orderNo}
                       </td>
-                      <td className='py-3 px-4'>{order.productName || '상품 정보 없음'}</td>
-                      <td className='py-3 px-4'>{order.productDetails || '상세 정보 없음'}</td>
+                      <td className='py-3 px-4'>{order.payment}</td>
+                      <td className='py-3 px-4'>{order.orderStatus}</td>
+                      <td className='py-3 px-4'>{order.deliveryStatus}</td>
+                      <td className='py-3 px-4'>{order.createdAt}</td>
+                      <td className='py-3 px-4'>{order.totalPrice.toLocaleString()} 원</td>
                       <td className='py-3 px-4'>
-                        옵션: {order.option} / 수량: {order.quantity}
+                        {order.orderStatus === '결제 완료' ? (
+                          <>
+                            <input
+                              type='text'
+                              value={trackingNumbers[order.orderNo] || ''}
+                              onChange={(e) =>
+                                handleTrackingNumberChange(order.orderNo, e.target.value)
+                              }
+                              className='border p-1 mr-2'
+                            />
+                            <button onClick={() => handleTrackingNumberSubmit(order.orderNo)}>
+                              등록
+                            </button>
+                          </>
+                        ) : (
+                          order.trackingNumber || '미등록'
+                        )}
                       </td>
-                      <td className='py-3 px-4 text-center'>{order.status || '상태 없음'}</td>
-                      <td className='py-3 px-4 text-center'>{order.trackingNumber || '미등록'}</td>
                     </tr>
                   ))
                 )}
@@ -143,35 +186,6 @@ const Orders = () => {
           </div>
         </div>
       </div>
-
-      {/* 페이지네이션 */}
-      {totalPages > 1 && (
-        <div className='flex justify-center mt-auto py-6'>
-          <button
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
-          >
-            <FaAngleDoubleLeft />
-          </button>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
-          >
-            <FaAngleLeft />
-          </button>
-          <button
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
-          >
-            <FaAngleDoubleRight />
-          </button>
-        </div>
-      )}
-
-      {isOpenPopup && <OrderPopup order={popupData} onClose={() => setIsOpenPopup(false)} />}
     </div>
   )
 }

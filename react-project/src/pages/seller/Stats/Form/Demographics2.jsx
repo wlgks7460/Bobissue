@@ -108,7 +108,7 @@ const Demographics = ({ selectedPeriod }) => {
           <button
             key={age}
             onClick={() => setSelectedAge(age === selectedAge ? null : age)}
-            className={`px-4 py-2 rounded-lg transition ${selectedAge === age ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+            className={`px-4 py-2 rounded-lg transition ${selectedAge === age ? 'bg-caramelTan/60 text-white' : 'bg-gray-200 hover:bg-caramelTan/50'}`}
           >
             {age === 'ALL_AGE_GROUPS' ? '전체' : age}
           </button>

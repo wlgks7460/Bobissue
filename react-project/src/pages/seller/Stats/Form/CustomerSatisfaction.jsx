@@ -22,7 +22,7 @@ const CustomerSatisfaction = ({ selectedPeriod }) => {
   return (
     <div className='bg-gray-50 p-6 rounded-xl border border-gray-300 shadow-md'>
       <div className='flex items-center gap-3 mb-4'>
-        <FaSmile className='text-4xl text-green-500' />
+        <FaSmile className='text-4xl ' />
         <h3 className='text-2xl font-semibold text-gray-800'>고객 만족도</h3>
       </div>
       <div className='overflow-hidden rounded-lg border border-gray-200 bg-white p-4'>

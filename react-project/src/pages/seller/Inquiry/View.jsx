@@ -5,7 +5,7 @@ import ReplyEditForm from './Form/ReplyEdit'
 import DeleteButton from './Form/Delete'
 import ReportButton from './Form/Report'
 import API from '@/utils/API'
-import { FaTrash, FaFlag } from 'react-icons/fa'
+import { FaTrash, FaFlag, FaEdit } from 'react-icons/fa'
 
 const InquiryDetail = () => {
   const location = useLocation()
@@ -17,6 +17,7 @@ const InquiryDetail = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [status, setStatus] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
     async function fetchInquiry() {
@@ -72,7 +73,24 @@ const InquiryDetail = () => {
 
       <div className='pt-6'>
         {status === 'Y' && reply ? (
-          <ReplyEditForm inquiryId={id} replyData={reply} />
+          isEditing ? (
+            <ReplyEditForm inquiryId={id} replyData={reply} />
+          ) : (
+            <div>
+              <div className='w-full border-2 border-coffeeBrown rounded-lg p-4'>
+                <p className='text-graphteDark'>
+                  <strong>답변:</strong>
+                </p>
+                <p className='text-rose-500'>{reply.content}</p>
+              </div>
+              <button
+                className='mt-4 flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition'
+                onClick={() => setIsEditing(true)}
+              >
+                <FaEdit className='mr-2' /> 수정하기
+              </button>
+            </div>
+          )
         ) : (
           <ReplyForm inquiryId={id} />
         )}
