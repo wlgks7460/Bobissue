@@ -35,9 +35,9 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
             label: '주문/배송 관리',
             icon: <FaShippingFast className='text-coffeeBrown' />,
             links: [
-              { to: 'delivery/orders', text: '주문 정보 조회' },
-              { to: 'delivery/delivers', text: '배송 관리' },
-              { to: 'delivery/returns', text: '환불 관리' },
+              { to: 'delivery/orders', text: '주문/배송 조회' },
+              //{ to: 'delivery/delivers', text: '배송 관리' },
+              // { to: 'delivery/returns', text: '환불 관리' },
             ],
           },
           // {
