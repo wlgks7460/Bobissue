@@ -31,16 +31,20 @@ public class PaymentController {
     @PostMapping("/orderable")
     public ResponseDto checkOrder(@RequestBody List<PaymentItemReqDto> paymentList) {
 
-        if(paymentService.checkOrder(paymentList)) {
+        if (paymentService.checkOrder(paymentList)) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
 
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_ORDERABLE, new DefaultResponse<UserOrderResDto>(paymentService.getUserOrderInfo(email)));
-        }
-        else {
+        } else {
             paymentService.unorderable(paymentList); // 주문 실패에서 차감한 수량 더하기
             return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_ORDERABLE, new DefaultResponse<Boolean>(false));
         }
     }
 
+    @PostMapping("/cancel")
+    public ResponseDto failOrder(@RequestBody List<PaymentItemReqDto> paymentList) {
+        paymentService.unorderable(paymentList);
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_ORDERABLE, new DefaultResponse<List<PaymentItemReqDto>>(paymentList));
+    }
 }
