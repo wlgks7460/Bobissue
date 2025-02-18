@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/openvidu")
 public class OpenViduController {
 
-    private static final String OPENVIDU_URL = "https://bobissue.store";
+    private static final String OPENVIDU_URL = "https://bobissue.store:8443";
     private static final String OPENVIDU_USERNAME = "OPENVIDUAPP";
     private static final String OPENVIDU_SECRET = "C108bob";
 
@@ -38,7 +38,7 @@ public class OpenViduController {
     }
 
 
-}
+
 @PostMapping("/sessions/{sessionId}/connections")
 public ResponseEntity<String> createConnection(
         @PathVariable("sessionId") String sessionId, @RequestBody Map<String, Object> params)
@@ -52,4 +52,5 @@ public ResponseEntity<String> createConnection(
     Connection connection = session.createConnection(properties);
     System.out.println(":::나감요");
     return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+}
 }
