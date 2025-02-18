@@ -72,14 +72,14 @@ const Dashboard = () => {
   ]
 
   return (
-    <div className='w-full mx-auto px-10 py-12 min-h-screen '>
+    <div className='w-full mx-auto px-8 py-10 min-h-screen bg-warmBeige/20'>
       {/* 헤더 */}
       <header className='text-center mb-12'>
-        <h1 className='text-4xl font-extrabold text-deepCobalt'>상품 관리, 쉽고 간편하게!</h1>
-        <p className='text-lg text-steelBlue mt-3'>
+        <h1 className='text-4xl font-extrabold text-espressoBlack'>상품 관리, 쉽고 간편하게</h1>
+        <p className='text-lg text-coffeeBrown mt-3'>
           상품 등록부터 정산까지 한 곳에서 관리하세요.
-          <br />
-          효율적인 상품 관리 시스템을 경험해보세요.
+       
+         
         </p>
       </header>
 
@@ -92,10 +92,10 @@ const Dashboard = () => {
             description={item.description}
             link={item.link}
             icon={item.icon}
-            color={index % 2 === 0 ? 'bg-frozenSilver' : 'bg-darkChrome'}
-            text={index % 2 === 0 ? 'text-deepCobalt' : 'text-white'}
-            hoverColor={index % 2 === 0 ? 'hover:bg-frostWhite/80' : 'hover:bg-darkChrome/80'}
-            hoverText={index % 2 === 0 ? 'hover:text-steelBlue' : 'hover:text-neonAqua'}
+            color={index % 2 === 0 ? 'bg-latteBeige' : 'bg-caramelTan'}
+            text={index % 2 === 0 ? 'text-coffeeBrown' : 'text-warmBeige'}
+            hoverColor={index % 2 === 0 ? 'hover:bg-mochaBrown/80' : 'hover:bg-espressoBlack/80'}
+            hoverText={index % 2 === 0 ? 'hover:text-espressoBlack' : 'hover:text-latteBeige'}
           />
         ))}
       </div>
@@ -110,7 +110,7 @@ const Dashboard = () => {
 const DashboardItem = ({ title, description, link, color, hoverColor, icon, text, hoverText }) => (
   <Link to={link} className='block transform transition-transform hover:scale-105'>
     <div
-      className={`flex flex-col items-center justify-center p-8 rounded-xl ${text} ${color} ${hoverColor} ${hoverText} shadow-md hover:shadow-lg transition`}
+      className={`flex flex-col items-center justify-center p-8 rounded-xl shadow-md ${text} ${color} ${hoverColor} ${hoverText} hover:shadow-lg transition`}
     >
       <div className='text-5xl mb-4'>{icon}</div>
       <h3 className='font-bold text-xl text-center'>{title}</h3>
@@ -121,7 +121,7 @@ const DashboardItem = ({ title, description, link, color, hoverColor, icon, text
 
 // 📢 판매자를 위한 광고 배너 컴포넌트
 const SellerAdBanner = () => (
-  <div className='bg-deepCobalt text-white p-10 rounded-xl shadow-lg text-center max-w-4xl mx-auto'>
+  <div className='bg-coffeeBrown text-warmBeige p-10 rounded-xl shadow-lg text-center max-w-4xl mx-auto'>
     <h2 className='text-3xl font-bold mb-4'>🚀 판매자를 위한 특별한 혜택!</h2>
     <p className='text-lg'>
       지금 가입하고 광고 프로모션을 무료로 경험하세요.
@@ -129,7 +129,7 @@ const SellerAdBanner = () => (
     </p>
     <Link
       to='/seller/ads'
-      className='mt-6 inline-block px-6 py-3 bg-neonAqua text-white font-semibold rounded-lg hover:bg-frostyCyan transition'
+      className='mt-6 inline-block px-6 py-3 bg-caramelTan text-espressoBlack font-semibold rounded-lg hover:bg-roastedCocoa transition'
     >
       광고 프로모션 알아보기
     </Link>
