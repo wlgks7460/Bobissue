@@ -19,7 +19,7 @@ public class OrderDetailResDto {
     private Long orderNo;
     private int userNo;
     private int addressNo;
-    private int userCouponNo;
+    private Integer couponNo;
     private String payment;
     private int totalPrice;
     private String requests;
@@ -33,7 +33,7 @@ public class OrderDetailResDto {
                 .orderNo(order.getOrderNo())
                 .userNo(order.getUser().getUserNo())
                 .addressNo(order.getAddress().getAddressNo())
-                .userCouponNo(order.getCoupon().getCouponNo())
+                .couponNo(order.getCoupon() != null ? order.getCoupon().getCouponNo() : null)
                 .payment(order.getPayment())
                 .totalPrice(order.getTotalPrice())
                 .requests(order.getRequests())

@@ -28,6 +28,7 @@ import com.c108.springproject.order.repository.OrderStatusRepository;
 import com.c108.springproject.user.domain.User;
 import com.c108.springproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,14 +59,15 @@ public class OrderService {
     }
 
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER')")
     public OrderCreateResDto createOrder(OrderCreateReqDto request) {
         User user = userRepository.findById(request.getUserNo()).orElseThrow(()-> new BobIssueException(ResponseCode.USER_NOT_FOUND));
         Address address = addressRepository.findById(request.getAddressNo()).orElseThrow(()-> new BobIssueException(ResponseCode.FAILED_FIND_CALENDAR));
         try {
             // 주문 금액 계산
             int totalPrice = calculateTotalPrice(request.getItems());
-            Coupon coupon = couponRepository.findByCouponNo(request.getUserCouponNo()).orElseThrow(()-> new BobIssueException(ResponseCode.COUPON_NOT_FOUND));
-            int couponPrice = coupon.getDeductedPrice();
+            Coupon coupon = couponRepository.findByCouponNo(request.getUserCouponNo()).orElse(null);
+            int couponPrice = coupon == null ? 0 : coupon.getDeductedPrice();
             int paymentPrice = totalPrice - couponPrice - request.getUsePoint();
 
             //  주문 기본 정보 생성
@@ -83,9 +85,11 @@ public class OrderService {
                     .orderDetails(new ArrayList<>())
                     .build();
 
-            // 쿠폰 사용 후 삭제
-            coupon.delete();
 
+            // 쿠폰 사용 후 삭제
+            if(coupon !=null){
+                coupon.delete();
+            }
             // 주문 상세 정보 (OrderDetail data) 생성
             createOrderDetails(order, request.getItems());
 
@@ -133,13 +137,12 @@ public class OrderService {
 
     // 그냥 전체 조회
     @Transactional
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public List<OrderListResDto> findAllOrders() {
         List<Order> orders = orderRepository.findAll();
         List<OrderListResDto> orderListResDtos = new ArrayList<>();
         for(Order order: orders) {
-            String orderStatus = getOrderStatus(order.getOrderCategoryNo());
-            String deliveryStatus = getDeliveryStatus(order.getDelCategoryNo());
-            orderListResDtos.add(OrderListResDto.toDto(order, orderStatus, deliveryStatus));
+            orderListResDtos.add(OrderListResDto.toDto(order));
         }
         return orderListResDtos;
     }
@@ -147,9 +150,9 @@ public class OrderService {
 
     // 상세 조회
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER', 'SELLER', 'ADMIN')")
     public OrderDetailResDto findOrder(Long orderNo) {
-        Order order = orderRepository.findById(orderNo)
-                .orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
+        Order order = orderRepository.findById(orderNo).orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
         return OrderDetailResDto.toDto(order);
     }
 
@@ -201,6 +204,7 @@ public class OrderService {
 
     // orderNo인 order취소
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER', 'SELLER', 'ADMIN')")
     public OrderDetailResDto findCancelOrders(long orderNo) {
         Order order = orderRepository.findById(orderNo).orElseThrow(()-> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
         User user=order.getUser();

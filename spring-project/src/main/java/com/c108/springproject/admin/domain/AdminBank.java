@@ -11,7 +11,7 @@ import lombok.*;
 public class AdminBank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int BankNo;
+    private int bankNo;
 
     @Setter
     @Column(nullable = false)

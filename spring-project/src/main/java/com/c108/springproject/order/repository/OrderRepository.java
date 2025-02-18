@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Repository
@@ -25,4 +26,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 
     List<Order> findByUser_UserNo(int userNo);
+
+    Optional<Order> findByOrderNo(long orderNo);
 }

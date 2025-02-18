@@ -170,9 +170,7 @@ public class UserService {
             List<Order> orders = orderRepository.findByUser_UserNo(userNo);
             List<OrderListResDto> orderListResDtos = new ArrayList<>();
             for(Order order: orders) {
-                String orderStatus = orderService.getOrderStatus(order.getOrderCategoryNo()); // orderService 사용
-                String deliveryStatus = orderService.getDeliveryStatus(order.getDelCategoryNo()); // orderService 사용
-                orderListResDtos.add(OrderListResDto.toDto(order, orderStatus, deliveryStatus));
+                orderListResDtos.add(OrderListResDto.toDto(order));
             }
             return orderListResDtos;
         } catch (Exception e) {

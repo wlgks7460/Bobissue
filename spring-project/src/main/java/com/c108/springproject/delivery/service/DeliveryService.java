@@ -1,6 +1,7 @@
 package com.c108.springproject.delivery.service;
 
 import com.c108.springproject.delivery.dto.CompanyOrdersResDto;
+import com.c108.springproject.delivery.dto.UserInfoDto;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.order.domain.Order;
@@ -39,9 +40,18 @@ public class DeliveryService {
             HashMap<Integer, Integer> itemsMap = new HashMap<>();
             itemsMap.put(detail.getItem().getItemNo(), detail.getCount());
 
+            Order order = orderRepository.findByOrderNo(detail.getOrder().getOrderNo()).orElseThrow(()-> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
+            UserInfoDto userInfoDto = UserInfoDto.builder()
+                    .userName(order.getUser().getName())
+                    .address(order.getAddress())
+                    .userPhoneNumber(order.getUser().getPhoneNumber())
+                    .request(order.getRequests())
+                    .build();
+
             CompanyOrdersResDto orderDto = CompanyOrdersResDto.builder()
                     .orderNo(detail.getOrder().getOrderNo())
                     .items(itemsMap)
+                    .userInfo(userInfoDto)
                     .build();
             result.add(orderDto);
         }
@@ -52,8 +62,11 @@ public class DeliveryService {
     @Transactional
     @PreAuthorize("hasAnyAuthority('SELLER')")
     public OrderDetailResDto setOrder(long orderNo, int deliveryStatus){
+        System.out.println("1234");
         Order order = orderRepository.findById(orderNo).orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
+        System.out.println("1234");
         order.setDelCategoryNo(deliveryStatus);
+        System.out.println("1234");
 
         return OrderDetailResDto.toDto(order);
     }

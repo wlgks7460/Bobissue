@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class OrderCreateResDto {
     private Long orderNo;             // 생성된 주문 번호
     private int userNo;              // 주문자 번호
-    private int couponNo; // 사용된 쿠폰 번호
+    private Integer couponNo; // 사용된 쿠폰 번호
     private int paymentPrice;          // 총 주문 금액
     private String payment;          // 결제 방식
     private String requests;         // 배송 요청사항
@@ -29,7 +29,7 @@ public class OrderCreateResDto {
         return OrderCreateResDto.builder()
                 .orderNo(order.getOrderNo())
                 .userNo(order.getUser().getUserNo())
-                .couponNo(order.getCoupon().getCouponNo())
+                .couponNo(order.getCoupon() != null ? order.getCoupon().getCouponNo() : null)
                 .paymentPrice(order.getPaymentPrice())
                 .payment(order.getPayment())
                 .requests(order.getRequests())

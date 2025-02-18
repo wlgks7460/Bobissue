@@ -16,13 +16,15 @@ import java.util.List;
 @AllArgsConstructor
 public class CompanyOrdersResDto {
     private long orderNo;
+    private UserInfoDto userInfo;
     private HashMap<Integer, Integer> items;
 
-    public static CompanyOrdersResDto toDto(OrderDetail orderDetail) {
+    public static CompanyOrdersResDto toDto(OrderDetail orderDetail, UserInfoDto userInfo) {
         HashMap<Integer, Integer> itemsMap = new HashMap<>();
         itemsMap.put(orderDetail.getItem().getItemNo(), orderDetail.getCount());
 
         return CompanyOrdersResDto.builder()
+                .userInfo(userInfo)
                 .orderNo(orderDetail.getOrder().getOrderNo())
                 .items(itemsMap)
                 .build();

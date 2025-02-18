@@ -4,6 +4,7 @@ import com.c108.springproject.address.domain.Address;
 import com.c108.springproject.coupon.domain.Coupon;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.user.domain.User;
+import com.c108.springproject.user.domain.UserGrade;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,8 +32,8 @@ public class Order extends BaseEntity {
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon_no", nullable = false)
-    private Coupon coupon;
+    @JoinColumn(name = "coupon_no", nullable = true)
+    private Coupon coupon = null;
 
     @Setter
     @Column(nullable = false)
@@ -51,8 +52,8 @@ public class Order extends BaseEntity {
     @Column(nullable = true, length = 255)
     private String requests;
 
-    @Column
-    private int usePoint;
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Integer usePoint;
 
     @Column(nullable = false)
     private int getPoint;
@@ -70,5 +71,16 @@ public class Order extends BaseEntity {
         if (requests != null) this.requests = requests;
         this.orderCategoryNo = orderCategoryNo;
         this.delCategoryNo = delCategoryNo;
+    }
+
+    public int calculateGetPoint(UserGrade grade){
+        if (grade == UserGrade.GOLD) {
+            this.getPoint = (int) (this.totalPrice * 0.03);
+        } else if (grade == UserGrade.SILVER) {
+            this.getPoint = (int) (this.totalPrice * 0.01);
+        } else { // BRONZE
+            this.getPoint = (int) (this.totalPrice * 0.005);
+        }
+        return this.getPoint;
     }
 }

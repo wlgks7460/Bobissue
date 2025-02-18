@@ -32,7 +32,7 @@ public class DeliveryController {
 
     // 배송 상태 변경
     @GetMapping("/{orderNo}/{deliveryStatus}")
-    public ResponseDto updateDeliveryStatus(@PathVariable long orderNo, int deliveryStatus) {
+    public ResponseDto updateDeliveryStatus(@PathVariable long orderNo, @PathVariable int deliveryStatus) {
         // 2: 상품 준비중 / 3: 배송 출발 / 4: 배송 완료
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ORDER, new DefaultResponse<OrderDetailResDto>(deliveryService.setOrder(orderNo, deliveryStatus)));
     }
