@@ -12,6 +12,7 @@ const Payment = () => {
   const [deliveryFee, setDeliveryFee] = useState(3000) // 배송비
 
   // 배송 정보 상태
+  const [addressNo, setAddressNo] = useState()
   const [postcode, setPostCode] = useState('')
   const [address, setAddress] = useState('')
   const [addressDetail, setAddressDetail] = useState('')
@@ -49,6 +50,7 @@ const Payment = () => {
 
   // 배송지 선택 함수
   const selectAddress = (addr) => {
+    setAddressNo(addr.addressNo)
     setPostCode(addr.postalCode)
     setAddress(addr.address)
     setAddressDetail(addr.addressDetail)
@@ -66,18 +68,47 @@ const Payment = () => {
       setDeliveryFee(0)
     }
   }
+
+  // 결제 전 상품 체크
+  const checkStock = () => {
+    const payload = JSON.parse(localStorage.getItem('cart'))
+    console.log(payload)
+    API.post('/payments/orderable', payload)
+      .then((res) => {
+        if (res.data.message.code === 'SUCCESS_ORDERABLE') {
+          handlePayment()
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 결제 성공 후 주문 생성
+  const createOrder = (payload) => {
+    API.post('/orders', payload)
+      .then((res) => {
+        localStorage.removeItem('cart')
+        navigate('/')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  // 결제
   const handlePayment = () => {
     // 결제 정보 생성
     const paymentData = {
-      addressNo: 1, // 예시 주소 번호, 실제로는 주소 저장 후 반환된 값으로 대체
-      payment: paymentMethod,
-      couponCode: selectedCoupon ? selectedCoupon.code : null,
-      totalPrice: totalSalePrice + deliveryFee - points - couponDiscount,
-      orderDetails: items.map((item) => ({
+      userNo: userInfo.userNo,
+      addressNo: addressNo,
+      payment: paymentMethod.toUpperCase(),
+      useCouponNo: selectedCoupon ? selectedCoupon.code : null,
+      requests: requests || '부재시 경비실에 맡겨주세요.',
+      items: items.map((item) => ({
         itemNo: item.itemData.itemNo,
         count: item.count,
-        price: item.itemData.salePrice,
       })),
+      usePoint: points,
     }
 
     // 결제 함수
@@ -107,7 +138,7 @@ const Payment = () => {
       if (success) {
         // 결제성공시 시행할 동작들
         alert('결제 성공')
-        console.log(paymentData)
+        createOrder(paymentData)
       } else {
         // 결제 실패시 시행할 동작들
         alert('결제 실패')
@@ -135,7 +166,6 @@ const Payment = () => {
     if (payload.userNo) {
       API.post('/address/list', payload)
         .then((res) => {
-          console.log(res)
           setSavedAddresses(res.data.result.data)
           getBaseAddressData()
         })
@@ -150,6 +180,7 @@ const Payment = () => {
     API.get('/address/base')
       .then((res) => {
         const addr = res.data.result.data
+        setAddressNo(addr.addressNo)
         setPostCode(addr.postalCode)
         setAddress(addr.address)
         setAddressDetail(addr.addressDetail)
@@ -201,7 +232,7 @@ const Payment = () => {
               배송지 선택
             </button>
             <textarea
-              placeholder='배송 요청 사항 (선택)'
+              placeholder={`배송 요청 사항\n(기본값) 부재시 경비실에 맡겨주세요.`}
               value={requests}
               onChange={(e) => setRequests(e.target.value)}
               className='w-full p-2 border border-[#6F4E37] rounded resize-none h-20'
@@ -292,7 +323,7 @@ const Payment = () => {
           {/* 결제 버튼 */}
           <button
             className='w-full bg-[#A67B5B] hover:bg-[#6F4E37] text-white p-3 rounded '
-            onClick={handlePayment}
+            onClick={checkStock}
           >
             결제하기
           </button>
