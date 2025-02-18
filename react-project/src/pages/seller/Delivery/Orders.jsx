@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight } from 'react-icons/fa'
 import OrderPopup from './Popup/OrderPopup'
 import API from '@/utils/API'
+import { useOutletContext } from 'react-router-dom'
 
-// ✅ 상태값을 문자열로 매핑하는 객체
 const ORDER_STATUS_MAP = {
   0: '전체',
   1: '주문 확인중',
@@ -13,23 +13,24 @@ const ORDER_STATUS_MAP = {
 }
 
 const Orders = () => {
+  const { companyNo } = useOutletContext()
   const [orderList, setOrderList] = useState([])
   const [filteredOrders, setFilteredOrders] = useState([])
-  const [selectedOrderStatus, setSelectedOrderStatus] = useState(0) // 기본값: '전체'
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState(0)
   const [popupOrderNo, setPopupOrderNo] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [trackingInfo, setTrackingInfo] = useState({})
   const [deliveryStatus, setDeliveryStatus] = useState({})
-
-  const ordersPerPage = 10
+  
+  const ordersPerPage = 10 // 한 페이지당 주문 개수
 
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true)
       try {
-        const response = await API.get('/delivery/companyNo/status')
+        const response = await API.get(`/delivery/${companyNo}/${selectedOrderStatus}`)
         if (response.data.status === 'OK') {
           setOrderList(response.data.result.data)
         } else {
@@ -42,15 +43,24 @@ const Orders = () => {
       }
     }
     fetchOrders()
-  }, [])
+  }, [selectedOrderStatus])
 
   useEffect(() => {
     const filtered = orderList.filter(
-      (order) => selectedOrderStatus === 0 || order.orderStatus === selectedOrderStatus,
+      (order) => selectedOrderStatus === 0 || order.orderStatus === selectedOrderStatus
     )
     setFilteredOrders(filtered)
-    setCurrentPage(1)
+    setCurrentPage(1) // 상태 변경 시 첫 페이지로 이동
   }, [selectedOrderStatus, orderList])
+
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage) // 전체 페이지 개수
+
+  // 페이지 이동 핸들러
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page)
+    }
+  }
 
   return (
     <div className='w-full mx-auto px-8 py-10 min-h-screen bg-warmBeige/20'>
@@ -83,11 +93,11 @@ const Orders = () => {
           <thead className='bg-espressoBlack text-warmBeige'>
             <tr>
               <th className='py-3 px-4'>주문번호</th>
-              <th className='py-3 px-4'>결제 방식</th>
-              <th className='py-3 px-4'>주문 상태</th>
-              <th className='py-3 px-4'>주문 일자</th>
-              <th className='py-3 px-4'>총 금액</th>
-              <th className='py-3 px-4'>배송 상태</th>
+              <th className='py-3 px-4'>구매자</th>
+              <th className='py-3 px-4'>전화번호</th>
+              <th className='py-3 px-4'>주소</th>
+              <th className='py-3 px-4'>상세주소</th>
+              <th className='py-3 px-4'>주문량</th>
               <th className='py-3 px-4'>송장번호</th>
               <th className='py-3 px-4'>택배사</th>
               <th className='py-3 px-4'>관리</th>
@@ -98,47 +108,50 @@ const Orders = () => {
               .slice((currentPage - 1) * ordersPerPage, currentPage * ordersPerPage)
               .map((order) => (
                 <tr key={order.orderNo} className='hover:bg-latteBeige transition-all'>
-                  <td
-                    className='cursor-pointer text-blue-600 hover:underline py-3 px-4'
-                    onClick={() => setPopupOrderNo(order.orderNo)}
-                  >
+                  <td className='cursor-pointer text-blue-600 hover:underline py-3 px-4' onClick={() => setPopupOrderNo(order.orderNo)}>
                     {order.orderNo}
                   </td>
-                  <td className='py-3 px-4'>{order.payment}</td>
-                  {/* ✅ 숫자 상태를 문자열로 변환 */}
+                  <td className='py-3 px-4'>{order.userInfo.userName}</td>
+                  <td className='py-3 px-4'>{order.userInfo.userPhoneNumber}</td>
+                  <td className='py-3 px-4'>{order.userInfo.address.address}</td>
+                  <td className='py-3 px-4'>{order.userInfo.address.addressDetail}</td>
+                  <td className='py-3 px-4 text-green-500 font-semibold'>{}</td>
                   <td className='py-3 px-4'>
-                    {ORDER_STATUS_MAP[order.orderStatus] || '알 수 없음'}
-                  </td>
-                  <td className='py-3 px-4'>{order.createdAt}</td>
-                  <td className='py-3 px-4'>{order.totalPrice.toLocaleString()} 원</td>
-                  <td className='py-3 px-4 text-green-500 font-semibold'>
-                    {deliveryStatus[order.orderNo] || '-'}
+                    <input type='text' className='border px-2 py-1 w-28 rounded-md bg-warmBeige text-espressoBlack' placeholder='송장번호' />
                   </td>
                   <td className='py-3 px-4'>
-                    <input
-                      type='text'
-                      value={trackingInfo[order.orderNo]?.trackingNumber || ''}
-                      className='border px-2 py-1 w-28 rounded-md bg-warmBeige text-espressoBlack'
-                      placeholder='송장번호'
-                    />
+                    <input type='text' className='border px-2 py-1 w-28 rounded-md bg-warmBeige text-espressoBlack' placeholder='택배사' />
                   </td>
                   <td className='py-3 px-4'>
-                    <input
-                      type='text'
-                      value={trackingInfo[order.orderNo]?.deliveryCompany || ''}
-                      className='border px-2 py-1 w-28 rounded-md bg-warmBeige text-espressoBlack'
-                      placeholder='택배사'
-                    />
-                  </td>
-                  <td className='py-3 px-4'>
-                    <button className='bg-espressoBlack text-warmBeige px-3 py-1 rounded-lg shadow-md hover:bg-coffeeBrown'>
-                      저장
-                    </button>
+                    <button className='bg-espressoBlack text-warmBeige px-3 py-1 rounded-lg shadow-md hover:bg-coffeeBrown'>저장</button>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
+      </div>
+
+      {/* 페이지네이션 */}
+      <div className='flex justify-center items-center gap-2 mt-6'>
+        <button onClick={() => handlePageChange(1)} disabled={currentPage === 1}>
+          <FaAngleDoubleLeft />
+        </button>
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+          <FaAngleLeft />
+        </button>
+
+        {[...Array(totalPages)].map((_, index) => (
+          <button key={index} onClick={() => handlePageChange(index + 1)} className={`${currentPage === index + 1 ? 'font-bold' : ''}`}>
+            {index + 1}
+          </button>
+        ))}
+
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+          <FaAngleRight />
+        </button>
+        <button onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>
+          <FaAngleDoubleRight />
+        </button>
       </div>
 
       {popupOrderNo && <OrderPopup orderNo={popupOrderNo} onClose={() => setPopupOrderNo(null)} />}

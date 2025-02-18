@@ -12,7 +12,7 @@ import {
   FaBuilding,
 } from 'react-icons/fa'
 
-const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
+const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select,companyNo, }) => {
   return (
     <aside
       className={`fixed top-0 left-0 w-64 bg-latteBeige/20 border-b border-coffeeBrown h-full overflow-y-auto transition-transform duration-300 transform ${
@@ -121,6 +121,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
                         select === text ? 'text-roastedCocoa font-bold' : 'text-darkGraphite'
                       } hover:bg-warmBeige`}
                       onClick={() => setSelect(text)}
+                      context={{ companyNo: companyNo}}
                     >
                       {text}
                     </Link>
