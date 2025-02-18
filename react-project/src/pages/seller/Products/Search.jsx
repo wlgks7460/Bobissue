@@ -68,10 +68,13 @@ const Search = () => {
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
   const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages)
-  const displayedProducts = filteredProducts.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage)
+  const displayedProducts = filteredProducts.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage,
+  )
 
   return (
-    <div className='p-6 bg-white'>
+    <div className='p-6 bg-warmBeige/20'>
       <h1 className='font-bold text-2xl mb-10'>상품 조회</h1>
       <SearchFilter onSearch={applyFilters} />
       <div className='mt-6 p-6 border rounded-lg bg-white shadow-md'>
@@ -98,7 +101,9 @@ const Search = () => {
                   className='border-b hover:bg-gray-50 cursor-pointer'
                   onClick={() => handleClickNavigate(product.itemNo)}
                 >
-                  <td className='border px-4 py-2 text-center'>{(currentPage - 1) * productsPerPage + index + 1}</td>
+                  <td className='border px-4 py-2 text-center'>
+                    {(currentPage - 1) * productsPerPage + index + 1}
+                  </td>
                   <td className='border px-4 py-2 text-center'>
                     {product.imageUrl ? (
                       <img
@@ -113,8 +118,12 @@ const Search = () => {
                   <td className='border px-4 py-2 text-blue-500'>{product.name}</td>
                   <td className='border px-4 py-2'>{product.companyName}</td>
                   <td className='border px-4 py-2'>{product.price?.toLocaleString() || '0'} 원</td>
-                  <td className='border px-4 py-2'>{product.salePrice?.toLocaleString() || '0'} 원</td>
-                  <td className='border px-4 py-2'>{product.parentCategory} &gt; {product.categoryName}</td>
+                  <td className='border px-4 py-2'>
+                    {product.salePrice?.toLocaleString() || '0'} 원
+                  </td>
+                  <td className='border px-4 py-2'>
+                    {product.parentCategory} &gt; {product.categoryName}
+                  </td>
                   <td className='border px-4 py-2'>{product.description || '설명 없음'}</td>
                 </tr>
               ))}
@@ -124,21 +133,43 @@ const Search = () => {
 
         {totalPages > 1 && (
           <div className='flex justify-center mt-6'>
-            <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'>
+            <button
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+              className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            >
               <FaAngleDoubleLeft />
             </button>
-            <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            >
               <FaAngleLeft />
             </button>
-            {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
-              <button key={page} onClick={() => setCurrentPage(page)} className={`mx-1 px-4 py-2 rounded-md text-lg font-medium transition ${currentPage === page ? 'bg-gray-500 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-400 hover:text-white'}`}>
-                {page}
-              </button>
-            ))}
-            <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'>
+            {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map(
+              (page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`mx-1 px-4 py-2 rounded-md text-lg font-medium transition ${currentPage === page ? 'bg-gray-500 text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-400 hover:text-white'}`}
+                >
+                  {page}
+                </button>
+              ),
+            )}
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            >
               <FaAngleRight />
             </button>
-            <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'>
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+              className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            >
               <FaAngleDoubleRight />
             </button>
           </div>

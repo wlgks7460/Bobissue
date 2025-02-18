@@ -78,8 +78,6 @@ const Dashboard = () => {
         <h1 className='text-4xl font-extrabold text-espressoBlack'>상품 관리, 쉽고 간편하게</h1>
         <p className='text-lg text-coffeeBrown mt-3'>
           상품 등록부터 정산까지 한 곳에서 관리하세요.
-       
-         
         </p>
       </header>
 

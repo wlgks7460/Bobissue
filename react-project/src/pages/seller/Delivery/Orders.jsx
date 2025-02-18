@@ -20,6 +20,7 @@ const Orders = () => {
       setIsLoading(true)
       try {
         const response = await API.get('/orders')
+        console.log(response)
         if (response.data.status === 'OK') {
           setOrderList(response.data.result.data)
         } else {
@@ -51,13 +52,14 @@ const Orders = () => {
   )
 
   return (
-    <div className='min-h-screen flex flex-col bg-white py-10 px-5 sm:px-10'>
-      <div className='flex-grow max-w-7xl mx-auto'>
+    <div className='min-h-screen flex flex-col bg-warmBeige/20 py-10 px-5 sm:px-10'>
+      <div className='flex-grow  mx-auto'>
         <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900'>주문 관리</h1>
-          <p className='mt-2 text-lg text-gray-700'>주문 현황을 한눈에 확인하고 관리하세요.</p>
+          <h1 className='text-4xl font-bold text-espressoBlack'>주문 관리</h1>
+          <p className='mt-2 text-lg text-hazelnutBrown'>주문 현황을 한눈에 확인하고 관리하세요.</p>
         </div>
 
+        {/* 필터 버튼 */}
         <div className='flex justify-center gap-3 mb-6'>
           {['all', 'orderComplete', 'orderConfirm', 'refundRequest', 'refundComplete'].map(
             (status) => (
@@ -66,86 +68,109 @@ const Orders = () => {
                 onClick={() => setSelectedTab(status)}
                 className={`px-5 py-2 rounded-md text-lg font-medium transition duration-300 ${
                   selectedTab === status
-                    ? 'bg-gray-500 text-white shadow-md'
-                    : 'bg-white text-gray-500 border border-gray-300 hover:bg-gray-400 hover:text-white'
+                    ? 'bg-caramelTan/60 text-white shadow-md border border-white'
+                    : 'bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-white hover:text-caramelTan'
                 }`}
               >
-                {status === 'all' ? '전체' : status}
+                {status === 'all'
+                  ? '전체'
+                  : status === 'orderComplete'
+                    ? '결제완료'
+                    : status === 'orderConfirm'
+                      ? '주문확정'
+                      : status === 'refundRequest'
+                        ? '환불신청'
+                        : '환불됨'}
               </button>
             ),
           )}
         </div>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {displayedOrders.length === 0 ? (
-            <div className='col-span-3 text-center text-gray-500 text-lg'>
-              해당 분류의 주문이 없습니다.
-            </div>
-          ) : (
-            displayedOrders.map((order) => (
-              <div
-                key={order.orderId}
-                className='bg-white p-5 rounded-lg shadow border border-gray-300 hover:scale-105 transition duration-200 cursor-pointer'
-                onClick={() => setPopupData(order)}
-              >
-                <h3 className='text-lg font-semibold text-gray-900'>{order.orderId}</h3>
-                <p className='text-gray-700 mt-1 font-medium'>
-                  상품명: {order.productName || '상품 정보 없음'}
-                </p>
-                <div className='mt-3 text-sm text-gray-600'>
-                  옵션: {order.option} / 수량: {order.quantity}
-                </div>
-              </div>
-            ))
-          )}
+        {/* 주문 목록 테이블 */}
+        <div className='bg-latteBeige/40 rounded-lg w-full shadow-md border border-caramelTan p-6'>
+          <h2 className='text-xl text-center font-semibold text-espressoBlack mb-4'>주문 목록</h2>
+
+          <div className='w-full'>
+            <table className='w-full bg-white border border-roastedCocoa table-fixed'>
+              {/* 테이블 헤더 */}
+              <thead className='bg-coffeeBrown text-white'>
+                <tr>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문번호</th>
+                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품명</th>
+                  <th className='py-3 px-4 w-1/4 text-left whitespace-nowrap'>상품정보</th>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>옵션/수량</th>
+                  <th className='py-3 px-4 w-1/6 text-left whitespace-nowrap'>주문상태</th>
+                  <th className='py-3 px-4 w-1/5 text-left whitespace-nowrap'>운송장번호</th>
+                </tr>
+              </thead>
+
+              {/* 테이블 본문 */}
+              <tbody className='divide-y divide-roastedCocoa'>
+                {displayedOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan='6' className='py-4 text-center text-hazelnutBrown text-lg'>
+                      해당 분류의 주문이 없습니다.
+                    </td>
+                  </tr>
+                ) : (
+                  displayedOrders.map((order) => (
+                    <tr
+                      key={order.orderId}
+                      className='hover:bg-warmBeige transition cursor-pointer'
+                    >
+                      {/* 주문번호 클릭 시 팝업 오픈 */}
+                      <td
+                        className='py-3 px-4 text-blue-600 underline cursor-pointer'
+                        onClick={() => {
+                          setPopupData(order)
+                          setIsOpenPopup(true)
+                        }}
+                      >
+                        {order.orderNo}
+                      </td>
+                      <td className='py-3 px-4'>{order.productName || '상품 정보 없음'}</td>
+                      <td className='py-3 px-4'>{order.productDetails || '상세 정보 없음'}</td>
+                      <td className='py-3 px-4'>
+                        옵션: {order.option} / 수량: {order.quantity}
+                      </td>
+                      <td className='py-3 px-4 text-center'>{order.status || '상태 없음'}</td>
+                      <td className='py-3 px-4 text-center'>{order.trackingNumber || '미등록'}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
+      {/* 페이지네이션 */}
       {totalPages > 1 && (
         <div className='flex justify-center mt-auto py-6'>
           <button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
           >
             <FaAngleDoubleLeft />
           </button>
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
           >
             <FaAngleLeft />
-          </button>
-          {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`mx-1 px-4 py-2 rounded-md text-lg font-medium transition ${
-                currentPage === page
-                  ? 'bg-gray-500 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-400 hover:text-white'
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
-          >
-            <FaAngleRight />
           </button>
           <button
             onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            className='mx-1 px-3 py-2 rounded-md bg-latteBeige text-espressoBlack border border-caramelTan hover:bg-mochaBrown hover:text-white'
           >
             <FaAngleDoubleRight />
           </button>
         </div>
       )}
+
       {isOpenPopup && <OrderPopup order={popupData} onClose={() => setIsOpenPopup(false)} />}
     </div>
   )
