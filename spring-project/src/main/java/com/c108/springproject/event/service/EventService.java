@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Date;
 
+import static org.springframework.data.elasticsearch.core.query.Query.findAll;
+
 @Service
 public class EventService {
 
@@ -166,6 +168,14 @@ public class EventService {
                     ? "Y" : "N";
             event.setStatus(status);
         }
+    }
+
+    @Transactional
+    public List<EventDetailResDto> findAllEvents(){
+        List<Event> events = eventRepository.findAll();
+        return events.stream()
+                .map(EventDetailResDto::toDto)
+                .collect(Collectors.toList());
     }
 
 
