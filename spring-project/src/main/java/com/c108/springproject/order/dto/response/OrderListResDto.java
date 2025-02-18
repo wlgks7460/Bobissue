@@ -15,18 +15,18 @@ public class OrderListResDto {
     private int userNo;
     private String payment;
     private int totalPrice;
-    private String orderStatus;
-    private String deliveryStatus;
+    private int orderStatus;
+    private int deliveryStatus;
     private String createdAt;
 
-    public static OrderListResDto toDto(Order order, String orderStatus, String deliveryStatus) {
+    public static OrderListResDto toDto(Order order) {
         return OrderListResDto.builder()
                 .orderNo(order.getOrderNo())
                 .userNo(order.getUser().getUserNo())
                 .payment(order.getPayment())
                 .totalPrice(order.getTotalPrice())
-                .orderStatus(orderStatus)
-                .deliveryStatus(deliveryStatus)
+                .orderStatus(order.getOrderCategoryNo())
+                .deliveryStatus(order.getDelCategoryNo())
                 .createdAt(order.getCreatedAt())
                 .build();
     }

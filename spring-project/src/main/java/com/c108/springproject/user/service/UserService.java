@@ -170,9 +170,7 @@ public class UserService {
             List<Order> orders = orderRepository.findByUser_UserNo(userNo);
             List<OrderListResDto> orderListResDtos = new ArrayList<>();
             for(Order order: orders) {
-                String orderStatus = orderService.getOrderStatus(order.getOrderCategoryNo()); // orderService 사용
-                String deliveryStatus = orderService.getDeliveryStatus(order.getDelCategoryNo()); // orderService 사용
-                orderListResDtos.add(OrderListResDto.toDto(order, orderStatus, deliveryStatus));
+                orderListResDtos.add(OrderListResDto.toDto(order));
             }
             return orderListResDtos;
         } catch (Exception e) {
@@ -186,11 +184,7 @@ public class UserService {
         try {
             Order order = orderRepository.findById(orderNo)
                     .orElseThrow(() -> new BobIssueException(ResponseCode.ORDER_NOT_FOUND));
-
-            String orderStatus = orderService.getOrderStatus(order.getOrderCategoryNo());
-            String deliveryStatus = orderService.getDeliveryStatus(order.getDelCategoryNo());
-
-            return OrderDetailResDto.toDto(order, orderStatus, deliveryStatus);
+            return OrderDetailResDto.toDto(order);
         } catch (Exception e) {
             throw new BobIssueException(ResponseCode.FAILED_FIND_USER_ORDER);
         }

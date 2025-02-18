@@ -19,30 +19,31 @@ public class OrderDetailResDto {
     private Long orderNo;
     private int userNo;
     private int addressNo;
-    private Long userCouponNo;
+    private Integer couponNo;
     private String payment;
     private int totalPrice;
     private String requests;
-    private String orderStatus;
-    private String deliveryStatus;
+    private int orderStatus;
+    private int deliveryStatus;
     private String createdAt;
     private List<OrderItemResDto> orderItems;
 
-    public static OrderDetailResDto toDto(Order order, String orderStatus, String deliveryStatus) {
+    public static OrderDetailResDto toDto(Order order) {
         return OrderDetailResDto.builder()
                 .orderNo(order.getOrderNo())
                 .userNo(order.getUser().getUserNo())
                 .addressNo(order.getAddress().getAddressNo())
-                .userCouponNo(order.getUserCouponNo())
+                .couponNo(order.getCoupon() != null ? order.getCoupon().getCouponNo() : null)
                 .payment(order.getPayment())
                 .totalPrice(order.getTotalPrice())
                 .requests(order.getRequests())
-                .orderStatus(orderStatus)
-                .deliveryStatus(deliveryStatus)
                 .createdAt(order.getCreatedAt())
                 .orderItems(order.getOrderDetails().stream()
                         .map(OrderItemResDto::toDto)
                         .collect(Collectors.toList()))
+                .orderStatus(order.getOrderCategoryNo())
+                .deliveryStatus(order.getDelCategoryNo())
                 .build();
     }
+
 }

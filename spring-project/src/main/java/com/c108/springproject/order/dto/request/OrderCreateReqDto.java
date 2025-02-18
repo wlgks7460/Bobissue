@@ -15,8 +15,9 @@ import java.util.List;
 public class OrderCreateReqDto {
     private int userNo;
     private int addressNo;
-    private Long userCouponNo;
+    private int userCouponNo;
     private String payment;
     private String requests;
+    private int usePoint;
     private List<OrderItemReqDto> items;
 }

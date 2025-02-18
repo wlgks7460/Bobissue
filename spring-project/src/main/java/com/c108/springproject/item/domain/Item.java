@@ -51,19 +51,8 @@ public class Item extends BaseEntity {
     @Column(nullable = true, length = 255)
     private String description;
 
+    @Setter
     @Column(nullable = false)
     private int stock;
-
-    public void decreaseStock(int quantity) {
-        int restStock = this.stock - quantity;
-        if (restStock < 0) {
-            throw new BobIssueException(ResponseCode.NOT_ENOUGH_STOCK);
-        }
-        this.stock = restStock;
-    }
-
-    public void increaseStock(int quantity) {
-        this.stock += quantity;
-    }
 
 }

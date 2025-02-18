@@ -4,6 +4,7 @@ import com.c108.springproject.address.dto.AddressReqDto;
 import com.c108.springproject.address.dto.AddressResDto;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.user.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Address extends BaseEntity {
 
     @Id
