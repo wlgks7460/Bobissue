@@ -66,6 +66,8 @@ import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 // import SellerDetailPage from '../pages/admin/seller/SellerDetailPage'
 import SellerStatisticsPage from '../pages/admin/seller/SellerStatisticsPage'
+// (관리자) 주문 관리
+import OrderListPage from '../pages/admin/order/OrderListPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -571,6 +573,16 @@ const router = createBrowserRouter([
               {
                 path: ':categoryNo',
                 element: <CategoryDetailPage />, // 카테고리 상세 페이지
+              },
+            ],
+          },
+          {
+            //주문 관리 섹션
+            path: 'order',
+            children: [
+              {
+                path: '', // 주문 현황 페이지지
+                elemer: <orderListPage />,
               },
             ],
           },

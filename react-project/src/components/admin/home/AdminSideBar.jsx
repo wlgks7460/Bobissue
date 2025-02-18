@@ -79,7 +79,7 @@ const menuData = [
     id: 3,
     title: '주문 관리',
     items: [
-      { id: 301, title: '주문 현황', path: '설명: 주문 현황 페이지 추가 예정' },
+      { id: 301, title: '주문 현황', path: '/admin/order' },
       { id: 302, title: '주문 분석', path: '설명: 주문 분석 페이지 추가 예정' },
       { id: 303, title: '상품별 환불 통계', path: '설명: 상품별 환불 통계 페이지 추가 예정' },
     ],
