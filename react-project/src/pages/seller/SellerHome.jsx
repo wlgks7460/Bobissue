@@ -5,14 +5,14 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import API from '@/utils/API' // API 호출 모듈
 
 const SellerMainPage = () => {
-  const debug_mode = true
+  const debug_mode = false
   const navigate = useNavigate()
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [status, setStatus] = useState('N')
   const [user, setUser] = useState(null) // ✅ 초기값 null로 변경
-  const[select,setSelect]=useState(null)
+  const [select, setSelect] = useState(null)
 
   const [menuState, setMenuState] = useState({
     product: false,
@@ -136,7 +136,12 @@ const SellerMainPage = () => {
           <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
             {/* Top Navbar */}
             <div className='fixed top-0 z-50 w-full h-16 bg-gray-100 border-b border-gray-300'>
-              <TopNavbar toggleSidebar={toggleSidebar} select={select} setSelect={setSelect} user={user} />
+              <TopNavbar
+                toggleSidebar={toggleSidebar}
+                select={select}
+                setSelect={setSelect}
+                user={user}
+              />
             </div>
 
             <div className='flex flex-1 mt-16 min-h-[calc(100vh-64px)]'>
@@ -145,7 +150,13 @@ const SellerMainPage = () => {
                 className={`fixed left-0 top-16 h-[calc(100%-64px)] z-40 transition-transform duration-300 ease-in-out bg-white border-r border-gray-300
                 ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}`}
               >
-                <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} select={select} setSelect={setSelect} menuState={menuState} />
+                <Sidebar
+                  isOpen={sidebarOpen}
+                  toggleMenu={toggleMenu}
+                  select={select}
+                  setSelect={setSelect}
+                  menuState={menuState}
+                />
               </div>
 
               {/* Main Content */}
@@ -168,7 +179,12 @@ const SellerMainPage = () => {
         <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
           {/* Top Navbar */}
           <div className='fixed top-0 z-50 w-full h-16 bg-gray-100 border-b border-gray-300'>
-            <TopNavbar toggleSidebar={toggleSidebar} user={user} select={select} setSelect={setSelect}/>
+            <TopNavbar
+              toggleSidebar={toggleSidebar}
+              user={user}
+              select={select}
+              setSelect={setSelect}
+            />
           </div>
 
           <div className='flex flex-1 mt-16 min-h-[calc(100vh-64px)]'>
@@ -177,7 +193,13 @@ const SellerMainPage = () => {
               className={`fixed left-0 top-16 h-[calc(100%-64px)] z-40 transition-transform duration-300 ease-in-out bg-white border-r border-gray-300
               ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full'}`}
             >
-              <Sidebar isOpen={sidebarOpen} toggleMenu={toggleMenu} select={select} setSelect={setSelect} menuState={menuState} />
+              <Sidebar
+                isOpen={sidebarOpen}
+                toggleMenu={toggleMenu}
+                select={select}
+                setSelect={setSelect}
+                menuState={menuState}
+              />
             </div>
 
             {/* Main Content */}

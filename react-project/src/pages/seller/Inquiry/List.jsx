@@ -5,8 +5,8 @@ import API from '@/utils/API'
 const InquiryList = () => {
   const [inquiries, setInquiries] = useState([])
   const [filteredInquiries, setFilteredInquiries] = useState([])
-  const [answerFilter, setAnswerFilter] = useState('all')
-  const [typeFilter, setTypeFilter] = useState('all')
+  const [answerFilter, setAnswerFilter] = useState('전체')
+  const [typeFilter, setTypeFilter] = useState('전체')
   const navigate = useNavigate()
 
   const debug_mode = localStorage.getItem('debug_mode') === 'true'
@@ -15,6 +15,7 @@ const InquiryList = () => {
     const fetchInquiries = async () => {
       try {
         const response = await API.get(`/question`)
+        console.log(response)
         setInquiries(response.data.result.data)
         setFilteredInquiries(response.data.result.data)
       } catch (error) {
@@ -27,15 +28,16 @@ const InquiryList = () => {
 
   useEffect(() => {
     let updatedList = inquiries
+    console.log(updatedList)
 
-    if (answerFilter !== 'all') {
+    if (answerFilter !== '전체') {
       updatedList = updatedList.filter((item) =>
-        answerFilter === 'answered' ? item.isAnswered : !item.isAnswered,
+        answerFilter === 'answered' ? item.status === 'Y' : item.status !== 'Y',
       )
     }
 
-    if (typeFilter !== 'all') {
-      updatedList = updatedList.filter((item) => item.type === typeFilter)
+    if (typeFilter !== '전체') {
+      updatedList = updatedList.filter((item) => item.category === typeFilter)
     }
 
     setFilteredInquiries([...updatedList])
@@ -61,7 +63,7 @@ const InquiryList = () => {
 
       {/* ✅ 카테고리 버튼 */}
       <div className='flex space-x-6 justify-center text-[16px] font-medium my-6'>
-        {['제품', '배송', '결제', '환불', '기타'].map((category) => (
+        {['전체', '제품', '배송', '결제', '환불', '기타'].map((category) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
@@ -102,27 +104,31 @@ const InquiryList = () => {
             <tr>
               <th className='p-3 w-20 text-center'>번호</th>
               <th className='p-3 w-28 text-center'>문의 유형</th>
+              <th className='p-3 w-28 text-center'>상품 번호</th>
               <th className='p-3 text-center'>제목</th>
               <th className='p-3 w-40 text-center'>답변 상태</th>
             </tr>
           </thead>
           <tbody>
             {filteredInquiries.length > 0 ? (
-              filteredInquiries.map((inquiry) => (
+              filteredInquiries.map((question) => (
                 <tr
-                  key={inquiry.id}
-                  onClick={() => handleInquiryClick(inquiry.id)}
+                  key={question.questionNo}
+                  onClick={() => handleInquiryClick(question.questionNo)}
                   className='border-b border-hazelnutBrown hover:bg-goldenAmber/20 cursor-pointer transition'
                 >
-                  <td className='p-3 text-center'>{inquiry.id}</td>
-                  <td className='p-3 text-center text-hazelnutBrown font-medium'>{inquiry.type}</td>
-                  <td className='p-3 text-center'>{inquiry.title}</td>
+                  <td className='p-3 text-center'>{question.questionNo}</td>
+                  <td className='p-3 text-center text-hazelnutBrown font-medium'>
+                    {question?.category}
+                  </td>
+                  <td className='p-3 text-center'>{question?.itemNo}</td>
+                  <td className='p-3 text-center'>{question?.title}</td>
                   <td
                     className={`p-3 text-center font-semibold ${
-                      inquiry.isAnswered ? 'text-mochaBrown' : 'text-goldenAmber'
+                      question?.isAnswered ? 'text-mochaBrown' : 'text-goldenAmber'
                     }`}
                   >
-                    {inquiry.isAnswered ? '답변 완료' : '미답변'}
+                    {question?.status === 'Y' ? '답변 완료' : '미답변'}
                   </td>
                 </tr>
               ))

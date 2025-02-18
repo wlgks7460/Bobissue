@@ -40,15 +40,15 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
               { to: 'delivery/returns', text: '환불 관리' },
             ],
           },
-          {
-            key: 'settlement',
-            label: '정산',
-            icon: <FaChartBar className='text-coffeeBrown' />,
-            links: [
-              { to: 'settlement/overview', text: '정산 조회' },
-              { to: 'settlement/details', text: '정산 상세' },
-            ],
-          },
+          // {
+          //   key: 'settlement',
+          //   label: '정산',
+          //   icon: <FaChartBar className='text-coffeeBrown' />,
+          //   links: [
+          //     { to: 'settlement/overview', text: '정산 조회' },
+          //     { to: 'settlement/details', text: '정산 상세' },
+          //   ],
+          // },
           {
             key: 'salesStats',
             label: '판매 통계',

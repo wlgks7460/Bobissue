@@ -39,7 +39,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
         </button>
 
         {/* 로고 이미지 */}
-        <Link to='/seller' onClick={() => setSelect(null)}>
+        <Link to='/' onClick={() => setSelect(null)}>
           <img
             src='/bobissueLogo2.png'
             alt='로고'
@@ -57,7 +57,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
 
         {/* 🏠 홈 버튼 */}
         <Link
-          to='/'
+          to='/seller'
           className='p-3 bg-caramelTan/30 text-coffeeBrown rounded-lg hover:bg-caramelTan/80 transition flex items-center'
         >
           <FaHome className='w-5 h-5' />
