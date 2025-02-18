@@ -5,6 +5,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import PauseIcon from '@mui/icons-material/Pause'
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
 import FullscreenOutlinedIcon from '@mui/icons-material/FullscreenOutlined'
+import LiveItem from '../../components/consumer/live/LiveItem'
 
 const Live = () => {
   const [cast, setCast] = useState()
@@ -65,12 +66,48 @@ const Live = () => {
     }
   }, [])
 
+  // 상품 드래그 관련
+  const scrollContainerRef = useRef()
+
+  // 드래그 기능
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [scrollLeft, setScrollLeft] = useState(0)
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true)
+    setStartX(e.clientX)
+    setScrollLeft(scrollContainerRef.current.scrollLeft)
+  }
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return
+    const x = e.clientX - startX
+    scrollContainerRef.current.scrollLeft = scrollLeft - x
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  const castItemList = [
+    { itemNo: 0, name: '상품1' },
+    { itemNo: 1, name: '상품2' },
+    { itemNo: 2, name: '상품3' },
+    { itemNo: 3, name: '상품4' },
+    { itemNo: 4, name: '상품5' },
+    { itemNo: 5, name: '상품6' },
+    { itemNo: 6, name: '상품7' },
+    { itemNo: 7, name: '상품8' },
+    { itemNo: 8, name: '상품9' },
+  ]
+
   return (
     <div>
       <SearchBar />
       <div className='min-h-[70vh] flex justify-center'>
         <div className='w-[70rem] flex mt-10 border border-[#6F4E37] rounded'>
-          <div className='grow h-full flex flex-col rounded'>
+          <div className='w-3/4 h-full flex flex-col rounded'>
             {/* 라이브 방송 */}
             <div
               className='grow relative'
@@ -104,12 +141,24 @@ const Live = () => {
               )}
             </div>
             {/* 상품 */}
-            <div className='flex-none h-[150px] border-t border-[#6F4E37] p-3'>
+            <div className='flex-none w-full max-w-full h-[150px] border-t border-[#6F4E37] p-3'>
               <h3>판매 중 상품</h3>
+              <div
+                ref={scrollContainerRef}
+                className='flex gap-3 overflow-x-auto no-scrollbar cursor-grab flex-nowrap'
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp} // 마우스가 벗어났을 때도 드래그 끝내기
+              >
+                {castItemList.map((v) => (
+                  <LiveItem key={v.itemNo} item={v} />
+                ))}
+              </div>
             </div>
           </div>
           {/* 채팅 */}
-          <div className='flex-none w-1/4 h-full flex flex-col border-s border-[#6F4E37] rounded-e'>
+          <div className='w-1/4 h-full flex flex-col border-s border-[#6F4E37] rounded-e'>
             {/* 채팅 출력 */}
             <div className='grow p-3 bg-[#F8F0E5] rounded-tr'></div>
             {/* 채팅 입력 */}
