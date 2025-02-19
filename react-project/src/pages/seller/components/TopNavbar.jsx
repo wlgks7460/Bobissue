@@ -51,9 +51,8 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
       {/* 네비게이션 버튼 그룹 */}
       <div className='ml-auto flex items-center gap-4'>
         {/* 👤 유저 인사 메시지 */}
-        <span className='text-coffeeBrown font-semibold'>
-          {user?.name || '판매자'}님 안녕하세요!
-        </span>
+        <span className='text-mochaBrown font-semibold gap-2'>{user?.name || '판매자'}</span>
+        <p className='text-coffeeBrown'>님 안녕하세요!</p>
 
         {/* 🏠 홈 버튼 */}
         <Link
