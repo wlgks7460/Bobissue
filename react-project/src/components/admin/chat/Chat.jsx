@@ -835,7 +835,7 @@ const ChatRoom = () => {
 
         console.log("📌 Subscribing to", event.stream.connection.connectionId);
         // console.log("📌 Stream Tracks:", event.stream.getMediaStream().getVideoTracks());
-
+        subscriber.subscribeToAudio(true);
         if (event.stream.hasVideo) {
           console.log("✅ 스트림에 비디오 포함됨!");
         } else {
