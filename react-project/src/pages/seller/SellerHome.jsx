@@ -93,7 +93,7 @@ const SellerMainPage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
+
     navigate('/seller/login')
   }
 
@@ -130,6 +130,13 @@ const SellerMainPage = () => {
               className='mt-6 px-6 py-3 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition'
             >
               회사 등록하기
+            </button>
+            <button
+              onClick={() => {
+                handleLogout()
+              }}
+            >
+              로그아웃
             </button>
           </div>
         ) : (

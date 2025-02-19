@@ -23,7 +23,7 @@ const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [trackingInfo, setTrackingInfo] = useState({})
   const [deliveryStatus, setDeliveryStatus] = useState({})
-  
+
   const ordersPerPage = 10 // 한 페이지당 주문 개수
 
   useEffect(() => {
@@ -31,6 +31,7 @@ const Orders = () => {
       setIsLoading(true)
       try {
         const response = await API.get(`/delivery/${companyNo}/${selectedOrderStatus}`)
+        console.log(response.data.result.data)
         if (response.data.status === 'OK') {
           setOrderList(response.data.result.data)
         } else {
@@ -47,13 +48,20 @@ const Orders = () => {
 
   useEffect(() => {
     const filtered = orderList.filter(
-      (order) => selectedOrderStatus === 0 || order.orderStatus === selectedOrderStatus
+      (order) => selectedOrderStatus === 0 || order.orderStatus === selectedOrderStatus,
     )
     setFilteredOrders(filtered)
     setCurrentPage(1) // 상태 변경 시 첫 페이지로 이동
   }, [selectedOrderStatus, orderList])
 
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage) // 전체 페이지 개수
+
+  const handleSubmit = async (orderNo) => {
+    try {
+      const response = await API.post(`/delivery/${orderNo}`)
+      console.log(response)
+    } catch (err) {}
+  }
 
   // 페이지 이동 핸들러
   const handlePageChange = (page) => {
@@ -98,9 +106,8 @@ const Orders = () => {
               <th className='py-3 px-4'>주소</th>
               <th className='py-3 px-4'>상세주소</th>
               <th className='py-3 px-4'>주문량</th>
-              <th className='py-3 px-4'>송장번호</th>
-              <th className='py-3 px-4'>택배사</th>
-              <th className='py-3 px-4'>관리</th>
+
+              <th className='py-3 px-4'>배송상태</th>
             </tr>
           </thead>
           <tbody>
@@ -108,7 +115,10 @@ const Orders = () => {
               .slice((currentPage - 1) * ordersPerPage, currentPage * ordersPerPage)
               .map((order) => (
                 <tr key={order.orderNo} className='hover:bg-latteBeige transition-all'>
-                  <td className='cursor-pointer text-blue-600 hover:underline py-3 px-4' onClick={() => setPopupOrderNo(order.orderNo)}>
+                  <td
+                    className='cursor-pointer text-blue-600 hover:underline py-3 px-4'
+                    onClick={() => setPopupOrderNo(order.orderNo)}
+                  >
                     {order.orderNo}
                   </td>
                   <td className='py-3 px-4'>{order.userInfo.userName}</td>
@@ -116,14 +126,14 @@ const Orders = () => {
                   <td className='py-3 px-4'>{order.userInfo.address.address}</td>
                   <td className='py-3 px-4'>{order.userInfo.address.addressDetail}</td>
                   <td className='py-3 px-4 text-green-500 font-semibold'>{}</td>
+
                   <td className='py-3 px-4'>
-                    <input type='text' className='border px-2 py-1 w-28 rounded-md bg-warmBeige text-espressoBlack' placeholder='송장번호' />
-                  </td>
-                  <td className='py-3 px-4'>
-                    <input type='text' className='border px-2 py-1 w-28 rounded-md bg-warmBeige text-espressoBlack' placeholder='택배사' />
-                  </td>
-                  <td className='py-3 px-4'>
-                    <button className='bg-espressoBlack text-warmBeige px-3 py-1 rounded-lg shadow-md hover:bg-coffeeBrown'>저장</button>
+                    <button
+                      onClick={() => handleSubmit(order.orderNo)}
+                      className='bg-espressoBlack text-warmBeige px-3 py-1 rounded-lg shadow-md hover:bg-coffeeBrown'
+                    >
+                      저장
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -141,12 +151,19 @@ const Orders = () => {
         </button>
 
         {[...Array(totalPages)].map((_, index) => (
-          <button key={index} onClick={() => handlePageChange(index + 1)} className={`${currentPage === index + 1 ? 'font-bold' : ''}`}>
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`${currentPage === index + 1 ? 'font-bold' : ''}`}
+          >
             {index + 1}
           </button>
         ))}
 
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
           <FaAngleRight />
         </button>
         <button onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>

@@ -1,67 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import API from '@/utils/API';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
-import 'react-datepicker/dist/react-datepicker.css';
-import { FaCalendarAlt, FaClock, FaVideo, FaBoxOpen } from 'react-icons/fa';
-import Guide from './Form/LiveGuide';
+import React, { useEffect, useState } from 'react'
+import API from '@/utils/API'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import 'react-datepicker/dist/react-datepicker.css'
+import { FaCalendarAlt, FaClock, FaVideo, FaBoxOpen } from 'react-icons/fa'
+import Guide from './Form/LiveGuide'
 
 const LiveApply = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTimes, setSelectedTimes] = useState([]);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [items, setItems] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedTimes, setSelectedTimes] = useState([])
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [selectedItems, setSelectedItems] = useState([])
+  const [items, setItems] = useState([])
 
-  const availableTimes = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+  const availableTimes = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00']
 
   useEffect(() => {
     async function fetchItems() {
       try {
-        const response = await API.get('/item');
-        setItems(response.data?.result?.data || []);
+        const response = await API.get('/item')
+        setItems(response.data?.result?.data || [])
       } catch (error) {
-        console.error('상품 정보 불러오기 실패:', error);
-        setItems([]);
+        console.error('상품 정보 불러오기 실패:', error)
+        setItems([])
       }
     }
-    fetchItems();
-  }, []);
+    fetchItems()
+  }, [])
 
   const handleTimeSelection = (time) => {
     setSelectedTimes((prev) =>
-      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
-    );
-  };
+      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time],
+    )
+  }
 
   const handleItemSelection = (itemNo) => {
     setSelectedItems((prev) =>
-      prev.includes(itemNo) ? prev.filter((id) => id !== itemNo) : [...prev, itemNo]
-    );
-  };
+      prev.includes(itemNo) ? prev.filter((id) => id !== itemNo) : [...prev, itemNo],
+    )
+  }
 
   const handleLiveApply = async () => {
-    if (!title.trim() || !content.trim() || !selectedDate || selectedTimes.length === 0 || selectedItems.length === 0) {
-      return alert('모든 항목을 입력해주세요.');
+    if (
+      !title.trim() ||
+      !content.trim() ||
+      !selectedDate ||
+      selectedTimes.length === 0 ||
+      selectedItems.length === 0
+    ) {
+      return alert('모든 항목을 입력해주세요.')
     }
 
-    const formattedDate = moment(selectedDate).format('YYYYMMDD');
-    const startTime = selectedTimes[0];
-    const startAt = `${formattedDate} ${startTime.replace(':', '')}00`;
+    const formattedDate = moment(selectedDate).format('YYYYMMDD')
+    const startTime = selectedTimes[0]
+    const startAt = `${formattedDate} ${startTime.replace(':', '')}00`
 
-    const items = selectedItems.map((itemNo) => ({ itemNo }));
+    const items = selectedItems.map((itemNo) => ({ itemNo }))
 
-    const requestData = { title, content, startAt, items };
+    const requestData = { title, content, startAt, items }
 
     try {
-      await API.post('/live/apply', requestData);
-      alert('라이브 신청이 완료되었습니다!');
+      await API.post('/cast', requestData)
+      alert('라이브 신청이 완료되었습니다!')
     } catch (error) {
-      console.error('라이브 신청 실패:', error);
-      alert('라이브 신청 중 오류가 발생했습니다.');
+      console.error('라이브 신청 실패:', error)
+      alert('라이브 신청 중 오류가 발생했습니다.')
     }
-  };
+  }
 
   return (
     <div className='p-6 min-h-screen flex flex-col md:flex-row gap-6 bg-warmBeige/20'>
@@ -155,7 +161,7 @@ const LiveApply = () => {
         <Guide />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LiveApply;
+export default LiveApply
