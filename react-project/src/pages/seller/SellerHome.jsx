@@ -7,9 +7,10 @@ import API from '@/utils/API' // API 호출 모듈
 const SellerMainPage = () => {
   const debug_mode = false
   const navigate = useNavigate()
-  const [registration, setRegistration] = useState('N') // ✅ null: 아직 확인되지 않음
+  const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [approvalStatus,setApprovalStatus]=useState('N')
 
   const [user, setUser] = useState(null) // ✅ 초기값 null로 변경
   const [select, setSelect] = useState(null)
@@ -48,7 +49,8 @@ const SellerMainPage = () => {
         const response = await API.get('/sellers/profile')
         console.log(response.data.result.data)
         setUser(response?.data?.result?.data || null) // ✅ 전체 유저 객체 저장
-        setRegistration(response.data.result.data.company)
+        setRegistration(response.data.result.data.company.companyNo)
+        setApprovalStatus(response.data.result.data.approvalStatus)
       } catch (err) {
         console.error(err)
       }
@@ -79,7 +81,7 @@ const SellerMainPage = () => {
   }
 
   // ✅ 로그인 상태 확인 중에는 로딩 화면 표시
-  if (token === null || registration === 'N') {
+  if (token === null) {
     return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
   }
 
@@ -92,34 +94,39 @@ const SellerMainPage = () => {
         {debug_mode ? '로그인페이지 디버깅중' : '디버깅X'}
       </button> */}
       {!debug_mode ? (
-        registration === 'N' ? (
-          <div className='flex flex-col items-center justify-center min-h-screen'>
-            <p className='text-lg font-medium'>회사 정보 확인 중...</p>
-            <button
-              onClick={handleLogout}
-              className='mt-4 px-4 py-2 bg-red-500 text-white font-medium rounded-lg shadow hover:bg-red-600 transition'
-            >
-              로그아웃
-            </button>
-          </div>
-        ) : registration===null ? (
+        registration === null ? (
           <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 p-8'>
-            <h1 className='text-2xl font-semibold text-gray-800'>회사 등록 필요</h1>
-            <p className='text-gray-600 mt-2'>판매자로 활동하기 위해 회사를 등록하세요.</p>
-            <button
-              onClick={() => navigate('/seller/company/register')}
-              className='mt-6 px-6 py-3 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition'
-            >
-              회사 등록하기
-            </button>
-            <button
-              onClick={() => {
-                handleLogout()
-              }}
-            >
-              로그아웃
-            </button>
-          </div>
+          <h1 className='text-2xl font-semibold text-gray-800'>회사 등록 필요</h1>
+          <p className='text-gray-600 mt-2'>판매자로 활동하기 위해 회사를 등록하세요.</p>
+          <button
+            onClick={() => navigate('/seller/company/register')}
+            className='mt-6 px-6 py-3 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition'
+          >
+            회사 등록하기
+          </button>
+          <button
+          className='bg-red-500 p-2 rounded-lg text-white'
+            onClick={() => {
+              handleLogout()
+            }}
+          >
+            로그아웃
+          </button>
+        </div>
+        ) : approvalStatus==='N' ? (
+          <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 p-8'>
+          <h1 className='text-2xl font-semibold text-gray-800'>회사 승인 대기중</h1>
+          <p className='text-gray-600 mt-2'>회사 정보를 확인중입니다.</p>
+         
+          <button
+          className='bg-red-500 p-2 rounded-lg text-white'
+            onClick={() => {
+              handleLogout()
+            }}
+          >
+            로그아웃
+          </button>
+        </div>
         ) : (
           <div className='flex flex-col min-h-screen bg-white border border-gray-300'>
             {/* Top Navbar */}
