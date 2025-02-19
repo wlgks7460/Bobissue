@@ -72,7 +72,6 @@ const Payment = () => {
   // 결제 전 상품 체크
   const checkStock = () => {
     const payload = JSON.parse(localStorage.getItem('cart'))
-    console.log(payload)
     API.post('/payments/orderable', payload)
       .then((res) => {
         if (res.data.message.code === 'SUCCESS_ORDERABLE') {
@@ -91,6 +90,15 @@ const Payment = () => {
         localStorage.removeItem('cart')
         navigate('/')
       })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  // 결제 취소 및 실패 시
+  const cancelPayment = () => {
+    const payload = JSON.parse(localStorage.getItem('cart'))
+    API.post('/payments/cancel', payload)
+      .then((res) => {})
       .catch((err) => {
         console.error(err)
       })
@@ -142,6 +150,7 @@ const Payment = () => {
       } else {
         // 결제 실패시 시행할 동작들
         alert('결제 실패')
+        cancelPayment()
       }
     })
   }
