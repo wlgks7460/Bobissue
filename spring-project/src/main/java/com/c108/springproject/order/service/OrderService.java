@@ -202,7 +202,7 @@ public class OrderService {
 
     }
 
-    // orderNo인 order취소
+    // orderNo인 order취소d
     @Transactional
     @PreAuthorize("hasAnyAuthority('USER', 'SELLER', 'ADMIN')")
     public OrderDetailResDto findCancelOrders(long orderNo) {

@@ -1,6 +1,7 @@
 package com.c108.springproject.delivery.controller;
 
 import com.c108.springproject.delivery.dto.CompanyOrdersResDto;
+import com.c108.springproject.delivery.dto.DeliveryReqDto;
 import com.c108.springproject.delivery.service.DeliveryService;
 import com.c108.springproject.global.DefaultResponse;
 import com.c108.springproject.global.ResponseCode;
@@ -34,6 +35,10 @@ public class DeliveryController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ORDER, new DefaultResponse<OrderDetailResDto>(deliveryService.setOrder(orderNo, deliveryStatus)));
     }
 
-
+    @PostMapping("/{orderDetailNo}")
+    public ResponseDto setDelivery(@PathVariable long orderDetailNo,@RequestBody DeliveryReqDto deliveryReqDto) {
+        deliveryService.assignDeliveryToOrderDetail(orderDetailNo, deliveryReqDto.getCourier(), deliveryReqDto.getTrackingNumber());
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_ORDER, new DefaultResponse<>());
+    }
 
 }
