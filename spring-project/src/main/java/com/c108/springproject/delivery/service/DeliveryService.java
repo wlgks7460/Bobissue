@@ -1,6 +1,7 @@
 package com.c108.springproject.delivery.service;
 
 import com.c108.springproject.delivery.dto.CompanyOrdersResDto;
+import com.c108.springproject.delivery.dto.DeliveryReqDto;
 import com.c108.springproject.delivery.dto.UserInfoDto;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
@@ -102,5 +103,11 @@ public class DeliveryService {
 //            orderDetail.setOrderStatus(2);
 //            orderDetailRepository.save(orderDetail);
 //        }
+//    }
+
+//    @Transactional
+//    @PreAuthorize("hasAnyAuthority('SELLER')")
+//    public OrderDetailResDto setDelivery(long orderNo, DeliveryReqDto deliveryReqDto) {
+//        return OrderDetailResDto.toDto(order)
 //    }
 }
