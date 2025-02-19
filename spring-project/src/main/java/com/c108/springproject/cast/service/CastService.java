@@ -10,6 +10,7 @@ import com.c108.springproject.cast.repository.CastItemRepository;
 import com.c108.springproject.cast.repository.CastRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
+import com.c108.springproject.global.redis.RedisService;
 import com.c108.springproject.item.domain.Item;
 import com.c108.springproject.item.repository.ItemRepository;
 import com.c108.springproject.seller.domain.Seller;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,15 +37,18 @@ public class CastService {
     private final SellerRepository sellerRepository;
     private final ItemRepository itemRepository;
     private final CastItemRepository castItemRepository;
+    private final RedisService redisService;
 
     public CastService(CastRepository castRepository,
                        SellerRepository sellerRepository,
                        ItemRepository itemRepository,
-                       CastItemRepository castItemRepository){
+                       CastItemRepository castItemRepository,
+                       RedisService redisService){
         this.castRepository = castRepository;
         this.sellerRepository =sellerRepository;
         this.itemRepository = itemRepository;
         this.castItemRepository = castItemRepository;
+        this.redisService = redisService;
     }
 
     @Transactional
@@ -297,6 +302,9 @@ public class CastService {
         boolean isAdmin = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(role-> role.equals("ADMIN"));
 
+        Set<String> chats = redisService.keys("chat*");
+        System.out.println(chats);
+
         if(isAdmin){
             try{
                 cast.endCast();
@@ -324,8 +332,9 @@ public class CastService {
     @Transactional
     public List<CastResDto> findTodayList(){
         try{
-            String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            List<Cast> casts = castRepository.findByCastStatusInAndStartAt(
+            String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"%";
+            System.out.println(today);
+            List<Cast> casts = castRepository.findByCastStatusInAndStartAtStartingWith(
                     List.of(CastStatus.AWAIT, CastStatus.ONAIR), today);
             List<CastResDto> castResDtos = new ArrayList<>();
             for(Cast cast : casts){
