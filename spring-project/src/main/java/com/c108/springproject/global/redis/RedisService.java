@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -73,5 +74,22 @@ public class RedisService {
 
     public Set<String> keys(String pattern) {
         return redisTemplate.keys(pattern);
+    }
+
+    public Map<String, String> getAllValuesByPattern(String pattern) {
+        Set<String> keys = redisTemplate.keys(pattern);
+        if (keys == null || keys.isEmpty()) {
+            return Map.of(); // 빈 Map 반환
+        }
+
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        Map<String, String> result = new HashMap<>();
+
+        for (String key : keys) {
+            Object value = values.get(key);
+            result.put(key, value != null ? value.toString() : "null");
+        }
+
+        return result;
     }
 }
