@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryReqDto {
-    String delCompany; // 택배사
-    String delNumber; // 송장번호
+    String courier; // 택배사
+    String trackingNumber; // 송장번호
 }
