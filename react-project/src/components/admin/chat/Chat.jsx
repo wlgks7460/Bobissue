@@ -958,7 +958,7 @@ const ChatRoom = () => {
       }
   
       if (message.trim() !== '') {
-        const chatMessage = { content: messageInput }
+        const chatMessage = { content: message }
   
         stompClientRef.current.publish({
           destination: '/pub/messages', // ✅ 백엔드에서 설정한 엔드포인트 확인
@@ -967,6 +967,12 @@ const ChatRoom = () => {
   
         console.log('📤 메시지 전송:', chatMessage)
         setMessage('') // 입력창 초기화
+      }
+  }
+    // ✅ Enter 키로 메시지 전송
+    const handleKeyPress = (e) => {
+      if (e.key === 'Enter') {
+        sendMessage()
       }
     }
 
@@ -997,8 +1003,9 @@ const ChatRoom = () => {
         <input
           type="text"
           className="flex-1 p-2 border rounded-lg"
-          value={messageInput}
+          value={message}
           onChange={(e) => setMessageInput(e.target.value)}
+          onKeyPress={handleKeyPress} // Enter 키로 전송
           placeholder="메시지를 입력하세요"
         />
         <button onClick={sendMessage} className="ml-2 p-2 bg-blue-500 text-white rounded-lg">
