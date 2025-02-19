@@ -94,7 +94,7 @@ const OrderPopup = ({ orderNo, onClose }) => {
                   {statusLabels[order.orderStatus]?.icon}
                 </span>
                 <p className='text-espressoBlack font-semibold'>
-                  주문 상태: {order.orderStatus || '정보 없음'}
+                  주문 상태: {statusLabels[order.orderStatus].label || '정보 없음'}
                 </p>
               </div>
               <div className='flex items-center p-4 bg-background border rounded-lg shadow-sm'>
@@ -102,7 +102,7 @@ const OrderPopup = ({ orderNo, onClose }) => {
                   {deliveryLabels[order.deliveryStatus]?.icon}
                 </span>
                 <p className='text-espressoBlack font-semibold'>
-                  배송 상태: {order.deliveryStatus || '정보 없음'}
+                  배송 상태: {deliveryLabels[order.deliveryStatus].label || '정보 없음'}
                 </p>
               </div>
             </div>

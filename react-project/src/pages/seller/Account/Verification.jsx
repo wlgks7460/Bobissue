@@ -10,8 +10,8 @@ const PasswordVerification = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const redirectPath = '/seller/account/vender/info'
-  const debug_mode = localStorage.getItem('debug_mode') === 'true'
-
+  // const debug_mode = localStorage.getItem('debug_mode') === 'true'
+  const debug_mode = true
   // ✅ 비밀번호 인증 요청
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -71,7 +71,9 @@ const PasswordVerification = () => {
         </div>
 
         {/* ✅ 에러 메시지 출력 */}
-        {error && <p className='text-roastedCocoa text-sm mb-4 text-center animate-fade-in'>{error}</p>}
+        {error && (
+          <p className='text-roastedCocoa text-sm mb-4 text-center animate-fade-in'>{error}</p>
+        )}
 
         {/* ✅ 인증 버튼 */}
         <button
