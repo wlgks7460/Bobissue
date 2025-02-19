@@ -27,7 +27,7 @@ const Overview = () => {
     <div className='bg-warmBeige/20 p-6 max-w-7xl mx-auto bg-frostWhite border border-silverMedium rounded-lg shadow-md flex min-h-screen'>
       {/* 왼쪽 필터 메뉴 */}
       <div className='w-1/4 bg-silverLight p-4 rounded-lg shadow-sm border border-silverMedium'>
-        <h2 className='text-lg font-semibold text-darkGraphite mb-4'>통계 선택</h2>
+        <h2 className='text-lg font-semibold text-darkGraphite mb-4 '>통계 선택</h2>
         <ul className='space-y-2'>
           {Object.keys(components).map((key) => (
             <li key={key}>

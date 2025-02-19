@@ -74,7 +74,7 @@ const Orders = () => {
     <div className='w-full mx-auto px-8 py-10 min-h-screen bg-warmBeige/20'>
       {/* 헤더 */}
       <header className='text-center mb-12'>
-        <h1 className='text-4xl font-extrabold text-espressoBlack'>📦 주문 관리</h1>
+        <h1 className='text-4xl font-extrabold text-espressoBlack'>주문 관리</h1>
         <p className='text-lg text-coffeeBrown mt-3'>주문부터 배송까지 쉽게 관리하세요.</p>
       </header>
 

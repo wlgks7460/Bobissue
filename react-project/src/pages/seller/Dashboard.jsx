@@ -127,7 +127,7 @@ const SellerAdBanner = () => (
     </p>
     <Link
       to='/seller/ads'
-      className='mt-6 inline-block px-6 py-3 bg-caramelTan text-espressoBlack font-semibold rounded-lg hover:bg-roastedCocoa transition'
+      className='mt-6 inline-block px-6 py-3 bg-caramelTan text-espressoBlack font-semibold rounded-lg hover:text-warmBeige hover:bg-roastedCocoa transition'
     >
       광고 프로모션 알아보기
     </Link>
