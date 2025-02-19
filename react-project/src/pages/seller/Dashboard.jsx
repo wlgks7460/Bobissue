@@ -10,22 +10,6 @@ import {
 } from 'react-icons/fa'
 
 const Dashboard = () => {
-  const [hasPendingProduct, setHasPendingProduct] = useState(false)
-
-  // useEffect(() => {
-  //   const fetchPendingProduct = async () => {
-  //     try {
-  //       const response = await fetch('/products/pending')
-  //       const data = await response.json()
-  //       setHasPendingProduct(data.hasPending)
-  //     } catch (error) {
-  //       console.error('Error fetching pending product status:', error)
-  //     }
-  //   }
-
-  //   fetchPendingProduct()
-  // }, [])
-
   const dashboardItems = [
     {
       title: '상품 조회 & 관리',
@@ -35,7 +19,7 @@ const Dashboard = () => {
     },
     {
       title: '상품 등록',
-      description: hasPendingProduct ? '이어서 등록하세요.' : '새로운 상품을 등록하세요.',
+      description: '새로운 상품을 등록하세요.',
       link: 'products/register',
       icon: <FaShoppingCart />,
     },
@@ -127,7 +111,7 @@ const SellerAdBanner = () => (
     </p>
     <Link
       to='/seller/ads'
-      className='mt-6 inline-block px-6 py-3 bg-caramelTan text-espressoBlack font-semibold rounded-lg hover:bg-roastedCocoa transition'
+      className='mt-6 inline-block px-6 py-3 bg-caramelTan text-espressoBlack font-semibold rounded-lg hover:text-warmBeige hover:bg-roastedCocoa transition'
     >
       광고 프로모션 알아보기
     </Link>

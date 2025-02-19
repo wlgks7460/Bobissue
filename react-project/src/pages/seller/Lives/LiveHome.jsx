@@ -76,7 +76,7 @@ const LiveHome = () => {
 
       <div className='mb-6'>
         <h3 className='text-lg font-semibold mb-4 flex items-center text-coffeeBrown'>
-          <FaCalendarAlt className='mr-2 text-caramelTan' /> 확정된 라이브 일정
+          확정된 라이브 일정
         </h3>
         <div className='bg-white border border-latteBeige rounded-lg shadow-md p-4'>
           <Calendar
