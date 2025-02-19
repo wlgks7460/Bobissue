@@ -12,19 +12,19 @@ import {
 const Dashboard = () => {
   const [hasPendingProduct, setHasPendingProduct] = useState(false)
 
-  useEffect(() => {
-    const fetchPendingProduct = async () => {
-      try {
-        const response = await fetch('/products/pending')
-        const data = await response.json()
-        setHasPendingProduct(data.hasPending)
-      } catch (error) {
-        console.error('Error fetching pending product status:', error)
-      }
-    }
+  // useEffect(() => {
+  //   const fetchPendingProduct = async () => {
+  //     try {
+  //       const response = await fetch('/products/pending')
+  //       const data = await response.json()
+  //       setHasPendingProduct(data.hasPending)
+  //     } catch (error) {
+  //       console.error('Error fetching pending product status:', error)
+  //     }
+  //   }
 
-    fetchPendingProduct()
-  }, [])
+  //   fetchPendingProduct()
+  // }, [])
 
   const dashboardItems = [
     {

@@ -1,9 +1,13 @@
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import React, { useState } from 'react'
+import API from '../../../utils/API'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { useSelector } from 'react-redux'
 import MyPageCancelRefundItem from '../../../components/consumer/mypage/MyPageCancelRefundItem'
 
 const MyPageCancelRefund = () => {
+  const userNo = useSelector((state) => state.user.userInfo.userNo)
+
   const [cancelRefundData, setCancelRefundData] = useState([])
   const [filteredData, setFilteredData] = useState([])
 
@@ -53,6 +57,29 @@ const MyPageCancelRefund = () => {
     })
   }
 
+  // 주문 리스트 조회
+  const getOrderData = () => {
+    if (userNo && cancelRefundData.length < 1) {
+      API.get(`/users/${userNo}/orders`)
+        .then((res) => {
+          const result = res.data.result.data.filter(
+            // 취소 & 환불 관련 상품만
+            (v) => v.orderStatus > 2,
+          )
+          console.log(result)
+          setCancelRefundData(result)
+          setFilteredData(filterDataByDate(result, filter))
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+  }
+
+  useEffect(() => {
+    getOrderData()
+  }, [userNo])
+
   return (
     <div className='p-5'>
       <h3 className='text-center text-xl mb-5'>취소 / 환불 내역</h3>
@@ -71,9 +98,13 @@ const MyPageCancelRefund = () => {
       {/*  취소/환불 내역 */}
       <div>
         {filteredData.length > 0 ? (
-          <div className='grid grid-cols-3 gap-y-10'>
+          <div className='p-5 flex flex-col gap-3'>
             {filteredData.map((v) => (
-              <MyPageCancelRefundItem key={v.recipeNo} recipe={v} getRecipeData={getRecipeData} />
+              <MyPageCancelRefundItem
+                key={`order-${v.orderNo}`}
+                orderNo={v.orderNo}
+                userNo={userNo}
+              />
             ))}
           </div>
         ) : (

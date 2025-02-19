@@ -3,8 +3,11 @@ import dayjs from 'dayjs'
 import API from '../../../utils/API'
 import MyPageOrderItem from '../../../components/consumer/mypage/MyPageOrderItem'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { useSelector } from 'react-redux'
 
 const MyPageOrder = () => {
+  const userNo = useSelector((state) => state.user.userInfo.userNo)
+
   const [orders, setOrders] = useState([]) // 전체 주문 목록
   const [filteredOrders, setFilteredOrders] = useState([]) // 필터된 주문 목록
   const [filter, setFilter] = useState('1개월') // 필터
@@ -53,60 +56,31 @@ const MyPageOrder = () => {
     })
   }
 
+  // 주문 리스트 조회
+  const getOrderData = () => {
+    if (userNo && orders.length < 1) {
+      API.get(`/users/${userNo}/orders`)
+        .then((res) => {
+          const result = res.data.result.data.filter(
+            // 결제 완료, 주문 확정 상품만 선택
+            (v) => v.orderStatus === 1 || v.orderStatus === 2,
+          )
+          setOrders(result)
+          setFilteredOrders(filterOrdersByDate(result, filter))
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+  }
+  // 주문 삭제 함수
+  const removeOrder = (orderNo) => {
+    setFilteredOrders((prevOrders) => prevOrders.filter((order) => order.orderNo !== orderNo))
+  }
+
   useEffect(() => {
-    const res = [
-      {
-        orderNo: 1,
-        orderStatus: 1,
-        payment_method: 'Credit Card',
-        totalPrice: 45000,
-        request: '문 앞에 두고 가주세요.',
-        createAt: '20250206 101530',
-        orderDetail: [
-          { orderDetailNo: 1, itemNo: 101, quantity: 2, price: 15000 },
-          { orderDetailNo: 2, itemNo: 102, quantity: 1, price: 15000 },
-        ],
-      },
-      {
-        orderNo: 2,
-        orderStatus: 2,
-        payment_method: 'PayPal',
-        totalPrice: 78000,
-        request: '연락 후 배달 부탁드립니다.',
-        createAt: '20241106 112045',
-        orderDetail: [{ orderDetailNo: 3, itemNo: 103, quantity: 3, price: 26000 }],
-      },
-      {
-        orderNo: 3,
-        orderStatus: 3,
-        payment_method: 'Bank Transfer',
-        totalPrice: 62000,
-        request: '포장 단단히 부탁드립니다.',
-        createAt: '20240806 121015',
-        orderDetail: [{ orderDetailNo: 4, itemNo: 104, quantity: 2, price: 31000 }],
-      },
-      {
-        orderNd: 4,
-        orderStatus: 3,
-        payment_method: 'Cash on Delivery',
-        totalPrice: 53000,
-        request: '빠른 배송 부탁드립니다.',
-        createAt: '20240206 134550',
-        orderDetail: [{ orderDetailNo: 5, itemNo: 105, quantity: 1, price: 53000 }],
-      },
-      {
-        orderNd: 5,
-        orderStatus: 3,
-        payment_method: 'Credit Card',
-        totalPrice: 91000,
-        request: '배달 전에 문자 주세요.',
-        createAt: '20220206 143025',
-        orderDetail: [{ orderDetailNo: 6, itemNo: 106, quantity: 2, price: 45500 }],
-      },
-    ]
-    setOrders(res)
-    setFilteredOrders(filterOrdersByDate(res, filter))
-  }, [])
+    getOrderData()
+  }, [userNo])
   return (
     <div className='p-5'>
       <h2 className='text-center text-xl mb-5'>주문 내역</h2>
@@ -127,7 +101,13 @@ const MyPageOrder = () => {
         {filteredOrders.length > 0 ? (
           <div className='p-5 flex flex-col gap-3'>
             {filteredOrders.map((v) => (
-              <MyPageOrderItem key={`order-${v.orderNo}`} orderItem={v} />
+              <MyPageOrderItem
+                key={`order-${v.orderNo}`}
+                orderNo={v.orderNo}
+                userNo={userNo}
+                getOrderData={getOrderData}
+                removeOrder={removeOrder}
+              />
             ))}
           </div>
         ) : (

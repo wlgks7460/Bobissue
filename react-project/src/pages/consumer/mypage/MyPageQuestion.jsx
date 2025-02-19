@@ -3,6 +3,7 @@ import API from '../../../utils/API'
 import { useSelector } from 'react-redux'
 import ItemDetailQuestionItem from '../../../components/consumer/itemDetail/ItemDetailQuestionItem'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import MyPageQuestionItem from '../../../components/consumer/mypage/MyPageQuestionItem'
 
 const MyPageQuestion = () => {
   const userNo = useSelector((state) => state.user.userInfo.userNo)
@@ -35,7 +36,7 @@ const MyPageQuestion = () => {
         </thead>
         <tbody>
           {questions.length > 0 ? (
-            questions.map((v) => <ItemDetailQuestionItem key={v.questionNo} question={v} />)
+            questions.map((v) => <MyPageQuestionItem key={v.questionNo} question={v} />)
           ) : (
             <tr>
               <td colSpan={'3'}>

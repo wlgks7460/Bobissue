@@ -49,6 +49,7 @@ const SellerMainPage = () => {
     const fetchCompanyData = async () => {
       try {
         const response = await API.get('/sellers/company')
+        console.log(response.data.result.data);
         setRegistration(response.data.result.data?.companyNo || false)
       } catch (error) {
         console.error('회사 등록 여부 확인 실패:', error)
@@ -98,9 +99,9 @@ const SellerMainPage = () => {
   }
 
   // ✅ 로그인 상태 확인 중에는 로딩 화면 표시
-  // if (token === null) {
-  //   return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
-  // }
+  if (token === null || registration===null) {
+    return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
+  }
 
   return (
     <div className=''>
@@ -156,6 +157,7 @@ const SellerMainPage = () => {
                   select={select}
                   setSelect={setSelect}
                   menuState={menuState}
+                  companyNo={registration}
                 />
               </div>
 
@@ -165,7 +167,7 @@ const SellerMainPage = () => {
                   sidebarOpen ? 'ml-64' : 'ml-0'
                 }`}
               >
-                <Outlet />
+                <Outlet context={{ companyNo: registration }}/>
               </main>
             </div>
 

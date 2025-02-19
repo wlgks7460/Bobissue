@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/24/solid'
 const ItemDetailReviewCard = ({ review }) => {
-  const userName = '김지원'
   // 평점 별 개수 조정
   const [star, setStar] = useState([])
 
@@ -32,7 +31,7 @@ const ItemDetailReviewCard = ({ review }) => {
     <div className='w-full flex justify-between'>
       {/* 작성자 및 작성일 */}
       <div className='flex-none w-[200px]'>
-        <p className='text-lg'>{handleUserName(userName)}</p>
+        <p className='text-lg'>{handleUserName(review.userName)}</p>
         <p className='text-gray-400'>{handleCreateAt(review.createdAt)}</p>
       </div>
       {/* 리뷰 내용 */}
@@ -43,7 +42,7 @@ const ItemDetailReviewCard = ({ review }) => {
           <div className='flex'>
             {star.map((v, i) => (
               <StarIcon
-                className={`w-5 ${v ? 'text-indigo-600' : 'text-gray-400'}`}
+                className={`w-5 ${v ? 'text-yellow-400' : 'text-gray-400'}`}
                 key={`star-${i}`}
               />
             ))}
