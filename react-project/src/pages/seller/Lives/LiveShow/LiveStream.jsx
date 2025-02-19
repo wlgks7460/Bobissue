@@ -10,7 +10,7 @@ import axios from 'axios' // axios 임포트 추가
 
 const LiveStreamSetup = () => {
   
-  const debug_mode = localStorage.getItem('debug_mode') === 'true'
+  const debug_mode = true;
   const location = useLocation()
   const event = location.state?.event
   const videoRef = useRef(null)
@@ -49,7 +49,7 @@ const LiveStreamSetup = () => {
 
   // 방송 시작 (joinSession)
   const joinSession = async () => {
-
+    
     // let ws = new WebSocket("wss://bobissue.store:8443/openvidu");
     // ws.onopen = () => console.log("WebSocket 연결 성공!");
     // ws.onerror = (err) => console.error("WebSocket 오류 발생:", err);
@@ -147,7 +147,7 @@ const LiveStreamSetup = () => {
       try {
         const response = await axios.post(
           'https://bobissue.store/api/openvidu/sessions',
-          { customSessionId: "jihancast" },
+          { customSessionId: "jihancastt" },
           { headers: { 'Content-Type': 'application/json' } }
         );
         console.log("📌 OpenVidu 세션 생성 응답:", response);
@@ -163,7 +163,7 @@ const LiveStreamSetup = () => {
   const createToken = async (sessionId) => {
     try {
       const response = await axios.post(
-        `https://bobissue.store/api/openvidu/sessions/jihancast/connections`,
+        `https://bobissue.store/api/openvidu/sessions/jihancastt/connections`,
         {},
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -204,15 +204,18 @@ const LiveStreamSetup = () => {
 
       {/* 📌 컨트롤 버튼 */}
       <div className='flex justify-center mt-4 space-x-4'>
-        <button
-          onClick={handleStreamToggle}
-          className={`px-4 py-2 font-bold text-white rounded ${
-            isStreaming ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
-          }`}
-          disabled={!debug_mode && !isLiveAvailable}
-        >
-          {isStreaming ? '방송 중지' : '방송 시작'}
-        </button>
+      <button
+        onClick={() => {
+          console.log("방송 시작 버튼 클릭됨");
+          handleStreamToggle();
+        }}
+        className={`px-4 py-2 font-bold text-white rounded ${
+          isStreaming ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
+        }`}
+        disabled={!debug_mode && !isLiveAvailable}
+      >
+        {isStreaming ? '방송 중지' : '방송 시작'}
+      </button>
 
         <button
           onClick={handleMicToggle}
