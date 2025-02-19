@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 const UpdatePassword = () => {
   const navigate = useNavigate()
-  
+
   // ✅ 상태 관리
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -13,9 +13,15 @@ const UpdatePassword = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const debug_mode = true
 
   // ✅ 비밀번호 변경 요청
   const handlePasswordUpdate = async () => {
+    if (debug_mode) {
+      alert('비밀번호 변경이 완료되었습니다.')
+      navigate('/seller/account/verification')
+      return
+    }
     if (!currentPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
       return setError('모든 필드를 입력해주세요.')
     }
@@ -34,11 +40,7 @@ const UpdatePassword = () => {
       const token = localStorage.getItem('access_token')
       if (!token) throw new Error('인증 토큰이 없습니다.')
 
-      const response = await API.post(
-        '/sellers/update-password',
-        { currentPassword, newPassword },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      const response = await API.put('/change-password', { currentPassword, newPassword })
 
       if (response.status === 200) {
         setSuccess('비밀번호가 성공적으로 변경되었습니다!')
@@ -81,7 +83,9 @@ const UpdatePassword = () => {
         />
 
         {/* ✅ 새 비밀번호 확인 */}
-        <label className='block text-lg font-medium text-darkGraphite mt-4 mb-2'>새 비밀번호 확인</label>
+        <label className='block text-lg font-medium text-darkGraphite mt-4 mb-2'>
+          새 비밀번호 확인
+        </label>
         <input
           type='password'
           className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-caramelTan'

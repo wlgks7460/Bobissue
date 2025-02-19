@@ -12,7 +12,7 @@ import {
   FaBuilding,
 } from 'react-icons/fa'
 
-const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
+const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select,companyNo, }) => {
   return (
     <aside
       className={`fixed top-0 left-0 w-64 bg-latteBeige/20 border-b border-coffeeBrown h-full overflow-y-auto transition-transform duration-300 transform ${
@@ -55,7 +55,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
             icon: <FaChartLine className='text-coffeeBrown' />,
             links: [
               { to: 'stats/overview', text: '판매 개요' },
-              { to: 'stats/products', text: '상품 성과 조회' },
+              // { to: 'stats/products', text: '상품 성과 조회' },
             ],
           },
           {
@@ -121,6 +121,7 @@ const Sidebar = ({ isOpen, toggleMenu, menuState, setSelect, select }) => {
                         select === text ? 'text-roastedCocoa font-bold' : 'text-darkGraphite'
                       } hover:bg-warmBeige`}
                       onClick={() => setSelect(text)}
+                      context={{ companyNo: companyNo}}
                     >
                       {text}
                     </Link>
