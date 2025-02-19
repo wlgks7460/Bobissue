@@ -50,11 +50,7 @@ const LiveStreamSetup = () => {
   // 방송 시작 (joinSession)
   const joinSession = async () => {
     
-    // let ws = new WebSocket("wss://bobissue.store:8443/openvidu");
-    // ws.onopen = () => console.log("WebSocket 연결 성공!");
-    // ws.onerror = (err) => console.error("WebSocket 오류 발생:", err);
-    // ws.onmessage = (msg) => console.log("서버 메시지:", msg.data);
-    
+
     const OV = new OpenVidu();
 
     const mySession = OV.initSession();
@@ -79,7 +75,6 @@ const LiveStreamSetup = () => {
       const token = await getToken(); // getToken()을 사용하여 토큰을 받아옴
       console.log('📌 백엔드에서 받은 OpenVidu 토큰:', token);
 
-      console.log(token);
       await mySession.connect(token);
 
       const publisher = await OV.initPublisherAsync(undefined, {
@@ -113,9 +108,6 @@ const LiveStreamSetup = () => {
     setChatActive(false);
     setStream(null);
   };
-
-
-
 
   // 📌 방송 시작 / 중지 핸들러
   const handleStreamToggle = async () => {
