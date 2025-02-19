@@ -817,7 +817,6 @@ const ChatRoom = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('')
-  const [messageInput, setMessageInput] = useState("");
   const [sessionId] = useState("cast"); // 기본 세션 ID 설정
 
   const sessionRef = useRef(null);
@@ -1004,7 +1003,7 @@ const ChatRoom = () => {
           type="text"
           className="flex-1 p-2 border rounded-lg"
           value={message}
-          onChange={(e) => setMessageInput(e.target.value)}
+          onChange={(e) => setMessage(e.target.value)}
           onKeyPress={handleKeyPress} // Enter 키로 전송
           placeholder="메시지를 입력하세요"
         />
