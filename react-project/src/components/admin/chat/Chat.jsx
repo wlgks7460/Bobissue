@@ -807,7 +807,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { OpenVidu } from "openvidu-browser";
 import SockJS from "sockjs-client";
-import Stomp from "stompjs";
+import { Client } from '@stomp/stompjs'
 import axios from "axios";
 
 const APPLICATION_SERVER_URL = "https://bobissue.store/";
@@ -894,7 +894,7 @@ const ChatRoom = () => {
     //   });
     // });
     // stompClientRef.current = stompClient;
-
+    console.log("webSocket 접속 시도");
         const socket = new SockJS('https://bobissue.store/ws/chat')
         const client = new Client({
           webSocketFactory: () => socket,
