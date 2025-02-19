@@ -10,22 +10,6 @@ import {
 } from 'react-icons/fa'
 
 const Dashboard = () => {
-  const [hasPendingProduct, setHasPendingProduct] = useState(false)
-
-  // useEffect(() => {
-  //   const fetchPendingProduct = async () => {
-  //     try {
-  //       const response = await fetch('/products/pending')
-  //       const data = await response.json()
-  //       setHasPendingProduct(data.hasPending)
-  //     } catch (error) {
-  //       console.error('Error fetching pending product status:', error)
-  //     }
-  //   }
-
-  //   fetchPendingProduct()
-  // }, [])
-
   const dashboardItems = [
     {
       title: '상품 조회 & 관리',
@@ -35,7 +19,7 @@ const Dashboard = () => {
     },
     {
       title: '상품 등록',
-      description: hasPendingProduct ? '이어서 등록하세요.' : '새로운 상품을 등록하세요.',
+      description: '새로운 상품을 등록하세요.',
       link: 'products/register',
       icon: <FaShoppingCart />,
     },

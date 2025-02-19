@@ -10,7 +10,7 @@ const SellerMainPage = () => {
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  //const [status, setStatus] = useState('N')
+
   const [user, setUser] = useState(null) // ✅ 초기값 null로 변경
   const [select, setSelect] = useState(null)
 
@@ -69,7 +69,6 @@ const SellerMainPage = () => {
         const response = await API.get('/sellers/profile')
         console.log(response)
         setUser(response?.data?.result?.data || null) // ✅ 전체 유저 객체 저장
-        setStatus(response.data?.result?.data.approvalStatus || 'N')
       } catch (err) {
         console.error(err)
       }
