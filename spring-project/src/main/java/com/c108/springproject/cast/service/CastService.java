@@ -8,6 +8,9 @@ import com.c108.springproject.cast.dto.requset.CastReqDto;
 import com.c108.springproject.cast.dto.response.CastResDto;
 import com.c108.springproject.cast.repository.CastItemRepository;
 import com.c108.springproject.cast.repository.CastRepository;
+import com.c108.springproject.chat.domain.ChatList;
+import com.c108.springproject.chat.dto.ChatMessageDto;
+import com.c108.springproject.chat.repository.ChatListRepository;
 import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.redis.RedisService;
@@ -22,6 +25,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -34,17 +38,20 @@ public class CastService {
     private final SellerRepository sellerRepository;
     private final ItemRepository itemRepository;
     private final CastItemRepository castItemRepository;
+    private final ChatListRepository chatListRepository;
     private final RedisService redisService;
 
     public CastService(CastRepository castRepository,
                        SellerRepository sellerRepository,
                        ItemRepository itemRepository,
                        CastItemRepository castItemRepository,
+                       ChatListRepository chatListRepository,
                        RedisService redisService){
         this.castRepository = castRepository;
         this.sellerRepository =sellerRepository;
         this.itemRepository = itemRepository;
         this.castItemRepository = castItemRepository;
+        this.chatListRepository = chatListRepository;
         this.redisService = redisService;
     }
 
@@ -299,11 +306,30 @@ public class CastService {
         boolean isAdmin = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(role-> role.equals("ADMIN"));
 
-        Map<String, String> chatList = redisService.getAllValuesByPattern("chat*");
+        Map<String, String> chats = redisService.getAllValuesByPattern("chat*");
 
-        for (Map.Entry<String, String> entry : chatList.entrySet()) {
+//        if (chats == null || chats.isEmpty()) {
+//            throw new BobIssueException(ResponseCode.CHAT_NOT_FOUND);
+//        };
+
+        List<ChatMessageDto> messages = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : chats.entrySet()) {
+            ChatMessageDto message = new ChatMessageDto(entry.getValue(), entry.getKey(), cast_no);
+            messages.add(message);
             System.out.println(entry.getKey() + " : " + entry.getValue());
+            redisService.deleteValues(entry.getKey());
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
+        String now = sdf.format(new Date());
+        ChatList chatList = new ChatList();
+        chatList.setCastId(cast_no);
+        chatList.setMessages(messages);
+        chatList.setCreatedAt(now);
+
+        chatListRepository.save(chatList);
+
 
         if(isAdmin){
             try{
