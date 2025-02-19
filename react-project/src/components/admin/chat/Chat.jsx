@@ -871,7 +871,7 @@ const ChatRoom = () => {
         const videoElement = document.createElement("video");
         videoElement.autoplay = true;
         videoElement.playsInline = true;
-        videoElement.muted = true;
+        videoElement.muted = false;
         videoElement.style.width = "100%";
 
         videoContainerRef.current.innerHTML = "";
