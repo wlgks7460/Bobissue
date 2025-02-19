@@ -3,7 +3,7 @@ import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 import { Link } from 'react-router-dom'
 import API from '../../../utils/API'
 
-const MyPageOrderItemProduct = ({ itemNo, price, count, orderStatus }) => {
+const MyPageOrderItemProduct = ({ itemNo, price, count, deliveryStatus }) => {
   const [item, setItem] = useState({})
 
   const getItem = () => {
@@ -40,7 +40,7 @@ const MyPageOrderItemProduct = ({ itemNo, price, count, orderStatus }) => {
           </div>
         </div>
       </div>
-      {orderStatus === 3 && (
+      {deliveryStatus === 3 && (
         <Link to={`/mypage/review/${itemNo}`}>
           <button className='w-full h-[40px] border border-[#6F4E37] hover:bg-[#6F4E37] hover:text-white rounded'>
             리뷰 작성

@@ -61,7 +61,10 @@ const MyPageOrder = () => {
     if (userNo && orders.length < 1) {
       API.get(`/users/${userNo}/orders`)
         .then((res) => {
-          const result = res.data.result.data.filter((v) => v.orderStatus !== 4)
+          const result = res.data.result.data.filter(
+            // 결제 완료, 주문 확정 상품만 선택
+            (v) => v.orderStatus === 1 || v.orderStatus === 2,
+          )
           setOrders(result)
           setFilteredOrders(filterOrdersByDate(result, filter))
         })

@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import ItemCard from '../common/ItemCard'
 import API from '../../../utils/API'
+import HomeBestItemCard from './HomeBestItemCard'
 
 const HomeBestItemList = ({ bestCategory }) => {
   const [items, setItems] = useState([]) // 상품 데이터 리스트
@@ -60,7 +60,7 @@ const HomeBestItemList = ({ bestCategory }) => {
       </div>
       <Slider {...setting} className='best-item-slider'>
         {items.map((v) => (
-          <ItemCard key={v.itemNo} item={v} />
+          <HomeBestItemCard key={v.itemNo} itemNo={v.itemNo} />
         ))}
       </Slider>
     </div>
