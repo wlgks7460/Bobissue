@@ -13,7 +13,8 @@ const LiveChat = ({ channelId }) => {
       return
     }
 
-    const socket = new SockJS('http://localhost:8080/ws/chat')
+    // const socket = new SockJS('http://localhost:8080/ws/chat')
+    const socket = new SockJS('https://bobissue.store/ws/chat')
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // 자동 재연결 (5초)
