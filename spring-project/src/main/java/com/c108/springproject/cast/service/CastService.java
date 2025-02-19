@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -301,8 +302,9 @@ public class CastService {
         boolean isAdmin = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(role-> role.equals("ADMIN"));
 
-        System.out.println(redisService.getValues("cast"));
-        
+        Set<String> chats = redisService.keys("chat*");
+        System.out.println(chats);
+
         if(isAdmin){
             try{
                 cast.endCast();
