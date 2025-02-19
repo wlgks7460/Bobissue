@@ -5,7 +5,7 @@ import API from '../../../utils/API'
 
 const MyPageOrderItem = ({ orderNo, userNo, getOrderData, removeOrder }) => {
   const [orderItem, setOrderItem] = useState({})
-  const orderStatus = ['', '상품 준비 중', '배송 중', '배송 완료']
+  const delivery = ['', '주문 확인 중', '상품 준비 중', '배송 출발', '배송 완료']
 
   // 주문 취소
   const cancelOrder = () => {
@@ -37,7 +37,7 @@ const MyPageOrderItem = ({ orderNo, userNo, getOrderData, removeOrder }) => {
   }, [])
   return (
     <div className='w-full border border-[#6F4E37] rounded p-3'>
-      <h3 className='font-bold text-lg'>{orderStatus[orderItem.orderStatus]}</h3>
+      <h3 className='font-bold text-lg'>{delivery[orderItem.orderStatus]}</h3>
       {/* 상품 내역 */}
       <div className='flex flex-col gap-3 my-5'>
         {orderItem.orderItems?.map((v) => (
@@ -46,7 +46,7 @@ const MyPageOrderItem = ({ orderNo, userNo, getOrderData, removeOrder }) => {
             itemNo={v.itemNo}
             price={v.price}
             count={v.count}
-            orderStatus={orderItem.orderStatus}
+            deliveryStatus={orderItem.deliveryStatus}
           />
         ))}
       </div>
@@ -55,7 +55,7 @@ const MyPageOrderItem = ({ orderNo, userNo, getOrderData, removeOrder }) => {
         <span>{orderItem.requests}</span>
       </div>
       {/* 주문 취소 */}
-      {orderItem.orderStatus === 1 && (
+      {orderItem.deliveryStatus === 1 && (
         <div>
           <button
             className='w-full h-[40px] border border-[#6F4E37] hover:bg-[#6F4E37] hover:text-white rounded'
@@ -65,7 +65,7 @@ const MyPageOrderItem = ({ orderNo, userNo, getOrderData, removeOrder }) => {
           </button>
         </div>
       )}
-      {orderItem.orderStatus === 2 && (
+      {orderItem.deliveryStatus === 2 && (
         <div className='w-full'>
           <Link to={`/board/question?order=${orderItem.orderNo}`}>
             <button className='w-full h-[40px] border border-[#6F4E37] hover:bg-[#6F4E37] hover:text-white rounded'>
@@ -74,7 +74,7 @@ const MyPageOrderItem = ({ orderNo, userNo, getOrderData, removeOrder }) => {
           </Link>
         </div>
       )}
-      {orderItem.orderStatus === 3 && (
+      {orderItem.deliveryStatus === 3 && orderItem.orderStatus === 2 && (
         <div className='grid grid-cols-3 gap-2'>
           <button className='w-full h-[40px] border border-[#6F4E37] hover:bg-[#6F4E37] hover:text-white rounded'>
             구매 확정
