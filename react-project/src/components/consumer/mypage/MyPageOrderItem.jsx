@@ -3,7 +3,7 @@ import MyPageOrderItemProduct from './MyPageOrderItemProduct'
 import { Link } from 'react-router-dom'
 import API from '../../../utils/API'
 
-const MyPageOrderItem = ({ orderNo, userNo, getOrderData }) => {
+const MyPageOrderItem = ({ orderNo, userNo, getOrderData, removeOrder }) => {
   const [orderItem, setOrderItem] = useState({})
   const orderStatus = ['', '상품 준비 중', '배송 중', '배송 완료']
 
@@ -13,6 +13,7 @@ const MyPageOrderItem = ({ orderNo, userNo, getOrderData }) => {
       .then((res) => {
         console.log(res)
         if (res.data.message.code === 'SUCCESS_FIND_CANCEL_ORDERS') {
+          removeOrder(orderNo)
           getOrderData()
         }
       })

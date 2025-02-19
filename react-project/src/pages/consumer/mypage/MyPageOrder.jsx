@@ -70,6 +70,10 @@ const MyPageOrder = () => {
         })
     }
   }
+  // 주문 삭제 함수
+  const removeOrder = (orderNo) => {
+    setFilteredOrders((prevOrders) => prevOrders.filter((order) => order.orderNo !== orderNo))
+  }
 
   useEffect(() => {
     getOrderData()
@@ -99,6 +103,7 @@ const MyPageOrder = () => {
                 orderNo={v.orderNo}
                 userNo={userNo}
                 getOrderData={getOrderData}
+                removeOrder={removeOrder}
               />
             ))}
           </div>
