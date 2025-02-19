@@ -11,6 +11,8 @@ import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlin
 import FullscreenOutlinedIcon from '@mui/icons-material/FullscreenOutlined'
 import LiveItemList from '../../components/consumer/live/LiveItemList'
 
+const BASE_URL = import.meta.env.VITE_BOBISUUE_BASE_URL
+
 const Live = () => {
   // 화면 핸들 관련
   const [isHover, setIsHover] = useState(false)
@@ -140,7 +142,7 @@ const Live = () => {
 
   const setupWebSocket = () => {
     console.log('webSocket 접속 시도')
-    const socket = new SockJS('https://bobissue.store/ws/chat')
+    const socket = new SockJS(`${BASE_URL}/ws/chat`)
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // 자동 재연결 (5초)
@@ -174,7 +176,7 @@ const Live = () => {
 
   const getToken = async (sessionId) => {
     const response = await axios.post(
-      `https://bobissue.store/api/openvidu/sessions/jihancastt/connections`,
+      `${BASE_URL}/api/openvidu/sessions/jihancastt/connections`,
       {},
     )
     console.log('📌 서버에서 받은 토큰:', response.data)
@@ -206,6 +208,21 @@ const Live = () => {
       sendMessage()
     }
   }
+  // 일시정지 기능
+  const togglePauseVideo = () => {
+    if (!videoContainerRef.current) return
+
+    const videoElement = videoContainerRef.current.querySelector('video')
+    if (videoElement) {
+      if (videoElement.paused) {
+        videoElement.play()
+        setIsPause(false)
+      } else {
+        videoElement.pause()
+        setIsPause(true)
+      }
+    }
+  }
 
   return (
     <div>
@@ -225,7 +242,7 @@ const Live = () => {
                 <div className='w-full h-full flex items-end bg-black/50 absolute top-0 left-0 rounded-tl'>
                   <div className='w-full flex justify-between'>
                     <div className='m-2 '>
-                      <button className='text-white' onClick={() => setIsPause(!isPause)}>
+                      <button className='text-white' onClick={togglePauseVideo}>
                         {isPause ? (
                           <PlayArrowIcon sx={{ fontSize: 30 }} />
                         ) : (
@@ -252,7 +269,13 @@ const Live = () => {
           {/* 채팅 */}
           <div className='w-1/4 h-full flex flex-col border-s border-[#6F4E37] rounded-e'>
             {/* 채팅 출력 */}
-            <div className='grow p-3 bg-[#F8F0E5] rounded-tr'></div>
+            <div className='grow p-3 bg-[#F8F0E5] rounded-tr'>
+              {messages.map((msg, index) => (
+                <div key={`msg-${index}`} className='py-2 border-b'>
+                  {msg.sender}: {msg.content}
+                </div>
+              ))}
+            </div>
             {/* 채팅 입력 */}
             <div className='w-full flex-none flex items-end bg-[#F8F0E5] border-t border-[#6F4E37] p-3 rounded-br'>
               <textarea

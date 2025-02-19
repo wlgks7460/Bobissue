@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '../redux/store'
 import { userReducerActions } from '../redux/reducers/userSlice'
+import { loadingReducerActions } from '../redux/reducers/loadingSlice'
 
 const API = axios.create({
   // baseURL: '/api',
@@ -12,6 +13,7 @@ const API = axios.create({
 
 // 요청 interceptors: 요청에 jwt 추가
 API.interceptors.request.use((config) => {
+  store.dispatch(loadingReducerActions.setLoading(true))
   const { accessToken, refreshToken } = store.getState().user
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
@@ -24,6 +26,7 @@ API.interceptors.request.use((config) => {
 // 응답 interceptors: 토큰 갱신
 API.interceptors.response.use(
   (res) => {
+    store.dispatch(loadingReducerActions.setLoading(false))
     // access_token 갱신
     const newAccessToken = res.headers['newaccesstoken']
     if (newAccessToken) {
@@ -39,6 +42,7 @@ API.interceptors.response.use(
     return res
   },
   (err) => {
+    store.dispatch(loadingReducerActions.setLoading(false))
     console.error(err)
     // 로그인이 되어있을 경우에만
     if (store.getState().user.isAuthenticated) {
