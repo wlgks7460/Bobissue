@@ -856,30 +856,7 @@ const ChatRoom = () => {
     };
 
     initializeSession();
-
-    console.log("webSocket 접속 시도");
-    const socket = new SockJS('https://bobissue.store/ws/chat')
-    const client = new Client({
-      webSocketFactory: () => socket,
-      reconnectDelay: 5000, // 자동 재연결 (5초)
-      onConnect: () => {
-        console.log('✅ 웹소켓 연결 완료')
-
-        // 🌟 클라이언트 객체를 먼저 저장한 후 구독 설정
-        
-        stompClientRef.current = client
-
-        client.subscribe('/sub/message', (message) => {
-          const receivedMessage = JSON.parse(message.body)
-          console.log('📩 받은 메시지:', receivedMessage)
-          setMessages((prev) => [...prev, receivedMessage]) // 상태 업데이트
-        })
-      },
-      onStompError: (frame) => {
-        console.error('❌ STOMP 오류 발생:', frame)
-      },
-    })
-    // setupWebSocket();
+    setupWebSocket();
 
     return () => {
       sessionRef.current?.disconnect();
@@ -940,6 +917,15 @@ const ChatRoom = () => {
             console.error('❌ STOMP 오류 발생:', frame)
           },
         })
+        stompClientRef.current = client
+    client.activate()
+
+    return () => {
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate()
+        console.log('❌ 채팅 서버 연결 종료')
+      }
+    }
   };
 
   const getToken = async (sessionId) => {
