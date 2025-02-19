@@ -6,7 +6,7 @@ const MyPageCouponModal = ({ setShowModal, coupons }) => {
     <div className='fixed top-0 left-0 z-50'>
       <div className='w-full h-full fixed bg-gray-600/80 flex justify-center items-center'>
         <div className='w-[600px] border border-gray-400 rounded bg-white p-5 flex flex-col'>
-          <h2 className='text-center text-xl mb-5'>내 쿠폰</h2>
+          <h2 className='text-center text-lg mb-5'>내 쿠폰</h2>
           {/* 모달 main */}
           <div className='min-h-[300px] overflow-y-auto'>
             {coupons.length > 0 ? (
