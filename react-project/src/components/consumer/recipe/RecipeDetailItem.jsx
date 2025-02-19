@@ -41,8 +41,8 @@ const RecipeDetailItem = ({ itemNo, cnt, selectedItem, setSelectedItem }) => {
         onClick={handleItem}
       >
         <img
-          src={item.images?.[0].imageUrl || itemDefaultImg}
-          alt=''
+          src={item.images?.[0]?.imageUrl || itemDefaultImg}
+          alt='상품 이미지'
           className='w-[150px] h-[150px] rounded'
           onError={(e) => {
             e.target.src = itemDefaultImg

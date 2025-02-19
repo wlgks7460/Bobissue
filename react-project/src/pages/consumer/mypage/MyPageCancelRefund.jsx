@@ -66,7 +66,6 @@ const MyPageCancelRefund = () => {
             // 취소 & 환불 관련 상품만
             (v) => v.orderStatus > 2,
           )
-          console.log(result)
           setCancelRefundData(result)
           setFilteredData(filterDataByDate(result, filter))
         })
