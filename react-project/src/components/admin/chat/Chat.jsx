@@ -958,7 +958,7 @@ const ChatRoom = () => {
       }
   
       if (message.trim() !== '') {
-        const chatMessage = { content: message }
+        const chatMessage = { content: messageInput }
   
         stompClientRef.current.publish({
           destination: '/pub/messages', // ✅ 백엔드에서 설정한 엔드포인트 확인

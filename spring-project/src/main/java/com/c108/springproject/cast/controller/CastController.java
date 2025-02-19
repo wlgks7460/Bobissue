@@ -71,6 +71,9 @@ public class CastController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_CAST, new DefaultResponse<Integer>(castService.deleteCast(cast_no)));
     }
 
-    @GetMapping
+    @GetMapping("/todayList")
+    public ResponseDto todayList(){
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_FIND_TODAY_LIST, new DefaultResponse.ListResponse<CastResDto>(castService.findTodayList()));
+    }
 
 }
