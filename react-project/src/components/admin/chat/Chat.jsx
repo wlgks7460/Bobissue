@@ -886,14 +886,35 @@ const ChatRoom = () => {
   }, [subscribers]);
 
   const setupWebSocket = () => {
-    const socket = new SockJS(`${APPLICATION_SERVER_URL}ws/chat`);
-    const stompClient = Stomp.over(socket);
-    stompClient.connect({}, () => {
-      stompClient.subscribe("/topic/messages", (message) => {
-        setMessages((prev) => [...prev, JSON.parse(message.body)]);
-      });
-    });
-    stompClientRef.current = stompClient;
+    // const socket = new SockJS(`${APPLICATION_SERVER_URL}ws/chat`);
+    // const stompClient = Stomp.over(socket);
+    // stompClient.connect({}, () => {
+    //   stompClient.subscribe("/sub/message", (message) => {
+    //     setMessages((prev) => [...prev, JSON.parse(message.body)]);
+    //   });
+    // });
+    // stompClientRef.current = stompClient;
+
+        const socket = new SockJS('https://bobissue.store/ws/chat')
+        const client = new Client({
+          webSocketFactory: () => socket,
+          reconnectDelay: 5000, // 자동 재연결 (5초)
+          onConnect: () => {
+            console.log('✅ 웹소켓 연결 완료')
+    
+            // 🌟 클라이언트 객체를 먼저 저장한 후 구독 설정
+            stompClientRef.current = client
+    
+            client.subscribe('/sub/message', (message) => {
+              const receivedMessage = JSON.parse(message.body)
+              console.log('📩 받은 메시지:', receivedMessage)
+              setMessages((prev) => [...prev, receivedMessage]) // 상태 업데이트
+            })
+          },
+          onStompError: (frame) => {
+            console.error('❌ STOMP 오류 발생:', frame)
+          },
+        })
   };
 
   const getToken = async (sessionId) => {
@@ -905,19 +926,38 @@ const ChatRoom = () => {
     return response.data;
   };
 
-  const sendMessage = () => {
-    if (stompClientRef.current && messageInput.trim()) {
-      stompClientRef.current.send(
-        "/app/chat.send",
-        {},
-        JSON.stringify({
-          content: messageInput,
-          sender: "User",
+  // const sendMessage = () => {
+  //   if (stompClientRef.current && messageInput.trim()) {
+  //     stompClientRef.current.send(
+  //       "/app/chat.send",
+  //       {},
+  //       JSON.stringify({
+  //         content: messageInput,
+  //         sender: "User",
+  //       })
+  //     );
+  //     setMessageInput("");
+  //   }
+  // };
+    // ✅ 메시지 전송 함수 (WebSocket 연결 여부 체크)
+    const sendMessage = () => {
+      if (!stompClientRef.current || !stompClientRef.current.connected) {
+        console.warn('⚠️ 웹소켓이 아직 연결되지 않았습니다.')
+        return
+      }
+  
+      if (message.trim() !== '') {
+        const chatMessage = { content: message }
+  
+        stompClientRef.current.publish({
+          destination: '/pub/messages', // ✅ 백엔드에서 설정한 엔드포인트 확인
+          body: JSON.stringify(chatMessage),
         })
-      );
-      setMessageInput("");
+  
+        console.log('📤 메시지 전송:', chatMessage)
+        setMessage('') // 입력창 초기화
+      }
     }
-  };
 
   return (
     <div className="w-full max-w-lg h-[600px] bg-white shadow-lg rounded-lg p-4">
