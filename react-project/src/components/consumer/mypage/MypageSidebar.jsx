@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import MyPageCouponModal from './MyPageCouponModal'
 
 const MypageSidebar = () => {
   const userInfo = useSelector((state) => state.user.userInfo)
@@ -9,8 +10,47 @@ const MypageSidebar = () => {
     SILVER: '🥈',
     GOLD: '🥇',
   }
-  useEffect
   const [showUserGradeTooltip, setShowUserGradeTooltip] = useState(false)
+
+  // 상품 가격 , 찍기
+  const addComma = (price) => {
+    return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  // modal
+  const [showModal, setShowModal] = useState(false)
+
+  const [coupons, setCoupons] = useState([
+    {
+      couponNo: 1,
+      createdAt: '20250219 120000',
+      createdUser: 'admin',
+      delYn: 'N',
+      updatedAt: '20250219 120000',
+      updatedUser: 'admin',
+      content: '첫 주문 10% 할인',
+      deductedPrice: 5000,
+      minDeliveryPrice: 20000,
+      name: 'WELCOME10',
+      term: '20250219 ~ 20250319',
+      companyNo: 1001,
+    },
+    {
+      couponNo: 2,
+      createdAt: '20250219 120000',
+      createdUser: 'admin',
+      delYn: 'N',
+      updatedAt: '20250219 120000',
+      updatedUser: 'admin',
+      content: '5만원 이상 구매 시 1만원 할인',
+      deductedPrice: 10000,
+      minDeliveryPrice: 50000,
+      name: 'BIGSALE10K',
+      term: '20250219 ~ 20250419',
+      companyNo: 1002,
+    },
+  ])
+
   return (
     <div className='flex-none w-[300px]'>
       {/* 회원등급, 쿠폰 / 포인트 */}
@@ -35,14 +75,14 @@ const MypageSidebar = () => {
         <div className='flex justify-center gap-5'>
           <div className='w-[140px]'>
             <p className='text-sm text-gray-500'>발급된 쿠폰</p>
-            <button>
-              <span className='text-lg font-bold'>1</span> 장
+            <button className='text-right' onClick={() => setShowModal(true)}>
+              <span className='text-lg font-bold px-2'>1</span> 장
             </button>
           </div>
           <div className='border-s border-[#6F4E37]'></div>
           <div className='w-[140px]'>
             <p className='text-sm text-gray-500'>포인트</p>
-            <p className='text-lg font-bold'>00000</p>
+            <p className='text-lg font-bold px-2'>{addComma(5000)}</p>
           </div>
         </div>
       </div>
@@ -87,6 +127,7 @@ const MypageSidebar = () => {
           </Link>
         </div>
       </div>
+      {showModal && <MyPageCouponModal setShowModal={setShowModal} coupons={coupons} />}
     </div>
   )
 }

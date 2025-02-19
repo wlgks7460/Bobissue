@@ -12,7 +12,6 @@ const MyPageRecipe = () => {
   const getRecipeData = () => {
     API.get('/recipe')
       .then((res) => {
-        console.log(res)
         const result = res.data.result.data.filter((v) => v.createdUser === `USER ${email}`)
         setRecipes(result)
       })
