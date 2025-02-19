@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { OpenVidu } from 'openvidu-browser'
+import SockJS from 'sockjs-client'
+import { Client } from '@stomp/stompjs'
+import axios from 'axios'
 import SearchBar from '../../components/consumer/common/SearchBar'
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import PauseIcon from '@mui/icons-material/Pause'
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
 import FullscreenOutlinedIcon from '@mui/icons-material/FullscreenOutlined'
-import LiveItem from '../../components/consumer/live/LiveItem'
+import LiveItemList from '../../components/consumer/live/LiveItemList'
 
 const Live = () => {
-  const [cast, setCast] = useState()
-  const [chat, setChat] = useState()
-
+  // 화면 핸들 관련
   const [isHover, setIsHover] = useState(false)
   const [isPause, setIsPause] = useState(false)
 
@@ -43,8 +45,11 @@ const Live = () => {
     }
   }
 
-  const [liveItems, setLiveItems] = useState([])
-  const chatInputRef = useRef()
+  // 라이브 커머스(영상, 채팅) 관련
+  const [session, setSession] = useState(null)
+  const [subscribers, setSubscribers] = useState([])
+  const [messages, setMessages] = useState([])
+  const [sessionId] = useState('cast') // 기본 세션 ID 설정
 
   // 전체 화면 감지
   useEffect(() => {
@@ -66,71 +71,147 @@ const Live = () => {
     }
   }, [])
 
-  // 상품 드래그 관련
-  const scrollContainerRef = useRef()
+  const sessionRef = useRef(null)
+  const stompClientRef = useRef(null)
+  const videoContainerRef = useRef(null) // 비디오 화면 표시용
+  const chatInputRef = useRef()
 
-  // 드래그 기능
-  const [isDragging, setIsDragging] = useState(false)
-  const [startX, setStartX] = useState(0)
-  const [scrollLeft, setScrollLeft] = useState(0)
+  useEffect(() => {
+    const initializeSession = async () => {
+      const OV = new OpenVidu()
+      const newSession = OV.initSession()
 
-  const handleMouseDown = (e) => {
-    setIsDragging(true)
-    setStartX(e.clientX)
-    setScrollLeft(scrollContainerRef.current.scrollLeft)
-  }
+      // 📌 구독자(Subscriber)만 동작 (스트림 받아서 표시)
+      newSession.on('streamCreated', (event) => {
+        const subscriber = newSession.subscribe(event.stream, undefined)
+        setSubscribers((prev) => [...prev, subscriber])
 
-  const handleMouseMove = (e) => {
-    if (!isDragging) return
-    const x = e.clientX - startX
-    scrollContainerRef.current.scrollLeft = scrollLeft - x
-  }
-
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-
-  const castItemList = [
-    { itemNo: 0, name: '상품1' },
-    { itemNo: 1, name: '상품2' },
-    { itemNo: 2, name: '상품3' },
-    { itemNo: 3, name: '상품4' },
-    { itemNo: 4, name: '상품5' },
-    { itemNo: 5, name: '상품6' },
-    { itemNo: 6, name: '상품7' },
-    { itemNo: 7, name: '상품8' },
-    { itemNo: 8, name: '상품9' },
-  ]
-
-  const allToCart = () => {
-    let cartData = JSON.parse(localStorage.getItem('cart')) || []
-    let isDuplicate = false
-
-    const newItems = castItemList
-      .map((v) => {
-        const existingIndex = cartData.findIndex((item) => item.itemNo === v.itemNo)
-        if (existingIndex !== -1) {
-          cartData[existingIndex].count += 1
-          isDuplicate = true
-          return null
+        console.log('📌 Subscribing to', event.stream.connection.connectionId)
+        // console.log("📌 Stream Tracks:", event.stream.getMediaStream().getVideoTracks());
+        subscriber.subscribeToAudio(true)
+        if (event.stream.hasVideo) {
+          console.log('✅ 스트림에 비디오 포함됨!')
+        } else {
+          console.log('❌ 스트림에 비디오 없음!')
         }
-        return { itemNo: v.itemNo, count: 1 }
       })
-      .filter(Boolean) // null 값 제거
 
-    if (newItems.length > 0) {
-      cartData = [...cartData, ...newItems]
-      localStorage.setItem('cart', JSON.stringify(cartData))
+      newSession.on('streamDestroyed', (event) => {
+        setSubscribers((prev) => prev.filter((sub) => sub !== event.stream))
+      })
+
+      const token = await getToken(sessionId)
+      await newSession.connect(token, { clientData: 'Viewer' })
+
+      setSession(newSession)
+      sessionRef.current = newSession
     }
 
-    alert(isDuplicate ? '중복 상품은 수량을 추가하였습니다.' : '장바구니에 담았습니다.')
+    initializeSession()
+    setupWebSocket()
+
+    return () => {
+      sessionRef.current?.disconnect()
+      stompClientRef.current?.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (subscribers.length > 0 && videoContainerRef.current) {
+      setTimeout(() => {
+        console.log('🎥 비디오 스트림을 화면에 추가합니다.')
+
+        const videoElement = document.createElement('video')
+        videoElement.autoplay = true
+        videoElement.playsInline = true
+        videoElement.muted = false
+        videoElement.style.width = '100%'
+
+        videoContainerRef.current.innerHTML = ''
+        videoContainerRef.current.appendChild(videoElement)
+
+        // 📌 스트림을 비디오 요소에 바인딩
+        subscribers[subscribers.length - 1].addVideoElement(videoElement)
+        console.log('✅ 비디오 요소가 성공적으로 바인딩되었습니다.')
+        console.log('📌 비디오 소스 정보:', videoElement.srcObject)
+      }, 500) // 0.5초 딜레이
+    }
+  }, [subscribers])
+
+  const setupWebSocket = () => {
+    console.log('webSocket 접속 시도')
+    const socket = new SockJS('https://bobissue.store/ws/chat')
+    const client = new Client({
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000, // 자동 재연결 (5초)
+      onConnect: () => {
+        console.log('✅ 웹소켓 연결 완료')
+
+        // 🌟 클라이언트 객체를 먼저 저장한 후 구독 설정
+
+        stompClientRef.current = client
+
+        client.subscribe('/sub/message', (message) => {
+          const receivedMessage = JSON.parse(message.body)
+          console.log('📩 받은 메시지:', receivedMessage)
+          setMessages((prev) => [...prev, receivedMessage]) // 상태 업데이트
+        })
+      },
+      onStompError: (frame) => {
+        console.error('❌ STOMP 오류 발생:', frame)
+      },
+    })
+    stompClientRef.current = client
+    client.activate()
+
+    return () => {
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate()
+        console.log('❌ 채팅 서버 연결 종료')
+      }
+    }
+  }
+
+  const getToken = async (sessionId) => {
+    const response = await axios.post(
+      `https://bobissue.store/api/openvidu/sessions/jihancastt/connections`,
+      {},
+    )
+    console.log('📌 서버에서 받은 토큰:', response.data)
+    return response.data
+  }
+
+  // ✅ 메시지 전송 함수 (WebSocket 연결 여부 체크)
+  const sendMessage = () => {
+    if (!stompClientRef.current || !stompClientRef.current.connected) {
+      console.warn('⚠️ 웹소켓이 아직 연결되지 않았습니다.')
+      return
+    }
+    const message = chatInputRef.current.value
+    if (message.trim() !== '') {
+      const chatMessage = { content: message }
+
+      stompClientRef.current.publish({
+        destination: '/pub/messages', // ✅ 백엔드에서 설정한 엔드포인트 확인
+        body: JSON.stringify(chatMessage),
+      })
+
+      console.log('📤 메시지 전송:', chatMessage)
+      chatInputRef.current.value = '' // 입력창 초기화
+    }
+  }
+  // ✅ Enter 키로 메시지 전송
+  const handleKeyUp = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage()
+    }
   }
 
   return (
     <div>
       <SearchBar />
       <div className='min-h-[70vh] flex justify-center'>
-        <div className='w-[70rem] flex mt-10 border border-[#6F4E37] rounded'>
+        <div className='w-[80rem] flex mt-10 border border-[#6F4E37] rounded'>
           <div className='w-3/4 h-full flex flex-col rounded'>
             {/* 라이브 방송 */}
             <div
@@ -139,6 +220,7 @@ const Live = () => {
               onMouseOut={() => setIsHover(false)}
               ref={fullScreenRef}
             >
+              <div className='w-full h-full bg-black' ref={videoContainerRef}></div>
               {isHover && (
                 <div className='w-full h-full flex items-end bg-black/50 absolute top-0 left-0 rounded-tl'>
                   <div className='w-full flex justify-between'>
@@ -165,26 +247,7 @@ const Live = () => {
               )}
             </div>
             {/* 상품 */}
-            <div className='flex-none w-full max-w-full h-[150px] border-t border-[#6F4E37] p-3'>
-              <div className='flex justify-between'>
-                <h3>판매 중 상품</h3>
-                <button className='text-sm text-gray-400 hover:text-[#6F4E37]' onClick={allToCart}>
-                  전체 상품 담기
-                </button>
-              </div>
-              <div
-                ref={scrollContainerRef}
-                className='flex gap-3 overflow-x-auto no-scrollbar flex-nowrap'
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp} // 마우스가 벗어났을 때도 드래그 끝내기
-              >
-                {castItemList.map((v) => (
-                  <LiveItem key={v.itemNo} item={v} />
-                ))}
-              </div>
-            </div>
+            <LiveItemList />
           </div>
           {/* 채팅 */}
           <div className='w-1/4 h-full flex flex-col border-s border-[#6F4E37] rounded-e'>
@@ -201,8 +264,12 @@ const Live = () => {
                   e.target.style.height = '32px' // 높이 초기화
                   e.target.style.height = e.target.scrollHeight + 'px' // 내용에 맞게 높이 조정
                 }}
+                onKeyUp={handleKeyUp}
               ></textarea>
-              <button className='flex-none px-2 py-1 ms-1 rounded bg-gray-300 hover:bg-[#6F4E37] hover:text-white text-sm'>
+              <button
+                className='flex-none px-2 py-1 ms-1 rounded bg-gray-300 hover:bg-[#6F4E37] hover:text-white text-sm'
+                onClick={sendMessage}
+              >
                 <SendOutlinedIcon />
               </button>
             </div>
