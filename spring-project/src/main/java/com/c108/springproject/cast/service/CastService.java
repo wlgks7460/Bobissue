@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -302,8 +299,11 @@ public class CastService {
         boolean isAdmin = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .anyMatch(role-> role.equals("ADMIN"));
 
-        Set<String> chats = redisService.keys("chat*");
-        System.out.println(chats);
+        Map<String, String> chatList = redisService.getAllValuesByPattern("chat*");
+
+        for (Map.Entry<String, String> entry : chatList.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
 
         if(isAdmin){
             try{
