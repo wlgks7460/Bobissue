@@ -7,7 +7,7 @@ import API from '@/utils/API' // API 호출 모듈
 const SellerMainPage = () => {
   const debug_mode = false
   const navigate = useNavigate()
-  const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
+  const [registration, setRegistration] = useState('N') // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
@@ -39,36 +39,16 @@ const SellerMainPage = () => {
     }
   }, [navigate])
 
-  // ✅ 2. 회사 등록 여부 확인 (로그인이 된 상태에서만 실행)
-  useEffect(() => {
-    if (debug_mode) {
-      return
-    }
-    if (!token) return
-
-    const fetchCompanyData = async () => {
-      try {
-        const response = await API.get('/sellers/company')
-        console.log(response.data.result.data)
-        setRegistration(response.data.result.data?.companyNo || false)
-      } catch (error) {
-        console.error('회사 등록 여부 확인 실패:', error)
-        setRegistration(false)
-      }
-    }
-    fetchCompanyData()
-  }, [token])
-
-  // ✅ 3. 유저 정보 가져오기
   useEffect(() => {
     if (debug_mode) return
     if (!token) return
-
+    //console.log('hello');
     const fetchUserStatus = async () => {
       try {
         const response = await API.get('/sellers/profile')
-        console.log(response)
+        console.log(response.data.result.data)
         setUser(response?.data?.result?.data || null) // ✅ 전체 유저 객체 저장
+        setRegistration(response.data.result.data.company)
       } catch (err) {
         console.error(err)
       }
@@ -76,6 +56,8 @@ const SellerMainPage = () => {
 
     fetchUserStatus()
   }, [token])
+
+ 
 
   const toggleMenu = (menu) => {
     setMenuState((prevState) => {
@@ -97,7 +79,7 @@ const SellerMainPage = () => {
   }
 
   // ✅ 로그인 상태 확인 중에는 로딩 화면 표시
-  if (token === null || registration === null) {
+  if (token === null || registration === 'N') {
     return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
   }
 
@@ -110,7 +92,7 @@ const SellerMainPage = () => {
         {debug_mode ? '로그인페이지 디버깅중' : '디버깅X'}
       </button> */}
       {!debug_mode ? (
-        registration === null ? (
+        registration === 'N' ? (
           <div className='flex flex-col items-center justify-center min-h-screen'>
             <p className='text-lg font-medium'>회사 정보 확인 중...</p>
             <button
@@ -120,7 +102,7 @@ const SellerMainPage = () => {
               로그아웃
             </button>
           </div>
-        ) : !registration ? (
+        ) : registration===null ? (
           <div className='flex flex-col justify-center items-center min-h-screen bg-gray-100 p-8'>
             <h1 className='text-2xl font-semibold text-gray-800'>회사 등록 필요</h1>
             <p className='text-gray-600 mt-2'>판매자로 활동하기 위해 회사를 등록하세요.</p>
