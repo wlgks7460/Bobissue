@@ -30,7 +30,8 @@ public class ChatController {
     //@DestinationVariable에 추가로 chattingRoomId를 괄호 쓰고 넣어줘야 파라미터 인식을 함.
     public ChatMessageDto send2( @RequestBody ChatMessageDto chatMessageDto) {
         System.out.println(chatMessageDto.getContent());
-        redisService.setValues("cast", chatMessageDto.getSender() + " " + chatMessageDto.getContent());
+//        redisService.setValues("cast", chatMessageDto.getSender() + " " + chatMessageDto.getContent());
+        redisService.setValues("chat :" + chatMessageDto.getSender(), chatMessageDto.getContent());
         template.convertAndSend("/sub/message", chatMessageDto);       // 구독중인 모든 사용자에게 메시지를 전달합니다.
         return chatMessageDto;
     }
