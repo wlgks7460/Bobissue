@@ -312,6 +312,8 @@ public enum ResponseCode {
     FAILED_UNORDERABLE("FAILED_UNORDERABLE", "주문 불가능 처리 실패"),
     NOT_FOUND_ADMIN_BANK("NOT_FOUND_ADMIN_BANK", "관리자 계좌를 찾지 못함"),
     NOT_FOUND_ORDER_DETAIL("NOT_FOUND_ORDER_DETAIL", "상세 주문 없음"),
+    SUCCESS_FIND_TODAY_LIST("SUCCESS_FIND_TODAY_LIST", "금일 방송 목록 조회 성공"),
+    FAILED_FIND_TODAY_LIST("SUCCESS_FIND_TODAY_LIST", "금일 방송 목록 조회 성공"),
 
     ;
 

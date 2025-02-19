@@ -21,6 +21,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -317,6 +319,22 @@ public class CastService {
             }
         }
 
+    }
+
+    @Transactional
+    public List<CastResDto> findTodayList(){
+        try{
+            String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            List<Cast> casts = castRepository.findByCastStatusInAndStartAt(
+                    List.of(CastStatus.AWAIT, CastStatus.ONAIR), today);
+            List<CastResDto> castResDtos = new ArrayList<>();
+            for(Cast cast : casts){
+                castResDtos.add(CastResDto.toDto(cast));
+            }
+            return castResDtos;
+        }catch (Exception e){
+            throw new BobIssueException(ResponseCode.FAILED_FIND_TODAY_LIST);
+        }
     }
 
 }
