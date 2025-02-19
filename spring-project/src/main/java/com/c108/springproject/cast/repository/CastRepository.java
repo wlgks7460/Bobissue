@@ -18,7 +18,10 @@ public interface CastRepository extends JpaRepository<Cast, Integer> {
 
     Optional<Cast> findByCastStatusAndCompany(CastStatus castStatus, Company company);
 
-    @Query("SELECT c FROM Cast c WHERE c.castStatus IN (:statuses) AND FUNCTION('DATE_FORMAT', c.startAt, '%Y%m%d') = :today")
-    List<Cast> findByCastStatusInAndStartAt(@Param("statuses") List<CastStatus> statuses, @Param("today") String today);
+    @Query("SELECT c FROM Cast c WHERE c.castStatus IN (:statuses) AND c.startAt LIKE :todayPrefix")
+    List<Cast> findByCastStatusInAndStartAtStartingWith(
+            @Param("statuses") List<CastStatus> statuses,
+            @Param("todayPrefix") String todayPrefix
+    );
 
 }
