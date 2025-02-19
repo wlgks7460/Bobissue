@@ -10,7 +10,7 @@ const SellerMainPage = () => {
   const [registration, setRegistration] = useState(null) // ✅ null: 아직 확인되지 않음
   const [token, setToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [status, setStatus] = useState('N')
+  //const [status, setStatus] = useState('N')
   const [user, setUser] = useState(null) // ✅ 초기값 null로 변경
   const [select, setSelect] = useState(null)
 
@@ -49,14 +49,13 @@ const SellerMainPage = () => {
     const fetchCompanyData = async () => {
       try {
         const response = await API.get('/sellers/company')
-        console.log(response.data.result.data);
+        console.log(response.data.result.data)
         setRegistration(response.data.result.data?.companyNo || false)
       } catch (error) {
         console.error('회사 등록 여부 확인 실패:', error)
         setRegistration(false)
       }
     }
-
     fetchCompanyData()
   }, [token])
 
@@ -99,7 +98,7 @@ const SellerMainPage = () => {
   }
 
   // ✅ 로그인 상태 확인 중에는 로딩 화면 표시
-  if (token === null || registration===null) {
+  if (token === null || registration === null) {
     return <div className='flex items-center justify-center min-h-screen'>로딩 중...</div>
   }
 
@@ -112,7 +111,7 @@ const SellerMainPage = () => {
         {debug_mode ? '로그인페이지 디버깅중' : '디버깅X'}
       </button> */}
       {!debug_mode ? (
-        registration === null || status !== 'Y' ? (
+        registration === null ? (
           <div className='flex flex-col items-center justify-center min-h-screen'>
             <p className='text-lg font-medium'>회사 정보 확인 중...</p>
             <button
@@ -167,7 +166,7 @@ const SellerMainPage = () => {
                   sidebarOpen ? 'ml-64' : 'ml-0'
                 }`}
               >
-                <Outlet context={{ companyNo: registration }}/>
+                <Outlet context={{ companyNo: registration }} />
               </main>
             </div>
 
