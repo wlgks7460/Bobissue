@@ -76,7 +76,7 @@ const MypageSidebar = () => {
           <div className='w-[140px]'>
             <p className='text-sm text-gray-500'>발급된 쿠폰</p>
             <button className='text-right' onClick={() => setShowModal(true)}>
-              <span className='text-lg font-bold px-2'>1</span> 장
+              <span className='text-lg font-bold px-2'>2</span> 장
             </button>
           </div>
           <div className='border-s border-[#6F4E37]'></div>

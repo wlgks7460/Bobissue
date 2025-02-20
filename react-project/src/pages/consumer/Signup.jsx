@@ -6,9 +6,12 @@ import TermsOfService from '../../components/consumer/signup/TermsOfService'
 import TermsOfPersonalData from '../../components/consumer/signup/TermsOfPersonalData'
 import API from '../../utils/API'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../redux/reducers/loadingSlice'
 
 const Signup = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   // 회원 가입 관련 데이터
   const emailRef = useRef() // 이메일
@@ -88,18 +91,19 @@ const Signup = () => {
         height: Number(heightRef.current.value) || 0.0,
         weight: Number(weightRef.current.value) || 0.0,
       }
+      dispatch(loadingReducerActions.setLoading(true))
       API.post('/users/sign-up', payload)
         .then((res) => {
           console.log(res)
           if (res.status === 200) {
             alert('회원가입이 완료되었습니다.')
+            dispatch(loadingReducerActions.setLoading(false))
             navigate('/login')
-          } else {
-            console.log(res)
           }
         })
         .catch((err) => {
           console.error(err)
+          dispatch(loadingReducerActions.setLoading(false))
         })
     }
   }

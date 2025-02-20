@@ -1,7 +1,11 @@
 import React, { useRef, useState } from 'react'
 import API from '../../../utils/API'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 const MyPageAddressForm = ({ addresses, setAddresses }) => {
+  const dispatch = useDispatch()
+
   const [postCode, setPostCode] = useState() // 우편번호
   const [address, setAddress] = useState() // 주소
   const addressDetailRef = useRef() // 상세 주소
@@ -28,9 +32,9 @@ const MyPageAddressForm = ({ addresses, setAddresses }) => {
     if (!payload.postalCode || !payload.address || !payload.addressDetail || !payload.name) {
       alert('배송지를 작성해주세요.')
     } else {
+      dispatch(loadingReducerActions.setLoading(true))
       API.post('/address', payload)
         .then((res) => {
-          console.log(res)
           const temp = [...addresses]
           temp.push({
             ...payload,
@@ -41,9 +45,11 @@ const MyPageAddressForm = ({ addresses, setAddresses }) => {
           setAddress(null)
           addressDetailRef.current.value = ''
           nameRef.current.value = ''
+          dispatch(loadingReducerActions.setLoading(false))
         })
         .catch((err) => {
           console.error(err)
+          dispatch(loadingReducerActions.setLoading(false))
         })
     }
   }

@@ -77,11 +77,8 @@ const HomeLiveShopping = () => {
 
   useEffect(() => {
     getCast()
-    const interval = setInterval(() => {
-      getCast() // 10초마다 방송 데이터를 갱신
-    }, 10000)
 
-    return () => clearInterval(interval) // cleanup interval
+    return () => {}
   }, [])
 
   return (

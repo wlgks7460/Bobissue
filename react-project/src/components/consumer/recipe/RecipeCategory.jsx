@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import API from '../../../utils/API'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 const RecipeCategory = ({ setRecipes }) => {
+  const dispatch = useDispatch()
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('all')
 
@@ -17,25 +20,31 @@ const RecipeCategory = ({ setRecipes }) => {
 
   // 전체 상품 조회하기
   const getAllRecipe = () => {
+    dispatch(loadingReducerActions.setLoading(true))
     API.get('/recipe')
       .then((res) => {
         setSelectedCategory('all')
         setRecipes(res.data.result.data)
+        dispatch(loadingReducerActions.setLoading(false))
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
 
   // 카테고리 상품 조회하기
   const getCategoryRecipe = (recipeNo) => {
+    dispatch(loadingReducerActions.setLoading(true))
     API.get(`/recipecategory/${recipeNo}`)
       .then((res) => {
         setRecipes(res.data.result.data.recipes)
         setSelectedCategory(res.data.result.data.categoryNo)
+        dispatch(loadingReducerActions.setLoading(false))
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
 

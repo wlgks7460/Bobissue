@@ -4,22 +4,28 @@ import SearchBar from '../../components/consumer/common/SearchBar'
 import API from '../../utils/API'
 import recipeDefaultImg from '../../assets/consumer/recipeDefault.webp'
 import RecipeDetailItemList from '../../components/consumer/recipe/RecipeDetailItemList'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../redux/reducers/loadingSlice'
 
 const RecipeDetail = () => {
   const params = useParams()
+  const dispatch = useDispatch()
 
   const [recipeData, setRecipeData] = useState({})
   const [selectedImg, setSelectedImg] = useState({})
 
   // 레시피 상세 데이터 조회
   const getRecipeData = () => {
+    dispatch(loadingReducerActions.setLoading(true))
     API.get(`/recipe/${params.recipeNo}`)
       .then((res) => {
         setRecipeData(res.data.result.data)
         setSelectedImg(res.data.result.data.images[0])
+        dispatch(loadingReducerActions.setLoading(false))
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
 

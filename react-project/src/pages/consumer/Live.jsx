@@ -176,7 +176,7 @@ const Live = () => {
 
   const getToken = async (sessionId) => {
     const response = await axios.post(
-      `${BASE_URL}/api/openvidu/sessions/${sessionId}/connections`,
+      `${BASE_URL}/api/openvidu/sessions/jihancastt/connections`,
       {},
     )
     console.log('📌 서버에서 받은 토큰:', response.data)
@@ -228,7 +228,7 @@ const Live = () => {
     <div>
       <SearchBar />
       <div className='min-h-[70vh] flex justify-center'>
-        <div className='w-[80rem] flex mt-10 border border-[#6F4E37] rounded'>
+        <div className='w-[75rem] h-[700px] flex mt-10 border border-[#6F4E37] rounded'>
           <div className='w-3/4 h-full flex flex-col rounded'>
             {/* 라이브 방송 */}
             <div

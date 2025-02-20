@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import API from '../../../utils/API'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import MyPageRecipeItem from '../../../components/consumer/mypage/MyPageRecipeItem'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 const MyPageRecipe = () => {
+  const dispatch = useDispatch()
   const [recipes, setRecipes] = useState([])
   const email = useSelector((state) => state.user.userInfo.email)
   // 레시피 데이터 가져오기
   const getRecipeData = () => {
+    dispatch(loadingReducerActions.setLoading(true))
     API.get('/recipe')
       .then((res) => {
         const result = res.data.result.data.filter((v) => v.createdUser === `USER ${email}`)
         setRecipes(result)
+        dispatch(loadingReducerActions.setLoading(false))
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
 

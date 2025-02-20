@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
@@ -8,11 +8,13 @@ import dayjs from 'dayjs'
 import MyPageCalendarItem from '../../../components/consumer/mypage/MyPageCalendarItem'
 import MyPageCalendarModal from '../../../components/consumer/mypage/MyPageCalendarModal'
 import API from '../../../utils/API'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 moment.locale('ko') // 한글 버전
 const localizer = momentLocalizer(moment)
 
 const MyPageCalendar = () => {
+  const dispatch = useDispatch()
   const userInfo = useSelector((state) => state.user.userInfo)
 
   const [selectedDate, setSelectedDate] = useState(null) // 클릭한 날짜
@@ -65,6 +67,7 @@ const MyPageCalendar = () => {
 
   // 월별 데이터 가져오기
   const getCalendarData = (year, month) => {
+    dispatch(loadingReducerActions.setLoading(true))
     API.get(`/calendar/${year}/${month}`)
       .then((res) => {
         const eventData = Object.keys(res.data.result.data).map((key) => {
@@ -76,9 +79,11 @@ const MyPageCalendar = () => {
           }
         })
         setEvents(eventData)
+        dispatch(loadingReducerActions.setLoading(false))
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
 

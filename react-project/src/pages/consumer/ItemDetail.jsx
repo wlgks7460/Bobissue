@@ -5,8 +5,11 @@ import API from '../../utils/API'
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import ItemDetailTab from '../../components/consumer/itemDetail/ItemDetailTab'
 import itemDefaultImg from '../../assets/consumer/itemDefault.webp'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../redux/reducers/loadingSlice'
 
 const ItemDetail = () => {
+  const dispatch = useDispatch()
   // 파라미터 정보
   const params = useParams()
   // 상품 정보 객체
@@ -61,15 +64,18 @@ const ItemDetail = () => {
 
   useEffect(() => {
     // mount
+    dispatch(loadingReducerActions.setLoading(true))
     API.get(`/item/${params.itemNo}`)
       .then((res) => {
         setItem(res.data.result.data)
         if (res.data.result.data.images.length > 0) {
           setItemImg(res.data.result.data.images[0].imageUrl)
+          dispatch(loadingReducerActions.setLoading(false))
         }
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
     // setItem(response.data)
     // unmount

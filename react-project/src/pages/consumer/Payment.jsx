@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import API from '../../utils/API'
 import PaymentAddressModal from '../../components/consumer/payment/PaymentAddressModal'
 import SearchBar from '../../components/consumer/common/SearchBar'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../redux/reducers/loadingSlice'
 
 const Payment = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [userInfo, setUserInfo] = useState({})
 
@@ -71,6 +74,7 @@ const Payment = () => {
 
   // 결제 전 상품 체크
   const checkStock = () => {
+    dispatch(loadingReducerActions.setLoading(true))
     const payload = JSON.parse(localStorage.getItem('cart'))
     API.post('/payments/orderable', payload)
       .then((res) => {
@@ -88,19 +92,24 @@ const Payment = () => {
     API.post('/orders', payload)
       .then((res) => {
         localStorage.removeItem('cart')
+        dispatch(loadingReducerActions.setLoading(false))
         navigate('/')
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
   // 결제 취소 및 실패 시
   const cancelPayment = () => {
     const payload = JSON.parse(localStorage.getItem('cart'))
     API.post('/payments/cancel', payload)
-      .then((res) => {})
+      .then((res) => {
+        dispatch(loadingReducerActions.setLoading(false))
+      })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
   // 결제
