@@ -8,70 +8,21 @@ const ItemDetailQuestion = ({ itemNo }) => {
   // 문의 데이터
   const [questions, setQuestions] = useState([])
 
+  const getQuestions = () => {
+    API.get('/question')
+      .then((res) => {
+        const result = res.data.result.data.filter((v) => v.itemNo === itemNo)
+        setQuestions(result)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   // 데이터 불러오기
   useEffect(() => {
     // mount
-    const res = {
-      data: {
-        result: {
-          data: [
-            {
-              category: '배송',
-              content: 'test2',
-              createAt: '20250125 101437',
-              createdUser: 0,
-              delYN: 'N',
-              isPrivate: 'N',
-              itemNo: 3,
-              questionNo: 1,
-              status: 'N',
-              title: '개발을 빨리 끝내고 싶어!!!!',
-              updatedAt: '20250125 101437',
-              updatedUser: 0,
-              userNo: 0,
-            },
-            {
-              category: '배송',
-              content: 'test2',
-              createAt: '20250125 101437',
-              createdUser: 0,
-              delYN: 'N',
-              isPrivate: 'N',
-              itemNo: 3,
-              questionNo: 2,
-              status: 'Y',
-              title: '개발을 빨리 끝내고 싶어!!!!',
-              updatedAt: '20250125 101437',
-              updatedUser: 0,
-              userNo: 0,
-            },
-            {
-              category: '배송',
-              content: 'test2',
-              createAt: '20250125 101437',
-              createdUser: 0,
-              delYN: 'N',
-              isPrivate: 'Y',
-              itemNo: 3,
-              questionNo: 3,
-              status: 'N',
-              title: '개발을 빨리 끝내고 싶어!!!!',
-              updatedAt: '20250125 101437',
-              updatedUser: 0,
-              userNo: 0,
-            },
-          ],
-        },
-      },
-    }
-    setQuestions(res.data.result.data)
-    // API.get('/question')
-    //   .then((res) => {
-    //     console.log(res)
-    //   })
-    //   .catch((err) => {
-    //     console.error(err)
-    //   })
+    getQuestions()
     // unmount
     return () => {}
   }, [])
@@ -100,13 +51,15 @@ const ItemDetailQuestion = ({ itemNo }) => {
               {questions.length > 0 ? (
                 questions.map((v) => <ItemDetailQuestionItem key={v.questionNo} question={v} />)
               ) : (
-                <tr className='h-[35px] border-b border-gray-400'>
-                  <div className='flex flex-col gap-3 items-center mt-20'>
-                    <p className='text-center'>
-                      <ExclamationCircleIcon className='w-20 text-gray-400' />
-                    </p>
-                    <p className='text-center text-xl text-gray-600'>문의가 없습니다.</p>
-                  </div>
+                <tr>
+                  <td colSpan={4}>
+                    <div className='flex flex-col gap-3 items-center mt-10'>
+                      <p className='text-center'>
+                        <ExclamationCircleIcon className='w-20 text-gray-400' />
+                      </p>
+                      <p className='text-center text-xl text-gray-600'>문의가 없습니다.</p>
+                    </div>
+                  </td>
                 </tr>
               )}
             </tbody>
