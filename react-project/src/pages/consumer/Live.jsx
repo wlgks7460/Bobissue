@@ -131,9 +131,9 @@ const Live = () => {
         videoElement.autoplay = true
         videoElement.playsInline = true
         videoElement.muted = false
-        videoElement.style.width = '100%'
-        videoElement.style.height = '100%'
-        videoElement.style.objectFit = 'cover'
+        videoElement.style.width = 'auto'
+        videoElement.style.height = isFullScreen ? '100%' : '700px'
+        videoElement.style.objectFit = 'contain'
 
         videoContainerRef.current.innerHTML = ''
         videoContainerRef.current.appendChild(videoElement)
@@ -248,11 +248,11 @@ const Live = () => {
     <div>
       <SearchBar />
       <div className='min-h-[70vh] flex justify-center'>
-        <div className='w-[75rem] h-[700px] flex mt-10 border border-[#6F4E37] rounded'>
+        <div className='w-[75rem] min-h-[700px] flex mt-10 border border-[#6F4E37] rounded'>
           <div className='w-3/4 h-full flex flex-col rounded'>
             {/* 라이브 방송 */}
             <div
-              className='grow relative'
+              className={`grow relative ${isFullScreen ? 'h-full' : 'h-[700px]'}`}
               onMouseOver={() => setIsHover(true)}
               onMouseOut={() => setIsHover(false)}
               ref={fullScreenRef}
