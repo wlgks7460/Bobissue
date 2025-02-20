@@ -16,10 +16,13 @@ const LiveApply = () => {
 
   const availableTimes = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00']
 
+ 
+
   useEffect(() => {
     async function fetchItems() {
       try {
-        const response = await API.get('/item')
+        const response = await API.get('/sellers/item')
+        console.log(response);
         setItems(response.data?.result?.data || [])
       } catch (error) {
         console.error('상품 정보 불러오기 실패:', error)
