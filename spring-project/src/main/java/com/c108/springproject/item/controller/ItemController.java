@@ -170,7 +170,7 @@ public class ItemController {
     }
 
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseDto searchItems(@RequestBody SearchReqDto reqDto) {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<SearchResDto>(itemService.elasticSearchItems(reqDto)));
     }
