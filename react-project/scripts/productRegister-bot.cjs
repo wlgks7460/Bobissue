@@ -2,7 +2,6 @@ const puppeteer = require('puppeteer')
 const path = require('path')
 const fs = require('fs')
 
-// 상품 등록 페이지 URL
 const productRegisterUrl = 'https://bobissue.store/seller/products/register'
 const category1 = '김밥·도시락·볶음밥'
 const category2 = '김밥'
@@ -60,29 +59,34 @@ const registerProduct = async (browser, image, index) => {
   // 상품명 입력
   await page.type('input[type="text"]', productName)
 
-  // 카테고리 선택 (1차, 2차)
-  // ✅ 1. 클릭해서 카테고리 선택창 열기
+  // ✅ 1. 카테고리 선택 버튼 클릭하여 드롭다운 열기
   await page.waitForSelector('div[aria-haspopup="true"]', { visible: true })
-  await page.click('div[aria-haspopup="true"]') // 카테고리 선택창 열기
-  await page.waitForSelector('div.p-3.cursor-pointer', { visible: true }) // ✅ 대분류 카테고리가 뜰 때까지 대기
+  await page.click('div[aria-haspopup="true"]')
 
-  // ✅ 2. 대분류 카테고리 선택
+  // ✅ 2. 대분류 카테고리 선택 (카테고리 목록이 렌더링될 때까지 기다림)
+  await page.waitForSelector('div.p-3.cursor-pointer', { visible: true })
+
   await page.evaluate((category1) => {
-    const categoryElements = [...document.querySelectorAll('div.p-3.cursor-pointer')] // 모든 카테고리 찾기
-    const targetCategory = categoryElements.find((el) => el.textContent.includes(category1)) // 일치하는 카테고리 찾기
-    if (targetCategory) targetCategory.click()
+    const categoryElements = [...document.querySelectorAll('div.p-3.cursor-pointer')]
+    const targetCategory = categoryElements.find((el) => el.textContent.includes(category1))
+    if (targetCategory) {
+      targetCategory.click()
+    }
   }, category1)
 
-  await page.waitForSelector('div.p-3.cursor-pointer', { visible: true }) // ✅ 하위 카테고리가 뜰 때까지 대기
-
-  // ✅ 3. 다시 클릭해서 하위 카테고리 선택창 열기
+  // ✅ 3. 하위 카테고리 선택을 위해 다시 드롭다운 열기
+  await page.waitForTimeout(500) // UI 렌더링 대기
   await page.click('div[aria-haspopup="true"]')
 
   // ✅ 4. 하위 카테고리 선택
+  await page.waitForSelector('div.p-3.cursor-pointer', { visible: true })
+
   await page.evaluate((category2) => {
-    const subCategoryElements = [...document.querySelectorAll('div.p-3.cursor-pointer')] // 모든 서브 카테고리 찾기
-    const targetSubCategory = subCategoryElements.find((el) => el.textContent.includes(category2)) // 일치하는 하위 카테고리 찾기
-    if (targetSubCategory) targetSubCategory.click()
+    const subCategoryElements = [...document.querySelectorAll('div.p-3.cursor-pointer')]
+    const targetSubCategory = subCategoryElements.find((el) => el.textContent.includes(category2))
+    if (targetSubCategory) {
+      targetSubCategory.click()
+    }
   }, category2)
 
   console.log(`✅ 카테고리 선택 완료: ${category1} > ${category2}`)
@@ -106,17 +110,17 @@ const registerProduct = async (browser, image, index) => {
   await page.click('button[type="submit"]')
 
   console.log(`✅ [${index + 1}] ${productName} 등록 완료`)
-  //await page.waitForTimeout(2000)
-  // await page.close()
+  await page.waitForTimeout(2000)
+  await page.close()
 }
 
 ;(async () => {
   const browser = await puppeteer.launch({ headless: false })
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < imageFiles.length; i++) {
     await registerProduct(browser, imageFiles[i], i)
   }
 
   console.log('🎉 모든 상품 등록이 완료되었습니다!')
-  // await browser.close()
+  await browser.close()
 })()
