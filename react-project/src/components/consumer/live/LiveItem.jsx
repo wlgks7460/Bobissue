@@ -61,7 +61,7 @@ const LiveItem = ({ item }) => {
       >
         {item?.name}
       </div>
-      {isOpen && <LiveModal setIsOpen={setIsOpen} item={item} />}
+      {isOpen && <LiveModal setIsOpen={setIsOpen} item={itemData} />}
     </div>
   )
 }

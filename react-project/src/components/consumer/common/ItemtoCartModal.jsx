@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
@@ -51,7 +52,7 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
     }
     closeModal()
   }
-  return (
+  return createPortal(
     <div className='fixed top-0 left-0 z-20'>
       <div className='w-full h-full fixed bg-gray-600/80 flex justify-center items-center'>
         <div className='w-[400px] border border-gray-400 rounded bg-white p-5 flex flex-col'>
@@ -73,13 +74,17 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
                 <div className=' grow flex flex-col justify-between'>
                   <p className='text-lg font-semibold'>{item.name}</p> {/* 상품명 */}
                   <div className='text-right'>
-                    <p className='text-sm text-gray-400 line-through'>{addComma(item.price)}원</p>{' '}
                     {/* 원가 */}
+                    {item.price !== item.salePrice && (
+                      <p className='text-sm text-gray-400 line-through'>{addComma(item.price)}원</p>
+                    )}
                     <p className='text-lg'>
                       {/* 할인율 */}
-                      <span className='text-red-500 me-5'>
-                        {Math.round(((item.price - item.salePrice) / item.price) * 100)}%
-                      </span>
+                      {item.price !== item.salePrice && (
+                        <span className='text-red-500 me-5'>
+                          {Math.round(((item.price - item.salePrice) / item.price) * 100)}%
+                        </span>
+                      )}
                       {/* 판매가 */}
                       {addComma(item.salePrice)}원
                     </p>
@@ -133,7 +138,8 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

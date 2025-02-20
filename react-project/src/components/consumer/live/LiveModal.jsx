@@ -73,13 +73,17 @@ const LiveModal = ({ setIsOpen, item }) => {
                 <div className=' grow flex flex-col justify-between'>
                   <p className='text-lg font-semibold'>{item.name}</p> {/* 상품명 */}
                   <div className='text-right'>
-                    <p className='text-sm text-gray-400 line-through'>{addComma(item.price)}원</p>{' '}
                     {/* 원가 */}
+                    {item.price !== item.salePrice && (
+                      <p className='text-sm text-gray-400 line-through'>{addComma(item.price)}원</p>
+                    )}
                     <p className='text-lg'>
                       {/* 할인율 */}
-                      <span className='text-red-500 me-5'>
-                        {Math.round(((item.price - item.salePrice) / item.price) * 100)}%
-                      </span>
+                      {item.price !== item.salePrice && (
+                        <span className='text-red-500 me-5'>
+                          {Math.round(((item.price - item.salePrice) / item.price) * 100)}%
+                        </span>
+                      )}
                       {/* 판매가 */}
                       {addComma(item.salePrice)}원
                     </p>
