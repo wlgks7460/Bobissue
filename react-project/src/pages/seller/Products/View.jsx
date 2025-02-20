@@ -52,6 +52,7 @@ const View = () => {
     if (isConfirmed) {
       try {
         const response = await API.delete(`/item/${itemNo}`)
+        console.log(response)
         if (response.status === 200) {
           alert('상품이 삭제되었습니다.')
           navigate('/seller/products/search')
