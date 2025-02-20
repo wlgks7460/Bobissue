@@ -384,23 +384,23 @@ public class ItemService {
     }
 
     // like 검색
-//    @Transactional
-//    public SearchResDto searchItems(SearchReqDto reqDto) {
-//        int pageSize = 10;
-//        PageRequest pageable = PageRequest.of(reqDto.getPage(), pageSize);
-//        Page<Item> itemsPage = itemRepository.searchItems(reqDto.getSearch(), pageable);
-//
-//        List<ItemSearchListResDto> items = itemsPage.getContent()
-//                .stream()
-//                .map(ItemSearchListResDto::toDto)
-//                .collect(Collectors.toList());
-//
-//        return SearchResDto.builder()
-//                .items(items)
-//                .page(itemsPage.getNumber())
-//                .size(itemsPage.getTotalPages())
-//                .build();
-//    }
+    @Transactional
+    public SearchResDto searchItems(SearchReqDto reqDto) {
+        int pageSize = 10;
+        PageRequest pageable = PageRequest.of(reqDto.getPage(), pageSize);
+        Page<Item> itemsPage = itemRepository.searchItems(reqDto.getSearch(), pageable);
+
+        List<ItemSearchListResDto> items = itemsPage.getContent()
+                .stream()
+                .map(ItemSearchListResDto::toDto)
+                .collect(Collectors.toList());
+
+        return SearchResDto.builder()
+                .items(items)
+                .page(itemsPage.getNumber())
+                .size(itemsPage.getTotalPages())
+                .build();
+    }
 
     @Transactional
     public List<ItemRepurchaseDto> getTopRepurchaseItems() {
