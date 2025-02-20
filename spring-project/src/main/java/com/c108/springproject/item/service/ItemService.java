@@ -9,8 +9,9 @@ import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
 import com.c108.springproject.item.dto.request.SearchReqDto;
 import com.c108.springproject.item.dto.response.*;
+import com.c108.springproject.item.elasticRepository.ItemElasticRepository;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
-//import com.c108.springproject.item.repository.ItemElasticRepository;
+//import com.c108.springproject.item.elasticRepository.ItemElasticRepository;
 import com.c108.springproject.item.repository.ItemLikeRepository;
 import com.c108.springproject.item.repository.ItemQueryRepository;
 import com.c108.springproject.item.repository.ItemRepository;
@@ -47,11 +48,11 @@ public class ItemService {
     private final ItemLikeRepository itemLikeRepository;
     private final UserRepository userRepository;
     private final ItemQueryRepository itemQueryRepository;
-//    private final ItemElasticRepository itemElasticRepository;
+    private final ItemElasticRepository itemElasticRepository;
 
     public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, ItemCategoryRepository itemCategoryRepository, S3Service s3Service, SellerRepository sellerRepository, ItemLikeRepository itemLikeRepository, UserRepository userRepository, ItemQueryRepository itemQueryRepository
-//            ,
-//                       ItemElasticRepository itemElasticRepository
+            ,
+                       ItemElasticRepository itemElasticRepository
                        ) {
 
         this.itemRepository = itemRepository;
@@ -61,7 +62,7 @@ public class ItemService {
         this.sellerRepository = sellerRepository;
         this.itemLikeRepository = itemLikeRepository;
         this.userRepository = userRepository;
-//        this.itemElasticRepository = itemElasticRepository;
+        this.itemElasticRepository = itemElasticRepository;
         this.itemQueryRepository = itemQueryRepository;
     }
 
@@ -479,36 +480,36 @@ public class ItemService {
         }
     }
 
-//    // 엘라스틱 서치
-//    @Transactional
-//    public SearchResDto elasticSearchItems(SearchReqDto reqDto) {
-//        PageRequest pageable = PageRequest.of(reqDto.getPage(), 10);
-//        Page<ItemElastic> itemsPage = itemElasticRepository.findByNameOrDescriptionOrCompanyName(
-//                reqDto.getSearch(), reqDto.getSearch(), reqDto.getSearch(), pageable);
-//
-//        List<ItemSearchListResDto> items = itemsPage.getContent().stream().map(itemElastic -> {
-//            Item item = itemRepository.findById(itemElastic.getItemNo())
-//                    .orElseThrow(() -> new RuntimeException("Item not found"));
-//
-//            String imageUrl = item.getImages() != null && !item.getImages().isEmpty()
-//                    ? item.getImages().get(0).getImageUrl()
-//                    : "default_image_url";
-//
-//            return ItemSearchListResDto.builder()
-//                    .itemNo(item.getItemNo())
-//                    .name(item.getName())
-//                    .price(item.getPrice())
-//                    .salePrice(item.getSalePrice())
-//                    .stock(item.getStock())
-//                    .images(imageUrl)
-//                    .build();
-//        }).collect(Collectors.toList());
-//
-//        return SearchResDto.builder()
-//                .items(items)
-//                .page(itemsPage.getNumber())
-//                .size(itemsPage.getTotalPages())
-//                .build();
-//    }
+    // 엘라스틱 서치
+    @Transactional
+    public SearchResDto elasticSearchItems(SearchReqDto reqDto) {
+        PageRequest pageable = PageRequest.of(reqDto.getPage(), 10);
+        Page<ItemElastic> itemsPage = itemElasticRepository.findByNameOrDescriptionOrCompanyName(
+                reqDto.getSearch(), reqDto.getSearch(), reqDto.getSearch(), pageable);
+
+        List<ItemSearchListResDto> items = itemsPage.getContent().stream().map(itemElastic -> {
+            Item item = itemRepository.findById(itemElastic.getItemNo())
+                    .orElseThrow(() -> new RuntimeException("Item not found"));
+
+            String imageUrl = item.getImages() != null && !item.getImages().isEmpty()
+                    ? item.getImages().get(0).getImageUrl()
+                    : "default_image_url";
+
+            return ItemSearchListResDto.builder()
+                    .itemNo(item.getItemNo())
+                    .name(item.getName())
+                    .price(item.getPrice())
+                    .salePrice(item.getSalePrice())
+                    .stock(item.getStock())
+                    .images(imageUrl)
+                    .build();
+        }).collect(Collectors.toList());
+
+        return SearchResDto.builder()
+                .items(items)
+                .page(itemsPage.getNumber())
+                .size(itemsPage.getTotalPages())
+                .build();
+    }
 
 }

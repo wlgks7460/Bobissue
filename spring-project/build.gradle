@@ -49,6 +49,7 @@ dependencies {
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.data:spring-data-elasticsearch'
+	implementation 'org.springframework.data:spring-data-elasticsearch:5.2.2' // 최신 버전 확인 필요
 
 	// QueryDsl 의존성
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -59,6 +60,9 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-json'
 	implementation 'io.openvidu:openvidu-java-client:2.31.0'
+
+	//mongdo
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
 
 

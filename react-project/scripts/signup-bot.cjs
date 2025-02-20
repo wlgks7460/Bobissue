@@ -1,30 +1,87 @@
 const puppeteer = require('puppeteer')
-const { faker } = require('@faker-js/faker')
 
 // 회원가입 페이지 URL
 const signupUrl = 'https://bobissue.store/signup'
 
-// 랜덤 사용자 데이터 생성
+// 한국식 이름 리스트 (30개)
+const koreanNames = [
+  '민준',
+  '서준',
+  '예준',
+  '도윤',
+  '주원',
+  '하준',
+  '지호',
+  '지훈',
+  '준우',
+  '현우',
+  '우진',
+  '지후',
+  '성민',
+  '승우',
+  '태윤',
+  '서진',
+  '도현',
+  '유준',
+  '수현',
+  '민호',
+  '우빈',
+  '정우',
+  '준서',
+  '건우',
+  '승현',
+  '영훈',
+  '시우',
+  '하람',
+  '태민',
+  '윤호',
+  '정은',
+  '일성',
+  '정일',
+  '미나',
+  '진수',
+  '가은',
+]
+
+// 랜덤 사용자 데이터 생성 함수
 const generateUserData = () => {
+  const randomNumber = Math.floor(1000 + Math.random() * 9000) // 랜덤 숫자 (1000~9999)
+  const passwordBase = 'q1w2e3r4!' // 기본 비밀번호
+  const password = passwordBase + Math.floor(Math.random() * 10) // 랜덤 숫자 추가
+
+  // 랜덤 전화번호 (010-XXXX-YYYY)
+  const randomMid = Math.floor(1000 + Math.random() * 9000)
+  const randomEnd = Math.floor(1000 + Math.random() * 9000)
+  const phone = `010-${randomMid}-${randomEnd}`
+
+  // 성 + 이름 조합
+  const lastNames = ['김', '이', '박', '최', '강']
+  const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
+  const firstName = koreanNames[Math.floor(Math.random() * koreanNames.length)]
+
   return {
-    email: faker.internet.email(),
-    password: faker.internet.password(12, true, /[A-Za-z0-9@#%&*!]/),
-    name: faker.person.fullName(),
-    birthday: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }).toISOString().split('T')[0],
-    phone: faker.phone.number('010-####-####'),
-    gender: faker.helpers.arrayElement(['M', 'F']),
-    height: faker.number.int({ min: 150, max: 200 }).toString(),
-    weight: faker.number.int({ min: 45, max: 120 }).toString(),
+    email: `user${randomNumber}@test.com`,
+    password: password,
+    name: `${lastName}${firstName}`,
+    birthday: new Date(
+      Math.floor(Math.random() * (2006 - 1960 + 1) + 1960),
+      Math.floor(Math.random() * 12),
+      Math.floor(Math.random() * 28) + 1,
+    )
+      .toISOString()
+      .split('T')[0],
+    phone: phone,
+    gender: Math.random() > 0.5 ? 'M' : 'F',
+    height: (Math.floor(Math.random() * 51) + 150).toString(),
+    weight: (Math.floor(Math.random() * 76) + 45).toString(),
   }
 }
 
-;(async () => {
-  const userData = generateUserData() // 랜덤 유저 데이터 생성
-  console.log('📌 생성된 유저 정보:', userData)
-
-  const browser = await puppeteer.launch({ headless: false })
+// Puppeteer 회원가입 함수
+const signupProcess = async (browser, userData, index) => {
+  console.log(`🔄 [${index + 1}/30] 회원가입 진행 중...`)
   const page = await browser.newPage()
-  await page.goto(signupUrl, { waitUntil: 'networkidle2' })
+  await page.goto(signupUrl, { waitUntil: 'networkidle2', timeout: 5000 })
 
   // 자동으로 입력
   await page.type('#email', userData.email)
@@ -40,34 +97,54 @@ const generateUserData = () => {
     document.querySelector('input[type="date"]').value = birth
   }, userData.birthday)
 
-  // 성별 선택 (라디오 버튼)
+  // 성별 선택
   if (userData.gender === 'M') {
     await page.click('input[id="male"]')
   } else {
     await page.click('input[id="female"]')
   }
 
-  // 전체 동의 버튼 클릭 (모든 필수 약관 체크)
-  await page.waitForSelector('button', { visible: true })
-  await page.evaluate(() => {
-    const buttons = Array.from(document.querySelectorAll('button'))
-    const agreementButton = buttons.find((btn) => btn.textContent.includes('전체 동의'))
-    if (agreementButton) agreementButton.click()
+  // 전체 동의 버튼 클릭
+  await page.waitForSelector('button, div, span', { visible: true, timeout: 5000 })
+
+  const found = await page.evaluate(() => {
+    const elements = Array.from(document.querySelectorAll('button, div, span'))
+    const agreementContainer = elements.find((el) =>
+      el.textContent.trim().includes('전체 동의합니다.'),
+    )
+    if (agreementContainer) {
+      const agreementButton = agreementContainer.querySelector('button') || agreementContainer
+      if (agreementButton) {
+        agreementButton.click()
+        return '✅ 전체 동의 버튼 클릭됨!'
+      }
+    }
+    return '❌ 전체 동의 버튼을 찾을 수 없음!'
   })
+
+  console.log(`🔍 [${index + 1}] ${found}`)
 
   // 회원가입 버튼 클릭
   await page.click('input[type="submit"]')
 
   // 가입 처리 후 결과 대기
-  //await page.waitForTimeout(5000)
-
-  // 회원가입 성공 여부 확인 (alert 창 감지)
   page.on('dialog', async (dialog) => {
-    console.log('📢 Alert 메시지:', dialog.message())
+    console.log(`📢 [${index + 1}] Alert 메시지:`, dialog.message())
     await dialog.dismiss()
   })
 
-  console.log('✅ 자동 회원가입 완료!')
+  console.log(`✅ [${index + 1}/300] 회원가입 완료!`)
+  await page.close() // 페이지 닫기
+}
 
-  await browser.close()
+;(async () => {
+  const browser = await puppeteer.launch({ headless: false }) // 브라우저 실행
+
+  for (let i = 0; i < 300; i++) {
+    const userData = generateUserData() // 랜덤 유저 생성
+    await signupProcess(browser, userData, i) // 회원가입 실행
+  }
+
+  await browser.close() // 모든 작업 종료 후 브라우저 닫기
+  console.log('🎉 300명의 회원가입이 완료되었습니다!')
 })()
