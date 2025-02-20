@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaSignOutAlt, FaHome, FaBars } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
+import { userReducerActions } from '../../../redux/reducers/userSlice'
 
 const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
   const navigate = useNavigate()
   const [debugMode, setDebugMode] = useState(false)
-
+  const dispatch = useDispatch()
   useEffect(() => {
     const storedDebugMode = localStorage.getItem('debug_mode')
     if (storedDebugMode) {
@@ -14,8 +16,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
   }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
+    dispatch(userReducerActions.logout())
     navigate('/seller/login')
   }
 
@@ -53,6 +54,7 @@ const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
           to='/'
           className='p-3 bg-caramelTan/30 text-coffeeBrown rounded-lg hover:bg-caramelTan/80 transition flex items-center'
           aria-label='Go to Home'
+          onClick={handleLogout}
         >
           <FaHome className='w-5 h-5' />
         </Link>

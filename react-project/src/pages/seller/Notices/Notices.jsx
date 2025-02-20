@@ -6,14 +6,14 @@ const categories = ['전체', '필독', '일반', '정책', '기술', '홍보']
 const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
 const dummyNotices = [
-  {
-    noticeNo: 1,
-    category: '필독',
-    title: '서비스 점검 안내',
-    adminNo: '관리자',
-    date: '2025-01-22',
-    reader: '판매자',
-  },
+  // {
+  //   noticeNo: 1,
+  //   category: '필독',
+  //   title: '서비스 점검 안내',
+  //   adminNo: '관리자',
+  //   date: '2025-01-22',
+  //   reader: '판매자',
+  // },
   {
     noticeNo: 2,
     category: '일반',
@@ -104,7 +104,7 @@ const Notices = () => {
       </div>
 
       {/* 카테고리 선택 */}
-      <div className='mb-6 flex justify-center items-center space-x-4 text-lg font-semibold'>
+      {/* <div className='mb-6 flex justify-center items-center space-x-4 text-lg font-semibold'>
         {categories.map((category) => (
           <span
             key={category}
@@ -121,7 +121,7 @@ const Notices = () => {
             {category}
           </span>
         ))}
-      </div>
+      </div> */}
 
       {/* 공지사항 테이블 */}
       <div className='bg-white rounded-lg shadow border border-hazelnutBrown p-4'>
