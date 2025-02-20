@@ -120,21 +120,21 @@ public class ItemService {
         Item savedItem = itemRepository.save(item);
 
         // Elastic Search 저장
-//        saveElasticItem(savedItem);
+        saveElasticItem(savedItem);
         return ItemCreateResDto.toDto(savedItem);
 
     }
 
 //    // Elastic Search 저장
-//    public void saveElasticItem(Item item){
-//        ItemElastic itemElastic = ItemElastic.builder()
-//                .itemNo(item.getItemNo())
-//                .name(item.getName())
-//                .description(item.getDescription())
-//                .companyName(item.getCompany().getName())
-//                .build();
-//        itemElasticRepository.save(itemElastic);
-//    }
+    public void saveElasticItem(Item item){
+        ItemElastic itemElastic = ItemElastic.builder()
+                .itemNo(Integer.toString(item.getItemNo()))
+                .name(item.getName())
+                .description(item.getDescription())
+                .companyName(item.getCompany().getName())
+                .build();
+        itemElasticRepository.save(itemElastic);
+    }
 
     // 전체 상품 조회
     @Transactional
@@ -252,7 +252,7 @@ public class ItemService {
         Item savedItem = itemRepository.save(updatedItem);
 
         // 엘라스틱 업데이트 (저장 로직과 동일)
-//        saveElasticItem(savedItem);
+        saveElasticItem(savedItem);
         return ItemUpdateResDto.toDto(savedItem);
     }
 
@@ -294,14 +294,14 @@ public class ItemService {
         item.getImages().clear();
 
         item.delete();
-//        deleteFromElastic(itemNo);
+        deleteFromElastic(itemNo);
         itemRepository.save(item);
     }
 
-//    // 엘라스틱 데이터 삭제
-//    public void deleteFromElastic(int itemNo) {
-//        itemElasticRepository.deleteById(String.valueOf(itemNo));
-//    }
+    // 엘라스틱 데이터 삭제
+    public void deleteFromElastic(int itemNo) {
+        itemElasticRepository.deleteById(String.valueOf(itemNo));
+    }
 
 
     // 상품 찜 Create Delete
@@ -373,16 +373,17 @@ public class ItemService {
         List<Item> items = itemRepository.findByDelYn("N");
         List<ItemElastic> itemDocuments = items.stream().map(item ->
                 ItemElastic.builder()
-                        .itemNo(item.getItemNo())
+                        .itemNo(Integer.toString(item.getItemNo()))
                         .name(item.getName())
                         .description(item.getDescription())
                         .companyName(item.getCompany().getName())
                         .build()
-        ).collect(Collectors.toList());
+        ).toList();
 
-//        itemElasticRepository.saveAll(itemDocuments);
+        itemElasticRepository.saveAll(itemDocuments);
     }
 
+    // like 검색
     @Transactional
     public SearchResDto searchItems(SearchReqDto reqDto) {
         int pageSize = 10;
@@ -488,12 +489,12 @@ public class ItemService {
                 reqDto.getSearch(), reqDto.getSearch(), reqDto.getSearch(), pageable);
 
         List<ItemSearchListResDto> items = itemsPage.getContent().stream().map(itemElastic -> {
-            Item item = itemRepository.findById(itemElastic.getItemNo())
+            Item item = itemRepository.findById(Integer.parseInt(itemElastic.getItemNo()))
                     .orElseThrow(() -> new RuntimeException("Item not found"));
 
             String imageUrl = item.getImages() != null && !item.getImages().isEmpty()
                     ? item.getImages().get(0).getImageUrl()
-                    : "default_image_url";
+                    : "https://bobissue-dev-storage-ap.s3.ap-northeast-2.amazonaws.com/global/no_image.png";
 
             return ItemSearchListResDto.builder()
                     .itemNo(item.getItemNo())

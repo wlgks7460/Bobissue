@@ -15,7 +15,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public class ItemElastic {
 
     @Id
-    private int itemNo;
+    private String itemNo;
 
     @Field(type = FieldType.Text, analyzer = "standard")
     private String name;
