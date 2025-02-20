@@ -258,7 +258,7 @@ const router = createBrowserRouter([
             element: <ConsumerRecipeDetail />,
           },
           {
-            path: 'liveShopping',
+            path: 'liveShopping/:castNo',
             element: <ConsumerPrivateRoute />,
             children: [{ path: '', element: <ConsumerLive /> }],
           },
