@@ -89,6 +89,7 @@ const Payment = () => {
 
   // 결제 성공 후 주문 생성
   const createOrder = (payload) => {
+    console.log(payload);
     API.post('/orders', payload)
       .then((res) => {
         localStorage.removeItem('cart')
@@ -127,6 +128,7 @@ const Payment = () => {
       })),
       usePoint: points,
     }
+    console.log(paymentData);
 
     // 결제 함수
     callPayment(paymentData)

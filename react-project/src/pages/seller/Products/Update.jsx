@@ -84,13 +84,13 @@ const EditProduct = () => {
 
   // ✅ 폼 제출 핸들러 (상품 수정)
   const handleSubmit = async (e) => {
-    e.preventDefault()
-
+    e.preventDefault();
+  
     if (!localStorage.getItem('access_token')) {
-      alert('상품 수정에 대한 인증이 필요합니다.')
-      return
+      alert('상품 수정에 대한 인증이 필요합니다.');
+      return;
     }
-
+  
     if (
       !product.name ||
       !product.categoryNo ||
@@ -100,22 +100,18 @@ const EditProduct = () => {
       !product.expiredAt ||
       !product.description
     ) {
-      alert('모든 항목을 입력해주세요.')
-      return
+      alert('모든 항목을 입력해주세요.');
+      return;
     }
-
-    // ✅ 기존 값과 동일하면 제출 불가
+  
     if (!isProductChanged()) {
-      alert('수정된 내용이 없습니다.')
-      return
+      alert('수정된 내용이 없습니다.');
+      return;
     }
-
+  
     try {
-      const formData = new FormData()
-
-      // ✅ 기존 이미지 중 유지할 이미지 ID 필터링
-
-      // ✅ 상품 데이터 JSON 변환 후 추가
+      const formData = new FormData();
+  
       const itemData = {
         name: product.name,
         categoryNo: product.categoryNo,
@@ -124,29 +120,38 @@ const EditProduct = () => {
         stock: parseInt(product.stock, 10),
         expiredAt: product.expiredAt,
         description: product.description,
-        keepImageIds: product.keepImageIds, // ✅ 유지할 이미지 ID 추가
-      }
-
-      formData.append('item', JSON.stringify(itemData))
-
-      // ✅ 새로운 이미지 파일 추가
+        keepImageIds: product.keepImageIds,
+      };
+  
+      formData.append('item', JSON.stringify(itemData));
+  
       product.images.forEach((img) => {
         if (img.file) {
-          formData.append('images', img.file) // 새 이미지 업로드
+          formData.append('images', img.file);
         }
-      })
-
+      });
+  
+      // ✅ FormData 내용 콘솔 확인
+      console.log("=== FormData 출력 시작 ===");
+      formData.forEach((value, key) => console.log(`${key}:`, value));
+      console.log("item 데이터:", JSON.parse(formData.get('item')));
+      formData.getAll('images').forEach((file, index) => {
+        console.log(`이미지 ${index + 1}:`, file.name, file.size, file.type);
+      });
+      console.log("=== FormData 출력 끝 ===");
+      console.log(itemNo);
       await API.put(`/item/${itemNo}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-      })
-
-      alert('상품이 수정되었습니다!')
-      navigate('/seller/products/search')
+      });
+  
+      alert('상품이 수정되었습니다!');
+      navigate('/seller/products/search');
     } catch (error) {
-      console.error('수정 실패:', error)
-      alert('수정 중 오류가 발생했습니다.')
+      console.error('수정 실패:', error);
+      alert('수정 중 오류가 발생했습니다.');
     }
-  }
+  };
+  
 
   return (
     <div className='p-6'>
