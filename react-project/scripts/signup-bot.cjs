@@ -41,13 +41,20 @@ const koreanNames = [
   '미나',
   '진수',
   '가은',
+  '정수',
+  '정재',
+  '정민',
+  '동석',
+  '무식',
+  '민수',
 ]
 
 // 랜덤 사용자 데이터 생성 함수
-const generateUserData = () => {
-  const randomNumber = Math.floor(1000 + Math.random() * 9000) // 랜덤 숫자 (1000~9999)
-  const passwordBase = 'q1w2e3r4!' // 기본 비밀번호
-  const password = passwordBase + Math.floor(Math.random() * 10) // 랜덤 숫자 추가
+
+const generateUserData = (i) => {
+  const randomNumber = Math.floor(10000 + i) // 랜덤 숫자 (1000~9999)
+  const password = 'q1w2e3r4!' // 기본 비밀번호
+  // 랜덤 숫자 추가
 
   // 랜덤 전화번호 (010-XXXX-YYYY)
   const randomMid = Math.floor(1000 + Math.random() * 9000)
@@ -55,7 +62,7 @@ const generateUserData = () => {
   const phone = `010-${randomMid}-${randomEnd}`
 
   // 성 + 이름 조합
-  const lastNames = ['김', '이', '박', '최', '강']
+  const lastNames = ['김', '이', '박', '최', '강', '차', '황황']
   const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
   const firstName = koreanNames[Math.floor(Math.random() * koreanNames.length)]
 
@@ -141,7 +148,7 @@ const signupProcess = async (browser, userData, index) => {
   const browser = await puppeteer.launch({ headless: false }) // 브라우저 실행
 
   for (let i = 0; i < 300; i++) {
-    const userData = generateUserData() // 랜덤 유저 생성
+    const userData = generateUserData(i) // 랜덤 유저 생성
     await signupProcess(browser, userData, i) // 회원가입 실행
   }
 

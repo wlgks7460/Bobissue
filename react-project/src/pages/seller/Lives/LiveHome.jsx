@@ -63,6 +63,7 @@ const LiveHome = () => {
   const events = convertToCalendarEvents(liveSchedules)
 
   const handleEventClick = (event) => {
+    console.log(event)
     setSelectedEvent(event)
   }
 
