@@ -5,7 +5,7 @@ import kakaoLogo from '../../assets/consumer/kakaoLoginLogo.png'
 import API from '../../utils/API'
 import { useDispatch } from 'react-redux'
 import { userReducerActions } from '../../redux/reducers/userSlice'
-import { v4 as uuidv4 } from 'uuid'
+import { loadingReducerActions } from '../../redux/reducers/loadingSlice'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -25,13 +25,17 @@ const Login = () => {
       password: passwordRef.current.value,
       isOauth: false,
     }
+    dispatch(loadingReducerActions.setLoading(true))
     API.post('/auths/user-login', payload)
       .then((res) => {
         dispatch(userReducerActions.login({ ...res.data.result.data, status: 'consumer' }))
+        dispatch(loadingReducerActions.setLoading(false))
         navigate('/')
       })
       .catch((err) => {
         console.error(err)
+        alert('아이디 / 비밀번호를 확인해주세요.')
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
 

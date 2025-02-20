@@ -3,10 +3,14 @@ import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import { Link } from 'react-router-dom'
 
+// 플러그인 등록
+dayjs.extend(isBetween)
+
 const HomeLiveShoppingItem = ({ cast }) => {
   const [remainingTime, setRemainingTime] = useState('')
   const scrollContainerRef = useRef(null)
   const [isLive, setIsLive] = useState(false)
+  const [liveOff, setLiveOff] = useState(false)
 
   // 남은 시간 계산 함수
   const calculateRemainingTime = () => {
@@ -62,6 +66,9 @@ const HomeLiveShoppingItem = ({ cast }) => {
     if (currentTime.isBetween(startTime, endTime)) {
       setIsLive(true)
     }
+    if (currentTime.isAfter(endTime)) {
+      setLiveOff(true)
+    }
   }, [])
 
   return (
@@ -74,20 +81,27 @@ const HomeLiveShoppingItem = ({ cast }) => {
         <p className='text-gray-500'>방송 시간</p>
         <p className='font-semibold'>{`${dayjs(cast.startAt).format('HH:MM')} ~ ${dayjs(cast.endAt).format('HH:MM')}`}</p>
       </div>
-
-      {isLive ? (
-        <div className='w-full h-[50px] flex justify-center items-center'>
-          <Link to={'/liveShopping'}>
-            {/* 라이브 이동 */}
-            <button className='text-[#6F4E37]'>라이브 보러가기</button>
-          </Link>
+      {liveOff ? (
+        <div className='mb-4'>
+          <p>종료된 방송입니다.</p>
         </div>
       ) : (
-        <div className='mb-4'>
-          {/* 남은 시간 */}
-          <p className='text-gray-500'>남은 방송 시간</p>
-          <p className='font-semibold text-red-500'>{remainingTime}</p>
-        </div>
+        <>
+          {isLive ? (
+            <div className='w-full h-[50px] flex justify-center items-center mb-4'>
+              <Link to={'/liveShopping'}>
+                {/* 라이브 이동 */}
+                <button className='text-[#6F4E37]'>라이브 보러가기</button>
+              </Link>
+            </div>
+          ) : (
+            <div className='mb-4'>
+              {/* 남은 시간 */}
+              <p className='text-gray-500'>남은 방송 시간</p>
+              <p className='font-semibold text-red-500'>{remainingTime}</p>
+            </div>
+          )}
+        </>
       )}
 
       {/* 방송 상품 목록 */}

@@ -3,9 +3,11 @@ import dayjs from 'dayjs'
 import API from '../../../utils/API'
 import MyPageOrderItem from '../../../components/consumer/mypage/MyPageOrderItem'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 const MyPageOrder = () => {
+  const dispatch = useDispatch()
   const userNo = useSelector((state) => state.user.userInfo.userNo)
 
   const [orders, setOrders] = useState([]) // 전체 주문 목록
@@ -59,6 +61,7 @@ const MyPageOrder = () => {
   // 주문 리스트 조회
   const getOrderData = () => {
     if (userNo && orders.length < 1) {
+      dispatch(loadingReducerActions.setLoading(true))
       API.get(`/users/${userNo}/orders`)
         .then((res) => {
           const result = res.data.result.data.filter(
@@ -67,9 +70,11 @@ const MyPageOrder = () => {
           )
           setOrders(result)
           setFilteredOrders(filterOrdersByDate(result, filter))
+          dispatch(loadingReducerActions.setLoading(false))
         })
         .catch((err) => {
           console.error(err)
+          dispatch(loadingReducerActions.setLoading(false))
         })
     }
   }

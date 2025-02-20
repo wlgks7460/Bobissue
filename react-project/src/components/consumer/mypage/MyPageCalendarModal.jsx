@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import MyPageCalendarModalForm from './MyPageCalendarModalForm'
 import MyPageCalendarModalItem from './MyPageCalendarModalItem'
 import API from '../../../utils/API'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 const MyPageCalendarModal = ({
   setModalOpen,
@@ -12,6 +14,7 @@ const MyPageCalendarModal = ({
   currentYear,
   currentMonth,
 }) => {
+  const dispatch = useDispatch()
   const [todayMeal, setTodayMeal] = useState([])
   const [showForm, setShowForm] = useState(false)
 
@@ -21,12 +24,15 @@ const MyPageCalendarModal = ({
 
   // 식단 데이터 조회
   const getDayData = () => {
+    dispatch(loadingReducerActions.setLoading(true))
     API.get(`/calendar/${year}/${month}/${day}`)
       .then((res) => {
         setTodayMeal(res.data.result.data)
+        dispatch(loadingReducerActions.setLoading(false))
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
   // 식단 데이터 생성

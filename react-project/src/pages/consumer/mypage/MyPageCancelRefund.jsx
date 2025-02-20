@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import API from '../../../utils/API'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import MyPageCancelRefundItem from '../../../components/consumer/mypage/MyPageCancelRefundItem'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 const MyPageCancelRefund = () => {
+  const dispatch = useDispatch()
   const userNo = useSelector((state) => state.user.userInfo.userNo)
 
   const [cancelRefundData, setCancelRefundData] = useState([])
@@ -60,6 +62,7 @@ const MyPageCancelRefund = () => {
   // 주문 리스트 조회
   const getOrderData = () => {
     if (userNo && cancelRefundData.length < 1) {
+      dispatch(loadingReducerActions.setLoading(true))
       API.get(`/users/${userNo}/orders`)
         .then((res) => {
           const result = res.data.result.data.filter(
@@ -68,9 +71,11 @@ const MyPageCancelRefund = () => {
           )
           setCancelRefundData(result)
           setFilteredData(filterDataByDate(result, filter))
+          dispatch(loadingReducerActions.setLoading(false))
         })
         .catch((err) => {
           console.error(err)
+          dispatch(loadingReducerActions.setLoading(false))
         })
     }
   }

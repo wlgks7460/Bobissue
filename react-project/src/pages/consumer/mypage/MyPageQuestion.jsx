@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import API from '../../../utils/API'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ItemDetailQuestionItem from '../../../components/consumer/itemDetail/ItemDetailQuestionItem'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import MyPageQuestionItem from '../../../components/consumer/mypage/MyPageQuestionItem'
+import { loadingReducerActions } from '../../../redux/reducers/loadingSlice'
 
 const MyPageQuestion = () => {
+  const dispatch = useDispatch()
   const userNo = useSelector((state) => state.user.userInfo.userNo)
   const [questions, setQuestions] = useState([])
   // 문의 리스트 조회
   const getUserQuestion = () => {
+    dispatch(loadingReducerActions.setLoading(true))
     API.get(`/users/${userNo}/questions`)
       .then((res) => {
         setQuestions(res.data.result.data)
+        dispatch(loadingReducerActions.setLoading(false))
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
   }
   useEffect(() => {

@@ -27,7 +27,6 @@ const MyPageAddress = () => {
       userNo: Number(userNo),
     }
     if (payload.userNo) {
-      console.log(payload.userNo)
       API.post('/address/list', payload)
         .then((res) => {
           setAddresses(res.data.result.data)
