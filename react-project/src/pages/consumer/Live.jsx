@@ -78,37 +78,37 @@ const Live = () => {
   const videoContainerRef = useRef(null) // 비디오 화면 표시용
   const chatInputRef = useRef()
 
+  const initializeSession = async () => {
+    const OV = new OpenVidu()
+    const newSession = OV.initSession()
+
+    // 📌 구독자(Subscriber)만 동작 (스트림 받아서 표시)
+    newSession.on('streamCreated', (event) => {
+      const subscriber = newSession.subscribe(event.stream, undefined)
+      setSubscribers((prev) => [...prev, subscriber])
+
+      console.log('📌 Subscribing to', event.stream.connection.connectionId)
+      // console.log("📌 Stream Tracks:", event.stream.getMediaStream().getVideoTracks());
+      subscriber.subscribeToAudio(true)
+      if (event.stream.hasVideo) {
+        console.log('✅ 스트림에 비디오 포함됨!')
+      } else {
+        console.log('❌ 스트림에 비디오 없음!')
+      }
+    })
+
+    newSession.on('streamDestroyed', (event) => {
+      setSubscribers((prev) => prev.filter((sub) => sub !== event.stream))
+    })
+
+    const token = await getToken(sessionId)
+    await newSession.connect(token, { clientData: 'Viewer' })
+
+    setSession(newSession)
+    sessionRef.current = newSession
+  }
+
   useEffect(() => {
-    const initializeSession = async () => {
-      const OV = new OpenVidu()
-      const newSession = OV.initSession()
-
-      // 📌 구독자(Subscriber)만 동작 (스트림 받아서 표시)
-      newSession.on('streamCreated', (event) => {
-        const subscriber = newSession.subscribe(event.stream, undefined)
-        setSubscribers((prev) => [...prev, subscriber])
-
-        console.log('📌 Subscribing to', event.stream.connection.connectionId)
-        // console.log("📌 Stream Tracks:", event.stream.getMediaStream().getVideoTracks());
-        subscriber.subscribeToAudio(true)
-        if (event.stream.hasVideo) {
-          console.log('✅ 스트림에 비디오 포함됨!')
-        } else {
-          console.log('❌ 스트림에 비디오 없음!')
-        }
-      })
-
-      newSession.on('streamDestroyed', (event) => {
-        setSubscribers((prev) => prev.filter((sub) => sub !== event.stream))
-      })
-
-      const token = await getToken(sessionId)
-      await newSession.connect(token, { clientData: 'Viewer' })
-
-      setSession(newSession)
-      sessionRef.current = newSession
-    }
-
     initializeSession()
     setupWebSocket()
 
@@ -176,7 +176,7 @@ const Live = () => {
 
   const getToken = async (sessionId) => {
     const response = await axios.post(
-      `${BASE_URL}/api/openvidu/sessions/jihancastt/connections`,
+      `${BASE_URL}/api/openvidu/sessions/${sessionId}/connections`,
       {},
     )
     console.log('📌 서버에서 받은 토큰:', response.data)

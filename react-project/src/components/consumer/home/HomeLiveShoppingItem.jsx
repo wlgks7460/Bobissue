@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
 import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+import { Link } from 'react-router-dom'
 
 const HomeLiveShoppingItem = ({ cast }) => {
   const [remainingTime, setRemainingTime] = useState('')
   const scrollContainerRef = useRef(null)
+  const [isLive, setIsLive] = useState(false)
 
   // 남은 시간 계산 함수
   const calculateRemainingTime = () => {
@@ -52,6 +55,15 @@ const HomeLiveShoppingItem = ({ cast }) => {
     setIsDragging(false)
   }
 
+  useEffect(() => {
+    const currentTime = dayjs()
+    const startTime = dayjs(cast.startAt)
+    const endTime = dayjs(cast.endAt)
+    if (currentTime.isBetween(startTime, endTime)) {
+      setIsLive(true)
+    }
+  }, [])
+
   return (
     <div className='flex flex-col justify-center items-center p-6 bg-white rounded border border-[#6F4E37]'>
       <h4 className='text-xl font-semibold mb-2'>{cast.title}</h4>
@@ -60,14 +72,23 @@ const HomeLiveShoppingItem = ({ cast }) => {
       {/* 방송 시간 */}
       <div className='mb-4'>
         <p className='text-gray-500'>방송 시간</p>
-        <p className='font-semibold'>{`${cast.startAt} ~ ${cast.endAt}`}</p>
+        <p className='font-semibold'>{`${dayjs(cast.startAt).format('HH:MM')} ~ ${dayjs(cast.endAt).format('HH:MM')}`}</p>
       </div>
 
-      {/* 남은 시간 */}
-      <div className='mb-4'>
-        <p className='text-gray-500'>남은 방송 시간</p>
-        <p className='font-semibold text-red-500'>{remainingTime}</p>
-      </div>
+      {isLive ? (
+        <div className='w-full h-[50px] flex justify-center items-center'>
+          <Link to={'/liveShopping'}>
+            {/* 라이브 이동 */}
+            <button className='text-[#6F4E37]'>라이브 보러가기</button>
+          </Link>
+        </div>
+      ) : (
+        <div className='mb-4'>
+          {/* 남은 시간 */}
+          <p className='text-gray-500'>남은 방송 시간</p>
+          <p className='font-semibold text-red-500'>{remainingTime}</p>
+        </div>
+      )}
 
       {/* 방송 상품 목록 */}
       <div className='w-full'>

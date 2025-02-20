@@ -126,7 +126,7 @@ const Payment = () => {
   // 결제 함수
   const callPayment = (paymentData) => {
     const { IMP } = window
-    IMP.init(import.meta.env.VITE_PORTONE_STORE_ID) // 가맹점 식별 코드
+    IMP.init('imp01087767') // 가맹점 식별 코드
 
     // 결제 데이터 정의하기
     const data = {

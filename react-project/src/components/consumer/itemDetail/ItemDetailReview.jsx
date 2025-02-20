@@ -11,7 +11,6 @@ const ItemDetailReview = ({ itemNo }) => {
   const getReviews = () => {
     API.get(`/item/${itemNo}/review`)
       .then((res) => {
-        console.log(res)
         setReviews(res.data.result.data)
       })
       .catch((err) => {
