@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "items", createIndex = true)
+@Document(indexName = "items", createIndex = false)
 @Getter
 @Setter
 @Builder
@@ -17,10 +17,10 @@ public class ItemElastic {
     @Id
     private String itemNo;
 
-    @Field(type = FieldType.Text, analyzer = "standard")
+    @Field(type = FieldType.Text, analyzer = "nori")
     private String name;
 
-    @Field(type = FieldType.Text, analyzer = "standard")
+    @Field(type = FieldType.Text, analyzer = "nori")
     private String description;
 
     @Field(type = FieldType.Keyword)
