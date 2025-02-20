@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import API from '@/utils/API'
 
-const debug_mode = localStorage.getItem('debug_mode')
+const debug_mode = localStorage.getItem('debug_mode') === 'true'
 
 // 샘플 데이터
 const dummynotice = {
@@ -41,6 +41,7 @@ const NoticeView = () => {
     async function fetchNotice() {
       try {
         const response = await API.get(`notification/${noticeId}`)
+        setNotice(response.data.result.data)
         console.log(response)
       } catch (err) {
         console.log(err)
@@ -66,7 +67,6 @@ const NoticeView = () => {
       </div>
     )
   }
-
   return (
     <div className='flex justify-center min-h-screen bg-gray-100 p-6'>
       <div className='h-[60vh] w-full max-w-3xl bg-white shadow-lg rounded-xl p-8'>
