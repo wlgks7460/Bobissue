@@ -39,28 +39,35 @@ spring:
       authentication-database: admin  # 인증을 사용할 경우 추가
       database: bobChat
 
-      #    elasticsearch:
-      #      uris: https://bobissue.store:9200
-      #      authentication:
-      #        username: elastic
-      #        password: cMvp=DUQcyc9NH5E*1h5
-      # ssl:
-      #   enabled: true
-      #   trust-store: classpath:truststore.jks
-      #   trust-store-password: truststore-password
-
+#    elasticsearch:
+#      uris: http://bobissue.store:9200
+#      username: elastic
+#      password: cMvp=DUQcyc9NH5E*1h5
+#      # ssl:
+#      #   enabled: true
+#      #   trust-store: classpath:truststore.jks
+#      #   trust-store-password: truststore-password
 
   elasticsearch:
-    rest:
-      uris: http://bobissue.store:9200
-      read-timeout: 5s
-    cluster-name: docker-cluster
-    cluster-nodes: bobissue.store:9200
-    http.cors.enabled: true
-    http.cors.allow-origin: "*"
+    uris: http://bobissue.store:9200
+    username: elastic
+    password: "ok=Z+-QeSD9vAvWvY8KV"
 
-  config:
-    import: optional:classpath:elasticsearch-config.yml
+#    config:
+#      import: optional:classpath:elasticsearch-config.yml
+
+#
+#  elasticsearch:
+#    rest:
+#      uris: http://bobissue.store:9200
+#      read-timeout: 5s
+#    cluster-name: docker-cluster
+#    cluster-nodes: bobissue.store:9200
+#    http.cors.enabled: true
+#    http.cors.allow-origin: "*"
+#
+#  config:
+#    import: optional:classpath:elasticsearch-config.yml
 
 
 
