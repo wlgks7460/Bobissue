@@ -164,16 +164,23 @@ public class ItemController {
         }
     }
 
+    @GetMapping("/like-search")
+    public ResponseDto likeSearchItems(@RequestBody SearchReqDto reqDto) {
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<SearchResDto>(itemService.searchItems(reqDto)));
+    }
+
+
     @GetMapping("/search")
     public ResponseDto searchItems(@RequestBody SearchReqDto reqDto) {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_SEARCH, new DefaultResponse<SearchResDto>(itemService.elasticSearchItems(reqDto)));
     }
 
-//    @GetMapping("/dataToElastic")
-//    public ResponseDto searchItems(){
-//        itemService.syncAllItemsToElastic();
-//        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_ITEM,  null);
-//    }
+    // SQL에 있는 데이터를 엘라스틱으로 저장
+    @GetMapping("/dataToElastic")
+    public ResponseDto searchItems(){
+        itemService.syncAllItemsToElastic();
+        return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_CREATE_ITEM,  null);
+    }
 
     // 통계
     // 재구매율 높은 상품
