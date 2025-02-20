@@ -52,13 +52,21 @@ const LiveApply = () => {
       return alert('모든 항목을 입력해주세요.')
     }
 
+    // 날짜 및 시간 포맷 변환
     const formattedDate = moment(selectedDate).format('YYYYMMDD')
-    const startTime = selectedTimes[0]
+    const startTime = selectedTimes[0] // 첫 번째 선택된 시간
     const startAt = `${formattedDate} ${startTime.replace(':', '')}00`
 
+    // 2시간 후 endAt 설정
+    const startMoment = moment(`${formattedDate} ${startTime}`, 'YYYYMMDD HH:mm')
+    const endMoment = startMoment.add(2, 'hours') // 2시간 추가
+    const endAt = endMoment.format('YYYYMMDD HHmmss')
+
+    // 선택된 상품 변환
     const items = selectedItems.map((itemNo) => ({ itemNo }))
 
-    const requestData = { title, content, startAt, items }
+    const requestData = { title, content, startAt, endAt, items }
+    console.log(requestData) // 콘솔 확인
 
     try {
       await API.post('/cast', requestData)
