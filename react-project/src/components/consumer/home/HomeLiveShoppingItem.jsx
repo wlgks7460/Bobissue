@@ -16,9 +16,9 @@ const HomeLiveShoppingItem = ({ cast }) => {
   // 남은 시간 계산 함수
   const calculateRemainingTime = () => {
     const currentTime = dayjs()
-    const endTime = dayjs(cast.endAt)
+    const startTime = dayjs(cast.startAt)
 
-    const diffInSeconds = endTime.diff(currentTime, 'second')
+    const diffInSeconds = startTime.diff(currentTime, 'second')
 
     if (diffInSeconds <= 0) {
       setRemainingTime('방송 종료')
