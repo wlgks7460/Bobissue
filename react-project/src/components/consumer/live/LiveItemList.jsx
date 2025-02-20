@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import LiveItem from './LiveItem'
 
-const LiveItemList = () => {
+const LiveItemList = ({ items }) => {
   // 상품 드래그 관련
   const scrollContainerRef = useRef()
 
@@ -26,23 +26,11 @@ const LiveItemList = () => {
     setIsDragging(false)
   }
 
-  const castItemList = [
-    { itemNo: 0, name: '상품1' },
-    { itemNo: 1, name: '상품2' },
-    { itemNo: 2, name: '상품3' },
-    { itemNo: 3, name: '상품4' },
-    { itemNo: 4, name: '상품5' },
-    { itemNo: 5, name: '상품6' },
-    { itemNo: 6, name: '상품7' },
-    { itemNo: 7, name: '상품8' },
-    { itemNo: 8, name: '상품9' },
-  ]
-
   const allToCart = () => {
     let cartData = JSON.parse(localStorage.getItem('cart')) || []
     let isDuplicate = false
 
-    const newItems = castItemList
+    const newItems = items
       .map((v) => {
         const existingIndex = cartData.findIndex((item) => item.itemNo === v.itemNo)
         if (existingIndex !== -1) {
@@ -77,7 +65,7 @@ const LiveItemList = () => {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp} // 마우스가 벗어났을 때도 드래그 끝내기
       >
-        {castItemList.map((v) => (
+        {items.map((v) => (
           <LiveItem key={v.itemNo} item={v} />
         ))}
       </div>

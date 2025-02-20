@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LiveModal from './LiveModal'
+import API from '../../../utils/API'
+import itemDefaultImg from '../../../assets/consumer/itemDefault.webp'
 
 const LiveItem = ({ item }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [itemData, setItemData] = useState({})
 
   const handleMouseDown = () => {
     setIsDragging(false)
@@ -20,15 +23,35 @@ const LiveItem = ({ item }) => {
       setIsOpen(true)
     }
   }
+  const getItem = () => {
+    API.get(`/item/${item.itemNo}`)
+      .then((res) => {
+        setItemData(res.data.result.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  useEffect(() => {
+    getItem()
+  }, [])
+
   return (
     <div
-      className='relative border-[#6F4E37] border rounded-md shadow-md flex-none min-w-[100px]'
+      className='relative border-[#6F4E37] border rounded shadow-md flex-none min-w-[100px]'
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}
     >
       {/* 상품 이미지 (이미지 src는 나중에 불러오기) */}
-      <div className='w-[100px] h-[100px] bg-white rounded-md'>
-        {/* 이미지 src는 나중에 연결 */}
+      <div className='w-[100px] h-[100px] bg-white rounded'>
+        <img
+          src={itemData.images?.[0]?.imageUrl}
+          alt=''
+          className='w-[100px] h-[100px] rounded'
+          onError={(e) => {
+            e.target.src == itemDefaultImg
+          }}
+        />
       </div>
 
       {/* 툴팁: 상품 이름 */}

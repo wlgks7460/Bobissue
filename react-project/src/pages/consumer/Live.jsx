@@ -10,6 +10,8 @@ import PauseIcon from '@mui/icons-material/Pause'
 import FullscreenExitOutlinedIcon from '@mui/icons-material/FullscreenExitOutlined'
 import FullscreenOutlinedIcon from '@mui/icons-material/FullscreenOutlined'
 import LiveItemList from '../../components/consumer/live/LiveItemList'
+import API from '../../utils/API'
+import { useParams } from 'react-router-dom'
 
 const BASE_URL = import.meta.env.VITE_BOBISUUE_BASE_URL
 
@@ -114,7 +116,9 @@ const Live = () => {
 
     return () => {
       sessionRef.current?.disconnect()
-      stompClientRef.current?.disconnect()
+      if (stompClientRef.current && typeof stompClientRef.current.disconnect === 'function') {
+        stompClientRef.current.disconnect()
+      }
     }
   }, [])
 
@@ -128,6 +132,8 @@ const Live = () => {
         videoElement.playsInline = true
         videoElement.muted = false
         videoElement.style.width = '100%'
+        videoElement.style.height = '100%'
+        videoElement.style.objectFit = 'cover'
 
         videoContainerRef.current.innerHTML = ''
         videoContainerRef.current.appendChild(videoElement)
@@ -223,6 +229,20 @@ const Live = () => {
       }
     }
   }
+  const params = useParams()
+  const [castItems, setCastItems] = useState([])
+  const getCastItems = () => {
+    API.get(`/cast/${params.castNo}`)
+      .then((res) => {
+        setCastItems(res.data.result.data.castItemList)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+  useEffect(() => {
+    getCastItems()
+  }, [])
 
   return (
     <div>
@@ -237,7 +257,7 @@ const Live = () => {
               onMouseOut={() => setIsHover(false)}
               ref={fullScreenRef}
             >
-              <div className='w-full h-full bg-black' ref={videoContainerRef}></div>
+              <div className='w-full h-full bg-black overflow-hidden' ref={videoContainerRef}></div>
               {isHover && (
                 <div className='w-full h-full flex items-end bg-black/50 absolute top-0 left-0 rounded-tl'>
                   <div className='w-full flex justify-between'>
@@ -264,7 +284,7 @@ const Live = () => {
               )}
             </div>
             {/* 상품 */}
-            <LiveItemList />
+            <LiveItemList items={castItems} />
           </div>
           {/* 채팅 */}
           <div className='w-1/4 h-full flex flex-col border-s border-[#6F4E37] rounded-e'>

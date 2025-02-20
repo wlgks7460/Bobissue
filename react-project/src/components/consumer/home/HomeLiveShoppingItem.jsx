@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import { Link } from 'react-router-dom'
+import HomeLiveShoppingItemProduct from './HomeLiveShoppingItemProduct'
 
 // 플러그인 등록
 dayjs.extend(isBetween)
@@ -77,9 +78,9 @@ const HomeLiveShoppingItem = ({ cast }) => {
       <p className='text-gray-600 mb-4'>{cast.content}</p>
 
       {/* 방송 시간 */}
-      <div className='mb-4'>
+      <div className='mb-4 flex gap-3 items-center'>
         <p className='text-gray-500'>방송 시간</p>
-        <p className='font-semibold'>{`${dayjs(cast.startAt).format('HH:MM')} ~ ${dayjs(cast.endAt).format('HH:MM')}`}</p>
+        <p className='font-semibold'>{`${dayjs(cast.startAt).format('HH:mm')} ~ ${dayjs(cast.endAt).format('HH:mm')}`}</p>
       </div>
       {liveOff ? (
         <div className='mb-4'>
@@ -89,7 +90,7 @@ const HomeLiveShoppingItem = ({ cast }) => {
         <>
           {isLive ? (
             <div className='w-full h-[50px] flex justify-center items-center mb-4'>
-              <Link to={'/liveShopping'}>
+              <Link to={`/liveShopping/${cast.castNo}`}>
                 {/* 라이브 이동 */}
                 <button className='text-[#6F4E37]'>라이브 보러가기</button>
               </Link>
@@ -116,20 +117,7 @@ const HomeLiveShoppingItem = ({ cast }) => {
           onMouseLeave={handleMouseUp} // 마우스가 벗어났을 때도 드래그 끝내기
         >
           {cast.castItemList.map((item) => (
-            <div
-              key={item.itemNo}
-              className='relative border-[#6F4E37] border rounded-md shadow-md'
-            >
-              {/* 상품 이미지 (이미지 src는 나중에 불러오기) */}
-              <div className='w-[150px] h-[150px] bg-white rounded-md'>
-                {/* 이미지 src는 나중에 연결 */}
-              </div>
-
-              {/* 툴팁: 상품 이름 */}
-              <div className='absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black/60 text-white text-xs rounded-md opacity-0 hover:opacity-100 transition-opacity'>
-                {item.name}
-              </div>
-            </div>
+            <HomeLiveShoppingItemProduct key={item.itemNo} item={item} />
           ))}
         </div>
       </div>
