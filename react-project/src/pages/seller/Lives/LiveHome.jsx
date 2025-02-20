@@ -63,6 +63,7 @@ const LiveHome = () => {
   const events = convertToCalendarEvents(liveSchedules)
 
   const handleEventClick = (event) => {
+    console.log(event)
     setSelectedEvent(event)
   }
 
@@ -71,14 +72,14 @@ const LiveHome = () => {
   }
 
   return (
-    <div className='p-6 relative bg-caramel-50 min-h-screen'>
-      <h2 className='text-3xl font-bold text-coffee-900 mb-6'>라이브 홈</h2>
+    <div className='p-6 relative bg-warmBeige/20 min-h-screen'>
+      <h2 className='text-3xl font-bold text-espressoBlack mb-6'>라이브 홈</h2>
 
       <div className='mb-6'>
-        <h3 className='text-lg font-semibold mb-4 flex items-center text-coffee-900'>
-          <FaCalendarAlt className='mr-2 text-caramel-500' /> 확정된 라이브 일정
+        <h3 className='text-lg font-semibold mb-4 flex items-center text-coffeeBrown'>
+          확정된 라이브 일정
         </h3>
-        <div className='bg-white border border-coffee-300 rounded-lg shadow-md p-4'>
+        <div className='bg-white border border-latteBeige rounded-lg shadow-md p-4'>
           <Calendar
             localizer={localizer}
             events={events}
@@ -102,7 +103,7 @@ const LiveHome = () => {
             }}
             components={{
               event: ({ event }) => (
-                <div className='bg-white border border-coffee-300 p-2 rounded-lg shadow-sm text-sm font-semibold text-coffee-900'>
+                <div className='border border-roastedCocoa p-2 rounded-lg shadow-sm text-sm font-semibold text-darkGraphite'>
                   {event.title}
                 </div>
               ),
@@ -115,37 +116,37 @@ const LiveHome = () => {
       {/* 📌 모달 창 */}
       {selectedEvent && (
         <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50'>
-          <div className='bg-white p-6 rounded-lg shadow-lg w-[400px] relative'>
+          <div className='bg-white p-6 rounded-lg shadow-lg w-[400px] relative border border-coffeeBrown'>
             <button
               onClick={closeModal}
-              className='absolute top-2 right-2 text-coffee-500 hover:text-coffee-700'
+              className='absolute top-2 right-2 text-coffeeBrown hover:text-latteBeige'
             >
               <FaTimes size={20} />
             </button>
 
-            <h3 className='text-xl font-bold flex items-center mb-3 text-coffee-900'>
-              <FaVideo className='mr-2 text-caramel-700' />
+            <h3 className='text-xl font-bold flex items-center mb-3 text-espressoBlack'>
+              <FaVideo className='mr-2 text-caramelTan' />
               {selectedEvent.title}
             </h3>
 
-            <p className='text-sm text-coffee-700 mb-3'>
+            <p className='text-sm text-darkGraphite mb-3'>
               📅 <strong>방송 시작:</strong>{' '}
               {moment(selectedEvent.start).format('YYYY-MM-DD HH:mm')}
             </p>
-            <p className='text-sm text-coffee-700'>
+            <p className='text-sm text-darkGraphite'>
               ⏰ <strong>방송 종료:</strong> {moment(selectedEvent.end).format('YYYY-MM-DD HH:mm')}
             </p>
 
             <div className='mt-4 flex justify-end space-x-2'>
               <button
                 onClick={closeModal}
-                className='px-4 py-2 text-coffee-600 border border-coffee-300 rounded hover:bg-coffee-100'
+                className='px-4 py-2 text-coffeeBrown border border-roastedCocoa rounded hover:bg-latteBeige'
               >
                 닫기
               </button>
               <Link
                 to='/seller/lives/livestream'
-                className='px-4 py-2 bg-caramel-500 text-white rounded hover:bg-caramel-600 flex items-center'
+                className='px-4 py-2 bg-roastedCocoa text-white rounded hover:bg-mochaBrown flex items-center'
                 state={{ event: selectedEvent }}
               >
                 <FaVideo className='mr-2' />

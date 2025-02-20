@@ -13,70 +13,57 @@ const AdminDashBoard = () => {
   const [totalUsers, setTotalUsers] = useState(null)
   const [activeUsers, setActiveUsers] = useState(null)
   const [totalCompanies, setCompanies] = useState(null)
+  const [bestItem, setBestItem] = useState('로딩 중...')
+  const [recentOrders, setRecentOrders] = useState([])
+  const [recentUsers, setRecentUsers] = useState([])
+
   useEffect(() => {
-    const fetchTotalSales = async () => {
+    const fetchData = async () => {
       try {
-        const response = await API.get('/admin/total-sales')
-        const total = response?.data?.result?.data
-        if (total !== undefined) {
-          setTotalSales(total)
-        } else {
-          console.error('총 매출 데이터가 없습니다.', response)
-        }
-      } catch (error) {
-        console.error('총 매출 가져오기 실패:', error)
-      }
-    }
+        const [salesRes, usersRes, companiesRes, bestItemRes, ordersRes, usersListRes] =
+          await Promise.all([
+            API.get('/admin/total-sales'),
+            API.get('/admin/user-statistics'),
+            API.get('/admin/company-statistics'),
+            API.get('/item/best-sellers'),
+            API.get('/orders'),
+            API.get('/users'),
+          ])
 
-    const fetchTotalUsers = async () => {
-      try {
-        const response = await API.get('/admin/user-statistics')
-        const userData = response?.data?.result?.data
-        if (userData) {
-          setTotalUsers(userData.totalUsers)
-          setActiveUsers(userData.activeUsers)
-        } else {
-          console.error('유저 데이터가 없습니다.', response)
-        }
-      } catch (error) {
-        console.error('유저 데이터 가져오기 실패:', error)
-      }
-    }
+        // 매출 데이터
+        const total = salesRes?.data?.result?.data
+        setTotalSales(total ?? 0)
 
-    const fetchTotalCompanies = async () => {
-      try {
-        const response = await API.get('/admin/company-statistics')
-        const companyData = response?.data?.result?.data
-        if (companyData) {
-          setCompanies(companyData.totalCompanies)
-        } else {
-          console.error('회사 데이터가 없습니다.', response)
+        // 유저 통계
+        const userData = usersRes?.data?.result?.data
+        setTotalUsers(userData?.totalUsers ?? 0)
+        setActiveUsers(userData?.activeUsers ?? 0)
+
+        // 회사 수
+        const companyData = companiesRes?.data?.result?.data
+        setCompanies(companyData?.totalCompanies ?? 0)
+
+        // 베스트 셀러
+        const bestItems = bestItemRes?.data?.result?.data
+        if (bestItems && bestItems.length > 0) {
+          setBestItem(bestItems[0].itemName)
         }
+
+        // 최근 주문 내역 (최대 5개)
+        const orders = ordersRes?.data?.result?.data
+        setRecentOrders(orders.slice(0, 5))
+
+        // 최근 회원가입 유저 (최대 5명)
+        const usersList = usersListRes?.data?.result?.data
+        setRecentUsers(usersList.slice(0, 5))
       } catch (error) {
-        console.error('회사 데이터 가져오기 실패:', error)
+        console.error('데이터 가져오기 실패:', error)
       }
     }
-    fetchTotalSales()
-    fetchTotalUsers()
-    fetchTotalCompanies()
+    fetchData()
   }, [])
 
-  // 더미 데이터 생성 - 최근 5개 고정으로 렌더링
-  const dummyOrders = [
-    { orderNumber: '20240102', customer: '김지원', amount: 70000, date: '2024-02-14' },
-    { orderNumber: '20240103', customer: '이다은', amount: 65000, date: '2024-02-13' },
-    { orderNumber: '20240101', customer: '강현호', amount: 50000, date: '2024-02-15' },
-    { orderNumber: '20240102', customer: '윤경상', amount: 70000, date: '2024-02-14' },
-    { orderNumber: '20240103', customer: '김경은', amount: 65000, date: '2024-02-13' },
-  ]
-
-  const dummyUsers = [
-    { name: '김지한', email: 'hong@example.com', dateJoined: '2024-02-01' },
-    { name: '이다은', email: 'lee@example.com', dateJoined: '2024-01-20' },
-    { name: '강현호', email: 'hong@example.com', dateJoined: '2024-02-01' },
-    { name: '윤경상', email: 'lee@example.com', dateJoined: '2024-01-20' },
-    { name: '김경은', email: 'lee@example.com', dateJoined: '2024-01-20' },
-  ]
+  const formatDate = (dateTime) => dateTime.split(' ')[0]
 
   return (
     <div>
@@ -125,9 +112,9 @@ const AdminDashBoard = () => {
         <div className='bg-[#FDF5E6] shadow-md rounded-lg p-4 flex flex-col items-start'>
           <div className='flex items-center space-x-2 mb-2'>
             <StarIcon className='h-6 w-6 text-[#5C4033]' />
-            <h2 className='text-lg font-semibold text-gray-800'>이번주 베스트 상품(예시)</h2>
+            <h2 className='text-lg font-semibold text-gray-800'>베스트 상품</h2>
           </div>
-          <p className='text-xl font-bold text-gray-900'>닭가슴살 5kg 패키지</p>
+          <p className='text-xl font-bold text-gray-900'>{bestItem}</p>
         </div>
       </div>
 
@@ -136,7 +123,10 @@ const AdminDashBoard = () => {
         <div className='bg-white hover:shadow-md rounded-lg p-4 relative'>
           <h2 className='text-xl font-bold text-[#5C4033] mb-3 flex justify-between'>
             🛒 최근 주문 내역
-            <button className='px-3 py-1 text-sm bg-[#5C4033] text-white rounded hover:bg-[#725a3e]'>
+            <button
+              className='px-3 py-1 text-sm bg-[#5C4033] text-white rounded hover:bg-[#725a3e]'
+              onClick={() => (window.location.href = '/admin/order')}
+            >
               주문 현황 바로가기
             </button>
           </h2>
@@ -144,18 +134,20 @@ const AdminDashBoard = () => {
             <thead className='bg-[#FAEBD7] text-gray-700'>
               <tr>
                 <th className='border border-[#D2B48C] p-2'>주문번호</th>
-                <th className='border border-[#D2B48C] p-2'>고객명</th>
+                <th className='border border-[#D2B48C] p-2'>결제수단</th>
                 <th className='border border-[#D2B48C] p-2'>주문금액</th>
                 <th className='border border-[#D2B48C] p-2'>주문일자</th>
               </tr>
             </thead>
             <tbody>
-              {dummyOrders.map((order, index) => (
+              {recentOrders.map((order, index) => (
                 <tr key={index} className='text-center hover:bg-[#FFF5E1]'>
-                  <td className='border border-[#D2B48C] p-2'>{order.orderNumber}</td>
-                  <td className='border border-[#D2B48C] p-2'>{order.customer}</td>
-                  <td className='border border-[#D2B48C] p-2'>₩ {order.amount.toLocaleString()}</td>
-                  <td className='border border-[#D2B48C] p-2'>{order.date}</td>
+                  <td className='border border-[#D2B48C] p-2'>{order.orderNo}</td>
+                  <td className='border border-[#D2B48C] p-2'>{order.payment}</td>
+                  <td className='border border-[#D2B48C] p-2'>
+                    ₩ {order.totalPrice.toLocaleString()}
+                  </td>
+                  <td className='border border-[#D2B48C] p-2'>{formatDate(order.createdAt)}</td>
                 </tr>
               ))}
             </tbody>
@@ -165,7 +157,10 @@ const AdminDashBoard = () => {
         <div className='bg-white hover:shadow-md rounded-lg p-4 relative'>
           <h2 className='text-xl font-bold text-[#5C4033] mb-3 flex justify-between'>
             🙋‍♂️ 최근 회원 가입
-            <button className='px-3 py-1 text-sm bg-[#5C4033] text-white rounded hover:bg-[#725a3e]'>
+            <button
+              className='px-3 py-1 text-sm bg-[#5C4033] text-white rounded hover:bg-[#725a3e]'
+              onClick={() => (window.location.href = '/admin/members/info')}
+            >
               회원 정보관리 바로가기
             </button>
           </h2>
@@ -178,11 +173,11 @@ const AdminDashBoard = () => {
               </tr>
             </thead>
             <tbody>
-              {dummyUsers.map((user, index) => (
+              {recentUsers.map((user, index) => (
                 <tr key={index} className='text-center hover:bg-[#FFF5E1]'>
                   <td className='border border-[#D2B48C] p-2'>{user.name}</td>
                   <td className='border border-[#D2B48C] p-2'>{user.email}</td>
-                  <td className='border border-[#D2B48C] p-2'>{user.dateJoined}</td>
+                  <td className='border border-[#D2B48C] p-2'>{formatDate(user.createAt)}</td>
                 </tr>
               ))}
             </tbody>

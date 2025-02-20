@@ -1,129 +1,125 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import API from '@/utils/API'
-import Info from './Form/Info'
-import UpdateInfo from './Form/Update_Info'
-import Withdrawal from './Form/Withdrawal'
 import { Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-const VenderInfo = () => {
-  const debug_mode = localStorage.getItem('debug_mode') === 'true' // ✅ 디버그 모드 활성화 여부
+const UpdatePassword = () => {
   const navigate = useNavigate()
-  
-  // ✅ 디버그 모드용 더미 데이터
-  const dummyData = {
-    sellerNo: 1,
-    name: '판매자2',
-    email: 'seller@naver.com',
-    company: {
-      name: '주식회사우리',
-      license: 'license1',
-      status: 'Y',
-      bank: '광주은행',
-      bankAccount: '007121112675',
-    },
-    callNumber: '010-1234-5678',
-    status: 'Y',
-    approvalStatus: 'Y',
-  }
 
   // ✅ 상태 관리
-  const [userInfo, setUserInfo] = useState(debug_mode ? dummyData : null)
-  const [loading, setLoading] = useState(!debug_mode)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [isUpdatePage, setIsUpdatePage] = useState(false)
+  const [success, setSuccess] = useState('')
+  const debug_mode = true
 
-  // ✅ 사용자 정보 가져오기
-  useEffect(() => {
+  // ✅ 비밀번호 변경 요청
+  const handlePasswordUpdate = async () => {
     if (debug_mode) {
-      setUserInfo(dummyData)
-      setLoading(false)
+      alert('비밀번호 변경이 완료되었습니다.')
+      navigate('/seller/account/verification')
       return
     }
-
-    const fetchUserInfo = async () => {
-      try {
-        const token = localStorage.getItem('access_token')
-        if (!token) throw new Error('인증 토큰이 없습니다.')
-
-        const response = await API.get('/sellers/profile', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        console.log(response)
-        if (response.status === 200) {
-          setUserInfo(response.data?.result?.data || dummyData)
-        } else {
-          throw new Error('서버에서 데이터를 가져오는 데 실패했습니다.')
-        }
-      } catch (err) {
-        setError(err.message)
-        setUserInfo(dummyData) // 실패 시 더미 데이터 사용 가능
-      } finally {
-        setLoading(false)
-      }
+    if (!currentPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
+      return setError('모든 필드를 입력해주세요.')
+    }
+    if (newPassword !== confirmPassword) {
+      return setError('새 비밀번호가 일치하지 않습니다.')
+    }
+    if (newPassword.length < 8) {
+      return setError('비밀번호는 최소 8자 이상이어야 합니다.')
     }
 
-    fetchUserInfo()
-  }, [isUpdatePage])
+    setLoading(true)
+    setError('')
+    setSuccess('')
 
-  // ✅ 로딩 화면 처리
-  if (loading)
-    return (
-      <div className='flex items-center justify-center min-h-screen bg-white'>
-        <Loader2 className='animate-spin w-12 h-12 text-gray-500' />
-      </div>
-    )
+    try {
+      const token = localStorage.getItem('access_token')
+      if (!token) throw new Error('인증 토큰이 없습니다.')
+
+      const response = await API.put('/change-password', { currentPassword, newPassword })
+
+      if (response.status === 200) {
+        setSuccess('비밀번호가 성공적으로 변경되었습니다!')
+        setCurrentPassword('')
+        setNewPassword('')
+        setConfirmPassword('')
+      } else {
+        throw new Error('비밀번호 변경에 실패했습니다.')
+      }
+    } catch (err) {
+      setError(err.message || '비밀번호 변경 중 오류가 발생했습니다.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className='flex flex-col justify-center items-center bg-white min-h-screen p-6'>
-      <div className='w-full max-w-2xl bg-white shadow-lg p-8 rounded-xl border border-gray-300'>
-        {/* ✅ 페이지 상태에 따라 컴포넌트 렌더링 */}
-        {isUpdatePage ? (
-          <UpdateInfo
-            userInfo={userInfo}
-            onSave={(updatedInfo) => {
-              setUserInfo((prev) => ({ ...prev, ...updatedInfo }))
-              setIsUpdatePage(false)
-            }}
-            onClose={() => setIsUpdatePage(false)}
-          />
-        ) : (
-          <Info userInfo={userInfo} />
-        )}
+    <div className='flex flex-col justify-center items-center bg-warmBeige/20 min-h-screen p-6'>
+      <div className='w-full max-w-md bg-white shadow-lg p-8 rounded-xl border border-caramelTan'>
+        <h2 className='text-2xl font-bold text-espressoBlack text-center mb-6'>비밀번호 변경</h2>
+
+        {/* ✅ 현재 비밀번호 입력 */}
+        <label className='block text-lg font-medium text-darkGraphite mb-2'>현재 비밀번호</label>
+        <input
+          type='password'
+          className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-caramelTan'
+          placeholder='현재 비밀번호 입력'
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+        />
+
+        {/* ✅ 새 비밀번호 입력 */}
+        <label className='block text-lg font-medium text-darkGraphite mt-4 mb-2'>새 비밀번호</label>
+        <input
+          type='password'
+          className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-caramelTan'
+          placeholder='새 비밀번호 입력'
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+
+        {/* ✅ 새 비밀번호 확인 */}
+        <label className='block text-lg font-medium text-darkGraphite mt-4 mb-2'>
+          새 비밀번호 확인
+        </label>
+        <input
+          type='password'
+          className='border p-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-caramelTan'
+          placeholder='새 비밀번호 재입력'
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+
+        {/* ✅ 오류 메시지 출력 */}
+        {error && <p className='mt-4 text-center text-roastedCocoa'>{error}</p>}
+
+        {/* ✅ 성공 메시지 출력 */}
+        {success && <p className='mt-4 text-center text-coffeeBrown font-semibold'>{success}</p>}
 
         {/* ✅ 버튼 그룹 */}
         <div className='mt-6 flex justify-center space-x-4'>
-          {!isUpdatePage && (
-            <>
-              {/* 개인정보 수정 버튼 */}
-              <button
-                onClick={() => setIsUpdatePage(true)}
-                className='px-4 py-2 text-white bg-gray-500 rounded-lg hover:bg-gray-600 transition-all shadow-md'
-              >
-                개인정보 수정
-              </button>
+          <button
+            onClick={handlePasswordUpdate}
+            className='px-4 py-2 text-white bg-coffeeBrown rounded-lg hover:bg-mochaBrown transition-all shadow-md'
+            disabled={loading}
+          >
+            {loading ? <Loader2 className='animate-spin w-5 h-5 inline-block' /> : '비밀번호 변경'}
+          </button>
 
-              {/* 사업자 정보 수정 버튼 */}
-              <button
-                onClick={() => navigate('/seller/company/update')}
-                className='px-4 py-2 text-white bg-gray-400 rounded-lg hover:bg-gray-500 transition-all shadow-md'
-              >
-                회사정보수정
-              </button>
-            </>
-          )}
-        </div>
-
-        {/* ✅ 오류 메시지 출력 */}
-        {error && <p className='mt-4 text-center text-gray-700 animate-fade-in'>{error}</p>}
-
-        {/* ✅ 판매자 탈퇴 컴포넌트 */}
-        <div className='mt-8'>
-          <Withdrawal userInfo={userInfo} />
+          <button
+            onClick={() => navigate('/seller')}
+            className='px-4 py-2 text-darkGraphite bg-latteBeige rounded-lg hover:bg-caramelTan transition-all shadow-md'
+          >
+            취소
+          </button>
         </div>
       </div>
     </div>
   )
 }
 
-export default VenderInfo
+export default UpdatePassword

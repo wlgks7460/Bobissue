@@ -6,10 +6,10 @@ import { OpenVidu } from 'openvidu-browser' // ✅ OpenVidu 라이브러리 추�
 import SockJS from 'sockjs-client' // ✅ SockJS 사용
 import { Client } from '@stomp/stompjs' // ✅ STOMP 사용
 import LiveChat from './LiveChat.jsx' // ✅ 채팅 컴포넌트
+import axios from 'axios' // axios 임포트 추가
 
 const LiveStreamSetup = () => {
-  
-  const debug_mode = localStorage.getItem('debug_mode') === 'true'
+  const debug_mode = true
   const location = useLocation()
   const event = location.state?.event
   const videoRef = useRef(null)
@@ -46,86 +46,123 @@ const LiveStreamSetup = () => {
     setupStream()
   }, [cameraOn, micOn]) // 마이크 또는 카메라 상태 변경 시 다시 스트림 설정
 
-  // 📌 방송 시작 / 중지 핸들러
-  const handleStreamToggle = async () => {
-    if (isStreaming) {
-      // 방송 중지 로직
-      setIsStreaming(false)
-      setChatActive(false)
-      if (session) {
-        session.disconnect()
-        setSession(null)
-      }
-      if (stompClientRef.current) {
-        stompClientRef.current.deactivate()
-        stompClientRef.current = null
-      }
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop())
-        setStream(null)
-      }
+  // 방송 시작 (joinSession)
+  const joinSession = async () => {
+    const OV = new OpenVidu()
 
-      // 📌 PeerConnection 해제
-      if (peerConnectionRef.current) {
-        peerConnectionRef.current.close()
-        peerConnectionRef.current = null
-      }
-    } else {
-      try {
-          // Initialize OpenVidu session
-          const OV = new OpenVidu();
-          const mySession = OV.initSession();
+    const mySession = OV.initSession()
 
-                // Set up event listeners
-      mySession.on('streamCreated', (event) => {
-        const subscriber = mySession.subscribe(event.stream, undefined);
-        setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
-      });
+    setSession(mySession)
 
-      mySession.on('streamDestroyed', (event) => {
-        setSubscribers((prevSubscribers) =>
-          prevSubscribers.filter((sub) => sub !== event.stream.streamManager)
-        );
-      });
+    mySession.on('streamCreated', (event) => {
+      const subscriber = mySession.subscribe(event.stream, undefined)
+    })
 
-      mySession.on('exception', (exception) => {
-        console.warn(exception);
-      });
+    mySession.on('streamDestroyed', (event) => {
+      // Handle stream destroyed
+    })
 
+    mySession.on('exception', (exception) => {
+      console.warn(exception)
+    })
 
-            // Get token from your server
-            const token = await getToken(); // Implement this function to get the token from your server
+    // 배포된 OpenVidu 서버에서 토큰 가져오기
+    try {
+      const token = await getToken() // getToken()을 사용하여 토큰을 받아옴
+      console.log('📌 백엔드에서 받은 OpenVidu 토큰:', token)
 
-            // Connect to the session
-            await mySession.connect(token, { clientData: 'Broadcaster' });
-      
-            // Initialize publisher
-            const publisher = await OV.initPublisherAsync(undefined, {
-              audioSource: undefined,
-              videoSource: undefined,
-              publishAudio: micOn,
-              publishVideo: cameraOn,
-              resolution: '640x480',
-              frameRate: 30,
-              insertMode: 'APPEND',
-              mirror: false,
-            });
-      
-            // Publish the stream
-            await mySession.publish(publisher);
-      
-            // Update state
-            setSession(mySession);
-            setIsStreaming(true);
-            setChatActive(true);
+      await mySession.connect(token)
 
+      const publisher = await OV.initPublisherAsync(undefined, {
+        audioSource: undefined,
+        videoSource: undefined,
+        publishAudio: true,
+        publishVideo: true,
+        resolution: '640x480',
+        frameRate: 30,
+        insertMode: 'APPEND',
+        mirror: false,
+      })
 
-      } catch (error) {
-        console.error('❌ OpenVidu 연결 실패:', error)
-      }
+      mySession.publish(publisher)
+      setSession(mySession)
+      setIsStreaming(true)
+      setChatActive(true)
+    } catch (error) {
+      console.error('❌ OpenVidu 연결 실패:', error)
     }
   }
 
+  // 방송 끄기 (leaveSession)
+  const leaveSession = () => {
+    const mySession = session
+    if (mySession) {
+      API.patch('cast/202/end')
+      mySession.disconnect()
+    }
+    setSession(null)
+    setIsStreaming(false)
+    setChatActive(false)
+    setStream(null)
+  }
+
+  // 📌 방송 시작 / 중지 핸들러
+  const handleStreamToggle = async () => {
+    if (isStreaming) {
+      leaveSession() // 방송 종료
+    } else {
+      joinSession() // 방송 시작
+    }
+  }
+
+  // 📌 토큰 가져오기
+  const getToken = async () => {
+    const sessionId = await createSession('jihancast')
+    const fullToken = await createToken(sessionId)
+
+    console.log('📌 OpenVidu에서 받은 전체 토큰:', fullToken)
+
+    if (!fullToken.startsWith('wss://')) {
+      console.error('❌ 잘못된 OpenVidu 토큰 형식:', fullToken)
+      throw new Error('올바른 WebSocket 토큰이 아님')
+    }
+
+    return fullToken // ✅ OpenVidu가 준 URL 그대로 반환
+  }
+
+  // 📌 세션 생성
+  const createSession = async (sessionId) => {
+    try {
+      const response = await axios.post(
+        'https://bobissue.store/api/openvidu/sessions',
+        { customSessionId: 'jihancastt' },
+        { headers: { 'Content-Type': 'application/json' } },
+      )
+      console.log('📌 OpenVidu 세션 생성 응답:', response)
+      console.log('📌 OpenVidu 세션 생성 응답:', response.data)
+      return response
+    } catch (error) {
+      console.error('❌ 세션 생성 실패:', error.response?.data || error)
+      throw error
+    }
+  }
+
+  // 📌 백엔드에서 OpenVidu 토큰 생성 요청
+  const createToken = async (sessionId) => {
+    try {
+      const response = await axios.post(
+        `https://bobissue.store/api/openvidu/sessions/jihancastt/connections`,
+        {},
+        { headers: { 'Content-Type': 'application/json' } },
+      )
+      console.log('📌 OpenVidu 토큰 생성 응답:', response)
+      console.log('📌 OpenVidu 토큰 생성 응답:', response.data.token)
+      return response.data
+    } catch (error) {
+      console.error('❌ 토큰 생성 실패:', error.response?.data || error)
+      throw error
+    }
+  }
 
   // 📌 마이크 토글 핸들러
   const handleMicToggle = () => {
@@ -156,7 +193,10 @@ const LiveStreamSetup = () => {
       {/* 📌 컨트롤 버튼 */}
       <div className='flex justify-center mt-4 space-x-4'>
         <button
-          onClick={handleStreamToggle}
+          onClick={() => {
+            console.log('방송 시작 버튼 클릭됨')
+            handleStreamToggle()
+          }}
           className={`px-4 py-2 font-bold text-white rounded ${
             isStreaming ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
           }`}

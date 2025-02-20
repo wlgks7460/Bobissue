@@ -3,9 +3,9 @@ import ItemCard from '../common/ItemCard'
 
 const CategoryItemList = ({ items }) => {
   return (
-    <div>
+    <div className='mb-32'>
       {/* 정렬 */}
-      <div className='flex justify-between mb-3'>
+      <div className='flex justify-between mb-10'>
         <div>
           <span>총 {items?.length}건</span>
         </div>
@@ -16,7 +16,7 @@ const CategoryItemList = ({ items }) => {
         </div>
       </div>
       {/* 아이템 컨테이너 */}
-      <div className='grid grid-cols-4 gap-3'>
+      <div className='grid grid-cols-4 gap-3 gap-y-24'>
         {items?.map((v) => (
           <ItemCard key={v.itemNo} item={v} />
         ))}

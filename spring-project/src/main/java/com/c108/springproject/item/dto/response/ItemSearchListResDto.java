@@ -27,7 +27,7 @@ public class ItemSearchListResDto {
     private String images;
 
     public static ItemSearchListResDto toDto(Item item) {
-        String defaultImageUrl = "https://bobissue-dev-storage-ap.s3.ap-northeast-2.amazonaws.com/global/no_image.png";
+        String defaultImageUrl = "https://bobissue-dev-storage-ap.s3.ap-northeast-2.amazonaws.com/global/NoImage.png";
         String imageUrl = item.getImages() != null && !item.getImages().isEmpty()
                 ? item.getImages().get(0).getImageUrl()
                 : defaultImageUrl;

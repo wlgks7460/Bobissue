@@ -13,6 +13,7 @@ const SellerRegisterPage = () => {
     call_number3: '',
   })
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -29,183 +30,159 @@ const SellerRegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault()
-
+    setError('')
+    setLoading(true)
     const { password, confirmPassword } = formData
-
-    // 비밀번호 일치 여부 확인
     if (password !== confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.')
+      setLoading(false)
       return
     }
 
-    // 전화번호 합치기
     const fullPhoneNumber = `${formData.call_number1}-${formData.call_number2}-${formData.call_number3}`
-    console.log(fullPhoneNumber)
-    // 폼 데이터 준비
     const payload = {
       email: formData.email,
       password: formData.password,
       name: formData.name,
-      callNumber: fullPhoneNumber, // 전화번호 합침
+      callNumber: fullPhoneNumber,
     }
-
-    // API 요청 보내기
+    console.log(payload)
     try {
-      console.log(payload)
-
       const response = await API.post('/sellers/sign-up', payload)
-      console.log(response)
-      // 요청 성공 시, 로그인 페이지로 이동
       if (response.status === 200) {
         navigate('/seller/login')
       } else {
         setError('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.')
       }
     } catch (err) {
-      // 오류 발생 시
-      console.error('회원가입 오류:', err.response ? err.response.data : err.message)
       setError('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div className='flex justify-center items-center min-h-screen bg-gray-100 px-4'>
-      <form
-        onSubmit={handleRegister}
-        className='p-6 md:p-8 lg:p-12 bg-white rounded-lg shadow-lg w-full max-w-xl md:max-w-2xl lg:max-w-3xl'
-      >
-        <h2 className='text-2xl font-bold mb-6 text-center'>판매자 회원가입</h2>
-        {error && <p className='text-red-500 text-sm mb-4 text-center'>{error}</p>}
+    <div className='flex justify-center items-center min-h-screen bg-caramelTan/20'>
+      <div className='w-full max-w-lg bg-white p-10 rounded-xl shadow-lg border border-caramelTan'>
+        <h2 className='text-3xl font-bold text-center text-espressoBlack mb-6'>판매자 회원가입</h2>
 
-        {/* 이름 */}
-        <div className='mb-4'>
-          <label className='block text-sm font-medium mb-2' htmlFor='name'>
-            이름
-          </label>
-          <input
-            type='text'
-            id='name'
-            name='name'
-            value={formData.name}
-            onChange={handleChange}
-            className='w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500'
-            maxLength={255}
-            required
-          />
-        </div>
+        {/* ✅ 에러 메시지 */}
+        {error && <p className='text-roastedCocoa text-sm mb-4 text-center'>{error}</p>}
 
-        {/* 이메일 */}
-        <div className='mb-4'>
-          <label className='block text-sm font-medium mb-2' htmlFor='email'>
-            이메일
-          </label>
-          <input
-            type='email'
-            id='email'
-            name='email'
-            value={formData.email}
-            onChange={handleChange}
-            className='w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500'
-            maxLength={255}
-            required
-          />
-        </div>
+        <form onSubmit={handleRegister}>
+          <div className='space-y-4'>
+            {/* ✅ 이름 입력 */}
+            <div>
+              <label className='block text-sm font-medium mb-2 text-darkGraphite'>이름</label>
+              <input
+                type='text'
+                name='name'
+                value={formData.name}
+                onChange={handleChange}
+                className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
+                required
+              />
+            </div>
 
-        {/* 비밀번호 */}
-        <div className='mb-4 grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label className='block text-sm font-medium mb-2' htmlFor='password'>
-              비밀번호
-            </label>
-            <input
-              type='password'
-              id='password'
-              name='password'
-              value={formData.password}
-              onChange={handleChange}
-              className='w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500'
-              maxLength={100}
-              required
-            />
+            {/* ✅ 이메일 입력 */}
+            <div>
+              <label className='block text-sm font-medium mb-2 text-darkGraphite'>이메일</label>
+              <input
+                type='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
+                required
+              />
+            </div>
+
+            {/* ✅ 휴대폰 번호 입력 */}
+            <div className='grid grid-cols-3 gap-2'>
+              <div>
+                <label className='block text-sm font-medium mb-2 text-darkGraphite'>휴대폰 번호</label>
+                <input
+                  type='text'
+                  name='call_number1'
+                  value={formData.call_number1}
+                  onChange={handleChange}
+                  maxLength={3}
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md text-center'
+                  placeholder='010'
+                  required
+                />
+              </div>
+              <div className='flex items-end'>
+                <input
+                  type='text'
+                  name='call_number2'
+                  value={formData.call_number2}
+                  onChange={handleChange}
+                  maxLength={4}
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md text-center'
+                  required
+                />
+              </div>
+              <div className='flex items-end'>
+                <input
+                  type='text'
+                  name='call_number3'
+                  value={formData.call_number3}
+                  onChange={handleChange}
+                  maxLength={4}
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md text-center'
+                  required
+                />
+              </div>
+            </div>
+
+            {/* ✅ 비밀번호 입력 */}
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-sm font-medium mb-2 text-darkGraphite'>비밀번호</label>
+                <input
+                  type='password'
+                  name='password'
+                  value={formData.password}
+                  onChange={handleChange}
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
+                  required
+                />
+              </div>
+              <div>
+                <label className='block text-sm font-medium mb-2 text-darkGraphite'>비밀번호 확인</label>
+                <input
+                  type='password'
+                  name='confirmPassword'
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className='w-full px-4 py-2 border border-caramelTan rounded-md focus:ring-2 focus:ring-caramelTan focus:outline-none transition-all'
+                  required
+                />
+              </div>
+            </div>
           </div>
-          <div>
-            <label className='block text-sm font-medium mb-2' htmlFor='confirmPassword'>
-              비밀번호 확인
-            </label>
-            <input
-              type='password'
-              id='confirmPassword'
-              name='confirmPassword'
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className='w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500'
-              maxLength={100}
-              required
-            />
-          </div>
-        </div>
 
-        {/* 연락처 & 인증 버튼 */}
-        <div className='mb-4'>
-          <label className='block text-sm font-medium' htmlFor='call_number'>
-            휴대폰번호
-          </label>
-          <div className='flex flex-wrap space-x-2 justify-center'>
-            <input
-              type='text'
-              id='call_number1'
-              name='call_number1'
-              value={formData.call_number1}
-              onChange={handleChange}
-              maxLength={3}
-              className='w-full sm:w-1/4 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-center'
-              placeholder='010'
-              required
-            />
-            <span className='text-lg mt-2 sm:mt-0'>-</span>
-            <input
-              type='text'
-              id='call_number2'
-              name='call_number2'
-              value={formData.call_number2}
-              onChange={handleChange}
-              maxLength={4}
-              className='w-full sm:w-1/4 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-center'
-              placeholder='1234'
-              required
-            />
-            <span className='text-lg mt-2 sm:mt-0'>-</span>
-            <input
-              type='text'
-              id='call_number3'
-              name='call_number3'
-              value={formData.call_number3}
-              onChange={handleChange}
-              maxLength={4}
-              className='w-full sm:w-1/4 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-center'
-              placeholder='5678'
-              required
-            />
-          </div>
-        </div>
+          {/* ✅ 회원가입 버튼 */}
+          <button
+            type='submit'
+            disabled={loading}
+            className={`mt-3 w-full py-2 px-4 rounded-md text-white font-semibold transition-all ${
+              loading ? 'bg-caramelTan/90 cursor-not-allowed' : 'bg-coffeeBrown hover:bg-mochaBrown'
+            }`}
+          >
+            {loading ? '가입 중...' : '회원가입'}
+          </button>
+        </form>
 
-        {/* 회원가입 버튼 */}
+        {/* ✅ 로그인 이동 버튼 */}
         <button
-          type='submit'
-          className='w-full bg-blue-500 text-white py-3 rounded-lg text-sm md:text-base lg:text-lg hover:bg-blue-700'
-        >
-          회원가입
-        </button>
-
-        {/* 로그인 버튼 */}
-        <button
-          type='button'
+          className='mt-4 w-full py-2 px-4 bg-latteBeige text-darkGraphite rounded-md hover:bg-caramelTan transition-all'
           onClick={() => navigate('/seller/login')}
-          className='w-full mt-4 bg-red-500 text-white py-3 rounded-lg text-sm md:text-base lg:text-lg hover:bg-red-700'
         >
-          로그인하러가기
+          로그인하러 가기
         </button>
-      </form>
+      </div>
     </div>
   )
 }

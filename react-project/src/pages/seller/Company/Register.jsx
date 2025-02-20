@@ -17,11 +17,11 @@ const banks = [
 ]
 
 const CompanyRegister = () => {
+ const token = localStorage.getItem('access_token')
   const navigate = useNavigate()
 
   // ✅ 페이지 로드 시 로그인 확인
   useEffect(() => {
-    const token = localStorage.getItem('access_token')
     if (!token) {
       navigate('/seller/login')
     }
@@ -38,23 +38,33 @@ const CompanyRegister = () => {
   const [loading, setLoading] = useState(false)
 
   // ✅ 회사 등록 여부 확인 함수
-  const fetchCompanyData = async () => {
+
+  const fetchUserStatus = async () => {
     try {
-      const response = await API.get('/sellers/company')
-      console.log(response)
-      const companyNo = response.data?.result?.data?.companyNo || false
-      if (companyNo) {
-        navigate('/seller') // 회사 정보가 있으면 바로 대시보드로 이동
+      const response = await API.get('/sellers/profile')
+      console.log(response.data.result.data)
+      if(response.data.result.data.company===null){
+        console.error('회사 정보 불러오기 실패:',error)
+      }else{
+        navigate('/seller')
       }
-    } catch (error) {
-      console.error('회사 정보 불러오기 실패:', error)
+    
+    } catch (err) {
+      console.error(err)
     }
   }
+   useEffect(() => {
+      if (!token){
+        navigate('/seller/login')
+        return
+      } 
+      //console.log('hello');
+      fetchUserStatus()
+    }, [token])
+
 
   // ✅ 페이지 로드 시 회사 정보 확인
-  useEffect(() => {
-    fetchCompanyData()
-  }, []) // ✅ 최초 1회 실행
+
 
   // 📌 입력 필드 핸들러
   const handleChange = (e) => {
@@ -97,7 +107,7 @@ const CompanyRegister = () => {
         setForm({ companyName: '', companyLicense: '', bankName: '은행 선택', bankAccount: '' })
 
         // ✅ 등록 후 회사 정보 다시 불러오기
-        fetchCompanyData()
+        fetchUserStatus()
       }
     } catch (error) {
       setMessage({ text: '❌ 등록 중 오류가 발생했습니다.', type: 'error' })

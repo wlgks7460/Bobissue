@@ -75,7 +75,7 @@ const VenderInfo = () => {
 
   return (
     <div className='flex flex-col justify-center items-center bg-white h-[75vh]'>
-      <div className='w-full max-w-2xl bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl border border-gray-400 shadow-md'>
+      <div className='w-full max-w-2xl bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl border-2 border-warmBeige shadow-md'>
         {/* ✅ 페이지 상태에 따라 컴포넌트 렌더링 */}
         {isUpdatePage ? (
           <UpdateInfo
@@ -97,7 +97,7 @@ const VenderInfo = () => {
               {/* 개인정보 수정 버튼 */}
               <button
                 onClick={() => setIsUpdatePage(true)}
-                className='px-2 py-1 text-white bg-gray-500 rounded-[15px] hover:bg-gray-600 transition-all'
+                className='px-2 py-1 text-white bg-caramelTan/70 rounded-[15px] hover:bg-caramelTan/60 transition-all'
               >
                 개인정보 수정
               </button>
@@ -105,7 +105,7 @@ const VenderInfo = () => {
               {/* 사업자 정보 수정 버튼 */}
               <button
                 onClick={() => navigate('/seller/company/update')}
-                className='px-2 py-1 text-white bg-gray-400 rounded-[15px] hover:bg-gray-500 transition-all'
+                className='px-2 py-1 text-white bg-coffeeBrown rounded-[15px] hover:bg-coffeeBrown/80 transition-all'
               >
                 회사정보수정
               </button>

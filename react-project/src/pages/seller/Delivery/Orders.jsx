@@ -1,25 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import { FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight } from 'react-icons/fa'
 import OrderPopup from './Popup/OrderPopup'
-import API from '../../../utils/API'
+import API from '@/utils/API'
+import { useOutletContext } from 'react-router-dom'
+
+const ORDER_STATUS_MAP = {
+  0: '전체',
+  1: '주문 확인중',
+  2: '상품 준비중',
+  3: '배송 출발',
+  4: '배송 완료',
+}
 
 const Orders = () => {
+  const { companyNo } = useOutletContext()
   const [orderList, setOrderList] = useState([])
   const [filteredOrders, setFilteredOrders] = useState([])
-  const [selectedTab, setSelectedTab] = useState('all')
-  const [popupData, setPopupData] = useState(null)
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState(0)
+  const [popupOrderNo, setPopupOrderNo] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [isOpenPopup, setIsOpenPopup] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const ordersPerPage = 10
-  const pagesPerGroup = 5
+  const [trackingInfo, setTrackingInfo] = useState({})
+  const [deliveryStatus, setDeliveryStatus] = useState({})
+
+  const ordersPerPage = 10 // 한 페이지당 주문 개수
 
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true)
       try {
-        const response = await API.get('/orders')
+        const response = await API.get(`/delivery/${companyNo}/${selectedOrderStatus}`)
+        console.log(response.data.result.data)
         if (response.data.status === 'OK') {
           setOrderList(response.data.result.data)
         } else {
@@ -31,122 +43,135 @@ const Orders = () => {
         setIsLoading(false)
       }
     }
-
     fetchOrders()
-  }, [])
+  }, [selectedOrderStatus])
 
   useEffect(() => {
-    const filtered =
-      selectedTab === 'all' ? orderList : orderList.filter((order) => order.status === selectedTab)
+    const filtered = orderList.filter(
+      (order) => selectedOrderStatus === 0 || order.orderStatus === selectedOrderStatus,
+    )
     setFilteredOrders(filtered)
-  }, [selectedTab, orderList])
+    setCurrentPage(1) // 상태 변경 시 첫 페이지로 이동
+  }, [selectedOrderStatus, orderList])
 
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage)
-  const startPage = Math.floor((currentPage - 1) / pagesPerGroup) * pagesPerGroup + 1
-  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages)
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage) // 전체 페이지 개수
 
-  const displayedOrders = filteredOrders.slice(
-    (currentPage - 1) * ordersPerPage,
-    currentPage * ordersPerPage,
-  )
+  const handleSubmit = async (orderNo) => {
+    try {
+      const response = await API.post(`/delivery/${orderNo}`)
+      console.log(response)
+    } catch (err) {}
+  }
+
+  // 페이지 이동 핸들러
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page)
+    }
+  }
 
   return (
-    <div className='min-h-screen flex flex-col bg-white py-10 px-5 sm:px-10'>
-      <div className='flex-grow max-w-7xl mx-auto'>
-        <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900'>주문 관리</h1>
-          <p className='mt-2 text-lg text-gray-700'>주문 현황을 한눈에 확인하고 관리하세요.</p>
-        </div>
+    <div className='w-full mx-auto px-8 py-10 min-h-screen bg-warmBeige/20'>
+      {/* 헤더 */}
+      <header className='text-center mb-12'>
+        <h1 className='text-4xl font-extrabold text-espressoBlack'>주문 관리</h1>
+        <p className='text-lg text-coffeeBrown mt-3'>주문부터 배송까지 쉽게 관리하세요.</p>
+      </header>
 
-        <div className='flex justify-center gap-3 mb-6'>
-          {['all', 'orderComplete', 'orderConfirm', 'refundRequest', 'refundComplete'].map(
-            (status) => (
-              <button
-                key={status}
-                onClick={() => setSelectedTab(status)}
-                className={`px-5 py-2 rounded-md text-lg font-medium transition duration-300 ${
-                  selectedTab === status
-                    ? 'bg-gray-500 text-white shadow-md'
-                    : 'bg-white text-gray-500 border border-gray-300 hover:bg-gray-400 hover:text-white'
-                }`}
-              >
-                {status === 'all' ? '전체' : status}
-              </button>
-            ),
-          )}
-        </div>
-
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {displayedOrders.length === 0 ? (
-            <div className='col-span-3 text-center text-gray-500 text-lg'>
-              해당 분류의 주문이 없습니다.
-            </div>
-          ) : (
-            displayedOrders.map((order) => (
-              <div
-                key={order.orderId}
-                className='bg-white p-5 rounded-lg shadow border border-gray-300 hover:scale-105 transition duration-200 cursor-pointer'
-                onClick={() => setPopupData(order)}
-              >
-                <h3 className='text-lg font-semibold text-gray-900'>{order.orderId}</h3>
-                <p className='text-gray-700 mt-1 font-medium'>
-                  상품명: {order.productName || '상품 정보 없음'}
-                </p>
-                <div className='mt-3 text-sm text-gray-600'>
-                  옵션: {order.option} / 수량: {order.quantity}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+      {/* 주문 상태 필터 */}
+      <div className='flex gap-4 justify-center mb-6'>
+        {Object.entries(ORDER_STATUS_MAP).map(([key, label]) => (
+          <button
+            key={key}
+            onClick={() => setSelectedOrderStatus(Number(key))}
+            className={`px-4 py-2 rounded-lg text-md font-medium transition-all shadow-md ${
+              selectedOrderStatus === Number(key)
+                ? 'bg-espressoBlack text-warmBeige'
+                : 'bg-latteBeige text-coffeeBrown hover:bg-coffeeBrown hover:text-warmBeige'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      {totalPages > 1 && (
-        <div className='flex justify-center mt-auto py-6'>
+      {/* 주문 목록 테이블 */}
+      <div className='bg-white p-6 shadow-lg rounded-xl'>
+        <table className='w-full border border-gray-300 text-md'>
+          <thead className='bg-espressoBlack text-warmBeige'>
+            <tr>
+              <th className='py-3 px-4'>주문번호</th>
+              <th className='py-3 px-4'>구매자</th>
+              <th className='py-3 px-4'>전화번호</th>
+              <th className='py-3 px-4'>주소</th>
+              <th className='py-3 px-4'>상세주소</th>
+              <th className='py-3 px-4'>주문량</th>
+
+              <th className='py-3 px-4'>배송상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredOrders
+              .slice((currentPage - 1) * ordersPerPage, currentPage * ordersPerPage)
+              .map((order) => (
+                <tr key={order.orderNo} className='hover:bg-latteBeige transition-all'>
+                  <td
+                    className='cursor-pointer text-blue-600 hover:underline py-3 px-4'
+                    onClick={() => setPopupOrderNo(order.orderNo)}
+                  >
+                    {order.orderNo}
+                  </td>
+                  <td className='py-3 px-4'>{order.userInfo.userName}</td>
+                  <td className='py-3 px-4'>{order.userInfo.userPhoneNumber}</td>
+                  <td className='py-3 px-4'>{order.userInfo.address.address}</td>
+                  <td className='py-3 px-4'>{order.userInfo.address.addressDetail}</td>
+                  <td className='py-3 px-4 text-green-500 font-semibold'>{}</td>
+
+                  <td className='py-3 px-4'>
+                    <button
+                      onClick={() => handleSubmit(order.orderNo)}
+                      className='bg-espressoBlack text-warmBeige px-3 py-1 rounded-lg shadow-md hover:bg-coffeeBrown'
+                    >
+                      저장
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 페이지네이션 */}
+      <div className='flex justify-center items-center gap-2 mt-6'>
+        <button onClick={() => handlePageChange(1)} disabled={currentPage === 1}>
+          <FaAngleDoubleLeft />
+        </button>
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+          <FaAngleLeft />
+        </button>
+
+        {[...Array(totalPages)].map((_, index) => (
           <button
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`${currentPage === index + 1 ? 'font-bold' : ''}`}
           >
-            <FaAngleDoubleLeft />
+            {index + 1}
           </button>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
-          >
-            <FaAngleLeft />
-          </button>
-          {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`mx-1 px-4 py-2 rounded-md text-lg font-medium transition ${
-                currentPage === page
-                  ? 'bg-gray-500 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-400 hover:text-white'
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
-          >
-            <FaAngleRight />
-          </button>
-          <button
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-            className='mx-1 px-3 py-2 rounded-md bg-white text-gray-700 border border-gray-300 hover:bg-gray-500 hover:text-white'
-          >
-            <FaAngleDoubleRight />
-          </button>
-        </div>
-      )}
-      {isOpenPopup && <OrderPopup order={popupData} onClose={() => setIsOpenPopup(false)} />}
+        ))}
+
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          <FaAngleRight />
+        </button>
+        <button onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages}>
+          <FaAngleDoubleRight />
+        </button>
+      </div>
+
+      {popupOrderNo && <OrderPopup orderNo={popupOrderNo} onClose={() => setPopupOrderNo(null)} />}
     </div>
   )
 }

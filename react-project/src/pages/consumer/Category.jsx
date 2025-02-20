@@ -49,11 +49,11 @@ const Category = () => {
       <div className='flex justify-center'>
         <div className='w-[70rem] min-h-[70vh]'>
           <h2 className='text-2xl text-center my-10'>{parent}</h2>
-          <div className='w-full border border-gray-400 rounded px-5 mb-10'>
+          <div className='w-full min-h-[100px] border border-gray-400 rounded px-5 mb-32'>
             <div className='flex flex-wrap'>
               <Link
                 to={`/category/${params.categoryNo}`}
-                className={`w-[150px] text-center m-3 ${!params.child && 'text-indigo-600'}`}
+                className={`w-[150px] text-center m-3 ${!params.child && 'text-[#6F4E37]'}`}
               >
                 전체 보기
               </Link>
@@ -61,7 +61,7 @@ const Category = () => {
                 <Link
                   to={`/category/${params.categoryNo}/${v.categoryNo}`}
                   key={v.categoryNo}
-                  className={`w-[150px] text-center m-3 ${v.categoryNo === Number(params.child) && 'text-indigo-600'}`}
+                  className={`w-[150px] text-center m-3 ${v.categoryNo === Number(params.child) && 'text-[#6F4E37]'}`}
                 >
                   {v.name}
                 </Link>

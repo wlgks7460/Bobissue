@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import MyPageReviewItem from '../../../components/consumer/mypage/MyPageReviewItem'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import API from '../../../utils/API'
 
 const MyPageReview = () => {
   const [reviews, setReviews] = useState([])

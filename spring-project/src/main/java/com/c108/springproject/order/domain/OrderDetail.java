@@ -1,5 +1,6 @@
 package com.c108.springproject.order.domain;
 
+import com.c108.springproject.delivery.domain.Delivery;
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.item.domain.Item;
 import jakarta.persistence.*;
@@ -25,6 +26,11 @@ public class OrderDetail extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_no", nullable = false)
     private Item item;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "delivery_no")
+    private Delivery delivery;
 
     @Column(nullable = false)
     private int count;

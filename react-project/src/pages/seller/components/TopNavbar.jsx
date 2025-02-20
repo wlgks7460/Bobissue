@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { FaSignOutAlt, FaBug, FaHome, FaBars } from 'react-icons/fa' // ✅ 햄버거 아이콘 변경
+import { FaSignOutAlt, FaHome, FaBars } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
+import { userReducerActions } from '../../../redux/reducers/userSlice'
 
-const TopNavbar = ({ toggleSidebar, user }) => {
+const TopNavbar = ({ toggleSidebar, user, setSelect }) => {
   const navigate = useNavigate()
   const [debugMode, setDebugMode] = useState(false)
-
+  const dispatch = useDispatch()
   useEffect(() => {
     const storedDebugMode = localStorage.getItem('debug_mode')
     if (storedDebugMode) {
@@ -13,72 +15,55 @@ const TopNavbar = ({ toggleSidebar, user }) => {
     }
   }, [])
 
-  const toggleDebugMode = () => {
-    const newMode = !debugMode
-    setDebugMode(newMode)
-    localStorage.setItem('debug_mode', newMode)
-  }
-
   const handleLogout = () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
+    dispatch(userReducerActions.logout())
     navigate('/seller/login')
   }
 
   return (
-    <nav className='flex items-center justify-between bg-gray-100 px-6 py-3 border-b border-gray-300 shadow-md relative z-50'>
-      {/* 왼쪽 영역 (햄버거 메뉴 + 로고) */}
+    <nav className='flex items-center justify-between bg-white px-6 py-3 shadow-md shadow-coffeeBrown/20 relative z-50'>
+      {/* Left Section (Hamburger Menu + Logo) */}
       <div className='flex items-center gap-4'>
-        {/* ☰ 햄버거 버튼 */}
         <button
           onClick={toggleSidebar}
-          className='text-gray-800 p-2 rounded-lg hover:bg-gray-300 focus:outline-none transition'
+          className='text-coffeeBrown p-2 rounded-lg hover:bg-caramelTan/80 focus:outline-none transition'
           aria-label='Toggle Sidebar'
         >
           <FaBars className='w-6 h-6' />
         </button>
 
-        {/* 로고 이미지 */}
-        <Link to='/seller'>
+        {/* Logo */}
+        <Link to='/seller' onClick={() => setSelect(null)}>
           <img
-            src='/bobissueLogo.png'
-            alt='로고'
-            className='w-16 h-12 object-cover cursor-pointer'
+            src='/bobissueLogo2.png'
+            alt='Bobissue Logo'
+            className='w-30 h-10 object-cover cursor-pointer'
           />
         </Link>
       </div>
 
-      {/* 네비게이션 버튼 그룹 */}
+      {/* Navigation Button Group */}
       <div className='ml-auto flex items-center gap-4'>
-        {/* 👤 유저 인사 메시지 */}
-        <span className='text-gray-800 font-semibold'>
-          {user?.name || '판매자'}님 안녕하세요!
-        </span>
+        <div className='flex items-center'>
+          <span className='text-mochaBrown font-semibold'>{user ? user.name : '판매자'}</span>
+          <p className='text-coffeeBrown'>님 안녕하세요!</p>
+        </div>
 
-        {/* 🏠 홈 버튼 */}
+        {/* Home Button */}
         <Link
           to='/'
-          className='p-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition flex items-center'
+          className='p-3 bg-caramelTan/30 text-coffeeBrown rounded-lg hover:bg-caramelTan/80 transition flex items-center'
+          aria-label='Go to Home'
+          onClick={handleLogout}
         >
           <FaHome className='w-5 h-5' />
         </Link>
 
-        {/* 🐞 디버그 모드 토글 버튼 */}
-        <button
-          onClick={toggleDebugMode}
-          className={`p-3 rounded-lg transition ${
-            debugMode
-              ? 'bg-gray-600 hover:bg-gray-700 text-white'
-              : 'bg-gray-400 hover:bg-gray-500 text-white'
-          }`}
-        >
-          <FaBug className='w-5 h-5' />
-        </button>
-
-        {/* 🚪 로그아웃 버튼 */}
+        {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className='p-3 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition'
+          className='p-3 bg-rose-500 text-warmBeige rounded-lg hover:bg-rose-600 transition'
+          aria-label='Logout'
         >
           <FaSignOutAlt className='w-5 h-5' />
         </button>

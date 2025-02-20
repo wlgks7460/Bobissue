@@ -67,6 +67,44 @@ public class UserController {
         return new ResponseDto(HttpStatus.OK, ResponseCode.SUCCESS_DELETE_USER, new DefaultResponse<Integer>(userNo));
     }
 
+    @GetMapping("/{userNo}/orders")
+    public ResponseDto getUserOrderList(@PathVariable int userNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_USER_ORDER_LIST,
+                new DefaultResponse<>(userService.getUserOrderList(userNo))
+        );
+    }
 
+    @GetMapping("/{userNo}/orders/{orderNo}")
+    public ResponseDto getUserOrderDetail(
+            @PathVariable int userNo,
+            @PathVariable Long orderNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_USER_ORDER,
+                new DefaultResponse<>(userService.getUserOrderDetail(orderNo))
+        );
+    }
+
+    @GetMapping("/{userNo}/questions")
+    public ResponseDto getUserQuestions(@PathVariable int userNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_ALL_QUESTION,
+                new DefaultResponse<>(userService.getUserQuestions(userNo))
+        );
+    }
+
+    @GetMapping("/{userNo}/questions/{questionNo}")
+    public ResponseDto getUserQuestionDetail(
+            @PathVariable int userNo,
+            @PathVariable Long questionNo) {
+        return new ResponseDto(
+                HttpStatus.OK,
+                ResponseCode.SUCCESS_FIND_QUESTION,
+                new DefaultResponse<>(userService.getUserQuestionDetail(userNo, questionNo))
+        );
+    }
 
 }

@@ -4,8 +4,12 @@ import { useParams } from 'react-router-dom'
 import API from '../../utils/API'
 import { PlusIcon, MinusIcon } from '@heroicons/react/24/outline'
 import ItemDetailTab from '../../components/consumer/itemDetail/ItemDetailTab'
+import itemDefaultImg from '../../assets/consumer/itemDefault.webp'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../redux/reducers/loadingSlice'
 
 const ItemDetail = () => {
+  const dispatch = useDispatch()
   // 파라미터 정보
   const params = useParams()
   // 상품 정보 객체
@@ -60,15 +64,18 @@ const ItemDetail = () => {
 
   useEffect(() => {
     // mount
+    dispatch(loadingReducerActions.setLoading(true))
     API.get(`/item/${params.itemNo}`)
       .then((res) => {
         setItem(res.data.result.data)
         if (res.data.result.data.images.length > 0) {
           setItemImg(res.data.result.data.images[0].imageUrl)
+          dispatch(loadingReducerActions.setLoading(false))
         }
       })
       .catch((err) => {
         console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
       })
     // setItem(response.data)
     // unmount
@@ -82,9 +89,12 @@ const ItemDetail = () => {
           {/* 상품 카드 */}
           <div className='flex gap-10'>
             <img
-              src={itemImg}
+              src={itemImg || itemDefaultImg}
               alt={`${item.name} 이미지`}
               className='w-[400px] h-[500px] flex-none border border-gray-300 rounded'
+              onError={(e) => {
+                e.target.src = itemDefaultImg
+              }}
             />
             {/* 상품 정보 */}
             <div className='h-[500px] grow flex flex-col justify-between gap-5'>
@@ -159,7 +169,7 @@ const ItemDetail = () => {
                   <span>{addComma(item.salePrice * itemCount)}원</span>
                 </div>
                 <button
-                  className='w-full h-[50px] rounded text-white bg-indigo-400 hover:bg-indigo-600'
+                  className='w-full h-[50px] rounded text-white bg-[#A67B5B] hover:bg-[#6F4E37]'
                   onClick={itemOnCart}
                 >
                   장바구니 담기

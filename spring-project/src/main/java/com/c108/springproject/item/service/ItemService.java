@@ -4,16 +4,17 @@ import com.c108.springproject.global.BobIssueException;
 import com.c108.springproject.global.ResponseCode;
 import com.c108.springproject.global.s3.S3Service;
 import com.c108.springproject.item.domain.*;
+import com.c108.springproject.item.dto.querydsl.*;
 import com.c108.springproject.item.dto.request.ItemCreateReqDto;
 import com.c108.springproject.item.dto.request.ItemUpdateReqDto;
 import com.c108.springproject.item.dto.request.SearchReqDto;
 import com.c108.springproject.item.dto.response.*;
+import com.c108.springproject.item.elasticRepository.ItemElasticRepository;
 import com.c108.springproject.item.repository.ItemCategoryRepository;
-//import com.c108.springproject.item.repository.ItemElasticRepository;
+//import com.c108.springproject.item.elasticRepository.ItemElasticRepository;
 import com.c108.springproject.item.repository.ItemLikeRepository;
 import com.c108.springproject.item.repository.ItemQueryRepository;
 import com.c108.springproject.item.repository.ItemRepository;
-import com.c108.springproject.item.repository.querydsl.ItemRepurchaseDto;
 import com.c108.springproject.seller.domain.Company;
 import com.c108.springproject.seller.domain.Seller;
 import com.c108.springproject.seller.repository.SellerRepository;
@@ -47,11 +48,11 @@ public class ItemService {
     private final ItemLikeRepository itemLikeRepository;
     private final UserRepository userRepository;
     private final ItemQueryRepository itemQueryRepository;
-//    private final ItemElasticRepository itemElasticRepository;
+    private final ItemElasticRepository itemElasticRepository;
 
     public ItemService(ItemRepository itemRepository, ItemCategoryService itemCategoryService, ItemCategoryRepository itemCategoryRepository, S3Service s3Service, SellerRepository sellerRepository, ItemLikeRepository itemLikeRepository, UserRepository userRepository, ItemQueryRepository itemQueryRepository
-//            ,
-//                       ItemElasticRepository itemElasticRepository
+            ,
+                       ItemElasticRepository itemElasticRepository
                        ) {
 
         this.itemRepository = itemRepository;
@@ -61,7 +62,7 @@ public class ItemService {
         this.sellerRepository = sellerRepository;
         this.itemLikeRepository = itemLikeRepository;
         this.userRepository = userRepository;
-//        this.itemElasticRepository = itemElasticRepository;
+        this.itemElasticRepository = itemElasticRepository;
         this.itemQueryRepository = itemQueryRepository;
     }
 
@@ -119,21 +120,21 @@ public class ItemService {
         Item savedItem = itemRepository.save(item);
 
         // Elastic Search 저장
-//        saveElasticItem(savedItem);
+        saveElasticItem(savedItem);
         return ItemCreateResDto.toDto(savedItem);
 
     }
 
 //    // Elastic Search 저장
-//    public void saveElasticItem(Item item){
-//        ItemElastic itemElastic = ItemElastic.builder()
-//                .itemNo(item.getItemNo())
-//                .name(item.getName())
-//                .description(item.getDescription())
-//                .companyName(item.getCompany().getName())
-//                .build();
-//        itemElasticRepository.save(itemElastic);
-//    }
+    public void saveElasticItem(Item item){
+        ItemElastic itemElastic = ItemElastic.builder()
+                .itemNo(Integer.toString(item.getItemNo()))
+                .name(item.getName())
+                .description(item.getDescription())
+                .companyName(item.getCompany().getName())
+                .build();
+        itemElasticRepository.save(itemElastic);
+    }
 
     // 전체 상품 조회
     @Transactional
@@ -251,7 +252,7 @@ public class ItemService {
         Item savedItem = itemRepository.save(updatedItem);
 
         // 엘라스틱 업데이트 (저장 로직과 동일)
-//        saveElasticItem(savedItem);
+        saveElasticItem(savedItem);
         return ItemUpdateResDto.toDto(savedItem);
     }
 
@@ -293,14 +294,14 @@ public class ItemService {
         item.getImages().clear();
 
         item.delete();
-//        deleteFromElastic(itemNo);
+        deleteFromElastic(itemNo);
         itemRepository.save(item);
     }
 
-//    // 엘라스틱 데이터 삭제
-//    public void deleteFromElastic(int itemNo) {
-//        itemElasticRepository.deleteById(String.valueOf(itemNo));
-//    }
+    // 엘라스틱 데이터 삭제
+    public void deleteFromElastic(int itemNo) {
+        itemElasticRepository.deleteById(String.valueOf(itemNo));
+    }
 
 
     // 상품 찜 Create Delete
@@ -372,16 +373,17 @@ public class ItemService {
         List<Item> items = itemRepository.findByDelYn("N");
         List<ItemElastic> itemDocuments = items.stream().map(item ->
                 ItemElastic.builder()
-                        .itemNo(item.getItemNo())
+                        .itemNo(Integer.toString(item.getItemNo()))
                         .name(item.getName())
                         .description(item.getDescription())
                         .companyName(item.getCompany().getName())
                         .build()
-        ).collect(Collectors.toList());
+        ).toList();
 
-//        itemElasticRepository.saveAll(itemDocuments);
+        itemElasticRepository.saveAll(itemDocuments);
     }
 
+    // like 검색
     @Transactional
     public SearchResDto searchItems(SearchReqDto reqDto) {
         int pageSize = 10;
@@ -400,7 +402,7 @@ public class ItemService {
                 .build();
     }
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public List<ItemRepurchaseDto> getTopRepurchaseItems() {
         try {
             return itemQueryRepository.getTopRepurchaseItems();
@@ -410,36 +412,105 @@ public class ItemService {
         }
     }
 
-//    // 엘라스틱 서치
-//    @Transactional
-//    public SearchResDto elasticSearchItems(SearchReqDto reqDto) {
-//        PageRequest pageable = PageRequest.of(reqDto.getPage(), 10);
-//        Page<ItemElastic> itemsPage = itemElasticRepository.findByNameOrDescriptionOrCompanyName(
-//                reqDto.getSearch(), reqDto.getSearch(), reqDto.getSearch(), pageable);
-//
-//        List<ItemSearchListResDto> items = itemsPage.getContent().stream().map(itemElastic -> {
-//            Item item = itemRepository.findById(itemElastic.getItemNo())
-//                    .orElseThrow(() -> new RuntimeException("Item not found"));
-//
-//            String imageUrl = item.getImages() != null && !item.getImages().isEmpty()
-//                    ? item.getImages().get(0).getImageUrl()
-//                    : "default_image_url";
-//
-//            return ItemSearchListResDto.builder()
-//                    .itemNo(item.getItemNo())
-//                    .name(item.getName())
-//                    .price(item.getPrice())
-//                    .salePrice(item.getSalePrice())
-//                    .stock(item.getStock())
-//                    .images(imageUrl)
-//                    .build();
-//        }).collect(Collectors.toList());
-//
-//        return SearchResDto.builder()
-//                .items(items)
-//                .page(itemsPage.getNumber())
-//                .size(itemsPage.getTotalPages())
-//                .build();
-//    }
+    @Transactional
+    public List<ItemGenderStatsDto> getMalePreferredItems() {
+        try {
+            return itemQueryRepository.getMalePreferredItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_MALE_PREFERRED_ITEM);
+        }
+    }
+
+    @Transactional
+    public List<ItemGenderStatsDto> getFemalePreferredItems() {
+        try {
+            return itemQueryRepository.getFemalePreferredItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_FEMALE_PREFERRED_ITEM);
+        }
+    }
+
+    // 전체 성별 구매 통계
+    @Transactional
+    public List<ItemGenderStatsDto> getItemsByGenderPreference() {
+        try {
+            return itemQueryRepository.getItemsByGenderPreference();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_GENDER_PREFERENCE_ITEMS);
+        }
+    }
+
+    // 많이 팔린 제품 TOP 10
+    @Transactional
+    public List<ItemBestSellerDto> getBestSellerItems() {
+        try {
+            return itemQueryRepository.getBestSellerItems();
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_BEST_SELLER_ITEMS);
+        }
+    }
+
+    // 추천 관련 서비스
+    // 카테고리 + 성별/연령대 기반 추천
+    @Transactional
+    public List<ItemRecommendationDto> getRecommendationsByCategoryAndDemographic(Integer itemNo) {
+        try {
+            return itemQueryRepository.getRecommendationsByCategoryAndDemographic(itemNo);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_RECOMMENDATIONS_BY_DEMOGRAPHIC);
+        }
+    }
+
+    // 구매 이력 기반
+    @Transactional
+    public List<ItemRecommendationDto> getRecommendationsByCollaborativeFiltering(Integer itemNo) {
+        try {
+            return itemQueryRepository.getRecommendationsByCollaborativeFiltering(itemNo);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_RECOMMENDATIONS_BY_COLLABORATIVE);
+        }
+    }
+
+    // 레시피 기반 추천
+    @Transactional
+    public List<RecipeRecommendationDto> getRecommendationsByRecipe(Integer itemNo) {
+        try {
+            return itemQueryRepository.getRecommendationsByRecipe(itemNo);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_FIND_RECOMMENDATIONS_BY_RECIPE);
+        }
+    }
+
+    // 엘라스틱 서치
+    @Transactional
+    public SearchResDto elasticSearchItems(SearchReqDto reqDto) {
+        PageRequest pageable = PageRequest.of(reqDto.getPage(), 10);
+        Page<ItemElastic> itemsPage = itemElasticRepository.findByNameOrDescriptionOrCompanyName(
+                reqDto.getSearch(), reqDto.getSearch(), reqDto.getSearch(), pageable);
+
+        List<ItemSearchListResDto> items = itemsPage.getContent().stream().map(itemElastic -> {
+            Item item = itemRepository.findById(Integer.parseInt(itemElastic.getItemNo()))
+                    .orElseThrow(() -> new RuntimeException("Item not found"));
+
+            String imageUrl = item.getImages() != null && !item.getImages().isEmpty()
+                    ? item.getImages().get(0).getImageUrl()
+                    : "https://bobissue-dev-storage-ap.s3.ap-northeast-2.amazonaws.com/global/no_image.png";
+
+            return ItemSearchListResDto.builder()
+                    .itemNo(item.getItemNo())
+                    .name(item.getName())
+                    .price(item.getPrice())
+                    .salePrice(item.getSalePrice())
+                    .stock(item.getStock())
+                    .images(imageUrl)
+                    .build();
+        }).collect(Collectors.toList());
+
+        return SearchResDto.builder()
+                .items(items)
+                .page(itemsPage.getNumber())
+                .size(itemsPage.getTotalPages())
+                .build();
+    }
 
 }

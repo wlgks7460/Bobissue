@@ -2,6 +2,7 @@ package com.c108.springproject.user.domain;
 
 import com.c108.springproject.global.entity.BaseEntity;
 import com.c108.springproject.user.dto.UserUpdateReqDto;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends BaseEntity {
 
     @Id
@@ -43,6 +45,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
     private String status;
 
+    @Setter
     @Column(nullable = false)
     private int point;
 

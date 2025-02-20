@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '../redux/store'
 import { userReducerActions } from '../redux/reducers/userSlice'
+import { loadingReducerActions } from '../redux/reducers/loadingSlice'
 
 const API = axios.create({
   // baseURL: '/api',
@@ -39,18 +40,17 @@ API.interceptors.response.use(
     return res
   },
   (err) => {
+    console.error(err)
     // 로그인이 되어있을 경우에만
-    console.log(err)
     if (store.getState().user.isAuthenticated) {
       // refreshToken이 만료되었다면 로그아웃
       if (err.response) {
-        console.log(err.response)
         const { data, status } = err.response
         const loginStatus = store.getState().user.status
         if (status === 401) {
-          console.warn('인증 실패: 로그아웃')
+          console.warn('인증 실패:', err)
           store.dispatch(userReducerActions.logout())
-          //alert('인증이 만료되었습니다.')
+          alert('인증이 만료되었습니다.')
           if (loginStatus === 'seller') {
             window.location.href = '/seller'
           } else if (loginStatus === 'admin') {

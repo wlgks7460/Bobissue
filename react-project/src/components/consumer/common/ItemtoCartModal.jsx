@@ -52,7 +52,7 @@ const HomeItemModal = ({ isOpen, setIsOpen, setIsHovering, item }) => {
     closeModal()
   }
   return (
-    <div className='fixed top-0 left-0 z-10'>
+    <div className='fixed top-0 left-0 z-20'>
       <div className='w-full h-full fixed bg-gray-600/80 flex justify-center items-center'>
         <div className='w-[400px] border border-gray-400 rounded bg-white p-5 flex flex-col'>
           {/* 모달 main */}

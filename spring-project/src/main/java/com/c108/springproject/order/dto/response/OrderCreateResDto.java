@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 public class OrderCreateResDto {
     private Long orderNo;             // 생성된 주문 번호
     private int userNo;              // 주문자 번호
-    private Long userCouponNo; // 사용된 쿠폰 번호
-    private int totalPrice;          // 총 주문 금액
+    private Integer couponNo; // 사용된 쿠폰 번호
+    private int paymentPrice;          // 총 주문 금액
     private String payment;          // 결제 방식
     private String requests;         // 배송 요청사항
     private List<OrderItemResDto> items;  // 주문 상품 목록
@@ -29,8 +29,8 @@ public class OrderCreateResDto {
         return OrderCreateResDto.builder()
                 .orderNo(order.getOrderNo())
                 .userNo(order.getUser().getUserNo())
-                .userCouponNo(order.getUserCouponNo())
-                .totalPrice(order.getTotalPrice())
+                .couponNo(order.getCoupon() != null ? order.getCoupon().getCouponNo() : null)
+                .paymentPrice(order.getPaymentPrice())
                 .payment(order.getPayment())
                 .requests(order.getRequests())
                 .items(order.getOrderDetails().stream()

@@ -36,6 +36,11 @@ import ConsumerBoardQuestion from '../pages/consumer/board/BoardQuestion'
 // 이용자 레시피
 import ConsumerRecipe from '../pages/consumer/Recipe'
 import ConsumerRecipeDetail from '../pages/consumer/RecipeDetail'
+// 이용자 라이브커머스
+import ConsumerLive from '../pages/consumer/Live'
+// 이용자 Route 관리
+import ConsumerPrivateRoute from './consumer/PrivateRoute'
+import ConsumerPublicRoute from './consumer/PublicRoute'
 
 // 관리자 section
 
@@ -66,6 +71,9 @@ import MonitorProducts from '../pages/admin/seller/MonitorProductPage'
 import ItemDetailPage from '../pages/admin/seller/ItemDetailPage'
 // import SellerDetailPage from '../pages/admin/seller/SellerDetailPage'
 import SellerStatisticsPage from '../pages/admin/seller/SellerStatisticsPage'
+// (관리자) 주문 관리
+import OrderListPage from '../pages/admin/order/OrderListPage'
+import OrderDetailPage from '../pages/admin/order/OrderDetailPage'
 // (관리자) 카테고리관리
 import CategoryManagementPage from '../pages/admin/category/CategoryManagementPage'
 import CategoryDetailPage from '../pages/admin/category/CategoryDetailPage'
@@ -95,6 +103,7 @@ import PerformancePage from '../pages/admin/analytics/PerformancePage'
 import CategoryPage from '../pages/admin/analytics/CategoryPage'
 import TimesalesPage from '../pages/admin/analytics/TimesalesPage'
 import UsersAnalysisPage from '../pages/admin/analytics/UsersPage'
+import RepurchaseAnalysisPage from '../pages/admin/analytics/RepurchasePage'
 //판매자 페이지
 import * as Seller from '../pages/seller/import'
 
@@ -118,67 +127,77 @@ const router = createBrowserRouter([
           },
           {
             path: 'login',
-            element: <ConsumerLogin />,
+            element: <ConsumerPublicRoute />,
+            children: [{ path: '', element: <ConsumerLogin /> }],
           },
           {
             path: 'naver-login',
-            element: <ConsumerNaverLogin />,
+            element: <ConsumerPublicRoute />,
+            children: [{ path: '', element: <ConsumerNaverLogin /> }],
           },
           {
             path: 'kakao-login',
-            element: <ConsumerKakaoLogin />,
+            element: <ConsumerPublicRoute />,
+            children: [{ path: '', element: <ConsumerKakaoLogin /> }],
           },
           {
             path: 'signup',
-            element: <ConsumerSignup />,
+            element: <ConsumerPublicRoute />,
+            children: [{ path: '', element: <ConsumerSignup /> }],
           },
           {
             path: 'mypage',
-            element: <ConsumerMypage />,
+            element: <ConsumerPrivateRoute />,
             children: [
               {
-                path: 'order',
-                element: <ConsumerMyPageOrder />,
-              },
-              {
-                path: 'info',
-                element: <ConsumerMyPageInfo />,
-              },
-              {
-                path: 'address',
-                element: <ConsumerMyPageAddress />,
-              },
-              {
-                path: 'calender',
-                element: <ConsumerMyPageCalendar />,
-              },
-              {
-                path: 'recipe',
-                element: <ConsumerMyPageRecipe />,
-              },
-              {
-                path: 'recipe/create',
-                element: <ConsumerMyPageRecipeCreate />,
-              },
-              {
-                path: 'recipe/update/:recipeNo',
-                element: <ConsumerMyPageRecipeUpdate />,
-              },
-              {
-                path: 'review',
-                element: <ConsumerMyPageReview />,
-              },
-              {
-                path: 'review/:itemNo',
-                element: <ConsumerMyPageReviewCreate />,
-              },
-              {
-                path: 'cancelRefund',
-                element: <ConsumerMyPageCancelRefund />,
-              },
-              {
-                path: 'question',
-                element: <ConsumerMyPageQuestion />,
+                path: '',
+                element: <ConsumerMypage />,
+                children: [
+                  {
+                    path: 'order',
+                    element: <ConsumerMyPageOrder />,
+                  },
+                  {
+                    path: 'info',
+                    element: <ConsumerMyPageInfo />,
+                  },
+                  {
+                    path: 'address',
+                    element: <ConsumerMyPageAddress />,
+                  },
+                  {
+                    path: 'calender',
+                    element: <ConsumerMyPageCalendar />,
+                  },
+                  {
+                    path: 'recipe',
+                    element: <ConsumerMyPageRecipe />,
+                  },
+                  {
+                    path: 'recipe/create',
+                    element: <ConsumerMyPageRecipeCreate />,
+                  },
+                  {
+                    path: 'recipe/update/:recipeNo',
+                    element: <ConsumerMyPageRecipeUpdate />,
+                  },
+                  {
+                    path: 'review',
+                    element: <ConsumerMyPageReview />,
+                  },
+                  {
+                    path: 'review/:itemNo',
+                    element: <ConsumerMyPageReviewCreate />,
+                  },
+                  {
+                    path: 'cancelRefund',
+                    element: <ConsumerMyPageCancelRefund />,
+                  },
+                  {
+                    path: 'question',
+                    element: <ConsumerMyPageQuestion />,
+                  },
+                ],
               },
             ],
           },
@@ -204,7 +223,8 @@ const router = createBrowserRouter([
           },
           {
             path: 'payment',
-            element: <ConsumerPayment />,
+            element: <ConsumerPrivateRoute />,
+            children: [{ path: '', element: <ConsumerPayment /> }],
           },
           {
             path: 'board',
@@ -224,7 +244,8 @@ const router = createBrowserRouter([
               },
               {
                 path: 'question',
-                element: <ConsumerBoardQuestion />,
+                element: <ConsumerPrivateRoute />,
+                children: [{ path: '', element: <ConsumerBoardQuestion /> }],
               },
             ],
           },
@@ -235,6 +256,11 @@ const router = createBrowserRouter([
           {
             path: 'recipe/:recipeNo',
             element: <ConsumerRecipeDetail />,
+          },
+          {
+            path: 'liveShopping/:castNo',
+            element: <ConsumerPrivateRoute />,
+            children: [{ path: '', element: <ConsumerLive /> }],
           },
         ],
       },
@@ -574,6 +600,20 @@ const router = createBrowserRouter([
             ],
           },
           {
+            //주문 관리 섹션
+            path: 'order',
+            children: [
+              {
+                path: '', // 주문 현황 페이지
+                element: <OrderListPage />,
+              },
+              {
+                path: ':orderNo',
+                element: <OrderDetailPage />,
+              },
+            ],
+          },
+          {
             // 라이브 커머스 섹션
             path: 'live',
             children: [
@@ -698,6 +738,10 @@ const router = createBrowserRouter([
               {
                 path: 'users',
                 element: <UsersAnalysisPage />,
+              },
+              {
+                path: 'repurchase',
+                element: <RepurchaseAnalysisPage />,
               },
             ],
           },

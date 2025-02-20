@@ -1,4 +1,4 @@
-package com.c108.springproject.item.repository.querydsl;
+package com.c108.springproject.item.dto.querydsl;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemBestSellerDto {
+public class ItemGenderStatsDto {
     private Integer itemNo;
     private String itemName;
     private Integer price;

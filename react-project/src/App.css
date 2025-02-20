@@ -8,7 +8,7 @@
   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_JAMO@1.0/MoiraiOne-Regular.woff2')
     format('woff2');
   font-weight: normal;
-  font-style: normal;
+  font-style: 'normal';
 }
 
 @font-face {
@@ -37,4 +37,9 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none; /* IE 10+ */
   scrollbar-width: none; /* Firefox */
+}
+
+/* top10 상품 캐러셀 */
+.best-item-slider .slick-slide {
+  margin-right: 30px; /* 이 컴포넌트에서만 여백 적용 */
 }

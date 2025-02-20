@@ -7,126 +7,14 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import HomeLiveShoppingItem from './HomeLiveShoppingItem'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
+import API from '../../../utils/API'
 
 // 플러그인 등록
 dayjs.extend(isBetween)
 
 const HomeLiveShopping = () => {
   const [castData, setCastData] = useState([])
-
-  // 방송 조회
-  const getCast = () => {
-    const tempData = [
-      {
-        castNo: 4,
-        title: '첫 방송입니다.',
-        content: '닭가슴살 초특가',
-        startAt: '20250218 080000',
-        endAt: '20250218 100000',
-        castItemList: [
-          {
-            itemNo: 1,
-            name: '상품 이름1',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 2,
-            name: '상품 이름2',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 52,
-            name: '상품 이름122',
-            description: '상품 설명1',
-          },
-        ],
-        castStatus: '등록',
-        createAt: '20250212 014213',
-        createdUser: 'SELLER seller@naver.com',
-        updatedAt: '20250212 014213',
-        updatedUser: 'SELLER seller@naver.com',
-        delYN: 'N',
-      },
-      {
-        castNo: 5,
-        title: '두번 방송입니다.',
-        content: '닭가슴살 도시락 초특가',
-        startAt: '20250218 100000',
-        endAt: '20250218 110000',
-        castItemList: [
-          {
-            itemNo: 1,
-            name: '상품 이름1',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 2,
-            name: '상품 이름2',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 51,
-            name: '상품 이름122',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 52,
-            name: '상품 이름122',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 53,
-            name: '상품 이름122',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 54,
-            name: '상품 이름122',
-            description: '상품 설명1',
-          },
-          {
-            itemNo: 55,
-            name: '상품 이름122',
-            description: '상품 설명1',
-          },
-        ],
-        castStatus: '등록',
-        createAt: '20250212 014735',
-        createdUser: 'SELLER seller@naver.com',
-        updatedAt: '20250212 014735',
-        updatedUser: 'SELLER seller@naver.com',
-        delYN: 'N',
-      },
-    ]
-    const liveEvents = tempData.filter((event) => {
-      const currentTime = dayjs()
-      const startTime = dayjs(event.startAt)
-      const endTime = dayjs(event.endAt)
-
-      // 방송 중인 이벤트
-      return currentTime.isBetween(startTime, endTime)
-    })
-    const upcomingEvents = tempData.filter((event) => {
-      const currentTime = dayjs()
-      const startTime = dayjs(event.startAt)
-
-      // 방송 예정인 이벤트
-      return currentTime.isBefore(startTime)
-    })
-
-    // 우선 현재 방송이 없으면, 가장 가까운 예정 방송을 표시
-    const events = liveEvents.length > 0 ? liveEvents : upcomingEvents
-    setCastData(events)
-  }
-
-  useEffect(() => {
-    getCast()
-    const interval = setInterval(() => {
-      getCast() // 10초마다 방송 데이터를 갱신
-    }, 10000)
-
-    return () => clearInterval(interval) // cleanup interval
-  }, [])
+  const [startIdx, setStartIdx] = useState(0)
 
   // 캐로셀 버튼
   const PrevBtn = ({ onClick }) => (
@@ -145,7 +33,7 @@ const HomeLiveShopping = () => {
 
   // 캐로셀 설정
   const settings = {
-    infinite: true,
+    infinite: castData.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -154,14 +42,48 @@ const HomeLiveShopping = () => {
     arrows: true,
     prevArrow: <PrevBtn />,
     nextArrow: <NextBtn />,
-    initialSlide: 1,
+    initialSlide: startIdx,
     pauseOnFocus: true,
     pauseOnHover: true,
   }
 
+  // 방송 조회
+  const getCast = () => {
+    API.get('/cast/todayList')
+      .then((res) => {
+        const data = res.data.result.data
+        setCastData(data)
+
+        const currentTime = dayjs()
+
+        let currentIdx = data.findIndex((v) => {
+          const startTime = dayjs(v.startAt)
+          const endTime = dayjs(v.endAt)
+          return currentTime.isBetween(startTime, endTime)
+        })
+        if (currentIdx === -1) {
+          const upcomingIdx = data
+            .filter((v) => dayjs(v.startAt).isAfter(currentTime)) // 아직 시작 안 한 방송만 필터링
+            .sort((a, b) => dayjs(a.startAt).diff(dayjs(b.startAt))) // 시작 시간이 빠른 순으로 정렬
+            .map((v) => data.indexOf(v))[0] // 가장 먼저 시작할 방송의 인덱스 찾기
+          currentIdx = upcomingIdx ?? 0
+        }
+        setStartIdx(currentIdx)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    getCast()
+
+    return () => {}
+  }, [])
+
   return (
     <div className='flex justify-center mt-20 mb-32'>
-      <div className='w-[70rem]'>
+      <div className='w-[70rem] min-h-[300px]'>
         <h3 className='text-xl'>라이브 커머스</h3>
         <div className='w-full h-full flex justify-center items-center'>
           {castData.length > 0 ? (

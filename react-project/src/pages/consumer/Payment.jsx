@@ -3,16 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import API from '../../utils/API'
 import PaymentAddressModal from '../../components/consumer/payment/PaymentAddressModal'
 import SearchBar from '../../components/consumer/common/SearchBar'
-import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { loadingReducerActions } from '../../redux/reducers/loadingSlice'
 
 const Payment = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const userInfo = useSelector((state) => state.user.userInfo)
+  const [userInfo, setUserInfo] = useState({})
 
   const [deliveryFee, setDeliveryFee] = useState(3000) // 배송비
 
   // 배송 정보 상태
+  const [addressNo, setAddressNo] = useState()
   const [postcode, setPostCode] = useState('')
   const [address, setAddress] = useState('')
   const [addressDetail, setAddressDetail] = useState('')
@@ -50,6 +53,7 @@ const Payment = () => {
 
   // 배송지 선택 함수
   const selectAddress = (addr) => {
+    setAddressNo(addr.addressNo)
     setPostCode(addr.postalCode)
     setAddress(addr.address)
     setAddressDetail(addr.addressDetail)
@@ -67,18 +71,61 @@ const Payment = () => {
       setDeliveryFee(0)
     }
   }
+
+  // 결제 전 상품 체크
+  const checkStock = () => {
+    dispatch(loadingReducerActions.setLoading(true))
+    const payload = JSON.parse(localStorage.getItem('cart'))
+    API.post('/payments/orderable', payload)
+      .then((res) => {
+        if (res.data.message.code === 'SUCCESS_ORDERABLE') {
+          handlePayment()
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // 결제 성공 후 주문 생성
+  const createOrder = (payload) => {
+    API.post('/orders', payload)
+      .then((res) => {
+        localStorage.removeItem('cart')
+        dispatch(loadingReducerActions.setLoading(false))
+        navigate('/')
+      })
+      .catch((err) => {
+        console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
+      })
+  }
+  // 결제 취소 및 실패 시
+  const cancelPayment = () => {
+    const payload = JSON.parse(localStorage.getItem('cart'))
+    API.post('/payments/cancel', payload)
+      .then((res) => {
+        dispatch(loadingReducerActions.setLoading(false))
+      })
+      .catch((err) => {
+        console.error(err)
+        dispatch(loadingReducerActions.setLoading(false))
+      })
+  }
+  // 결제
   const handlePayment = () => {
     // 결제 정보 생성
     const paymentData = {
-      addressNo: 1, // 예시 주소 번호, 실제로는 주소 저장 후 반환된 값으로 대체
-      payment: paymentMethod,
-      couponCode: selectedCoupon ? selectedCoupon.code : null,
-      totalPrice: totalSalePrice + deliveryFee - points - couponDiscount,
-      orderDetails: items.map((item) => ({
+      userNo: userInfo.userNo,
+      addressNo: addressNo,
+      payment: paymentMethod.toUpperCase(),
+      useCouponNo: selectedCoupon ? selectedCoupon.code : null,
+      requests: requests || '부재시 경비실에 맡겨주세요.',
+      items: items.map((item) => ({
         itemNo: item.itemData.itemNo,
         count: item.count,
-        price: item.itemData.salePrice,
       })),
+      usePoint: points,
     }
 
     // 결제 함수
@@ -88,7 +135,7 @@ const Payment = () => {
   // 결제 함수
   const callPayment = (paymentData) => {
     const { IMP } = window
-    IMP.init(import.meta.env.VITE_PORTONE_STORE_ID) // 가맹점 식별 코드
+    IMP.init('imp01087767') // 가맹점 식별 코드
 
     // 결제 데이터 정의하기
     const data = {
@@ -108,23 +155,42 @@ const Payment = () => {
       if (success) {
         // 결제성공시 시행할 동작들
         alert('결제 성공')
-        console.log(paymentData)
+        createOrder(paymentData)
       } else {
         // 결제 실패시 시행할 동작들
         alert('결제 실패')
+        cancelPayment()
       }
     })
   }
 
-  // 배송지 불러오기
-  const getAddressData = () => {
-    API.get('/address/list')
+  // 유저 정보 불러오기
+  const getUserData = () => {
+    API.get('/users/profile')
       .then((res) => {
-        setSavedAddresses(res.data.result.data)
+        setUserInfo(res.data.result.data)
+        getAddressData(res.data.result.data.userNo)
       })
       .catch((err) => {
         console.error(err)
       })
+  }
+
+  // 배송지 불러오기
+  const getAddressData = (userNo) => {
+    const payload = {
+      userNo: userNo,
+    }
+    if (payload.userNo) {
+      API.post('/address/list', payload)
+        .then((res) => {
+          setSavedAddresses(res.data.result.data)
+          getBaseAddressData()
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
   }
 
   // 기본 배송지 불러오기
@@ -132,6 +198,7 @@ const Payment = () => {
     API.get('/address/base')
       .then((res) => {
         const addr = res.data.result.data
+        setAddressNo(addr.addressNo)
         setPostCode(addr.postalCode)
         setAddress(addr.address)
         setAddressDetail(addr.addressDetail)
@@ -160,8 +227,7 @@ const Payment = () => {
       updateTotalPrice(tempItems)
     }
     fetchCartItems()
-    getAddressData()
-    getBaseAddressData()
+    getUserData()
   }, [])
 
   return (
@@ -184,7 +250,7 @@ const Payment = () => {
               배송지 선택
             </button>
             <textarea
-              placeholder='배송 요청 사항 (선택)'
+              placeholder={`배송 요청 사항\n(기본값) 부재시 경비실에 맡겨주세요.`}
               value={requests}
               onChange={(e) => setRequests(e.target.value)}
               className='w-full p-2 border border-[#6F4E37] rounded resize-none h-20'
@@ -275,7 +341,7 @@ const Payment = () => {
           {/* 결제 버튼 */}
           <button
             className='w-full bg-[#A67B5B] hover:bg-[#6F4E37] text-white p-3 rounded '
-            onClick={handlePayment}
+            onClick={checkStock}
           >
             결제하기
           </button>
