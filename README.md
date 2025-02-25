@@ -271,12 +271,96 @@
 
 # :eyes: UI/UX 단위 결과서
 
+
+## 쇼핑몰 이용자 관련 기능
+
+### 1. 로그인
 <details>
+<summary> :film_frames: </summary>
+
+![social_login](./userGif/소셜로그인.gif)
+</details>
+
+- 쇼핑몰 자체 회원 로그인
+- 소셜 로그인
+
+### 2. 상품 구매
+
+<details>
+<summary> :film_frames: </summary>
+![buy_item](./userGif/상품구매.gif)
+</details>
+
+- Query DSL을 이용한 베스트 상품
+- 상품 검색
+  <details>
+  <summary> :framed_picture: </summary>
+  ![search_item](./userImage/상품검색.png)
+  </details>
+- 카테고리 별 상품
+  <details>
+  <summary> :framed_picture: </summary>
+  ![category_item](./userImage/카테고리별%20상품%20확인.png)
+  </details>
+- 장바구니 - 수량 변경, 제거
+- 결제 - 배송지, 포인트·쿠폰 적용, 포트원 API
+
+### 3. 라이브 커머스
+
+<details>
+<summary> :film_frames: </summary>
+![live_shopping](./userGif/라이브커머스.gif)
+</details>
+
+- 라이브 커머스 시청 및 채팅 기능
+- 판매 중 상품 장바구니 담기 - 개별, 전체
+
+### 4. 식단 관리
+
+<details>
+<summary> :film_frames: </summary>
+![calendar](./userGif/식단관리.gif)
+</details>
+
+- 이용자 키, 몸무게 정보를 바탕으로 한 일일 권장 칼로리 계산
+- 캘린더를 이용한 일일 식단 등록
+- 권장 칼로리 이상 섭취시 경고 표시
+
+### 5. 레시피
+
+<details>
+<summary> :film_frames: </summary>
+![recipe](./userGif/레시피.gif)
+</details>
+
+- 마이페이지에서 내 레시피 확인 및 작성
+- 레시피 페이지에서 전체 레시피 확인
+- 레시피 상세에서 관련 상품 장바구니 담기
+
+### 6. 기타
+
+- 마이페이지-정보관리
+  <details>
+  <summary> :framed_picture: </summary>
+  ![mypage-info](./userImage/마이페이지-개인정보수정.png)
+  ![mypage-address](./userImage/마이페이지-배송지관리.png)
+  </details>
+- 마이페이지-상품관련(주문내역, 후기 등)
+  <details>
+  <summary> :framed_picture: </summary>
+  ![mypage-order](./userImage/마이페이지-주문내역.png)
+  ![mypage-review](./userImage/마이페이지-상품후기.png)
+  </details>
+- 고객센터(FAQ, 공지사항, 문의)
+  <details>
+  <summary> :framed_picture: </summary>
+  ![board-faq](./userImage/고객센터-FAQ.png)
+  ![board-question](./userImage/고객센터-문의하기.png)
+  </details>
+
+<!-- <details>
 <summary> 관리자 </summary>
 
 <h3> 관리자 gif </h3>
 <img src="image/admin.gif" alt="관리자gif" height="100%" width="100%">
-</br>
-
-
-</details>
+</details> -->
