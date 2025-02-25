@@ -1,133 +1,218 @@
-# Bobissue
+# :green_salad: 밥이슈(Bobissue)
 <img src="image/logo.png" height="100%" width="100%">
+
+<!-- # :green_salad: 한줄 소개
+현대인들의 효율적인 건강식을 권장하는 종합 솔루션 쇼핑몰 -->
+
+# :green_salad: 프로젝트 개요
+## :rocket: 프로젝트 소개
+밥이슈(Bobissue) 프로젝트는 식단 관리 서비스를 기반한 건강식 쇼필몰로 현대인들이 보다 효율적으로 건강식을 접할 수 있는 종합 솔루션 쇼핑몰이다. 또한, 라이브 커머스 기능을 제공하며 판매자의 상품 판매 및 광고하며 소비자의 구매를 유도할 수 있는 기능 제공한다. 소비자의 성별, 나이 등을 기준을 통계 및 그래프를 제공하여 판매자가 소비자의 소비 패턴을 분석하여 판매 전략을 수립할 수 있도록 도움을 준다.
+
+
+## :dart: 프로젝트 기획 배경
+
+### :herb: 건강한 식단관리 필요성
+
+- 만성 질환 예방 중요성 인식
+- 올바른 영양 섭취의 필요성
+- 다이어트 및 건강식에 대한 관심도 지속적 상승
+- 건강한 생활습관 형성 욕구
+
+### :fork_and_knife_with_plate: 맞춤형 식단 수요 증가
+
+- 개인 건강데이터 저장 및 활용 증가
+- 다양한 식단 요구사항 존재
+- 편의성과 효율성 동시 추구
+
+### :chart_with_upwards_trend: 온라인 식품 시장 성장
+
+- 코로나 19로 인한 비대면 선호
+- 신선식품 온라인 구매 증가
+- MZ 세대의 온라인 쇼핑 선호
+- 간편식 및 밀키트 시장 확대
+
+## :warning: 문제점
+
+### :mag: 개인화 부족
+
+- 기존 식단 관리 서비스의 한계
+- 쇼핑몰과의 분리로 효율성 낮은 경우 많음
+    - 즉, 식단을 짜고 활용해보고 싶지만 시간이 없는 경우 직접 음식을 고르고 주문하고 기록하는 전과정이 오래 소요되고 비효율적.
+
+### :clock3: 지속성 문제
+
+- 단기적인 식단 관리
+- 동기부여 요소 부족
+- 사용자 이탈률 높음
+
+## :pushpin: 사례
+
+컬리? 식단 관리 서비스?
+
+## :bulb: 서비스 해결방안
+
+### :shopping_bags: 쇼핑몰 통합
+
+- 식단과 쇼핑 연계
+- 편리한 구매 경험
+- 신선식품 제공
+- 시간 절약 가능
+
+### :link: 원스톱 솔루션
+
+- 식단 계획부터 구매까지
+- 한 플랫폼에서 해결
+- 사용자 편의성 증대
+- 통합 서비스 제공
+
+## :key: 주요 기능 및 핵심 서비스
+
+### :shopping_cart: 쇼핑몰
+
+- 식재료 판매
+- 건강식품 제공
+- 맞춤형 상품 추천
+- 편리한 구매 경험
+
+### :movie_camera: 라이브 커머스
+
+- 실시간 상품 소개
+- 즉각적인 질의응답
+- 특별 할인 혜택
+
+### :green_salad: 식단 관리
+
+- 개인화된 식단 관리
+- 칼로리 및 영양 계산
+- 식단 기록 및 레시피 공유
+- 쇼핑몰 연계 식단 관리 및 즉시 주문
+
+</br>
+</br>
+
+# :green_salad: 개발 환경
+
+## :iphone: 프론트엔드
+
+
+| 항목 | 기술 |
+|------|------|
+| **개발 환경** | ![Visual Studio Code](https://img.shields.io/badge/VS_Code-007ACC.svg?&style=for-the-badge&logo=visualstudiocode&logoColor=white) |
+| **프로그래밍 언어** | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E.svg?&style=for-the-badge&logo=JavaScript&logoColor=black) |
+| **빌드 도구** | ![Vite](https://img.shields.io/badge/Vite-646CFF.svg?&style=for-the-badge&logo=Vite&logoColor=white) |
+| **프레임워크** | ![React](https://img.shields.io/badge/React-61DAFB.svg?&style=for-the-badge&logo=React&logoColor=black) |
+| **상태 관리** | ![Redux](https://img.shields.io/badge/Redux-764ABC.svg?&style=for-the-badge&logo=Redux&logoColor=white) |
+| **CSS 프레임워크** | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4.svg?&style=for-the-badge&logo=Tailwind-CSS&logoColor=white) |
+| **인증/보안** | ![OAuth](https://img.shields.io/badge/OAuth-3A3A3A.svg?&style=for-the-badge&logo=OAuth&logoColor=white) |
+
+
+
+## :computer: 백엔드
+
+| 항목 | 기술 |
+|------|------|
+| **프로그래밍 언어** | ![Java](https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=OpenJDK&logoColor=white) |
+| **개발 환경** | ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJ_IDEA-000000.svg?&style=for-the-badge&logo=IntelliJ-IDEA&logoColor=white) |
+| **빌드 도구** | ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?&style=for-the-badge&logo=Gradle&logoColor=white) |
+| **프레임워크** | ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F.svg?&style=for-the-badge&logo=Spring-Boot&logoColor=white) |
+| **보안** | ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F.svg?&style=for-the-badge&logo=Spring-Security&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000.svg?&style=for-the-badge&logo=JSON-Web-Tokens&logoColor=white) |
+
+
+## :gear: 공통
+
+| 항목 | 기술 |
+|------|------|
+| **형상 관리** | ![Git](https://img.shields.io/badge/Git-F05032.svg?&style=for-the-badge&logo=Git&logoColor=white) ![GitLab](https://img.shields.io/badge/GitLab-FC6D26.svg?&style=for-the-badge&logo=GitLab&logoColor=white) |
+| **협업** | ![Notion](https://img.shields.io/badge/Notion-000000.svg?&style=for-the-badge&logo=Notion&logoColor=white) ![JIRA](https://img.shields.io/badge/JIRA-0052CC.svg?&style=for-the-badge&logo=JIRA&logoColor=white) |
+| **데이터베이스** | ![MySQL](https://img.shields.io/badge/MySQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D.svg?&style=for-the-badge&logo=Redis&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-47A248.svg?&style=for-the-badge&logo=MongoDB&logoColor=white) ![ElasticSearch](https://img.shields.io/badge/Elastic_Search-005571.svg?&style=for-the-badge&logo=ElasticSearch&logoColor=white) |
+| **커뮤니케이션** | ![Mattermost](https://img.shields.io/badge/Mattermost-0072C6.svg?&style=for-the-badge&logo=Mattermost&logoColor=white) |
+| **배포** | ![Jenkins](https://img.shields.io/badge/Jenkins-D24939.svg?&style=for-the-badge&logo=Jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED.svg?&style=for-the-badge&logo=Docker&logoColor=white) ![Nginx](https://img.shields.io/badge/Nginx-009639.svg?&style=for-the-badge&logo=Nginx&logoColor=white) |
+
+</br>
+</br>
+
+# :green_salad: 요구사항 분석(기능 명세서)
+## :bust_in_silhouette: 이용자
+
+| 권한 | 대분류 | 중분류 | 소분류 | 설명 |
+|------|--------|--------|--------|------|
+| 이용자 | 1. 회원가입 | 1-1. 회원가입 |  | 필수: 아이디, 비밀번호, 이름, 주소, 닉네임, 전화, 이메일, 생년월일, 성별 <br> 동의: 이용약관, 개인정보 수집 및 이용 <br> 선택: 수신 동의, 사진 |
+|  |  | 1-2. 소셜 회원가입 |  |  |
+|  | 2. 로그인 | 2-1. 로그인 |  | 아이디 & 비밀번호 입력 후 로그인 |
+|  |  | 2-2. 소셜 로그인 |  | 네이버, 카카오 간편 로그인 지원 |
+|  |  | 2-3. 비밀번호 찾기 |  |  |
+|  | 3. 로그아웃 |  |  |  |
+|  | 4. 회원 등급 | 4-1. 등급 확인 |  | 구매 금액에 따른 포인트 적립 및 등급제 운영 |
+|  | 5. 네비게이션바 | 5-1. 카테고리 | 5-1-1. 종류별 | 닭고기, 소고기/돼지고기, 김밥/도시락/볶음밥, 샐러드/과일 등 |
+|  |  |  | 5-1-2. 목적별 | 간편식, 다이어트, 영양식, 벌크업 |
+|  | 6. 라이브 커머스 | 6-1. 라이브 일정 보기 |  | 라이브 커머스 방송 리스트 표시 |
+|  |  | 6-2. 라이브 시청 |  | 라이브 방송 시청 및 채팅 가능 |
+|  | 7. 상품 조회 | 7-1. 상품 목록 |  | 상품 이미지, 이름, 가격 등 정보 조회 |
+|  | 8. 상품 상세 | 8-1. 상품 상세정보 |  | 상품 설명, 영양성분, 판매자 정보 등 |
+|  |  | 8-2. 상품 찜 | 8-2-1. 찜하기 | 마이페이지에서 확인 가능 |
+|  | 9. 장바구니 | 9-1. 장바구니 목록 | 9-1-1. 상품 정보 조회 | 수량, 옵션 수정 및 삭제 가능 |
+|  | 10. 결제 | 10-1. 배송지 | 10-1-1. 배송지 선택 | 기본 배송지 설정 가능 |
+|  |  | 10-2. 결제 금액 | 10-2-1. 할인 쿠폰 | 관리자 발급 쿠폰 적용 가능 |
+|  |  | 10-5. 결제 |  | 결제 API 호출 |
+|  | 11. 마이페이지 | 11-1. 주문 목록 | 11-1-1. 주문 내역 조회 | 주문 기간 선택 및 상품 검색 가능 |
+|  | 12. 고객센터 | 12-1. FAQ |  | 자주 묻는 질문 카테고리 제공 |
+|  | 13. 레시피 | 13-1. 레시피 생성 | 13-1-1. 레시피 작성 | 레시피명, 시간, 방법 기입 |
+
+## :convenience_store: 판매자
+
+| 권한 | 대분류 | 중분류 | 소분류 | 설명 |
+|------|--------|--------|--------|------|
+| 판매자 | 1. 회원가입 | 1-1. 회원 가입 |  | 회원가입 유형: 사업자 전용 |
+|  | 2. 로그인 | 2-1. 로그인 |  | 판매자는 소셜 로그인 불가 |
+|  | 4. 판매자 페이지 | 4-1. 상품 목록 관리 | 4-1-1. 상품 정보 목록 조회 | 상품명, 가격, 상세설명, 재고 포함 |
+|  |  | 4-2. 상품 관리 | 4-2-1. 상품 정보 등록 | 상품명, 가격, 재고, 할인 설정 가능 |
+|  |  | 4-3. 주문/배송 관리 | 4-3-1. 주문 목록 조회 | 구매자의 배송 처리 목록 조회 |
+|  |  |  | 4-3-2. 출고 관리 | 이용자 구매 상품 배송 |
+|  |  | 4-4. 정산 | 4-4-1. 정산 조회 | 정산 금액 및 날짜 확인 가능 |
+|  |  | 4-5. 판매자 정보 관리 | 4-5-1. 판매자 정보 조회 | 판매자 등급, 판매 내역 확인 |
+|  | 5. 고객 관리 | 5-1. 1:1 문의 응대 | 5-1-1. 문의 조회 | 이용자 문의 목록 조회 및 상세 답변 |
+|  | 6. 라이브 커머스 | 6-1. 라이브 신청하기 |  | 관리자에게 라이브 방송 신청 가능 |
+|  | 7. 판매 통계 | 7-1. 판매 성과 조회 |  | 결제 금액 및 환불 현황 일별 분석 |
+|  | 9. 레시피 | 9-1. 레시피 생성 | 9-1-1. 레시피 작성 | 레시피명, 시간, 방법 입력 |
+
+## :cop: 관리자 
+
+| 권한 | 대분류 | 중분류 | 소분류 | 설명 |
+|------|--------|--------|--------|------|
+| 관리자 | 1. 로그인/로그아웃 |  |  |  |
+|  | 2. 일반 회원 관리 | 2-1. 회원 목록 조회 |  | 전체 회원 및 특정 회원 조회 |
+|  |  | 2-2. 회원 상세 조회 | 2-2-1. 회원 정보 조회 | 개인정보 및 등급 조회 |
+|  | 3. 판매자 회원 관리 | 3-1. 판매자 목록 조회 | 3-1-1. 전체 판매자 조회 | |
+|  |  | 3-2. 판매자 상세 조회 | 3-2-1. 판매자 신청 조회 | 판매자가 상품 판매 신청한 목록 |
+|  |  |  | 3-2-2. 판매자 정보 조회 | 해당 회사의 계정 수, 활동 내역, 판매 제품 등 |
+|  |  |  | 3-2-3. 판매자 활성화 | 비활성화된 판매자 계정 활성화 |
+|  | 4. 라이브 커머스 | 4-1. 라이브 시간표 관리 | 4-1-1. 라이브 신청받기 | 판매자가 신청한 라이브 관리 |
+|  | 5. 컨텐츠 관리 | 5-1. 쿠폰 관리 | 5-1-1. 쿠폰 현황 조회 | 사이트 내 모든 쿠폰 조회 |
+|  |  | 5-2. 화면 관리 | 5-2-1. 이벤트 배너 등록 | 이벤트 배너 생성 및 관리 |
+|  | 6. CS 관리 | 6-1. 알림 관리 | 6-1-1. 알림 보내기 | 전체 및 개별 알림 전송 가능 |
+|  |  | 6-2. 고객 센터 관리 | 6-2-1. 문의 조회 | 이용자 문의 내용 확인 |
+|  |  | 6-3. 공지사항 관리 | 6-3-1. 공지사항 조회 | 이용자/판매자별 공지 구분 가능 |
+
+</br>
+</br>
+
+
+# 📈 ERD
+<img src="image/BobIssueERD.png" height="100%" width="100%">
+</br>
+
+# [🖥 화면설계서]
+<img src="image/userPage.png" height="100%" width="100%">
+<img src="image/sellerPage.png" height="100%" width="100%">
+<img src="image/adminPage.png" height="100%" width="100%">
+</br>
+
 <!-- 
-# 프로젝트 개요
-## 프로젝트 소개
-CATCH 프로젝트는 CRM마케팅 전략을 기반으로 백화점에서 마케터들이 고객들을 대상으로 관리, 또는 이벤트를 제공 할 수 있는 서비스이다. 고객 정보를 토대로 성별, 나이, 멤버쉽 등 각각의 기준으로 통계 및 그래프를 제공하여 회사가 고객들의 소비 패턴들을 분석하고 마케팅 전략을 계획 할 수 있게 도움을 준다. 뿐만 아니라 마케팅 전략에 맞춰 이벤트를 제공 할 수 있게 회원들에게 이메일을 통한 광고를 전송하거나 멤버쉽 등급에 따라 쿠폰을 발급하는 등의 서비스를 구현해 회사가 고객 관리를 지속적으로 할 수 있게 한다.
-
-## CRM 마케팅
-CRM 마케팅이란, Customer Relationship Management의 약자로 고객 관계 관리라는 뜻이다. 기존 고객과의 관계를 중시하여 ‘고객이 어떻게 하면 더 많이 서비스를 이용하고 비용을 지불 할까?’ 에 대해 고민하는 전략이다. 고객데이터의 세분화를 실시하여 신규고객획득, 우수고객 유지, 고객가치증진, 잠재고객 활성화, 평생고객화와 같은 사이클을 통하여 고객을 적극적으로 관리하고 유도한다. 기존 마케팅이 단발적인 마케팅 전술이라면 CRM은 고객과의 지속적인 관계를 유지하면서 '한 번 고객은 평생고객'이 될수 있는 기회를 만들며, 평생고객화를 통해 고객의 가치를 극대화하는 것이다.
-
-## 서비스 타켓 선정 
-이번 프로젝트에서 서비스의 대상을 백화점으로 선정했다. 그 이유는  가장 먼저 많은 고객들을 대상으로 서비스를 제공하고 있는 업계이기 때문이다. 해당 프로젝트는 많은 고객들의 데이터를 분석하고 제공해주기 때문에 많은 이용자 수를 가지고 있는 곳이 필요했다. 뿐만 아니라 백화점은 유통 및 서비스 업계에 속해 있는데 해당 업계는 많은 고객들을 분석하고 이벤트를 기획을 하는 것이 회사매출에 가장 중요한 부분을 차지하고 있기 때문에 대상을 백화점으로 선정했다.
-
-## CRM 마케팅 사례
-<p align="center">
-<img src=".github/Image/마켓 컬리.png" height="40%" width="40%">
-<img src=".github/Image/알리익스프레스.png" height="40%" width="40%">
-</p>
-
-**마켓컬리**
-  - 마켓컬리에서는 SMS 문자메시지를 통해 CRM을 하고있다. 유사한 성향을 가진 고객 집단을 분류해 맞춤형 할인 쿠폰 등 개인화 된 혜택을 제공하고 있다.
-    
-**알리 익스프레스**
-  - 알리 익스프레스에서는 Email를 통해 CRM을 하고 있다. 특정 기간에만 진행하는 할인 행사를 인기있는 상품들을 위주로 보여줘 관심을 갖게 하여 행사에 참여하게끔 한다.
-
-</br>
-</br>
-
-# 개발 환경
-## 공통
-버전 관리 및 협업: GitHub, Git, GitHub Project, Notion
-데이터베이스: MariaDB
-커뮤니케이션: Slack
-
-## 프론트엔드
-개발 환경: Visual Studio Code
-프로그래밍 언어: HTML, CSS, JavaScript, Vue.js
-
-## 백엔드
-개발 환경: IntelliJ IDEA
-프로그래밍 언어: Java 11
-빌드 도구: Gradle
-프레임워크: Spring, Spring Boot
-보안: Spring Security, JSON Web Tokens (JWT)
-
-</br>
-</br>
-
-# 요구사항 분석
-## 사용자(회원)
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**회원 가입 (일반 회원)**|회원은 이메일 인증을 통해 회원 가입을 할 수 있다.|
-|**회원 가입 (소셜 회원)**|회원은 [구글] 소셜 수단으로 회원 가입 할 수 있다.|
-|**회원 가입시 기본 입력**|정보	회원 가입 진행 시 이름, 이메일, 비밀번호, 생년월일, 주소를 입력해야 한다.|
-|**개인정보 선택적 수집 및 이용에 대한 동의**|회원은 온라인회원 마케팅 수신동의(이메일, SMS)를 동의, 거부 할 수 있다.|
-|**로그인 (일반 회원)** |일반 회원은 이메일, 비밀번호로 로그인 할 수 있다.|
-|**로그인 (소셜 회원)**|소셜 회원은 [구글] 소셜 수단으로 로그인 할 수 있다.|
-|**비밀번호 재설정 (일반 회원)**|일반 회원은 이메일 인증을 통해 비밀번호를 재설정 할 수 있다.|
-|**마이 페이지**|회원은 마이페이지를 통해 개인 정보를 조회, 수정을 할 수 있다.|
-|**개인 정보 수정**|회원은 주소, 마케팅 수신 동의를 수정 할 수 있다.|
-|**개인 정보 조회**|자신의 아이디, 생년월일, 이메일, 주소, 마케팅 수신 동의를 조회할 수 있다.|
-|**1:1 문의**|회원은 1:1 문의를 할 수 있다.|
-|**개인의 쿠폰 상세 조회**|회원은 본인이 갖고 있는 쿠폰의 종류, 사용기간을 조회할 수 있다.|
-|**개인의 포인트(적립금) 상세 조회**|회원은 본인이 갖고 있는 포인트(적립금), 사용기간을 조회할 수 있다.|
-|**쿠폰 등록**|회원은 쿠폰 코드로 쿠폰을 등록 할 수 있다.|
-|**개인의 문의 상세 조회**|회원은 본인의 문의 내용, 해당 문의의 답변을 조회할 수 있다.|
-|**회원 탈퇴**|회원은 해당 서비스를 탈퇴할 수 있다.|
-|**최근에 본 상품 목록**|회원은 본인이 최근에 본 상품의 목록을 확인할 수 있다.|
-|**관심 상품**|회원은 상품에 좋아요를 눌러서 관심 상품에 등록할 수 있다.|
-|**관심 상품 목록**|회원은 본인이 관심있는 상품의 목록을 조회할 수 있다.|
-
-## 웹
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**로그인 후 화면 (메인)**|로그인 후 회원 개인의 등급, 쿠폰, 포인트(적립금)을 조회할 수 있다.|
-|**로그인 후 화면 (배너)**|로그인 후 관리자가 등록한 배너가 웹 메인에 노출되어야 한다.|
-
-## 이벤트
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**선착순 쿠폰**|선착순 쿠폰 이벤트|
-
-
-## 사용자 등급
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**사용자 등급 갱신**|사용자는 자신의 등급의 변동이 있을경우 실시간으로 확인해야한다.|
-
-## 관리자
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**회원 정보 조회**|관리자는 전체 또는 특정 회원의 정보를 입력해 조회할 수 있다.|
-|**회원 정보 수정**|관리자는 회원의 정보를 수정 및 삭제 할 수 있다.|
-
-## 마케터
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**성별을 통한 회원 분류**|성별에 따른 회원 분포 확인할 수 있다.|
-|**나이를 통한 회원 분류**|연령별 회원 분포를 확인할 수 있다.|
-|**등급을 통한 회원 분류**|등급별 회원 분포 확인할 수 있다.|
-|**광고성 메일**|마케터는 메일에 내용을 작성할 수 있고, 해당 내용을 메일로 보낼수 있다.|
-|**쿠폰 관리**|마케터는 쿠폰 생성이 가능하다.|
-|**회원 포인트 관리**|회원 포인트(적립금) 조회 및 수정할 수 있다.|
-|**신규 이벤트 생성 및 이벤트 수정**|이벤트 생성 및 삭제 관리를 할 수 있다.|
-
-
-## 상담사
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**1:1 문의에 대한 답변**|회원이 남긴 1 : 1 문의에 대해 답변을 남길 수 있다.|
-
-## 알람
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**알람**|기한 만료 예정인 쿠폰 및 이벤트에 대한 정보를 확인할 수 있다.|
-
-## 쿠폰
-|요청사항 명|요구사항 상세 설명|
-|---|:---|
-|**발급된 쿠폰**|발급된 쿠폰은 수정 및 삭제가 불가능 하다.|
-|**미발급 쿠폰**|미발급된 쿠폰은 수정 및 삭제가 가능하다.|
-
-</br>
 
 #  [📅 WBS](https://docs.google.com/spreadsheets/d/19pO974fKGKGOW3XLY8PIu9Kd5hFQFiLN8cf3-CNAI-o/edit?usp=sharing)
 </br>
 
-# [📈 ERD](https://www.erdcloud.com/d/4hBsL2CcK8LnCFWJL)
-</br>
+
 
 # [🖥 화면설계서](https://www.figma.com/file/J6p1dopme7dCpIH5zSnxHc/Catch?type=design&node-id=0%3A1&mode=design&t=OH7rpExEUxgtSPbR-1)
 </br>
