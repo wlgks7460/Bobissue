@@ -266,6 +266,295 @@
 
 # :hammer_and_pick: 중점 기술
 
+<details>
+  <summary> Querydsl </summary>
+
+## QueryDSL
+
+### 개념
+- **타입 안전한 SQL 쿼리 빌더**
+  - 컴파일 시점에 오류를 잡아낼 수 있어 안정적
+  - IDE의 자동완성 기능을 활용할 수 있어 개발이 수월함
+  - 동적 쿼리 작성이 매우 편리함
+
+- **실무적 이점**
+  - 쿼리 조건들을 재사용하기 쉬움
+  - 코드 기반이라 유지보수가 용이함
+  - 복잡한 서브쿼리나 조인도 깔끔하게 표현 가능
+  - 메서드 체이닝으로 직관적인 쿼리 작성이 가능함
+
+- **주의해야 할 점**
+  - 실행되는 SQL을 확인하며 성능을 고려해야 함
+  - 기본적인 SQL 지식이 반드시 필요함
+
+### JPQL과 비교했을 때의 장점
+- 복잡한 연산 과정에서 가독성이 더 높음
+- 유지보수가 용이함
+- 컴파일 단계에서 쿼리 오류가 감지됨
+- 카테고리 수가 많고 사용자 데이터가 다양한 쇼핑몰의 특성에 적합함
+- 복잡한 필터링 조건이나 로직을 효율적으로 처리 가능
+
+### 프로젝트에서 QueryDSL을 사용한 이유
+
+1. **복잡한 추천 시스템 구현**
+   - 카테고리와 인구통계학적 데이터(성별, 연령대)를 결합한 맞춤형 상품 추천 시스템 구현
+   - 구매 이력 기반 협업 필터링 알고리즘 구현
+   - 레시피 기반 연관 상품 추천 기능 개발
+
+2. **다양한 통계 분석 요구사항 충족**
+   - 성별에 따른 상품 선호도 분석 (getMalePreferredItems, getFemalePreferredItems)
+   - 재구매율이 높은 제품 분석 (getTopRepurchaseItems)
+   - 베스트셀러 상품 분석 (getBestSellerItems)
+
+3. **서브쿼리와 복잡한 조인 처리**
+   - 다양한 엔티티 간의 복잡한 관계를 효율적으로 처리 (상품, 주문, 사용자, 리뷰 등)
+   - 중첩된 서브쿼리를 가독성 있게 구현
+
+4. **동적 표현식 활용**
+   - 사용자 연령대 계산을 위한 동적 표현식 생성 (ageGroupExpr)
+   - 복잡한 통계 수식을 SQL 함수와 결합하여 구현
+
+### Querydsl 도입 효과
+
+1. **효율적인 코드 관리**
+   - 복잡한 쿼리를 체계적으로 관리할 수 있어 유지보수가 용이했습니다
+   - 각 기능별 메소드 분리로 코드 재사용성이 향상되었습니다
+
+2. **성능 최적화 경험**
+   - 쿼리 성능을 고려한 설계가 중요하다는 것을 실감했습니다
+   - 단순 ORM 방식보다 복잡한 비즈니스 로직을 DB 레벨에서 처리하여 성능 향상을 경험했습니다
+
+3. **비즈니스 인사이트 도출**
+   - 데이터 기반 통계를 통해 판매자와 관리자, 사용자에게 유용한 인사이트를 제공할 수 있었습니다
+   - 사용자 행동 패턴 분석을 통한 맞춤형 서비스 구현이 가능해졌습니다
+
+4. **타입 안전성의 중요성**
+   - 컴파일 시점에 오류를 잡아낼 수 있어 런타임 에러를 크게 줄일 수 있었습니다
+   - 복잡한 쿼리 작성 시 IDE의 자동완성 기능이 개발 생산성을 크게 향상시켰습니다
+
+### 프로젝트 활용
+1. **상품 추천 시스템**
+   - 성별/연령대별 구매 패턴 분석
+   - 카테고리별 인기 상품 추출
+   - 연관 상품 추천
+
+2. **매출 분석**
+   - 기간별 매출 집계
+   - 판매자별 실적 분석
+   - 상품별 판매 통계
+   - 시간대별 판매 분석
+   - 판매량 예측
+
+
+3. **고객 행동 분석**
+   - 구매 패턴 분석
+   - 재구매율 계산
+   - 성별/연령대별 선호도 분석
+
+  
+</details>
+
+
+<details>
+  <summary> AWS S3 </summary>
+
+  ### 1. 의존성 추가
+```gradle
+implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.780' // S3 버킷 접근
+implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.1.1' // SpringBoot AWS 통합
+implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+```
+
+#### 사용 버전
+- Java 17
+- Spring Boot 3.4.1
+
+### 2. 설정 파일 작성
+
+#### application.yml
+```yaml
+spring:
+  application:
+    name: spring-project
+  profiles:
+    include: aws
+```
+
+#### application-aws.yml
+```yaml
+cloud:
+  aws:
+    credentials:
+      access-key: [your-access-key]
+      secret-key: [your-secret-key]
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    s3:
+      bucket: example-dev-storage-ap
+```
+
+### 3. S3 설정 클래스 구현
+
+```java
+@Configuration
+public class S3Config {
+    @Value("${cloud.aws.credentials.access-key}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secret-key}")
+    private String secretKey;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    @Bean
+    public AmazonS3Client amazonS3Client() {
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        
+        return (AmazonS3Client) AmazonS3ClientBuilder.standard()
+                .withRegion(region)
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .build();
+    }
+}
+```
+
+### 4. S3Service 구현
+
+```java
+@Service
+@RequiredArgsConstructor
+public class S3Service {
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+    
+    // 파일 업로드
+    public String uploadFile(String dirName, MultipartFile file) {
+        try {
+            validateFile(file);
+            
+            String fileName = createFileName(getExtension(file.getOriginalFilename()));
+            String fileUrl = dirName + "/" + fileName;
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+
+            amazonS3Client.putObject(
+                    new PutObjectRequest(bucket, fileUrl, file.getInputStream(), metadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+
+            return amazonS3Client.getUrl(bucket, fileUrl).toString();
+
+        } catch (IOException e) {
+            throw new BobIssueException(ResponseCode.FILE_UPLOAD_ERROR);
+        }
+    }
+    
+    // 파일 검증
+    private void validateFile(MultipartFile file) {
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new BobIssueException(ResponseCode.INVALID_FILE_TYPE);
+        }
+
+        if (file.getSize() > 10 * 1024 * 1024) {
+            throw new BobIssueException(ResponseCode.FILE_SIZE_EXCEED);
+        }
+    }
+    
+    // 파일명 생성
+    private String createFileName(String ext) {
+        return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+                + "-"
+                + UUID.randomUUID().toString()
+                + ext;
+    }
+
+    private String getExtension(String fileName) {
+        if (fileName == null) return "";
+        int lastIndex = fileName.lastIndexOf(".");
+        if (lastIndex == -1) return "";
+        return fileName.substring(lastIndex);
+    }
+    
+    // 여러 파일 업로드
+    public List<String> uploadFiles(String dirName, List<MultipartFile> files) {
+        return files.stream()
+                .map(file -> uploadFile(dirName, file))
+                .collect(Collectors.toList());
+    }
+    
+    // 파일 삭제
+    public void deleteFile(String fileUrl) {
+        try {
+            String key = extractKeyFromUrl(fileUrl);
+            amazonS3Client.deleteObject(bucket, key);
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.FAILED_DELETE_IMAGE);
+        }
+    }
+
+    private String extractKeyFromUrl(String fileUrl) {
+        try {
+            java.net.URL url = new java.net.URL(fileUrl);
+            String path = url.getPath();
+            if (path.startsWith("/")) {
+                path = path.substring(1);
+            }
+            return path;
+        } catch (Exception e) {
+            throw new BobIssueException(ResponseCode.INVALID_FILE_URL);
+        }
+    }
+
+    public void deleteFiles(List<String> fileUrls) {
+        for (String fileUrl : fileUrls) {
+            deleteFile(fileUrl);
+        }
+    }
+}
+```
+
+### 5. 사용 예시
+
+```java
+// 단일 파일 업로드
+String fileUrl = s3Service.uploadFile("images", multipartFile);
+
+// 여러 파일 업로드
+List<String> fileUrls = s3Service.uploadFiles("images", multipartFiles);
+
+// 파일 삭제
+s3Service.deleteFile(fileUrl);
+```
+
+## AWS S3 구현을 통해 얻은 인사이트
+
+1. **클라우드 스토리지의 이점**
+   - 서버 부하 감소 및 이미지 로딩 속도 개선
+   - 대용량 파일의 안정적 처리 가능
+   - 상품 이미지 다수 관리에 필요한 확장성 확보
+
+2. **보안과 성능의 균형**
+   - 사용자 입력값 검증의 중요성 인식
+   - XSS, 악성코드 등 보안 취약점 사전 방지
+
+3. **개발 생산성 향상**
+   - 파일 관리 로직 추상화로 코드 간결화
+   - 여러 기능에서 코드 재사용 가능
+   - 통일된 예외 처리로 유지보수 용이
+
+4. **비용 최적화**
+   - S3 사용 비용 모니터링 방법 학습
+   - 불필요한 파일 저장 방지 정책 수립
+</details>
+
 # :repeat: 배포 Script
 
 
@@ -357,6 +646,83 @@
   ![board-faq](./userImage/고객센터-FAQ.png)
   ![board-question](./userImage/고객센터-문의하기.png)
   </details>
+
+## 쇼핑몰 관리자 관련 기능
+
+![밥이슈 관리자페이지 소개](./admin-images/밥이슈%20관리자페이지%20소개.gif)
+
+### 1. 회원관리(1) - 이용자
+
+![회원정보관리](./admin-images/회원정보관리.gif)
+
+- 회원 상태관리(활성/비활성)
+- 회원 상세정보 관리
+
+### 2. 회원등록
+
+![엑셀일괄등록](./admin-images/엑셀일괄등록.gif)
+
+- 엑셀 일괄등록
+  - 엑셀파일 템플릿 다운로드 이후 목록 업데이트 하여 등록
+
+### 3. 회원 메일 발송
+
+![회원메일발송](./admin-images/회원메일발송.gif)
+
+- 회원 대상 메일발송 (선택/전체 발송)
+
+### 4. 회원관리(2) - 판매자
+
+![판매자관리](./admin-images/판매자관리.gif)
+
+- 판매자 상태관리(활성/비활성)
+- 판매자 상세정보 관리
+- 판매권한 승인 절차
+
+### 5. 판매자 트리구조
+
+![판매자 트리구조](./admin-images/판매자%20트리구조.png)
+
+- 추가계정 지급 여부에 따른 계정 현황 파악
+
+### 6. 주문 현황
+
+![주문현황](./admin-images/주문현황.gif)
+
+- 쇼핑몰 주문 현황 검색 및 상세 관리
+
+### 7. 라이브커머스 관리
+
+![라이브커머스관리](./admin-images/라이브커머스관리.gif)
+
+- 라이브 커머스 신청시 내부 기준에 따라 승인/반려
+- 승인시 라이브 예정 캘린더에 등록 및 관리
+- 라이브 모니터링 및 종료 기능
+
+### 8. 쇼핑몰 분석 - 통계
+
+- Query DSL API를 활용하여 통계 분석 페이지 제공
+  ![쿼리dsl통계](./admin-images/쿼리dsl통계.gif)
+
+- 판매자 통계
+- 매출 분석
+- 카테고리 분석
+- 시간대별 분석
+- 유저 통계
+- 재구매율 분석
+
+### 9. 기타
+
+- 카테고리 관리
+
+  - 쇼핑몰 판매 카테고리 추가 및 유지보수
+
+- CS 관리
+
+  - 이용자 대상 공지 및 문의사항 관리
+
+- 기타 등등
+
 
 <!-- <details>
 <summary> 관리자 </summary>
