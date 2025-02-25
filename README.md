@@ -555,6 +555,33 @@ s3Service.deleteFile(fileUrl);
    - 불필요한 파일 저장 방지 정책 수립
 </details>
 
+<details>
+  <summary> OAuth2 </summary>
+
+</details>
+
+<details>
+  <summary> RefreshToken </summary>
+
+</details>
+
+<details>
+  <summary> WebSocket </summary>
+
+</details>
+
+<details>
+  <summary> redis, mongo </summary>
+
+</details>
+
+<details>
+  <summary> WebRtc </summary>
+
+</details>
+
+
+
 # :repeat: 배포 Script
 
 
@@ -570,8 +597,8 @@ s3Service.deleteFile(fileUrl);
 ![social_login](./userGif/소셜로그인.gif)
 </details>
 
-- 쇼핑몰 자체 회원 로그인
-- 소셜 로그인
+- 쇼핑몰 자체 회원 로그인 <br>
+- 소셜 로그인 <br>
 
 ### 2. 상품 구매
 
@@ -586,13 +613,13 @@ s3Service.deleteFile(fileUrl);
   <summary> :framed_picture: </summary>
   ![search_item](./userImage/상품검색.png)
   </details>
-- 카테고리 별 상품
+- 카테고리 별 상품 
   <details>
   <summary> :framed_picture: </summary>
   ![category_item](./userImage/카테고리별%20상품%20확인.png)
   </details>
-- 장바구니 - 수량 변경, 제거
-- 결제 - 배송지, 포인트·쿠폰 적용, 포트원 API
+- 장바구니 - 수량 변경, 제거 <br>
+- 결제 - 배송지, 포인트·쿠폰 적용, 포트원 API <br>
 
 ### 3. 라이브 커머스
 
@@ -601,8 +628,8 @@ s3Service.deleteFile(fileUrl);
 ![live_shopping](./userGif/라이브커머스.gif)
 </details>
 
-- 라이브 커머스 시청 및 채팅 기능
-- 판매 중 상품 장바구니 담기 - 개별, 전체
+- 라이브 커머스 시청 및 채팅 기능 <br>
+- 판매 중 상품 장바구니 담기 - 개별, 전체 <br>
 
 ### 4. 식단 관리
 
@@ -611,9 +638,9 @@ s3Service.deleteFile(fileUrl);
 ![calendar](./userGif/식단관리.gif)
 </details>
 
-- 이용자 키, 몸무게 정보를 바탕으로 한 일일 권장 칼로리 계산
-- 캘린더를 이용한 일일 식단 등록
-- 권장 칼로리 이상 섭취시 경고 표시
+- 이용자 키, 몸무게 정보를 바탕으로 한 일일 권장 칼로리 계산 <br>
+- 캘린더를 이용한 일일 식단 등록 <br>
+- 권장 칼로리 이상 섭취시 경고 표시 <br>
 
 ### 5. 레시피
 
@@ -622,9 +649,9 @@ s3Service.deleteFile(fileUrl);
 ![recipe](./userGif/레시피.gif)
 </details>
 
-- 마이페이지에서 내 레시피 확인 및 작성
-- 레시피 페이지에서 전체 레시피 확인
-- 레시피 상세에서 관련 상품 장바구니 담기
+- 마이페이지에서 내 레시피 확인 및 작성 <br>
+- 레시피 페이지에서 전체 레시피 확인 <br>
+- 레시피 상세에서 관련 상품 장바구니 담기 <br>
 
 ### 6. 기타
 
@@ -647,6 +674,47 @@ s3Service.deleteFile(fileUrl);
   ![board-question](./userImage/고객센터-문의하기.png)
   </details>
 
+## 쇼핑몰 판매자 주요 기능
+
+### 1. 로그인
+
+- 판매자 계정 로그인
+- 인증 및 권한 관리
+
+### 2. 상품 관리
+
+- 상품 등록 및 수정
+- 상품 목록 조회 및 검색
+- 상품 삭제
+
+### 3. 주문 및 배송 관리
+
+- 주문 내역 확인 및 처리
+- 배송 상태 변경 및 추적
+- 주문 취소 및 환불 관리
+
+### 4. 라이브 커머스 운영
+
+- 라이브 커머스 진행
+- 실시간 채팅 지원
+- 판매 중 상품 추가 및 관리
+
+### 5. 판매 통계
+
+- 일별/주별/월별 판매량 분석
+- 베스트셀러 상품 확인
+- 매출 데이터 시각화
+
+### 6. 기타
+
+- 판매자 마이페이지 - 정보 수정
+
+- 고객 문의 관리
+
+
+
+
+
 ## 쇼핑몰 관리자 관련 기능
 <details>
 <summary> :film_frames: </summary>
@@ -660,15 +728,17 @@ s3Service.deleteFile(fileUrl);
 <summary> :film_frames: </summary>
 ![회원정보관리](./admin-images/회원정보관리.gif)
 </details>
-- 회원 상태관리(활성/비활성)
-- 회원 상세정보 관리
+
+- 회원 상태관리(활성/비활성) <br>
+- 회원 상세정보 관리 <br>
 
 ### 2. 회원등록
 <details>
 <summary> :film_frames: </summary>
 ![엑셀일괄등록](./admin-images/엑셀일괄등록.gif)
 </details>
-- 엑셀 일괄등록
+
+- 엑셀 일괄등록 <br>
   - 엑셀파일 템플릿 다운로드 이후 목록 업데이트 하여 등록
 
 ### 3. 회원 메일 발송
@@ -677,6 +747,7 @@ s3Service.deleteFile(fileUrl);
 <summary> :film_frames: </summary>
 ![회원메일발송](./admin-images/회원메일발송.gif)
 </details>
+
 - 회원 대상 메일발송 (선택/전체 발송)
 
 ### 4. 회원관리(2) - 판매자
@@ -684,15 +755,17 @@ s3Service.deleteFile(fileUrl);
 <summary> :film_frames: </summary>
 ![판매자관리](./admin-images/판매자관리.gif)
 </details>
-- 판매자 상태관리(활성/비활성)
-- 판매자 상세정보 관리
-- 판매권한 승인 절차
+
+- 판매자 상태관리(활성/비활성) <br>
+- 판매자 상세정보 관리 <br>
+- 판매권한 승인 절차 <br>
 
 ### 5. 판매자 트리구조
 <details>
 <summary> :film_frames: </summary>
 ![판매자 트리구조](./admin-images/판매자%20트리구조.png)
 </details>
+
 - 추가계정 지급 여부에 따른 계정 현황 파악
 
 ### 6. 주문 현황
@@ -700,6 +773,7 @@ s3Service.deleteFile(fileUrl);
 <summary> :film_frames: </summary>
 ![주문현황](./admin-images/주문현황.gif)
 </details>
+
 - 쇼핑몰 주문 현황 검색 및 상세 관리
 
 ### 7. 라이브커머스 관리
@@ -707,9 +781,10 @@ s3Service.deleteFile(fileUrl);
 <summary> :film_frames: </summary>
 ![라이브커머스관리](./admin-images/라이브커머스관리.gif)
 </details>
-- 라이브 커머스 신청시 내부 기준에 따라 승인/반려
-- 승인시 라이브 예정 캘린더에 등록 및 관리
-- 라이브 모니터링 및 종료 기능
+
+- 라이브 커머스 신청시 내부 기준에 따라 승인/반려 <br>
+- 승인시 라이브 예정 캘린더에 등록 및 관리 <br>
+- 라이브 모니터링 및 종료 기능 <br>
 
 ### 8. 쇼핑몰 분석 - 통계
 <details>
@@ -717,24 +792,24 @@ s3Service.deleteFile(fileUrl);
 - Query DSL API를 활용하여 통계 분석 페이지 제공
   ![쿼리dsl통계](./admin-images/쿼리dsl통계.gif)
 </details>
-- 판매자 통계
-- 매출 분석
-- 카테고리 분석
-- 시간대별 분석
-- 유저 통계
-- 재구매율 분석
+
+- 판매자 통계 <br>
+- 매출 분석 <br>
+- 카테고리 분석 <br>
+- 시간대별 분석 <br>
+- 유저 통계 <br>
+- 재구매율 분석 <br>
 
 ### 9. 기타
 
-- 카테고리 관리
+- 카테고리 관리 <br>
+  - 쇼핑몰 판매 카테고리 추가 및 유지보수 <br>
 
-  - 쇼핑몰 판매 카테고리 추가 및 유지보수
+- CS 관리 <br>
 
-- CS 관리
+  - 이용자 대상 공지 및 문의사항 관리 <br>
 
-  - 이용자 대상 공지 및 문의사항 관리
-
-- 기타 등등
+- 기타 등등 <br>
 
 
 <!-- <details>
