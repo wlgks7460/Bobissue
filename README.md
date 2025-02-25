@@ -648,62 +648,75 @@ s3Service.deleteFile(fileUrl);
   </details>
 
 ## 쇼핑몰 관리자 관련 기능
+<details>
+<summary> :film_frames: </summary>
 
 ![밥이슈 관리자페이지 소개](./admin-images/밥이슈%20관리자페이지%20소개.gif)
+</details>
 
 ### 1. 회원관리(1) - 이용자
 
+<details>
+<summary> :film_frames: </summary>
 ![회원정보관리](./admin-images/회원정보관리.gif)
-
+</details>
 - 회원 상태관리(활성/비활성)
 - 회원 상세정보 관리
 
 ### 2. 회원등록
-
+<details>
+<summary> :film_frames: </summary>
 ![엑셀일괄등록](./admin-images/엑셀일괄등록.gif)
-
+</details>
 - 엑셀 일괄등록
   - 엑셀파일 템플릿 다운로드 이후 목록 업데이트 하여 등록
 
 ### 3. 회원 메일 발송
 
+<details>
+<summary> :film_frames: </summary>
 ![회원메일발송](./admin-images/회원메일발송.gif)
-
+</details>
 - 회원 대상 메일발송 (선택/전체 발송)
 
 ### 4. 회원관리(2) - 판매자
-
+<details>
+<summary> :film_frames: </summary>
 ![판매자관리](./admin-images/판매자관리.gif)
-
+</details>
 - 판매자 상태관리(활성/비활성)
 - 판매자 상세정보 관리
 - 판매권한 승인 절차
 
 ### 5. 판매자 트리구조
-
+<details>
+<summary> :film_frames: </summary>
 ![판매자 트리구조](./admin-images/판매자%20트리구조.png)
-
+</details>
 - 추가계정 지급 여부에 따른 계정 현황 파악
 
 ### 6. 주문 현황
-
+<details>
+<summary> :film_frames: </summary>
 ![주문현황](./admin-images/주문현황.gif)
-
+</details>
 - 쇼핑몰 주문 현황 검색 및 상세 관리
 
 ### 7. 라이브커머스 관리
-
+<details>
+<summary> :film_frames: </summary>
 ![라이브커머스관리](./admin-images/라이브커머스관리.gif)
-
+</details>
 - 라이브 커머스 신청시 내부 기준에 따라 승인/반려
 - 승인시 라이브 예정 캘린더에 등록 및 관리
 - 라이브 모니터링 및 종료 기능
 
 ### 8. 쇼핑몰 분석 - 통계
-
+<details>
+<summary> :film_frames: </summary>
 - Query DSL API를 활용하여 통계 분석 페이지 제공
   ![쿼리dsl통계](./admin-images/쿼리dsl통계.gif)
-
+</details>
 - 판매자 통계
 - 매출 분석
 - 카테고리 분석
