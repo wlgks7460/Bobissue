@@ -272,7 +272,7 @@
 # :eyes: UI/UX 단위 결과서
 
 <details>
-<summary> 관리자자 </summary>
+<summary> 관리자 </summary>
 
 <h3> 관리자 gif </h3>
 <img src="image/admin.gif" alt="관리자gif" height="100%" width="100%">
