@@ -211,7 +211,7 @@
 #  :spiral_calendar: WBS
 <details>
   <summary> BobIssue WBS 보기 </summary>
-  <img src="image/WBS.pdf" alt="밥이슈WBS" height="100%" width="100%">
+  [WBS 보기](image/WBS.pdf)
 </details>
 
 </br>
@@ -259,7 +259,7 @@
 # :movie_camera: API 연동규격서
 <details>
   <summary> API 연동규격서 보기 </summary>
-  <img src="image/API.pdf" alt="API명세서서" height="100%" width="100%">
+  [API 명세서 보기](image/API.pdf)
 </details>
 </br>
 </br>
@@ -930,7 +930,7 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
 # :eyes: UI/UX 단위 결과서
 
 
-## 쇼핑몰 이용자 관련 기능
+## :bust_in_silhouette: 쇼핑몰 이용자 관련 기능
 
 ### 1. 로그인
 <details>
@@ -1016,14 +1016,24 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
   ![board-question](./userImage/고객센터-문의하기.png)
   </details>
 
-## 쇼핑몰 판매자 주요 기능
+## :convenience_store: 쇼핑몰 판매자 주요 기능
 
 ### 1. 로그인
+
+<details>
+<summary> :film_frames: </summary>
+![seller_login]](./sellerGif/회원가입및로그인.gif)
+</details>
 
 - 판매자 계정 로그인
 - 인증 및 권한 관리
 
 ### 2. 상품 관리
+
+<details>
+<summary> :film_frames: </summary>
+![item](./sellerGif/상품등록 및 조회.gif)
+</details>
 
 - 상품 등록 및 수정
 - 상품 목록 조회 및 검색
@@ -1031,11 +1041,22 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
 
 ### 3. 주문 및 배송 관리
 
+<details>
+<summary> :film_frames: </summary>
+![order](./sellerGif/주문조회.gif)
+</details>
+
+
 - 주문 내역 확인 및 처리
 - 배송 상태 변경 및 추적
 - 주문 취소 및 환불 관리
 
 ### 4. 라이브 커머스 운영
+
+<details>
+<summary> :film_frames: </summary>
+![cast](./sellerGif/라이브신청및방송송출.gif)
+</details>
 
 - 라이브 커머스 진행
 - 실시간 채팅 지원
@@ -1043,11 +1064,21 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
 
 ### 5. 판매 통계
 
+<details>
+<summary> :film_frames: </summary>
+![statistics](./sellerGif/판매 통계.gif)
+</details>
+
 - 일별/주별/월별 판매량 분석
 - 베스트셀러 상품 확인
 - 매출 데이터 시각화
 
 ### 6. 기타
+
+<details>
+<summary> :film_frames: </summary>
+![seller](./sellerGif/회사계정관리리.gif)
+</details>
 
 - 판매자 마이페이지 - 정보 수정
 
@@ -1057,7 +1088,7 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
 
 
 
-## 쇼핑몰 관리자 관련 기능
+## :cop: 쇼핑몰 관리자 관련 기능
 <details>
 <summary> :film_frames: </summary>
 
@@ -1154,9 +1185,30 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
 - 기타 등등 <br>
 
 
-<!-- <details>
-<summary> 관리자 </summary>
+# :green_salad: 소감
 
-<h3> 관리자 gif </h3>
-<img src="image/admin.gif" alt="관리자gif" height="100%" width="100%">
-</details> -->
+### 김지한 
+
+쇼핑몰 시스템이 예상보다 훨씬 복잡하고 조율할 요소가 많다는 것을 깨달았습니다. 팀장으로서 이를 해결하며 프로젝트를 이끌었고, 배포와 백엔드 개발을 직접 경험하며 기술적 이해도를 높일 수 있었습니니다. 다양한 기능을 성공적으로 구현하며 한층 성장할 수 있었던 값진 경험이었습니다.
+
+### 이다은
+
+단순한 CRUD 개발을 넘어 서비스 운영에 최적화된 시스템 구축을 고민하며, React와 Redux를 활용해 48개의 관리자 페이지를 개발해볼 수 있었다. 최종 발표를 준비하며 우리 프로젝트를 되짚어 보고, 데이터 흐름과 API 설계까지 깊이 이해하고자 노력하였다.
+
+### 강현호
+
+### 김지원
+
+### 윤경상
+
+이번 프로젝트를 통해 리액트의 기본 개념을 익히고, 협업의 중요성을 경험할 수 있었습니다. 앞으로는 더욱 원활한 협업을 위해 커뮤니케이션을 강화하고, 코드 작성 시 팀원들과의 조율을 신경 쓰며 프로젝트를 진행하고자 합니다
+
+### 김경은
+
+
+# :green_salad: 첨부자료
+
+## 발표 자료
+[발표자료 보기]([SSAFY] 공통프로젝트 C108 최종발표 PPT.pdf)
+
+
