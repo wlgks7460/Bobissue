@@ -922,7 +922,86 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
 
 </details>
 
+<details>
+<summary>ElasticSearch</summary>
 
+## Elasticsearch
+
+### 개념
+## Elasticsearch란?
+
+Apache Lucene( 아파치 루씬 ) 기반의 Java 오픈소스 분산 검색 엔진으로, 방대한 양의 데이터를 신속하게 실시간으로 저장, 검색, 분석할 수 있습니다.
+
+엘라스틱 서치는 단독으로 사용되기도 하지만, ELK( Elasticsearch / Logstatsh / Kibana )스택으로 사용되기도 합니다.
+
+**Logstash** : 다양한 소스( DB, csv파일 등 )의 로그 또는 트랜잭션 데이터를 수집, 집계, 파싱하여 Elasticsearch로 전달
+
+**Kibana** : Elasticsearch의 빠른 검색을 통해 데이터를 시각화 및 모니터링
+
+## Elasticsearch
+
+- **실시간 검색 및 분석:**
+    
+    데이터가 추가되거나 수정될 때 거의 실시간으로 검색 결과에 반영되어, 빠른 검색 응답 속도를 제공합니다.
+    
+- **확장성:**
+    
+    분산 아키텍처를 채택하여 클러스터 구성으로 데이터를 여러 노드에 분산시킬 수 있어, 데이터 양이 증가하더라도 시스템 확장이 용이합니다.
+    
+- **강력한 검색 기능:**
+    
+    단순 텍스트 검색 뿐만 아니라, 복잡한 쿼리, 필터링, 집계(aggregations) 기능 등을 지원하여 다양한 비즈니스 요구사항에 맞는 검색 솔루션을 구현할 수 있습니다.
+    
+- **유연한 데이터 모델:**
+    
+    JSON 기반의 데이터 저장 방식을 채택해 스키마가 자유로워, 다양한 형태의 데이터를 손쉽게 다룰 수 있습니다.
+    
+- **다양한 활용 사례:**
+    
+    웹사이트 검색, 로그 분석, 실시간 모니터링, 데이터 분석 등 여러 분야에서 활용되며, Kibana와 같은 시각화 도구와 연계하여 데이터 인사이트를 도출하는 데 효과적입니다.
+    
+
+## nori
+
+Elasticsearch에 한글 형태소 분석기인 nori를 적용하여 한글 문서의 색인 및 검색 성능을 최적화하였습니다.
+
+### 사용 이유
+
+### 의존성 추가
+```
+implementation 'org.springframework.data:spring-data-elasticsearch'
+```
+
+### nori 플러그인 설치
+```bash
+sudo bin/elasticsearch-plugin install analysis-nori
+sudo systemctl restart elasticsearch
+```
+
+❗nori를 사용할 경우, 스프링에서 document.를 자동으로 생성해주지 않음
+
+</details>
+
+<details>
+<summary>Spring Boot Starter Mail</summary>
+
+## Spring Boot Starter Mail
+
+Spring Boot Starter Mail을 활용해 구글 SMTP 서버를 통해 이메일 발송을 구현하였습니다.
+관리자가 구매자, 판매자에게 문의 답변, 광고 등을 다양한 상황에서 이메일 전송이 필요할 때 활용할 수 있습니다.
+
+**의존성 추가**
+
+```xml
+implementation 'org.springframework.boot:spring-boot-starter-mail'
+```
+
+`JavaMailSender` : Spring Framework에서 제공하는 인터페이스로, JavaMail API를 기반으로 이메일 발송 기능을 간편하게 사용할 수 있도록 추상화한 클래스입니다. 주로 SMTP 서버 설정을 기반으로 메일을 전송하며, 단순 텍스트 메일뿐 아니라 MIME 메시지 전송도 지원합니다.
+
+`JavaMailSender` : JavaMailSender 인터페이스의 기본 구현체로, 실제 SMTP 서버와의 연결 설정(호스트, 포트, 사용자 인증 등)을 관리하며, JavaMailSender가 제공하는 메서드를 통해 이메일 전송을 수행합니다.
+
+`MimeMessageHelper` : MimeMessage 객체를 보다 쉽게 생성하고 구성할 수 있도록 도와주는 헬퍼 클래스입니다. HTML 내용, 첨부파일, 인라인 이미지 등 복잡한 메일 메시지 구성이 필요한 경우, 다양한 편의 메서드를 제공하여 개발자가 복잡한 MIME 메시지를 간단하게 다룰 수 있도록 지원합니다.
+</details>
 
 # :repeat: 배포 Script
 
@@ -1209,6 +1288,8 @@ WebRTC(Web Real-Time Communication)는 웹 브라우저 및 모바일 애플리�
 
 ### 김경은
 
+규모가 컸던 프로젝트였던 만큼 CRUD가 많아서 힘들었지만, 덕분에 스프링과 깃에 대한 이해도가 높아졌습니다.
+또한, 쇼핑몰 개발을 진행하며 다양한 기능이 필요하다는 점을 깨달았고, 구현 과정에서 예상치 못한 기능들이 추가적으로 요구되어 어려움이 있었지만, 팀원들과의 협업을 통해 해결할 수 있었습니다. 이를 통해 협업의 중요성을 다시 한번 실감하게 되었습니다.
 
 # :green_salad: 첨부자료
 
