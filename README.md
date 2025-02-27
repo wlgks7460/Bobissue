@@ -1137,6 +1137,11 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ![cast](./sellerGif/라이브신청및방송송출.gif)
 </details>
 
+<details>
+<summary> :film_frames: </summary>
+![cast](./sellerGif/방송송출화면.gif)
+</details>
+
 - 라이브 커머스 진행
 - 실시간 채팅 지원
 - 판매 중 상품 추가 및 관리
