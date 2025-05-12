@@ -1,5 +1,5 @@
 # :green_salad: 밥이슈(Bobissue)
-<img src="image/logo.png" height="100%" width="100%">
+<img src="exec/image/logo.png" height="100%" width="100%">
 
 <!-- # :green_salad: 한줄 소개
 현대인들의 효율적인 건강식을 권장하는 종합 솔루션 쇼핑몰 -->
@@ -18,7 +18,7 @@
 - 다이어트 및 건강식에 대한 관심도 지속적 상승
 - 건강한 생활습관 형성 욕구
 
-### :fork_and_knife_with_plate: 맞춤형 식단 수요 증가
+### :fork_and_knife: 맞춤형 식단 수요 증가
 
 - 개인 건강데이터 저장 및 활용 증가
 - 다양한 식단 요구사항 존재
@@ -51,7 +51,7 @@
 
 ## :bulb: 서비스 해결방안
 
-### :shopping_bags: 쇼핑몰 통합
+### :basket: 쇼핑몰 통합
 
 - 식단과 쇼핑 연계
 - 편리한 구매 경험
@@ -211,7 +211,7 @@
 #  :spiral_calendar: WBS
 <details>
   <summary> BobIssue WBS 보기 </summary>
-  [WBS 보기](image/WBS.pdf)
+  [WBS 보기](exec/image/WBS.pdf)
 </details>
 
 </br>
@@ -221,7 +221,7 @@
 
 <details>
   <summary> BobIssue ERD 보기 </summary>
-  <img src="image/BobIssueERD.png" alt="밥이슈ERD" height="100%" width="100%">
+  <img src="exec/image/BobIssueERD.png" alt="밥이슈ERD" height="100%" width="100%">
 </details>
 
 </br>
@@ -231,17 +231,17 @@
 
 <details>
   <summary> 이용자 Wireframe 보기 </summary>
-  <img src="image/userPage.png" alt="이용자 Wireframe" width="100%">
+  <img src="exec/image/userPage.png" alt="이용자 Wireframe" width="100%">
 </details>
 </br>
 <details>
   <summary> 판매자 Wireframe 보기 </summary>
-  <img src="image/sellerPage.png" alt="판매자 Wireframe" width="100%">
+  <img src="exec/image/sellerPage.png" alt="판매자 Wireframe" width="100%">
 </details>
 </br>
 <details>
   <summary> 관리자 Wireframe 보기 </summary>
-  <img src="image/adminPage.png" alt="관리자 Wireframe" width="100%">
+  <img src="exec/image/adminPage.png" alt="관리자 Wireframe" width="100%">
 </details>
 
 </br>
@@ -251,7 +251,7 @@
 # :building_construction: 아키텍처 설계도
 <details>
   <summary> 아키텍처 설계도 보기 </summary>
-  <img src="image/최종 배포.drawio.png" alt="밥이슈배포" height="100%" width="100%">
+  <img src="exec/image/최종 배포.drawio.png" alt="밥이슈배포" height="100%" width="100%">
 </details>
 
 
@@ -1013,9 +1013,9 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 ### 1. 로그인
 <details>
-<summary> :film_frames: </summary>
+<summary> :clapper: </summary>
 
-![social_login](./userGif/소셜로그인.gif)
+![social_login](./exec/userGif/소셜로그인.gif)
 </details>
 
 - 쇼핑몰 자체 회원 로그인 <br>
@@ -1024,20 +1024,20 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 2. 상품 구매
 
 <details>
-<summary> :film_frames: </summary>
-![buy_item](./userGif/상품구매.gif)
+<summary> :clapper: </summary>
+![buy_items](./exec/userGif/상품구매.gif)
 </details>
 
 - Query DSL을 이용한 베스트 상품
 - 상품 검색
   <details>
   <summary> :framed_picture: </summary>
-  ![search_item](./userImage/상품검색.png)
+  ![search_item](./exec/userImage/상품검색.png)
   </details>
 - 카테고리 별 상품 
   <details>
   <summary> :framed_picture: </summary>
-  ![category_item](./userImage/카테고리별%20상품%20확인.png)
+  ![category_item](./exec/userImage/카테고리별%20상품%20확인.png)
   </details>
 - 장바구니 - 수량 변경, 제거 <br>
 - 결제 - 배송지, 포인트·쿠폰 적용, 포트원 API <br>
@@ -1045,8 +1045,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 3. 라이브 커머스
 
 <details>
-<summary> :film_frames: </summary>
-![live_shopping](./userGif/라이브커머스.gif)
+<summary> :clapper: </summary>
+![live_shopping](./exec/userGif/라이브커머스.gif)
 </details>
 
 - 라이브 커머스 시청 및 채팅 기능 <br>
@@ -1055,7 +1055,7 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 4. 식단 관리
 
 <details>
-<summary> :film_frames: </summary>
+<summary> :clapper: </summary>
 ![calendar](./userGif/식단관리.gif)
 </details>
 
@@ -1066,8 +1066,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 5. 레시피
 
 <details>
-<summary> :film_frames: </summary>
-![recipe](./userGif/레시피.gif)
+<summary> :clapper: </summary>
+![recipe](./exec/userGif/레시피.gif)
 </details>
 
 - 마이페이지에서 내 레시피 확인 및 작성 <br>
@@ -1078,21 +1078,21 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 - 마이페이지-정보관리
   <details>
-  <summary> :framed_picture: </summary>
-  ![mypage-info](./userImage/마이페이지-개인정보수정.png)
-  ![mypage-address](./userImage/마이페이지-배송지관리.png)
+  <summary> :clapper: </summary>
+  ![mypage-info](./exec/userImage/마이페이지-개인정보수정.png)
+  ![mypage-address](./exec/userImage/마이페이지-배송지관리.png)
   </details>
 - 마이페이지-상품관련(주문내역, 후기 등)
   <details>
   <summary> :framed_picture: </summary>
-  ![mypage-order](./userImage/마이페이지-주문내역.png)
-  ![mypage-review](./userImage/마이페이지-상품후기.png)
+  ![mypage-order](./exec/userImage/마이페이지-주문내역.png)
+  ![mypage-review](./exec/userImage/마이페이지-상품후기.png)
   </details>
 - 고객센터(FAQ, 공지사항, 문의)
   <details>
   <summary> :framed_picture: </summary>
-  ![board-faq](./userImage/고객센터-FAQ.png)
-  ![board-question](./userImage/고객센터-문의하기.png)
+  ![board-faq](./exec/userImage/고객센터-FAQ.png)
+  ![board-question](./exec/userImage/고객센터-문의하기.png)
   </details>
 
 ## :convenience_store: 쇼핑몰 판매자 주요 기능
@@ -1100,8 +1100,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 1. 로그인
 
 <details>
-<summary> :film_frames: </summary>
-![seller_login]](./sellerGif/회원가입및로그인.gif)
+<summary> :clapper: </summary>
+![seller_login]](./exec/sellerGif/회원가입및로그인.gif)
 </details>
 
 - 판매자 계정 로그인
@@ -1110,8 +1110,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 2. 상품 관리
 
 <details>
-<summary> :film_frames: </summary>
-![item](./sellerGif/상품등록 및 조회.gif)
+<summary> :clapper: </summary>
+![item](./exec/sellerGif/상품등록 및 조회.gif)
 </details>
 
 - 상품 등록 및 수정
@@ -1121,8 +1121,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 3. 주문 및 배송 관리
 
 <details>
-<summary> :film_frames: </summary>
-![order](./sellerGif/주문조회.gif)
+<summary> :clapper: </summary>
+![order](./exec/sellerGif/주문조회.gif)
 </details>
 
 
@@ -1133,13 +1133,13 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 4. 라이브 커머스 운영
 
 <details>
-<summary> :film_frames: </summary>
-![cast](./sellerGif/라이브신청및방송송출.gif)
+<summary> :clapper: </summary>
+![cast](./exec/sellerGif/라이브신청및방송송출.gif)
 </details>
 
 <details>
-<summary> :film_frames: </summary>
-![cast](./sellerGif/방송송출화면.gif)
+<summary> :clapper: </summary>
+![cast](./exec/sellerGif/방송송출화면.gif)
 </details>
 
 - 라이브 커머스 진행
@@ -1149,8 +1149,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 5. 판매 통계
 
 <details>
-<summary> :film_frames: </summary>
-![statistics](./sellerGif/판매 통계.gif)
+<summary> :clapper: </summary>
+![statistics](./exec/sellerGif/판매 통계.gif)
 </details>
 
 - 일별/주별/월별 판매량 분석
@@ -1160,8 +1160,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 6. 기타
 
 <details>
-<summary> :film_frames: </summary>
-![seller](./sellerGif/회사계정관리리.gif)
+<summary> :clapper: </summary>
+![seller](./exec/sellerGif/회사계정관리리.gif)
 </details>
 
 - 판매자 마이페이지 - 정보 수정
@@ -1174,16 +1174,16 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 ## :cop: 쇼핑몰 관리자 관련 기능
 <details>
-<summary> :film_frames: </summary>
+<summary> :clapper: </summary>
 
-![밥이슈 관리자페이지 소개](./admin-images/밥이슈%20관리자페이지%20소개.gif)
+![밥이슈 관리자페이지 소개](./exec/admin-images/밥이슈%20관리자페이지%20소개.gif)
 </details>
 
 ### 1. 회원관리(1) - 이용자
 
 <details>
-<summary> :film_frames: </summary>
-![회원정보관리](./admin-images/회원정보관리.gif)
+<summary> :clapper: </summary>
+![회원정보관리](./exec/admin-images/회원정보관리.gif)
 </details>
 
 - 회원 상태관리(활성/비활성) <br>
@@ -1191,8 +1191,8 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 ### 2. 회원등록
 <details>
-<summary> :film_frames: </summary>
-![엑셀일괄등록](./admin-images/엑셀일괄등록.gif)
+<summary> :clapper: </summary>
+![엑셀일괄등록](./exec/admin-images/엑셀일괄등록.gif)
 </details>
 
 - 엑셀 일괄등록 <br>
@@ -1201,16 +1201,16 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 ### 3. 회원 메일 발송
 
 <details>
-<summary> :film_frames: </summary>
-![회원메일발송](./admin-images/회원메일발송.gif)
+<summary> :clapper: </summary>
+![회원메일발송](./exec/admin-images/회원메일발송.gif)
 </details>
 
 - 회원 대상 메일발송 (선택/전체 발송)
 
 ### 4. 회원관리(2) - 판매자
 <details>
-<summary> :film_frames: </summary>
-![판매자관리](./admin-images/판매자관리.gif)
+<summary> :clapper: </summary>
+![판매자관리](./exec/admin-images/판매자관리.gif)
 </details>
 
 - 판매자 상태관리(활성/비활성) <br>
@@ -1219,24 +1219,24 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 ### 5. 판매자 트리구조
 <details>
-<summary> :film_frames: </summary>
-![판매자 트리구조](./admin-images/판매자%20트리구조.png)
+<summary> :clapper: </summary>
+![판매자 트리구조](./exec/admin-images/판매자%20트리구조.png)
 </details>
 
 - 추가계정 지급 여부에 따른 계정 현황 파악
 
 ### 6. 주문 현황
 <details>
-<summary> :film_frames: </summary>
-![주문현황](./admin-images/주문현황.gif)
+<summary> :clapper: </summary>
+![주문현황](./exec/admin-images/주문현황.gif)
 </details>
 
 - 쇼핑몰 주문 현황 검색 및 상세 관리
 
 ### 7. 라이브커머스 관리
 <details>
-<summary> :film_frames: </summary>
-![라이브커머스관리](./admin-images/라이브커머스관리.gif)
+<summary> :clapper: </summary>
+![라이브커머스관리](./exec/userGif/라이브커머스.gif)
 </details>
 
 - 라이브 커머스 신청시 내부 기준에 따라 승인/반려 <br>
@@ -1245,9 +1245,9 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 ### 8. 쇼핑몰 분석 - 통계
 <details>
-<summary> :film_frames: </summary>
+<summary> :clapper: </summary>
 - Query DSL API를 활용하여 통계 분석 페이지 제공
-  ![쿼리dsl통계](./admin-images/쿼리dsl통계.gif)
+  ![쿼리dsl통계](./exec/admin-images/쿼리dsl통계.gif)
 </details>
 
 - 판매자 통계 <br>
@@ -1299,7 +1299,7 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 # :green_salad: 첨부자료
 
 ## 발표 자료
-[발표자료 보기]([SSAFY] 공통프로젝트 C108 최종발표 PPT.pdf)
+[발표자료 보기](./exec/[SSAFY] 공통프로젝트 C108 최종발표 PPT.pdf)
 
 ## UCC
 [![Video Label](http://img.youtube.com/vi/YadwrxahCKo/0.jpg)](https://www.youtube.com/watch?v=YadwrxahCKo)
