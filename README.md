@@ -1015,7 +1015,7 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 <details>
 <summary> :clapper: </summary>
 
-![social_login](./exec/userGif/소셜로그인.gif)
+![social_login](./exec/userGif/SocialLoginUser.gif)
 </details>
 
 - 쇼핑몰 자체 회원 로그인 <br>
@@ -1025,7 +1025,7 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 <details>
 <summary> :clapper: </summary>
-![buy_items](./exec/userGif/상품구매.gif)
+![buy_items](./exec/userGif/PurchaseGoods.gif)
 </details>
 
 - Query DSL을 이용한 베스트 상품
@@ -1056,7 +1056,7 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 <details>
 <summary> :clapper: </summary>
-![calendar](./userGif/식단관리.gif)
+![calendar](./exec/userGif/DietManagement.gif)
 </details>
 
 - 이용자 키, 몸무게 정보를 바탕으로 한 일일 권장 칼로리 계산 <br>
@@ -1067,7 +1067,7 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 <details>
 <summary> :clapper: </summary>
-![recipe](./exec/userGif/레시피.gif)
+![recipe](./exec/userGif/Recipe.gif)
 </details>
 
 - 마이페이지에서 내 레시피 확인 및 작성 <br>
