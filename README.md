@@ -211,7 +211,7 @@
 #  :spiral_calendar: WBS
 <details>
   <summary> BobIssue WBS 보기 </summary>
-  [WBS 보기](exec/image/WBS.pdf)
+  [WBS 보기](./exec/image/WBS.pdf)
 </details>
 
 </br>
