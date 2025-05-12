@@ -259,7 +259,7 @@
 # :movie_camera: API 연동규격서
 <details>
   <summary> API 연동규격서 보기 </summary>
-  [API 명세서 보기](image/API.pdf)
+  [API 명세서 보기](./exec/image/API.pdf)
 </details>
 </br>
 </br>
